@@ -17,6 +17,10 @@ function deg2rad(deg) {
    return deg * (Math.PI/180);
 }
 
+function strToLowerNoSpaces(textString) {
+    return textString.toLowerCase().replace(/ /g,"_");
+}
+
 
 /**
  * getDistance

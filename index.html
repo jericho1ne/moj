@@ -12,7 +12,8 @@
 <!-- external dependencies -->
 <script type="text/javascript" src="scripts/vendor/jquery.js"></script>
 <script type="text/javascript" src="scripts/vendor/jquery-ui.min.js"></script>
-<script type="text/javascript" src="scripts/vendor/modernizr.js"></script>
+<script type="text/javascript" src="scripts/vendor/jquery-ui.min.js"></script>
+<script type="text/javascript" src="scripts/vendor/datatables.min.js"></script>
 
 <!-- stuff i wrote -->
 <script type="text/javascript" src="scripts/common/__constants.js"></script>
@@ -21,6 +22,7 @@
 <script type="text/javascript" src="scripts/ui/UserState.js"></script>
 <script type="text/javascript" src="scripts/ui/Venues.js"></script>
 <script type="text/javascript" src="scripts/ui/Events.js"></script>
+<script type="text/javascript" src="scripts/ui/Artist.js"></script>
 
 <script type="text/javascript" src="scripts/main.js"></script>
 
@@ -28,11 +30,11 @@
 
 <!--<link href='https://fonts.googleapis.com/r?family=Ruda:400,700,900' rel='stylesheet' type='text/css'>-->
 <link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/datatables.min.css">
 <link rel="stylesheet" href="styles/fa/css/font-awesome.min.css">
 </head>
 
 <body>
-
 
 <div id="content-parent" class="center debug">
 
@@ -43,10 +45,11 @@
         <a href="#" data-val="The Bravery" class="artistInfo">The Bravery<a><br>
         <a href="#" data-val="Nas" class="artistInfo">Nas<a><br>
     </div>
-    <div id="artist-info" class="left debug">
-       
-    </div>
 
+    <div id="artist-info" class="auto-expand debug">
+        <div id="artist-bio" class="left auto-expand"></div>
+        <div id="artist-tracks" class="left auto-expand"></div>
+    </div>
     
     <div id="shows-content" class="left debug">
         <h2>Shows Content</h2>

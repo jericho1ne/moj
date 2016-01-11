@@ -79,6 +79,10 @@ h1 {
     margin-right: 0 !important;
 }
 
+.auto-expand {
+    display: block;
+    overflow: auto;
+}
 /*-------------------- div IDs -------------------*/
 #map {
     height: 300px;

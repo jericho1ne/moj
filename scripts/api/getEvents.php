@@ -1,102 +1,62 @@
 <?php
+include_once('../common/common.php');
+include_once('EventParser.php');
 
-/*
-getEvents.php
+// require_once("db/__db_upd.php");
+// require_once("db/__db_connex.php");
+// require_once("Geocoder.php");
 
-Runs as a cron job and/or
-is called up when the JSON events file timestamp is stale q
+//============================================================
+$eventParser = new EventParser('http://thescenestar.typepad.com/shows/');
 
-TODO:  - naming convention between 
-	- getEvents 
-	- displayEvents
-	- saveEvents (user-submitted, v2.0)
+$jsonFile = "../../data/events.json";
 
-*/
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Find out time elapsed in hours
+$hrsElapsed = (time() - filemtime($jsonFile)) / (60*60);
 
-require_once("../common/common.php");
-require_once("db/__db_upd.php");
-require_once("db/__db_connex.php");
-require_once("Geocoder.php");
-
-
-// $dblink is created in include/_db_connex.php
-$localPrefix = '';
-
-if (strpos(URL_ROOT, "localhost") !== -1)
-    $localPrefix = 'middleofjune/dist/';
-
-
-$fh = fopen(URL_ROOT . $localPrefix . '/data/top-100-venues.txt','r');
-
-
-while ($line = fgets($fh)) {
-	pr($line);
-};
-
-
-/*
-$break_after = 10;
-$count = 0;
-
-echo URL_ROOT . 'data/top-100-venues.txt';
-
-
-
-*/
-/*
-
-while ($line = fgets($fh)) {
-	// split up CSV on comma boundary
-	$venue_chunks = explode(",", $line);
-	//echo $line."<hr>";
-
-	// Map Venue name, Address, City and Zip
-	// Scrub out leading/trailing whitespace
-	$v_name = trim($venue_chunks[0]);
-	$v_addy = trim($venue_chunks[1]);
-	$v_city = trim($venue_chunks[2]);
-
-	// Strip out the state abbrev (if found)
-	$v_zipc = trim(str_replace("CA", "", $venue_chunks[3]));
-
-	$geoResult = geocodeFullAddress(
-		array(
-			"addy" => $v_addy,
-			"city" => $v_city,
-			"zipc" => $v_zipc,
-		)
-	);
-
-	//
-	if ($geoResult["success"]) {
-		pr($geoResult["payload"]);
-
-		// Prepare insert query
-		$statement = $dblink->prepare(
-			"INSERT INTO venues(name, address, city, zip, lat, lon) ".
-   			"VALUES(:name, :address, :city, :zip, :lat, :lon) ".
-   			"ON DUPLICATE KEY UPDATE lat= :lat2, lon= :lon2");
-
-		$statement->execute(array(
-			"name" => $v_name,
-			"address" => $v_addy,
-			"city" => $v_city,
-			"zip"  => $v_zipc,
-			"lat" => $geoResult["payload"]["lat"],
-			"lon" => $geoResult["payload"]["lon"],
-			"lat2" => $geoResult["payload"]["lat"],
-			"lon2" => $geoResult["payload"]["lon"]
-		));
-
-	}
-
-	if ($count >= 9)
-		break;
-
-	$count++;
+// Check JSON events file timestamp, only grab new data if stale
+if ($hrsElapsed > 12) {
+	// Scrape new data, save to JSON file in data directory
+	$json_events = $eventParser->getEventsJson();
+	$eventParser->saveJsonToFile('events', $jsonFile);
+	echo $json_events;
 }
-fclose($fh);
-*/
+
+// Print JSON data 
+echo file_get_contents( $jsonFile );
+
+
+// Save to CSV (if necessary)
+// $eventParser->saveVenuesCsv("../../data/venues.csv");
+// $eventParser->saveEventsCsv("../../data/events.csv");
+
+
+// ============================ HTML OUTPUT SECTION ===========================
+// Comment me out and use json_encode instead
+// $prev_month = "";
+// $prev_wkday = "";
+
+// $php_events_array = $eventParser->getEvents();
+// echo '<span class="small">';
+// foreach ($php_events_array as $show) {
+// 	//$nice_date = date("D M d", strtotime($show["date"]));
+// 	$weekday 	= date("l", strtotime($show["fmt_date"]));
+// 	$month 		= date("F", strtotime($show["fmt_date"]));
+
+// 	// Monthly header
+// 	if ($prev_month!=$month ) {											
+// 		echo "<hr><h2>".$month." ".$show["year"]."</h2>";
+// 	}	
+
+// 	// Day of week header
+// 	if ($prev_wkday!=$weekday) {								
+// 		echo "<h3>".$show["nice_date"]."</h3>";
+// 	}	
+// 		echo ' <a href="'.$show['url'].'">'.$show['artist'].'</a> '.$show['venue'].'<br>';
+// 	$prev_month	= $month;
+// 	$prev_wkday = $weekday;
+// }// End foreach
+// echo '</span>';
+//============================================================================ 
+
 ?>

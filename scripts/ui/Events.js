@@ -5,8 +5,12 @@
 
 var Events = {
    // PROPERTIES
-   baseURL: 'data/',
+   dataBaseURL: 'data/',
    eventsJSON: 'events.json',
+
+   apiScriptsBase: 'scripts/api/',
+   eventsScript: 'getEvents.php',
+
    eventsList: [],
 
    /**
@@ -54,16 +58,16 @@ var Events = {
 
       var requestBody = {
          type: "GET",
-         url: this.baseURL + this.eventsJSON,
+         url: this.apiScriptsBase + this.eventsScript,
          async: false
       };// End requestBody
 
-      // console.log(requestBody);
 
       $.ajax(requestBody).done(function(data, status, jqXHR) {
          if (status === 'success') {
             if (data) {
-               _this.displayEvents(data, divId);
+                // Script returns JSON string, so parse it first
+                _this.displayEvents(JSON.parse(data), divId);
                return true;
             }
          }
