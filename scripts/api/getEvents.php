@@ -6,13 +6,18 @@ getEvents.php
 Runs as a cron job and/or
 is called up when the JSON events file timestamp is stale q
 
+TODO:  - naming convention between 
+	- getEvents 
+	- displayEvents
+	- saveEvents (user-submitted, v2.0)
+
 */
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require_once("../common/common.php");
-require_once("db/_db_upd.php");
-require_once("db/_db_connex.php");
+require_once("db/__db_upd.php");
+require_once("db/__db_connex.php");
 require_once("Geocoder.php");
 
 

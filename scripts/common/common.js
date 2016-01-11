@@ -112,20 +112,23 @@ function getPos() {
 
    UserState.geoLocateUser()
     .then(function(position) {
-        console.dir(" >> 1 then >> ");
-        console.dir(position);
-        var coordinates = {
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-        };
-        return coordinates;
+      console.dir(" >> 1 then >> ");
+      console.dir(position);
+      var coordinates = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+      };
+      return coordinates;
     })
     .then(function(coordinates) {
-        console.dir(" >> 2 then >> ");
-        getNearbyVenues(coordinates, 25, 10);
+      console.dir(" >> 2 then >> ");
+      getNearbyVenues(coordinates, 25, 10);
+    })
+    .then(function() {
+      reattachListeners();
     })
     .fail(function(err) {
-        console.error(err);
+      console.error(err);
     });
 
    /*
@@ -138,4 +141,41 @@ function getPos() {
          ))
       .done()
    */
-}
+}// End function getPos
+
+
+
+/**
+ * reattachListeners
+ * ensures that buttons do stuff by reattaching listeners after DOM redraw
+ */
+function reattachListeners() {
+
+  // Bookmark favorite venues
+  $('.faveButton').on('click', function() {
+    console.log(" venue id " + $(this).data("id"));
+
+    // Save this to favorites
+    if ($(this).hasClass('btn-inactive')) {
+        UserState.faveVenues.push({
+            id: $(this).data("id")
+        });
+        $(this).removeClass('btn-inactive');
+        $(this).addClass('btn-active');
+    }// End if
+    // Remove venue from favorites
+    else {
+        $(this).removeClass('btn-active');
+        $(this).addClass('btn-inactive');
+
+        for(var i = UserState.faveVenues.length; i--; ) {
+            if (UserState.faveVenues[i]['id'] === $(this).id) {
+                UserState.faveVenues.splice(i, 1);
+            }
+        }
+    }// End else
+  });// End faveButton click
+
+
+}// End function reattachListeners
+

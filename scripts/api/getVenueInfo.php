@@ -2,11 +2,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once("../include/_constants.php");
 require_once("../include/common.php");
-require_once("../include/_db_sel.php");
-require_once("../include/_db_connex.php");
-require_once("../include/Geocode.php");
+require_once("../include/__db_sel.php");
+require_once("../include/__db_connex.php");
 
 // $dblink is created in include/_db_connex.php
 

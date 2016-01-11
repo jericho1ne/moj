@@ -1,0 +1,16 @@
+# https://davidwalsh.name/editor-config
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# JS indentation
+[*.js]
+indent_style = space
+indent_size = 4
+
+# Indentation override for all JS under vender directory
+[scripts/vendor/**.js]
+indent_style = space
+indent_size = 2

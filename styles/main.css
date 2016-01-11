@@ -25,7 +25,7 @@ body {
 h1 {
     font-family: "Ruda-Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 20px auto 0 auto;
-    width: $div-width;
+    width: "5%";
     font-size: 18px;
     font-weight: 200;
     line-height: 36px;
@@ -62,9 +62,9 @@ h1 {
     display: block;
     font-size: 16px;
     font-weight: 300;
-    height: 60px;
-    padding: $pad-sm;
-    border: 1px solid #ccc;
+    height: auto;
+    padding: 10px;
+    border-bottom: 1px solid #E5E5E5;
     margin: 0 2px;
     max-width: none;
     width: auto;
@@ -84,7 +84,7 @@ h1 {
     height: 300px;
     width: 300px;
     margin: 10px;
-    padding: $pad-sm;
+    padding: 20px;
     overflow: hidden;
     display: inline-block;
     border: 1px solid #ccc;
@@ -95,7 +95,7 @@ h1 {
 }
 
 #shows-content {
-    padding: $pad-md;
+    padding: 40px;
 }
 
 #nearby-shows {
@@ -104,7 +104,7 @@ h1 {
 }
 
 #content-parent {
-    max-width: $div-width;
+    max-width: "5%";
     height: auto;
 }
 
@@ -123,22 +123,22 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     width: 90%;
-    padding: $pad-sm;
+    padding: 20px;
 }
 
 .btn-active {
     color: #EAEAEA;
-    background-color: $active-color;
+    background-color: #CA2667;
 }
 .btn-inactive {
     color: #ababab;
-    background-color: $inactive-color;
+    background-color: 'transparent';
 }
 
 .stacked-boxes-common {
-    max-width: $80%;
+    max-width: 80%;
     min-width: 30%;
-    padding: $pad-lg;
+    padding: 60px;
     margin: 30px auto 40px auto;
     // margin: 20px auto 0 auto;
 }
@@ -174,7 +174,7 @@ h1 {
 }
 
 .debug {
-    padding: 10;
+    padding: 10px;
     border: 1px solid #aaa;
 }
 
@@ -202,13 +202,13 @@ h1 {
 }
 
 .phatButton {
-    @include border-radius(4px);
+    border-radius: 9px;
     font-family: "Ruda-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #ababab;
+    color: #fff;
     font-size: 14px;
-    background-color: #2A713D;
-    padding: 6px;
-	border: 1px solid #18ab29;
+    background-color: #18ab29;
+    padding: 8px 8px 6px 8px;
+    margin: 4px;
 	cursor: pointer;
     text-decoration: none;
 }

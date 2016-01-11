@@ -1,7 +1,7 @@
 <?php
 require_once("../common/common.php");
-require_once("db/_db_sel.php");
-require_once("db/_db_connex.php");
+require_once("db/__db_sel.php");
+require_once("db/__db_connex.php");
 
 
 // Do whatever it takes to grab a lat / lon to use as anchor

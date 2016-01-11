@@ -12,6 +12,33 @@ $(document).ready(function() {
         getPos();
     });
 
+    // Get events data ajax call, push to DOM
+    $('#getEvents').click(function() {
+
+      // Get venues within 25 miles, max 10 results
+      // getData('foo').then(function(response){
+      //   return $.when(
+      //   cache[ val ] || 
+
+      //   $.ajax('/foo/', {
+      //       data: { value: val },
+      //       dataType: 'j'
+      //   })
+      // )
+      //   $.when()
+
+      /* 
+       $.then(function(data, textStatus, jqXHR) {
+          console.log(":::::::::::::::::::::::");
+
+          console.log(data);
+          console.log(textStatus);
+          console.log(jqXHR.status); // Alerts 200
+          Events.displayEvents(data, "shows-content");
+        });
+       */
+
+    });// End getEvents
 
     $('#getNearbyVenues').click(function() {
         // Get venues within 25 miles, max 10 results
@@ -27,33 +54,122 @@ $(document).ready(function() {
        setPageState(lastSection);
     });
 
-    // Reattach click listeners on new data
-   // $("#nearby-shows").bind("DOMSubtreeModified", function() {
-        // Favorite button was clicked
-        $('.faveButton').on('click', function() {
-            console.log($(this));
 
-            // Save this to favorites
-            if ($(this).hasClass('btn-inactive')) {
-                UserState.faveVenues.push({
-                    id: $(this).data("id")
-                });
-                $(this).removeClass('btn-inactive');
-                $(this).addClass('btn-active');
-            }// End if
-            // Remove venue from favorites
-            else {
-                $(this).removeClass('btn-active');
-                $(this).addClass('btn-inactive');
+    $('.artistInfo').click(function() {
+        // Same as using the more specific $(this).attr('data-val') 
+        var artistName = $(this).html();  
 
-                for(var i = UserState.faveVenues.length; i--; ) {
-                    if (UserState.faveVenues[i]['id'] === $(this).id) {
-                        UserState.faveVenues.splice(i, 1);
-                    }
+        function getArtistInfo(artistName) {
+            console.log(" >> 1) getArtistInfo called");
+            // Get Artist Info
+            //  http://www.last.fm/api/show/artist.getinfo
+            // var artistXHR = $.ajax({
+            // var CACHE = {};
+
+            return CACHE[artistName] || $.ajax({
+                type: 'POST',
+                url: 'http://ws.audioscrobbler.com/2.0/',
+                data: 'method=artist.getInfo&' +
+                       'artist=' + artistName + '&' +
+                       'api_key=' + LASTFM_API_KEY + '&' +
+                       'format=json',
+                dataType : 'json',
+                // Success callback will fire even when couple with an external $.done
+                success : function(data) {
+                    console.log(' >> artistXHR success >>');
+                    // Save current artist data in global cache
+                    CACHE[data.artist.name] = data;
+                },
+                error : function(code, message){
+                    // Handle error here
+                    // TODO:  change to jquery UI modal that autofades and has (X) button
+                    alert("Unable to load Artist data =(");
                 }
-            }// End else
-        });
-   // });// End ("#nearby-shows").bind
+            });// End artistXHR $.ajax 
+        }
+
+        function getTopTracks(artistName) {
+            console.log(" >> 2) getTopTracks called");
+            // Get Artist Top Tracks
+            //   http://www.last.fm/api/show/artist.getTopTracks
+            // var topTracksXHR = $.ajax({
+
+            var underscoreLowercaseName = artistName.toLowerCase().replace(/ /g,"_");
+
+            return CACHE[underscoreLowercaseName + '_tracks' ] || $.ajax({
+                type: 'POST',
+                url: 'http://ws.audioscrobbler.com/2.0/',
+                data: 'method=artist.getTopTracks&' +
+                       'artist=' + artistName + '&' +
+                       'api_key=' + LASTFM_API_KEY + '&' +
+                       'format=json',
+                dataType : 'json',
+                // Success callback will fire even when couple with an external $.done
+                success : function(data) {
+                    console.log(' >> topTracksXHR success >>');
+
+                    // Cache track data to avoid future calls
+                    var underscoreLowercaseName = data.toptracks['@attr'].artist.toLowerCase().replace(/ /g, '_');
+                    CACHE[underscoreLowercaseName + '_tracks'] = data;
+                },
+                error : function(errorCode, errorMsg) {
+                    // Handle error here
+                    // TODO:  change to jquery UI modal that autofades and has (X) button
+                    var msg = 'Unable to load Top tracks for <b>' + + '</b>';
+                    alert(msg + '<br>' + errorMsg + '(' + errorCode + ')');
+                }
+            });// End topTracksXHR $.ajax 
+        }
+
+        function appendArtistInfo(divId, data) {
+            // Create custom info array
+            var artist = {
+                'name': data.artist.name,
+                'bio': data.artist.bio,
+                'url': data.artist.url,
+                'images': data.artist.image,
+                'tags': data.artist.tags.tag
+            };
+          
+            // Clip bio at 200 characters max
+            var shortBio = artist.bio.summary.substring(0, 200);
+
+            // If longer than max amount, add "show more" link
+            if (data.artist.bio.summary.length > 200) {
+                shortBio += '... <a href="#">[ more ]</a>';
+            }
+
+            $('#' + divId).html(artist.name 
+                + '<br>' 
+                + shortBio 
+                + '<br>' 
+                + '<img src="' + artist.images[2]['#text'] + '">');
+        }
+
+        function appendTopTracks(divId, data) {
+             console.log(data);
+             window.topTrackData = data;
+        }
+
+        // Promise chain 
+        //  - get artist info, display it, get top tracks, display them
+        getArtistInfo(artistName)
+            .then(function(data) {
+                appendArtistInfo('artist-info', data);
+            })
+            .then(getTopTracks(artistName))
+            .then(function(data) {
+                console.log(data);
+                appendTopTracks('artist-info', data);
+            });
+
+        // $.when(getArtistInfo).done(function(artistInfo) {
+        //     console.log(artistInfo);
+        //     // Handle both XHR objects
+        //     console.log(" >>>  $.when.done() complete");
+        // });
+
+    });
 
    // Events.getEvents("shows-content", 10);
 
@@ -63,53 +179,34 @@ $(document).ready(function() {
    //  ACTIONS
    //
 
-    /*
-        1) Get user's location
+    // 1) Get user location
+    // 2) Get nearby venues, current distance to each, and related shows
+    //     EG:
+    //         - Troubadour (2.3 mi)
+    //             * Show 1
+    //             * Show 2
+    //             * Show 3
+    //         - Molly malone's (5 mi)
+    //             *
+    //             *
+    //             *
+    //         etc...
+    // 3) Save nearby venues in global object
+    // 3) Display in div
 
-        2) Get nearby venues, current distance to each, and related shows
-            EG:
-                - Troubadour (2.3 mi)
-                    * Show 1
-                    * Show 2
-                    * Show 3
-                - Molly malone's (5 mi)
-                    *
-                    *
-                    *
-                etc...
-
-        3) Save nearby venues in global object
-
-        3) Display in div
-    */
-    getPos();
+    // getPos();
 
 
     // UserState.setNearbyVenues(venues);
 
-   /*$.when(UserState.geoLocateUser())
-         .done(
-            Venues.getVenues(
-               UserState.getSavedUserPosition(),  // sends lat, lon, etc array
-               25, // in miles
-               3)
-         );
-
-   )*/
-   // Get events data through ajaxy means, then push it to the DOM
-
-  //   $.when(Events.getEvents("shows-content", 10))
-
-   /*.then(function(data, textStatus, jqXHR) {
-      console.log(":::::::::::::::::::::::");
-
-      console.log(data);
-      console.log(textStatus);
-      console.log(jqXHR.status); // Alerts 200
-      Events.displayEvents(data, "shows-content");
-
-   });
-   */
+  // $.when(UserState.geoLocateUser())
+  //   .done(
+  //     Venues.getVenues(
+  //        UserState.getSavedUserPosition(),  // sends lat, lon, etc array
+  //        25, // in miles
+  //        3
+  //     )
+  //   );
 
    // Pass in a callback to our user location finder function,
    // in this case, to redraw the nearby place list
@@ -134,14 +231,6 @@ $(document).ready(function() {
    }
 
 
-   // Youtube API globals
-   var apiKey = "AIzaSyCF4m5XE3VTOUzo8b10EstraU1depENiB4";
-   // var playlistIds = [
-      "PLLtM6mCpibb-3jk6YbbaZtIBzcxAPxIIj",
-      "PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4"];
-
-   console.log('check one two'); // eslint-disable-line no-console
-
    $.getJSON('../dist/data/shows.json', function(data) {
        console.log(data);
        console.log("hi");
@@ -152,150 +241,8 @@ $(document).ready(function() {
    function getVideoStats(videoId) {
       console.log("videoId :: " + videoId);
    }
+   */
 
-
-   var YouTubeSearch = {
-      // PROPERTIES
-      apiKey:  "AIzaSyCF4m5XE3VTOUzo8b10EstraU1depENiB4",
-      baseURL:    "https://www.googleapis.com/youtube/v3/",
-      videosList: [],
-      favoritesList: [],
-      playlists: ['PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4'],
-
-
-      // METHODS
-      // searchForArtist(artist_name, max_results, ordering);
-
-      //----------------------------------------------------------------------------------
-      //    getAllUserPlaylists
-      //
-      //----------------------------------------------------------------------------------
-      getAllUserPlaylists: function(userId) {
-         // TODO: write code
-      },
-
-      //----------------------------------------------------------------------------------
-      //    getPlaylistVideos
-      //
-      //----------------------------------------------------------------------------------
-      getPlaylistVideos: function(playlistId, maxResults) {
-         console.log(" >> getPlaylistVideos >> ");
-         // we'll need this refernce later inside the $.ajax scope
-         var _this = this;
-
-         var requestBody = {
-            type:    "GET",
-            url:  this.baseURL +
-                  "playlistItems?part=snippet&" +
-                  "maxResults="+maxResults +
-                  "&playlistId="+playlistId +
-                  "&key="+this.apiKey,
-            async: false
-         };// End requestBody
-
-         $.ajax(requestBody).done(function(data, status) {
-            if (status === 'success') {
-               if (data) {
-                  //console.log(data);
-                  _this.videosList = data.items;
-                  return true;
-               }
-            }
-            else {
-               alert("No videos found :(");
-               return false;
-            }
-         });//End $.ajax
-      },// End getPlaylistVideos
-
-      //----------------------------------------------------------------------------------
-      //    displayVideos
-      //
-      //----------------------------------------------------------------------------------
-      displayVideos: function() {
-         console.log(' >> displayVideos >> ');
-         var vids = this.videosList;
-
-         for (key in vids) {
-            console.log( vids[key] );
-            // vids[0].id
-            // vids[0].snippet.thumbnails.title
-            // vids[0].snippet.thumbnails.medium.url     // .width=320, height=180
-            // vids[0].snippet.thumbnails.high.url          // .width=480, height=360
-            // vids[0].snippet.thumbnails.standard.url      // .width=640, height=480
-
-            var imgContainer = $('<li>')
-               .attr('class','yts-list');
-
-            // div containing image + caption
-            var wrapperDiv = $('<div>')
-               .attr('class','yts-photo-wrapper');
-
-            // image source tag
-            var imgTag = $('<img>')
-               .attr('class','yts-photo')
-               .attr('src', vids[key].snippet.thumbnails.medium.url);
-
-            // floating image label
-            var imgLabel = $('<div>')
-               .attr('class','yts-caption')
-               .html(vids[key].snippet.title);
-
-            wrapperDiv.append(imgTag);
-            wrapperDiv.append(imgLabel);
-            imgContainer.append(wrapperDiv);
-
-            imgContainer.appendTo('#stuff');
-            // $('#stuff').append(vids[key].snippet.thumbnails.high.url + '<br>');
-
-         }
-      },
-
-      //----------------------------------------------------------------------------------
-      //    displayVideos
-      //
-      //----------------------------------------------------------------------------------
-      getVideos: function(searchTerm, maxResults) {
-         // we'll need this refernce later inside the $.ajax scope
-         var _this = this;
-
-         var requestBody = {
-            type:    "GET",
-            url:  this.baseURL +
-                  "search?part=snippet&" +
-                  "&q="+ searchTerm +
-                  "maxResults="+maxResults +
-                  "&key="+this.apiKey,
-            async: false
-         };// End requestBody
-
-         console.log(url);
-
-         $.ajax(requestBody).done(function(data, status) {
-            if (status === 'success') {
-               if (data) {
-                  console.log(data);
-                  _this.videosList = data.items;
-                  return true;
-               }
-            }
-            else {
-               alert("No videos found :(");
-               return false;
-            }
-         });//End $.ajax
-      }// End getVideos
-
-   }// End object YouTubeSearch
-
-   window.yts = YouTubeSearch;
-
-   // grab JSON api data, then display
-   $.when(YouTubeSearch.getPlaylistVideos("PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4", 30))
-      .done(YouTubeSearch.displayVideos());
-*/
-   // grab JSON api data, then display
-   /*$.when(YouTubeSearch.getVideos("Dilated", 30))
-      .done(YouTubeSearch.displayVideos()); */
+  
 
 });// End on Document Load
