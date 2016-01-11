@@ -15,18 +15,7 @@ $(document).ready(function() {
 
     // Get events data ajax call, push to DOM
     $('#getEvents').click(function() {
-
-      /* 
-       $.then(function(data, textStatus, jqXHR) {
-          console.log(":::::::::::::::::::::::");
-
-          console.log(data);
-          console.log(textStatus);
-          console.log(jqXHR.status); // Alerts 200
-          Events.displayEvents(data, "shows-content");
-        });
-       */
-
+        // 
     });// End getEvents
 
     $('#getNearbyVenues').click(function() {
