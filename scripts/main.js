@@ -147,7 +147,7 @@ $(document).ready(function() {
         }
 
         function appendTopTracks(divId, data) {
-             console.log(data);
+             console.log(data.toptracks.track);
              window.topTrackData = data;
         }
 
@@ -156,10 +156,11 @@ $(document).ready(function() {
         getArtistInfo(artistName)
             .then(function(data) {
                 appendArtistInfo('artist-info', data);
-            })
-            .then(getTopTracks(artistName))
+            });
+
+        getTopTracks(artistName)
             .then(function(data) {
-                console.log(data);
+            
                 appendTopTracks('artist-info', data);
             });
 
