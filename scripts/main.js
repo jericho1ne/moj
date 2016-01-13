@@ -53,8 +53,7 @@ $(document).ready(function() {
 
 
     // Get list of shows
-    Events.getEvents("shows-content", 10);
-
+    Events.getEvents('shows-content', 10);
 
    //
    //  ACTIONS

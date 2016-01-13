@@ -10,13 +10,12 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <!-- external dependencies -->
-<script type="text/javascript" src="scripts/vendor/jquery.js"></script>
-<script type="text/javascript" src="scripts/vendor/jquery-ui.min.js"></script>
+<script type="text/javascript" src="scripts/vendor/jquery-2.2.0.min.js"></script>
 <script type="text/javascript" src="scripts/vendor/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/vendor/datatables.min.js"></script>
 
 <!-- stuff i wrote -->
-<script type="text/javascript" src="scripts/common/__constants.js"></script>
+<!-- <script type="text/javascript" src="scripts/common/__constants.js"></script> -->
 <script type="text/javascript" src="scripts/common/common.js"></script>
 <script type="text/javascript" src="scripts/ui/MapGeo.js"></script>
 <script type="text/javascript" src="scripts/ui/UserState.js"></script>
@@ -36,16 +35,23 @@
 
 <body>
 
-<div id="content-parent" class="center debug">
+<div id="content-parent" class="center">
 
-    <div class="button-bar center">
+    <div class="row left" style="border:2px solid gray">
+        <div id="map" class="column">
+        </div>
+
+        <div class="column" id="nearby-shows">
+            <h1 class="hero-unit">'twas a Friday afternoon in middle of June</h1>
+        </div>
+    </div>
+    <!-- <div class="button-bar center">
         <button class="phatButton" id="setPageState">Save Layout</button>
         <button class="phatButton" id="getPos">Get Location</button>
         <button class="phatButton" id="getNearbyVenues">What's nearby?</button>
-        <!-- <button class="phatButton" id="getEvents">Get Shows</button> -->
-    </div>
+    </div> -->
 
-    <div id="" class="left">
+    <!-- <div id="" class="left">
         <h2>Artists</h2>
         <a href="#" data-val="Hot Chip" class="artistInfo">Hot Chip<a><br>
         <a href="#" data-val="Jungle" class="artistInfo">Jungle<a><br>
@@ -56,19 +62,10 @@
     <div id="artist-info" class="auto-expand debug">
         <div id="artist-bio" class="left auto-expand"></div>
         <div id="artist-tracks" class="left auto-expand"></div>
-    </div>
+    </div> -->
     
     <div id="shows-content" class="left debug">
         <h2>Shows Content</h2>
-    </div>
-
-    <div class="row left" style="border:2px solid gray">
-        <div id="map" class="column">
-        </div>
-
-        <div class="column" id="nearby-shows">
-            <h1 class="hero-unit">'twas a Friday afternoon in middle of June</h1>
-        </div>
     </div>
 
 </div>
