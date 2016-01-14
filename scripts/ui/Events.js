@@ -62,6 +62,8 @@ var Events = {
         // Append Datatable header row
         $dataTable.append($tableHeader);
 
+        $dataTable.append('<tbody>');
+
         // Initialize once, reuse inside upcoming loop
         var row = '';
         var rowCount = 0;
@@ -90,10 +92,12 @@ var Events = {
 
             rowCount ++;
 
-            if (rowCount > 40) break;
+            // if (rowCount > 40) break;
         }
         // });// End eventsData.each
         
+        $dataTable.append('</tbody>');
+
         // The final append to DOM
         $('#' + divId).append($dataTable);
 
@@ -106,7 +110,7 @@ var Events = {
                 // 0 = date, 1 = artist, 2 = venue, 3 = ticket
                 "order": [[ 0, "asc" ]]
             });
-        }, 300);
+        }, 3000);
        
 
     },// End displayEvents
