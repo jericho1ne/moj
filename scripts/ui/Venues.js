@@ -13,7 +13,7 @@ var Venues = {
 	 * getVenues
 	 * list of venues
 	 */
-	getVenues: function(coords, maxDistance, maxResults, div) {
+	getVenues: function(coords, maxDistance, maxResults) {
 		console.log(" >> getVenues >> ");
 		console.log(coords);
 

@@ -30,7 +30,7 @@ h1 {
     font-weight: 200;
     line-height: 36px;
     background-color: #eee;
-    @include border-radius(6px);
+    border-radius: 6px;
     padding: 60px;
     font-size: 50px;
     line-height: 1;
@@ -85,8 +85,8 @@ h1 {
 }
 /*-------------------- div IDs -------------------*/
 #map {
-    height: 120px;
-    width: 300px;
+    height: 180px;
+    width: 180px;
     margin: 8px;
     padding: 4px;
     overflow: hidden;
@@ -95,7 +95,8 @@ h1 {
 }
 
 #map img {
-    @include border-radius(150px);
+    width: 180px;
+    border-radius: 180px;
 }
 
 #shows-content {
@@ -121,7 +122,7 @@ h1 {
 /*-------------------- Classes -------------------*/
 .content {
     box-shadow: 1px 2px 4px 2px rgba(10, 20, 30, 0.14);
-    @include border-radius(8px);
+    border-radius: 8px;
     background: #fff;
     margin-top: 30px;
     margin-left: auto;
@@ -176,6 +177,15 @@ h1 {
     margin-right: auto;
     text-align: left;
 }
+
+.right {
+    margin-left: 220px;
+    text-align: left;
+}
+
+.fa-ticket {
+    padding: 14px;
+}
 .center {
     margin-right: auto;
     margin-left: auto;
@@ -185,13 +195,13 @@ h1 {
 }
 
 .debug {
-    padding: 10px;
+    padding: 2px;
     border: 1px solid #aaa;
 }
 
 .faveButton {
     outline: none;
-    @include border-radius(22px);
+    border-radius: 22px;
     color: #EAEAEA;
     margin: 0 6px 0 0;
     padding: 6px;
@@ -210,6 +220,20 @@ h1 {
     border: 1px solid red;
     outline: none;
     opacity: 1;
+}
+
+.link {
+    background: none;
+    padding: 3px;
+    border: none;
+    color: #4779E5;
+    font-weight: 800;
+}
+
+.link:hover {
+    background: #A2E5F7;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .phatButton {
@@ -241,7 +265,7 @@ h1 {
 }
 
 .yts-photo-wrapper {
-    @include border-radius(8px);
+    border-radius: 8px;
 	position: relative;
 	display: inline-block;
 	padding: 2px;
@@ -250,7 +274,7 @@ h1 {
 .yts-photo {
 	display: inline-block;
 	vertical-align: text-top;
-    @include border-radius(7px);
+    border-radius: 7px;
 	border: 7px solid #777;
 }
 
@@ -276,6 +300,23 @@ h1 {
 }
 
 
+
+/*------------------- Artist info  -----------*/
+img.artist-profile {
+    border-radius: 87px;
+}
+
+.w200 {
+    width: 200px;
+}
+
+.h200 {
+    height: 200px;
+}
+
+.h400 {
+    height: 400px;
+}
 /*------------------- Error popup / modal dialog -----------*/
 .ui-dialog.error-dialog {
     font-family: "Ruda-Regular";

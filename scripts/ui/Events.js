@@ -18,6 +18,10 @@ var Events = {
      * display events inside the div id we've passed in
      */
     displayEvents: function(data, divId) {
+        // Create the deferred object ourselves
+        var deferred = $.Deferred();
+
+
         /*
         ----- data format ----
         artist: "Hanson"
@@ -79,7 +83,7 @@ var Events = {
 
                     // For artist, use a highlighted bg color if a fave
                     // style="background-color:' + expenseCategories[row.label].color + '"
-                    + '<td class="left">' + data[i].artist + '</td>'
+                    + '<td class="left"><span class="link artistInfo">' + data[i].artist + '</span></td>'
                     
                     + '<td class="left">' + data[i].venue + '</td>'
                     
@@ -106,43 +110,45 @@ var Events = {
         //
         setTimeout(function(){ 
             $('#' + dataTableUniqueID).DataTable({
-                "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
+                "lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]],
                 // 0 = date, 1 = artist, 2 = venue, 3 = ticket
                 "order": [[ 0, "asc" ]]
             });
-        }, 3000);
-       
+        }, 200);
 
+        // Give the datatable a chance to complete attaching, then call it quits
+        setTimeout(function() {
+            deferred.resolve();
+        }, 600);
+       
+        // Always return deferred object regardless
+        return deferred.promise();
     },// End displayEvents
 
     /**
      * getEvents
      * list of events, bounded by certain input parameters
      */
-    getEvents: function(divId, maxResults) {
-        // we'll need this refernce later inside the $.ajax scope
-        var _this = this;
-
-        var requestBody = {
-            type: "GET",
+    getEvents: function(maxResults) {
+        // $.ajax method will call resolve() on the deferred it returns
+        // when the request completes successfully
+        return $.ajax({
+            type: 'GET',
             url: this.apiScriptsBase + this.eventsScript,
-            async: false
-        };// End requestBody
-
-        // Load in the events JSON data
-        $.ajax(requestBody).done(function(data, status, jqXHR) {
-            if (status === 'success') {
-                if (data) {
-                    // Script returns JSON string, so parse it first
-                    _this.displayEvents(JSON.parse(data), divId);
-                    return true;
-                }
+            async: false,
+            // Success callback will fire even when coupled with an external $.done
+            success : function(data) {  // data, status, jqXHR
+                console.log(' >> events XHR success >>');
+                // Save current artist data in global cache
+                CACHE['eventData'] = data;
+            },
+            // if the request fails, deferred.reject() is called
+            error : function(code, message){
+                // Handle error here
+                // TODO:  change to jquery UI modal that autofades and has (X) button
+                alert("Unable to load Event data =(");
             }
-            else {
-                alert("No data returned :(");
-                return false;
-            }
-        });//End $.ajax loading events JSON
+        });// End getEvents $.ajax 
     },// End getEvents
 
 }// End object Events

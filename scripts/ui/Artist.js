@@ -12,6 +12,26 @@
     // Artist Bio, Info, Images, and Top tracks
     //
 
+    setListeners: function() {
+        $('.artistInfo').click(function() {
+            console.log( " artistInfo clicked ");
+            // Same as using the more specific $(this).attr('data-val') 
+            var artistName = $(this).html();  
+
+            // Promise chain 
+            //  - get artist info, display it, get top tracks, display them
+            Artist.getArtistInfo(artistName)
+                .then(function(artistData) {
+                    Artist.appendArtistInfo('artist-bio', artistData);
+                });
+
+            Artist.getTopTracks(artistName)
+                .then(function(trackData) {
+                    Artist.appendTopTracks('artist-tracks', trackData);
+                });
+        });// artistInfo .click
+    }, // End setListeners
+
     /**
      * getArtistInfo :: gets bio, images, etc
      */
@@ -98,15 +118,27 @@
 
         // If longer than max amount, add "show more" link
         if (data.artist.bio.summary.length > 200) {
-            shortBio += '... <a href="#">[ more ]</a>';
+            shortBio += ' ... <a href="#">[ more ]</a>';
         }
 
         $('#' + divId).empty();
 
         // Create artist info element to be displayed
-        $info = $('<span>')
-            .html('<h3>' + artist.name + '</h3>' + shortBio + 
-                '<br><br>' + '<img src="' + artist.images[2]['#text'] + '">');
+        $info = $('<div>')
+            .addClass('debug');
+
+        $artistPortrait = $('<div>')
+            .addClass('left w200 debug h200')
+            .append('<img src="' + artist.images[2]['#text'] + '" class="artist-profile">')
+            .append('<h3>' + artist.name + '</h3>');
+
+        $artistBio = $('<div>')
+            .addClass('right m220 debug')
+            .html(shortBio);
+
+        $info.append($artistPortrait);
+        $info.append($artistBio);
+ 
         $('#' + divId).append($info);
     },// End function appendArtistInfo
 
@@ -117,7 +149,7 @@
         var topTracks = data.toptracks.track;
 
         $('#' + divId).empty();
-        $('#' + divId).append('<h3>Tracklist</h3>');
+        // $('#' + divId).append('<h3>Tracklist</h3>');
 
         // Create artist info element to be displayed
         for (i = 0, len = topTracks.length; i < len; i++) { 

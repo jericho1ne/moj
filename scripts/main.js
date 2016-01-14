@@ -20,7 +20,7 @@ $(document).ready(function() {
 
     $('#getNearbyVenues').click(function() {
         // Get venues within 25 miles, max 10 results
-        getNearbyVenues(25, 10);
+        getNearbyVenues(25, 4);
     });
 
 
@@ -32,28 +32,31 @@ $(document).ready(function() {
        setPageState(lastSection);
     });
 
+    // Get user's location and display it
+    // getPos();
 
-    $('.artistInfo').click(function() {
-        // Same as using the more specific $(this).attr('data-val') 
-        var artistName = $(this).html();  
+    // Get list of shows, display them, set click listeners on each Artist
+    //
+    // $when is same as:
+    //      var eventPromise = Events.getEvents(10);
+    //      eventPromise.then(function(data)) ...
+    //
+    $.when(Events.getEvents(10))
+        .then(function(data) {
+            // JSON data will go into shows-content div
+            return $.when(Events.displayEvents(JSON.parse(data), 'shows-content'));
+        })
+        .then(function() {
+            console.log(" 2nd .then triggered");
+            // Set click listeners 
+            Artist.setListeners();
+        });
 
-        // Promise chain 
-        //  - get artist info, display it, get top tracks, display them
-        Artist.getArtistInfo(artistName)
-            .then(function(artistData) {
-                Artist.appendArtistInfo('artist-bio', artistData);
-            });
 
-        Artist.getTopTracks(artistName)
-            .then(function(trackData) {
-                Artist.appendTopTracks('artist-tracks', trackData);
-            });
+    // deferred.done(function(value) {
+    //    alert(value);
+    // });
 
-    });// artistInfo .click
-
-
-    // Get list of shows
-    Events.getEvents('shows-content', 10);
 
    //
    //  ACTIONS
@@ -74,7 +77,7 @@ $(document).ready(function() {
     // 3) Save nearby venues in global object
     // 3) Display in div
 
-    // getPos();
+
 
 
     // UserState.setNearbyVenues(venues);
