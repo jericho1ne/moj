@@ -22,7 +22,7 @@
             //  - get artist info, display it, get top tracks, display them
             Artist.getArtistInfo(artistName)
                 .then(function(artistData) {
-                    Artist.appendArtistInfo('artist-bio', artistData);
+                    Artist.appendArtistInfo('artist-info', artistData);
                 });
 
             Artist.getTopTracks(artistName)
@@ -112,34 +112,58 @@
             'images': data.artist.image,
             'tags': data.artist.tags.tag
         };
-      
-        // Clip bio at 200 characters max
-        var shortBio = artist.bio.summary.substring(0, 200);
+        
+        // window.artist = artist;
 
+        var maxChars = 800;
+
+        // Remove any links
+        var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+
+        // Clip bio at preset character max
+        var shortBio = fullBio.substring(0, maxChars);
+        
         // If longer than max amount, add "show more" link
-        if (data.artist.bio.summary.length > 200) {
-            shortBio += ' ... <a href="#">[ more ]</a>';
+        if (fullBio.length > maxChars) {
+            shortBio += ' ... <a href="#">( read on )</a>';
         }
 
+        // Clear existing content        
         $('#' + divId).empty();
 
         // Create artist info element to be displayed
-        $info = $('<div>')
-            .addClass('debug');
+        $artistLeftDiv = $('<div>')
+            .addClass('div-left');
 
-        $artistPortrait = $('<div>')
-            .addClass('left w200 debug h200')
-            .append('<img src="' + artist.images[2]['#text'] + '" class="artist-profile">')
-            .append('<h3>' + artist.name + '</h3>');
+        $artistRightDiv = $('<div>')
+            .addClass('div-right');
 
-        $artistBio = $('<div>')
-            .addClass('right m220 debug')
+        // photoContainer = img + caption
+        $photoContainer = $('<div>') 
+            .addClass('photo-container');
+
+        // $portrait = $('<div>')
+        //     .attr('id', 'artist-bio')
+        //     .addClass('left w200 debug h200')
+        
+        $photoCaption = $('<h3>')
+            .addClass('photo-caption')
+            .html(artist.name);
+
+        $photoContainer.append('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
+        $photoContainer.append($photoCaption);
+
+        $bio = $('<div>')
+            .addClass('line-height-200')
             .html(shortBio);
 
-        $info.append($artistPortrait);
-        $info.append($artistBio);
+        //$info.append($artistPortrait);
+        $artistLeftDiv.append($photoContainer);
+        $artistRightDiv.append($bio);
  
-        $('#' + divId).append($info);
+        $('#' + divId)
+            .append($artistLeftDiv)
+            .append($artistRightDiv);
     },// End function appendArtistInfo
 
     /**
@@ -154,11 +178,9 @@
         // Create artist info element to be displayed
         for (i = 0, len = topTracks.length; i < len; i++) { 
             // TODO:  create playlist of individual tracks via YouTube API hook
-            $song = $('<li>')
-                .addClass('youtube-clip')
-                .html(topTracks[i].name);
+            var song = topTracks[i].name;
 
-            $('#' + divId).append($song);
+            $('#' + divId).append(song + ' / ');
         }// End for loop
        
     },// End function appendTopTracks

@@ -8,30 +8,26 @@
     src: url("fonts/ruda/Ruda-Black.ttf");
 }
 
-@mixin border-radius($px) {
-	-ms-border-radius: $px;
-	-moz-border-radius: $px;
-	-webkit-border-radius: $px;
-	border-radius: $px;
-}
 
 /*-------------------- HTML tags -------------------*/
 body {
 	background: #fafafa;
+    font-size: 12px;
 	font-family: "Ruda-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: #333;
+    margin: 0px;
+    padding: 6px;
 }
 
-h1 {
+.large-text {
     font-family: "Ruda-Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: 20px auto 0 auto;
-    width: "5%";
-    font-size: 18px;
+    margin: 20px auto 20px auto;
+    font-size: 18px !important;
     font-weight: 200;
-    line-height: 36px;
+    line-height: 200px;
     background-color: #eee;
     border-radius: 6px;
-    padding: 60px;
+    padding: 40px;
     font-size: 50px;
     line-height: 1;
     letter-spacing: -1px;
@@ -84,6 +80,11 @@ h1 {
     overflow: auto;
 }
 /*-------------------- div IDs -------------------*/
+#content-parent {
+    padding: 10px;
+    height: auto;
+}
+
 #map {
     height: 180px;
     width: 180px;
@@ -105,13 +106,8 @@ h1 {
 
 #nearby-shows {
     font-size: 10px;
-    border: 1px solid #ccc;
 }
 
-#content-parent {
-    max-width: "5%";
-    height: auto;
-}
 
 #stuff {
     @extend .stacked-boxes-common;
@@ -172,14 +168,35 @@ h1 {
     opacity: 0.68;
 }
 
-.left {
-    margin-left: 0px;
-    margin-right: auto;
+.div-two-adjacent {
+    width: 100%;
+    display: block;
+    overflow: auto;
+    min-height: 320px;
+    position: relative;
+}
+
+.div-full-length {
+    width: 100%;
+    display: block;
+    overflow: auto;
+}
+
+.div-left { 
+    position: absolute; 
+    left: 0px; 
+    width: 310px; 
+    height: auto;
+    /*margin-right: auto;*/
     text-align: left;
 }
 
-.right {
-    margin-left: 220px;
+.div-right {
+    position: absolute; 
+    left: 320px; 
+    width: 400px; 
+    height:auto;
+   /* margin-left: 220px;*/
     text-align: left;
 }
 
@@ -302,18 +319,36 @@ h1 {
 
 
 /*------------------- Artist info  -----------*/
-img.artist-profile {
-    border-radius: 87px;
+img.artist-profile-pic {
+    border-radius: 0px;
+    border: 1px solid #333;
+}
+.photo-container {
+    left: 0px;
+    position: relative;
+    width: 180px;
+}
+.line-height-200 {
+    line-height: 200%;
+}
+.line-height-100 {
+    line-height: 100%;
 }
 
+.photo-caption {
+    color: #fff;
+    position: absolute;
+    bottom: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    left: 1=px;
+}
 .w200 {
     width: 200px;
 }
-
 .h200 {
     height: 200px;
 }
-
 .h400 {
     height: 400px;
 }

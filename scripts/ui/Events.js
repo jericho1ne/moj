@@ -110,9 +110,16 @@ var Events = {
         //
         setTimeout(function(){ 
             $('#' + dataTableUniqueID).DataTable({
-                "lengthMenu": [[20, 40, 80, -1], [20, 40, 80, "All"]],
+                "lengthMenu": [[40, 80, 200, 3], [40, 80, 200, "All"]],
                 // 0 = date, 1 = artist, 2 = venue, 3 = ticket
-                "order": [[ 0, "asc" ]]
+                "order": [[ 0, "asc" ]],
+                "language": {
+                    "lengthMenu": "_MENU_ events per page",
+                    "zeroRecords": "Nothing found.",
+                    "info": "",  // "Page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": ""
+                }
             });
         }, 200);
 
