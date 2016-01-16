@@ -23,7 +23,6 @@ $(document).ready(function() {
         getNearbyVenues(25, 4);
     });
 
-
     $('#setPageState').click(function() {
         // Parse the hashtag section from URL
         var lastSection = window.location.href.split("/").pop();
@@ -53,10 +52,13 @@ $(document).ready(function() {
         });
 
 
-    // deferred.done(function(value) {
-    //    alert(value);
-    // });
+    // grab JSON api data, then display
+    $.when(YouTubeSearch.getPlaylistVideos("PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4", 30))
+      .done(YouTubeSearch.displayVideos('artist-tracks'));
 
+    // grab JSON api data, then display
+    /*$.when(YouTubeSearch.getVideos("Dilated", 30))
+      .done(YouTubeSearch.displayVideos()); */
 
    //
    //  ACTIONS

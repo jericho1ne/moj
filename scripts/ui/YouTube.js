@@ -56,7 +56,7 @@
       //    displayVideos
       //
       //----------------------------------------------------------------------------------
-      displayVideos: function() {
+      displayVideos: function(divID) {
          console.log(' >> displayVideos >> ');
          var vids = this.videosList;
 
@@ -89,7 +89,7 @@
             wrapperDiv.append(imgLabel);
             imgContainer.append(wrapperDiv);
 
-            imgContainer.appendTo('#stuff');
+            $('#' + divID).append(imgContainer);
             // $('#stuff').append(vids[key].snippet.thumbnails.high.url + '<br>');
 
          }
@@ -133,11 +133,3 @@
    }// End object YouTubeSearch
 
    window.yts = YouTubeSearch;
-
-   // grab JSON api data, then display
-   $.when(YouTubeSearch.getPlaylistVideos("PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4", 30))
-      .done(YouTubeSearch.displayVideos());
-*/
-   // grab JSON api data, then display
-   /*$.when(YouTubeSearch.getVideos("Dilated", 30))
-      .done(YouTubeSearch.displayVideos()); */
