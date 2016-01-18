@@ -19,6 +19,10 @@ body {
     padding: 6px;
 }
 
+a {
+    color: #698ED0;
+}
+
 .large-text {
     font-family: "Ruda-Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 20px auto 20px auto;
@@ -201,7 +205,7 @@ body {
 }
 
 .fa-ticket {
-    padding: 14px;
+    font-size: 22px !important;
 }
 .center {
     margin-right: auto;
@@ -243,12 +247,12 @@ body {
     background: none;
     padding: 3px;
     border: none;
-    color: #4779E5;
+    color: #698ED0;
     font-weight: 800;
 }
 
 .link:hover {
-    background: #A2E5F7;
+    background: #B4CEE7;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -416,7 +420,12 @@ select {
 }
 
 .alternate-bgcolor {
-    background-color: #eee;
+    background-color: #FEFEFE;
+}
+
+table.dataTable tbody td {
+    padding: 10px !important;
+    margin: 2px !important;
 }
 
 /*           end datatables.min.css override        */

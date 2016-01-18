@@ -9,22 +9,24 @@ include_once('EventParser.php');
 //============================================================
 $eventParser = new EventParser('http://thescenestar.typepad.com/shows/');
 
+// Current (potentially outdated JSON data)
 $jsonFile = "../../data/events.json";
 
 // Find out time elapsed in hours
 $hrsElapsed = (time() - filemtime($jsonFile)) / (60*60);
 
-// Check JSON events file timestamp, only grab new data if stale
-if ($hrsElapsed > 12) {
+// Check JSON events file timestamp, 
+// only grab new data if stale AND the file is writable
+if ($hrsElapsed > 12 && is_writable($jsonFile)) {
 	// Scrape new data, save to JSON file in data directory
 	$json_events = $eventParser->getEventsJson();
 	$eventParser->saveJsonToFile('events', $jsonFile);
 	echo $json_events;
 }
-
-// Print JSON data 
-echo file_get_contents( $jsonFile );
-
+else {
+	// Print JSON data 
+	echo file_get_contents( $jsonFile );
+}
 
 // Save to CSV (if necessary)
 // $eventParser->saveVenuesCsv("../../data/venues.csv");

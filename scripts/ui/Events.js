@@ -106,13 +106,14 @@ var Events = {
         $('#' + divId).append($dataTable);
 
         //
-        //  Call upon the magic of ~ DataTables ~
+        //  Initialize DataTables
         //
         setTimeout(function(){ 
             $('#' + dataTableUniqueID).DataTable({
                 "lengthMenu": [[40, 80, 200, 3], [40, 80, 200, "All"]],
                 // 0 = date, 1 = artist, 2 = venue, 3 = ticket
                 "order": [[ 0, "asc" ]],
+                "autoWidth": true,
                 "language": {
                     "lengthMenu": "_MENU_ events per page",
                     "zeroRecords": "Nothing found.",

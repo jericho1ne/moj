@@ -46,7 +46,13 @@ class EventParser {
 		//echo " scraping shows starting with today's date > [<b>".$this->todays_date."</b>] <";
 
 		// TODO: if time is nearing midnight, grab next day's shows (d+1)
-		$todays_date = date('m.' . 'd'+1 . '.y');
+
+		// Reference:  http://php.net/manual/en/function.date.php
+		//	 date('n j y')   << no leading zeros
+
+		// Get today's date with leading zeros for month and day
+		$todays_date = date('m') . '.' . date('d') . '.' . date('y');
+		//  echo $todays_date . "<hr>";
 
 		$source   = file_get_contents($url);							// first ingestion
 
@@ -82,6 +88,8 @@ class EventParser {
 
 				// For whatever reason, the full date wasn't captured, assume bad input and skip
 				if (sizeof($dateArray) != 3) {
+					// echo (" >> Skipping - Bad Input ");
+					// pr($matches);
 					continue;
 				}
 
@@ -124,6 +132,10 @@ class EventParser {
 
 				$cal_date = strtotime($fmt_date).'000';
 
+				// ********** DEBUG ******
+				// Uncomment line below to see what the f is wrong
+				// echo $fmt_date . " " . $artist . " @ " . $venue ."<br>";
+
 				// Save all of our event info to the private class property (eventArray)
 				array_push(
 					$this->eventArray, 		
@@ -135,7 +147,7 @@ class EventParser {
 						"type"		=> "show",  		// TODO: find out if needed for Event Calendar??
 						"artist"	=> $artist,
 						"venue"		=> $venue,
-						"title"		=> $artist." @ ".$venue,	// needed for Event Calendar!
+						"title"		=> $artist . " @ " . $venue,	// needed for Event Calendar!
 						"url"		=> $url
 					)
 				);
