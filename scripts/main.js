@@ -53,8 +53,9 @@ $(document).ready(function() {
 
 
     // grab JSON api data, then display
-    $.when(YouTubeSearch.getPlaylistVideos("PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4", 30))
-      .done(YouTubeSearch.displayVideos('artist-tracks'));
+    // WORKS
+    // $.when(YouTubeSearch.getPlaylistVidisplayVideosdeos("PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4", 30))
+    //   .done(YouTubeSearch.('artist-tracks'));
 
     // grab JSON api data, then display
     /*$.when(YouTubeSearch.getVideos("Dilated", 30))

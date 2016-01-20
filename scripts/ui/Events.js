@@ -32,6 +32,7 @@ var Events = {
         type: "show"
         url: "http://www.axs.com/events/280155/hanson-tickets?skin=goldenvoice"
         venue: "Fonda Theatre"
+        artist: "Hanson"
         year: "2015"
         */
 

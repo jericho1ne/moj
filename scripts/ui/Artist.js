@@ -18,6 +18,32 @@
             // Same as using the more specific $(this).attr('data-val') 
             var artistName = $(this).html();  
 
+            // Create div to hold modal contents
+            $artistPopup = $('<div>')
+                .attr('id', 'artist-popup')
+                .attr('title', artistName)
+                .html('<b>BLAH</b> - - - - - <br>');
+
+            // TODO: Load modal template from URL
+            // $artistPopup.load(url).dialog({
+            //     modal: true
+            // }); 
+
+
+            // Initialize dialog box
+            $artistPopup.dialog({
+                autoOpen: false,
+                height: 200,
+                width: 500,
+                modal: true,
+                resizable: true,
+                dialogClass: 'no-close error-dialog'
+            });
+
+            // Pop up the info modal
+            $artistPopup.dialog("open");
+
+
             // Promise chain 
             //  - get artist info, display it, get top tracks, display them
             Artist.getArtistInfo(artistName)

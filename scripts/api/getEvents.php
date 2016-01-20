@@ -7,7 +7,6 @@ include_once('EventParser.php');
 // require_once("Geocoder.php");
 
 //============================================================
-$eventParser = new EventParser('http://thescenestar.typepad.com/shows/');
 
 // Current (potentially outdated JSON data)
 $jsonFile = "../../data/events.json";
@@ -18,11 +17,17 @@ $hrsElapsed = (time() - filemtime($jsonFile)) / (60*60);
 // Check JSON events file timestamp, 
 // only grab new data if stale AND the file is writable
 if ($hrsElapsed > 12 && is_writable($jsonFile)) {
-	// Scrape new data, save to JSON file in data directory
+	// Constructor automatically calls parseURL
+	$eventParser = new EventParser('http://thescenestar.typepad.com/shows/');
+
+	// Format the data as JSON, save file in data directory
 	$json_events = $eventParser->getEventsJson();
 	$eventParser->saveJsonToFile('events', $jsonFile);
+
+	// Also print out to screen, to satisfy the $.ajax call
 	echo $json_events;
 }
+// Data still fairly recent, Use cached file
 else {
 	// Print JSON data 
 	echo file_get_contents( $jsonFile );
