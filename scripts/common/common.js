@@ -21,6 +21,11 @@ function strToLowerNoSpaces(textString) {
     return textString.toLowerCase().replace(/ /g,"_");
 }
 
+function stripSpaces(textString) {
+    // originally / /g
+    return textString.toLowerCase().replace(/\W+/g,"+");
+}
+
 
 /**
  * getDistance

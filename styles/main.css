@@ -28,12 +28,10 @@ a {
     margin: 20px auto 20px auto;
     font-size: 22px !important;
     font-weight: 400;
-    line-height: 200px;
     background-color: rgba(200, 200, 200, 0.3);
     border-radius: 6px;
     padding: 40px;
     font-size: 50px;
-    line-height: 1;
     letter-spacing: -1px;
 }
 
@@ -181,8 +179,7 @@ a {
 .div-two-adjacent {
     width: 100%;
     display: block;
-    overflow: auto;
-    min-height: 320px;
+    
     position: relative;
 }
 
@@ -204,7 +201,6 @@ a {
 .div-right {
     position: absolute; 
     left: 320px; 
-    width: 400px; 
     height:auto;
    /* margin-left: 220px;*/
     text-align: left;
@@ -335,11 +331,13 @@ img.artist-profile-pic {
 }
 .photo-container {
     left: 0px;
-    position: relative;
     width: 180px;
 }
 .line-height-200 {
     line-height: 200%;
+}
+.line-height-150 {
+    line-height: 150%;
 }
 .line-height-100 {
     line-height: 100%;
@@ -353,6 +351,15 @@ img.artist-profile-pic {
     padding: 20px;
     left: 1=px;
 }
+.scroll-y{
+    overflow-y: scroll;
+}
+.pad4 {
+    padding: 4px;
+}
+.pad10 {
+    padding: 10px;
+}
 .w200 {
     width: 200px;
 }
@@ -365,11 +372,26 @@ img.artist-profile-pic {
 .h120 {
     height: 120px;
 }
+.h160 {
+    height: 160px;
+}
 .h200 {
     height: 200px;
 }
+.h300 {
+    height: 300px;
+}
+.h320 {
+    height: 320px;
+}
+.h340 {
+    height: 340px;
+}
 .h400 {
     height: 400px;
+}
+.margin-bottom-10 {
+    margin-bottom: 10px;
 }
 /*------------------- Error popup / modal dialog -----------*/
 .ui-dialog.error-dialog {

@@ -90,8 +90,6 @@
             imgContainer.append(wrapperDiv);
 
             $('#' + divID).append(imgContainer);
-            // $('#stuff').append(vids[key].snippet.thumbnails.high.url + '<br>');
-
          }
       },
 

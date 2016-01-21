@@ -7,6 +7,11 @@
     // PROPERTIES
     tempArray: [],
     stringthing: 'home',
+    maxVideosToShow: 3,
+
+    // YOUTUBE PROPERTIES
+    videosList: [],
+    favoritesList: [],
 
     //
     // Artist Bio, Info, Images, and Top tracks
@@ -19,30 +24,20 @@
             var artistName = $(this).html();  
 
             // Create div to hold modal contents
-            $artistPopup = $('<div>')
-                .attr('id', 'artist-popup')
-                .attr('title', artistName)
-                .html('<b>BLAH</b> - - - - - <br>');
+            var $artistPopup = $('<div>');
 
-            // TODO: Load modal template from URL
-            // $artistPopup.load(url).dialog({
-            //     modal: true
-            // }); 
-
-
-            // Initialize dialog box
-            $artistPopup.dialog({
+             // Initialize dialog box
+            $artistPopup.load('templates/artist-popup.html').dialog({
                 autoOpen: false,
-                height: 200,
-                width: 500,
+                height: '600',
+                width: '80%',
                 modal: true,
                 resizable: true,
-                dialogClass: 'no-close error-dialog'
+                dialogClass: 'error-dialog',
+                close: function(event, ui) {
+                    $(this).dialog('destroy').remove();
+                }
             });
-
-            // Pop up the info modal
-            $artistPopup.dialog("open");
-
 
             // Promise chain 
             //  - get artist info, display it, get top tracks, display them
@@ -55,6 +50,13 @@
                 .then(function(trackData) {
                     Artist.appendTopTracks('artist-tracks', trackData);
                 });
+
+            setTimeout(function(){
+                // Pop up the info modal
+                $artistPopup.dialog("open");
+             }, 150);
+            
+
         });// artistInfo .click
     }, // End setListeners
 
@@ -80,8 +82,15 @@
             // Success callback will fire even when couple with an external $.done
             success : function(data) {
                 console.log(' >> artistXHR success >>');
-                // Save current artist data in global cache
-                CACHE[strToLowerNoSpaces(data.artist.name)] = data;
+             
+                if (data.error !== 6) {
+                    // Save current artist data in global cache
+                    CACHE[strToLowerNoSpaces(data.artist.name)] = data;
+                }
+                else {
+                    console.log("no data on this artist...");
+                    // TODO: fallback to another API
+                }
             },
             error : function(code, message){
                 // Handle error here
@@ -130,6 +139,9 @@
      * appendArtistInfo :: display artist info in DOM
      */
     appendArtistInfo: function (divId, data) {
+        // Create specific parent div name
+        var $artistInfo = $('#'+divId);
+
         // Create custom info array
         var artist = {
             'name': data.artist.name,
@@ -138,8 +150,6 @@
             'images': data.artist.image,
             'tags': data.artist.tags.tag
         };
-        
-        // window.artist = artist;
 
         var maxChars = 800;
 
@@ -155,41 +165,27 @@
         }
 
         // Clear existing content        
-        $('#' + divId).empty();
-
-        // Create artist info element to be displayed
-        $artistLeftDiv = $('<div>')
-            .addClass('div-left');
-
-        $artistRightDiv = $('<div>')
-            .addClass('div-right');
+        $('#artist-photo', $artistInfo).html();
+        $('#artist-bio', $artistInfo).html();
+        $('#artist-tracks', $artistInfo).html();
 
         // photoContainer = img + caption
-        $photoContainer = $('<div>') 
-            .addClass('photo-container');
-
-        // $portrait = $('<div>')
-        //     .attr('id', 'artist-bio')
-        //     .addClass('left w200 debug h200')
-        
         $photoCaption = $('<h3>')
             .addClass('photo-caption')
             .html(artist.name);
 
-        $photoContainer.append('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
-        $photoContainer.append($photoCaption);
+        $('#artist-photo', $artistInfo).html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
+        $('#artist-photo', $artistInfo).append($photoCaption);
 
-        $bio = $('<div>')
-            .addClass('line-height-200')
-            .html(shortBio);
+        // Artist bio text
+        $('#artist-bio', $artistInfo).html(shortBio);
 
-        //$info.append($artistPortrait);
-        $artistLeftDiv.append($photoContainer);
-        $artistRightDiv.append($bio);
+        // $artistLeftDiv.append($photoContainer);
+        // $artistRightDiv.append($bio);
  
-        $('#' + divId)
-            .append($artistLeftDiv)
-            .append($artistRightDiv);
+        // $('#' + divId)
+        //     .append($artistLeftDiv)
+        //     .append($artistRightDiv);
     },// End function appendArtistInfo
 
     /**
@@ -197,18 +193,94 @@
      */
     appendTopTracks: function(divId, data) {
         var topTracks = data.toptracks.track;
+        var topTracksLength = topTracks.length;
 
         $('#' + divId).empty();
         // $('#' + divId).append('<h3>Tracklist</h3>');
 
         // Create artist info element to be displayed
-        for (i = 0, len = topTracks.length; i < len; i++) { 
+        for (i = 0; i < topTracksLength; i++) { 
             // TODO:  create playlist of individual tracks via YouTube API hook
             var song = topTracks[i].name;
+            var artist = topTracks[i].artist.name;
+
+            // Search for artist + track name one at a time, 1 max result
+            Artist.searchYoutube(stripSpaces(artist + ' ' + song), 1);
 
             $('#' + divId).append(song + ' / ');
+
+            if ((i+1) >= this.maxVideosToShow) {
+                break;
+            }
         }// End for loop
        
     },// End function appendTopTracks
 
+    searchYoutube: function(searchTerm, maxResults) {
+         console.log(searchTerm);
+
+         var requestBody = {
+            type: "GET",
+            url:  YOUTUBE_BASE_URL +
+                  "search?part=snippet" +
+                  "&q=" + searchTerm +
+                  "&key=" + YOUTUBE_API_KEY +
+                  "&maxResults=" + parseInt(maxResults),
+            async: false
+         };// End requestBody
+
+         $.ajax(requestBody).done(function(data, status) {
+            if (status === 'success') {
+               if (data) {
+                  // Append video thumb to DOM
+                  Artist.appendYoutubeVideo('artist-tracks', data.items);
+                  return true;
+               }
+            }
+            else {
+               alert("No videos found :(");
+               return false;
+            }
+         });//End $.ajax
+    },// End searchYoutube
+
+    appendYoutubeVideo: function(divID, vids) {
+        console.log(' >> displayVideos >> ');
+        console.log(divID);
+        console.log(vids);
+        window.data = vids;
+      
+         // vids[0].id
+            // vids[0].snippet.thumbnails.title
+            // vids[0].snippet.thumbnails.medium.url     // .width=320, height=180
+            // vids[0].snippet.thumbnails.high.url          // .width=480, height=360
+            // vids[0].snippet.thumbnails.default.url      // .width=120, height=90
+
+            var imgContainer = $('<li>')
+               .attr('class','yts-list');
+
+            // div containing image + caption
+            var wrapperDiv = $('<div>')
+               .attr('class','yts-photo-wrapper');
+
+            // image source tag
+            var imgTag = $('<img>')
+               .attr('class','yts-photo')
+               .attr('src', vids[0].snippet.thumbnails.default.url);       
+
+            // floating image label
+            var imgLabel = $('<div>')
+               .attr('class','yts-caption')
+               .html(vids[0].snippet.title);
+
+            wrapperDiv.append(imgTag);
+            wrapperDiv.append(imgLabel);
+            imgContainer.append(wrapperDiv);
+
+            window.imgContainer = imgContainer;
+            console.log(" APPENDING NOW >>>>> ");
+            console.log(vids[0]);
+            $('#' + divID).append(imgContainer);
+
+    },
   };// End object UserState

@@ -51,11 +51,8 @@ $(document).ready(function() {
             Artist.setListeners();
         });
 
-
-    // grab JSON api data, then display
-    // WORKS
-    // $.when(YouTubeSearch.getPlaylistVidisplayVideosdeos("PLLtM6mCpibb87Ee_bbDB11MXyDmjxh2e4", 30))
-    //   .done(YouTubeSearch.('artist-tracks'));
+ // grab JSON api data, then display
+ 
 
     // grab JSON api data, then display
     /*$.when(YouTubeSearch.getVideos("Dilated", 30))
