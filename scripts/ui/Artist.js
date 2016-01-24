@@ -207,7 +207,8 @@
             // Search for artist + track name one at a time, 1 max result
             Artist.searchYoutube(stripSpaces(artist + ' ' + song), 1);
 
-            $('#' + divId).append(song + ' / ');
+            // Debug - See top track names pulled by Last.fm
+            // $('#' + divId).append(song + ' / ');
 
             if ((i+1) >= this.maxVideosToShow) {
                 break;
@@ -266,7 +267,7 @@
             // image source tag
             var imgTag = $('<img>')
                .attr('class','yts-photo')
-               .attr('src', vids[0].snippet.thumbnails.default.url);       
+               .attr('src', vids[0].snippet.thumbnails.medium.url);       
 
             // floating image label
             var imgLabel = $('<div>')

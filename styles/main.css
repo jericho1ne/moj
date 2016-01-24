@@ -297,8 +297,7 @@ a {
 .yts-photo {
 	display: inline-block;
 	vertical-align: text-top;
-    border-radius: 7px;
-	border: 7px solid #777;
+	border: 3px solid #000;
 }
 
 .yts-caption {
