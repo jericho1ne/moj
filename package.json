@@ -3,5 +3,8 @@
   "name": "middle-of-june",
   "description": "",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "grunt-contrib-clean": "^0.7.0"
+  }
 }
