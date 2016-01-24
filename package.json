@@ -5,6 +5,15 @@
   "version": "1.0.0",
   "private": true,
   "devDependencies": {
-    "grunt-contrib-clean": "^0.7.0"
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-ftp-deploy": "^0.1.10",
+    "grunt-postcss": "^0.7.1"
+  },
+  "dependencies": {
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-copy": "^0.8.2",
+    "grunt-ftp-deploy": "^0.1.10",
+    "grunt-postcss": "^0.7.1"
   }
 }

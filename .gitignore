@@ -1,4 +1,5 @@
 .DS_Store
+.ftppass
 scripts/api/db/*
 __*
 node_modules/

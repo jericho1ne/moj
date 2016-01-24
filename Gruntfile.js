@@ -1,5 +1,5 @@
 // using generator-webapp 1.1.0
-// 'use strict';
+'use strict';
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -88,6 +88,13 @@ module.exports = function (grunt) {
       //    }
       // },
 
+
+      /**
+       * These plugins can lint your CSS, support variables and mixins, 
+       * transpile future CSS syntax, inline images, etc
+       *
+       * https://github.com/postcss/postcss
+       */
       postcss: {
          options: {
             map: true,
@@ -199,13 +206,15 @@ module.exports = function (grunt) {
                dest: '<%= config.dist %>',
                src: [
                 '{,*/}*.html',
-                'scripts/**/*.js',
-                'scripts/**/*.php',
+                'scripts/**/*.{js,php}',
+                // 'scripts/**/*.php',
                 '*.{ico,png,txt}',
-                'images/{,*/}*.webp',
+                // 'images/{,*/}*.webp',
                 'data/*',
                 'styles/fonts/{,*/}*.*',
-                'styles/fa/{,*/}*.*'
+                'styles/fa/{,*/}*.*',
+                'styles/images/**/*.{gif,jpeg,jpg,png}',
+                'styles/*.css'
                ]
             }]
          }
@@ -229,18 +238,18 @@ module.exports = function (grunt) {
       // },
 
       // Auto save via FTP
-      // 'ftp-deploy': {
-      //    build: {
-      //       auth: {
-      //          host: 'sol.apisnetworks.com',
-      //          port: 21,
-      //          authKey: 'apisnetworks-key'
-      //       },
-      //       src: 'dist/',
-      //       dest: '/var/www/html/middleofjune/dist/',
-      //       exclusions: ['dist/.DS_Store', 'dist/Thumbs.db', 'dist/data/' ]
-      //    }
-      // }
+      'ftp-deploy': {
+         build: {
+            auth: {
+               host: 'sol.apisnetworks.com',
+               port: 21,
+               authKey: 'apisnetworks-key'
+            },
+            src: 'dist/',
+            dest: '/var/www/html/middleofjune/dist/',
+            exclusions: ['dist/.DS_Store', 'dist/Thumbs.db', 'dist/data/' ]
+         }
+      }
 
     });// End grunt initConfig
 
@@ -283,26 +292,30 @@ module.exports = function (grunt) {
     //   ]);
     // });// End register task :: test
 
+    // This is the default Grunt task if you simply run "grunt" in project dir
     grunt.registerTask('build', [
-         'clean:dist'
+        'clean:dist',
+        'postcss',
+        'copy:dist',
+        'ftp-deploy'
     //   // 'wiredep',     // turn on only when bower-components is reinstated
     //   // 'useminPrepare',  // throws processing a template error ('test' is undefined)
     //   'concurrent:dist',
-    //   'postcss',
+        
     //   // 'concat',
     //   'cssmin',
     //   'uglify',
-    //   'copy:dist',
-    //   'filerev',
+        
+        // 'filerev'
     //   'usemin',
     //   'htmlmin',
-    //   // 'ftp-deploy'
+        
     ]);// End register task :: build
 
     grunt.registerTask('default', [
         //'newer:eslint',
-        'test',
-        'build'
+        'build',
+        'test'
     ]);// End register task :: default
 
 
@@ -312,5 +325,7 @@ module.exports = function (grunt) {
     // Once installed with "npm install <TASK_NAME> --save-dev",
     // we have to enable them!
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-postcss');
+    grunt.loadNpmTasks('grunt-ftp-deploy');
 };// End module.exports
