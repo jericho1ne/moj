@@ -107,11 +107,11 @@ module.exports = function (grunt) {
 		filerev: {
 			dist: {
 				src: [
-					'<%= cfg.dst %>/scripts/{,*/}*.js',
-					'<%= cfg.dst %>/styles/{,*/}*.css',
-					'<%= cfg.dst %>/images/{,*/}*.*',
-					'<%= cfg.dst %>/styles/fonts/{,*/}*.*',
-					'<%= cfg.dst %>/*.{ico,png}'
+					'<%= cfg.dst %>/scripts/{,*/}*.js'
+					//'<%= cfg.dst %>/styles/{,*/}*.css',
+					// '<%= cfg.dst %>/images/{,*/}*.*',
+					// '<%= cfg.dst %>/styles/fonts/{,*/}*.*',
+					// '<%= cfg.dst %>/*.{ico,png}'
 				]
 			}
 		},
@@ -150,7 +150,7 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
 					cwd: '<%= cfg.app %>/scripts/vendor/',
-					src: '*.js',
+					src: [ '*.js', '!datatables.min.js' ],
 					dest: '<%= cfg.dst %>/scripts/vendor',
 					ext:  '.min.js'
 				}]
@@ -299,7 +299,8 @@ module.exports = function (grunt) {
 		'clean:dist',
 		'postcss',
 		'copy:dist',
-		'uglify'
+		'uglify',
+		'filerev'
 	//   // 'wiredep',     // turn on only when bower-components is reinstated
 	//   // 'useminPrepare',  // throws processing a template error ('test' is undefined)
 	//   'concurrent:dist',
@@ -374,6 +375,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-postcss');
+	grunt.loadNpmTasks('grunt-filerev');
 	grunt.loadNpmTasks('grunt-ftp-deploy');
 
 };// End module.exports
