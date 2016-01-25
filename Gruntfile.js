@@ -99,15 +99,13 @@ module.exports = function (grunt) {
 			}
 		},
 
-
-		// All the bower crap
-		// wiredep: require('./grunt-include/wiredep'),
-
 		// Renames files for browser caching purposes
+		// https://www.npmjs.com/package/grunt-filerev
 		filerev: {
 			dist: {
 				src: [
-					'<%= cfg.dst %>/scripts/{,*/}*.js'
+					'<%= cfg.dst %>/scripts/*.js',
+					'<%= cfg.dst %>/scripts/ui/*.js'
 					//'<%= cfg.dst %>/styles/{,*/}*.css',
 					// '<%= cfg.dst %>/images/{,*/}*.*',
 					// '<%= cfg.dst %>/styles/fonts/{,*/}*.*',
@@ -376,6 +374,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-postcss');
 	grunt.loadNpmTasks('grunt-filerev');
+	grunt.loadNpmTasks('grunt-usemin');
 	grunt.loadNpmTasks('grunt-ftp-deploy');
 
 };// End module.exports
