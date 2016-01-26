@@ -53,24 +53,18 @@ module.exports = function (grunt) {
 	   
 		// Compiles Sass to CSS and generates necessary files if requested
 		sass: {
-			options: {
-				sourceMap: true,
-				sourceMapEmbed: true,
-				sourceMapContents: true,
-				includePaths: ['.']
-			},
 			dist: {
-				// files: {
-				// 	'<%= cfg.app %>/styles/main.css': '<%= cfg.dst %>/styles/main.scss'
-				// }
+				files: {
+					'<%= cfg.dst %>/styles/main.css': '<%= cfg.dst %>/styles/main.scss'
+				}
 				
-				files: [{
-					expand: true,
-					cwd: '<%= cfg.app %>/styles',
-					src: ['*.{scss,sass}'],
-					dest: '.tmp/styles',
-					ext: '.css'
-				}]
+				// files: [{
+				// 	expand: true,
+				// 	cwd: '<%= cfg.app %>/styles',
+				// 	src: ['*.{scss,sass}'],
+				// 	dest: '.tmp/styles',
+				// 	ext: '.css'
+				// }]
 			}
 		},
 
@@ -202,7 +196,7 @@ module.exports = function (grunt) {
 		cssmin: {
 			dist: {
 				 files: {
-					 '<%= cfg.dist %>/styles/main.css': [
+					 '<%= cfg.dst %>/styles/main.css': [
 						 '.tmp/styles/{,*/}*.css',
 						 '<%= cfg.app %>/styles/{,*/}*.css'
 					 ]
@@ -345,8 +339,9 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'clean:dist',
 		'postcss',
-		'copy:dist',
+		'cssmin',
 		'uglify',
+		'copy:dist',
 		'filerev',
 		'usemin'
 		// 'htmlmin',
@@ -407,6 +402,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-concurrent');
 	grunt.loadNpmTasks('grunt-postcss');
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-filerev');

@@ -1,8 +1,7 @@
 .DS_Store
 .ftppass
+.grunt
 scripts/api/db/*
 __*
 node_modules/
 dist/
-Gruntfile*
-grunt-include/

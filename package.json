@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "private": true,
   "devDependencies": {
+    "grunt-concurrent": "^2.1.0",
     "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-cssmin": "^0.14.0",
@@ -18,6 +19,7 @@
     "grunt-usemin": "^3.1.1"
   },
   "dependencies": {
+    "grunt-concurrent": "^2.1.0",
     "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-cssmin": "^0.14.0",

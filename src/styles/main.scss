@@ -1,18 +1,8 @@
-// bower:scss
-// endbower
+@import "colors";
 
 // Ruda available in: 400,700,900 weight
 $font-regular: "Ruda-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-bold: "Ruda-Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
-
-$primary-font-color: #333;
-$btn-bg-green: #2A713D;
-
-$gray-light: #EAEAEA;
-$gray-mid: #ababab;
-$gray-dark: #565656;
-
-$btn-bg-gold: #DBD12C;
 
 $btn-pad: 6px;
 
@@ -23,8 +13,6 @@ $pad-sm: 20px;
 $pad-md: 40px;
 $pad-lg: 60px;
 
-$active-color: #CA2667;
-$inactive-color: 'transparent';
 
 $col-min-height: 90px;
 
