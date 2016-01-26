@@ -1,11 +1,9 @@
-// using generator-webapp 1.1.0
+/**
+ * @file Gruntfile.js in all its greatness
+ * @author Mihai Peteu <mihai.peteu@gmail.com>
+ * @copyright 2015 Middle of June.  All rights reserved.
+ */
 'use strict';
-
-// # Globbing
-// for performance reasons we're only matching one level down:
-//       'test/spec/{,*/}*.js'
-// If you want to recursively match all subfolders, use:
-//       'test/spec/**/*.js'
 
 module.exports = function (grunt) {
 	// Time how long tasks take. Can help when optimizing build times
@@ -53,24 +51,28 @@ module.exports = function (grunt) {
 			 }
 		},
 	   
-		// // Compiles Sass to CSS and generates necessary files if requested
-		// sass: {
-		//    options: {
-		//       sourceMap: true,
-		//       sourceMapEmbed: true,
-		//       sourceMapContents: true,
-		//       includePaths: ['.']
-		//    },
-		//    dist: {
-		//       files: [{
-		//          expand: true,
-		//          cwd: '<%= cfg.app %>/styles',
-		//          src: ['*.{scss,sass}'],
-		//          dest: '.tmp/styles',
-		//          ext: '.css'
-		//       }]
-		//    }
-		// },
+		// Compiles Sass to CSS and generates necessary files if requested
+		sass: {
+			options: {
+				sourceMap: true,
+				sourceMapEmbed: true,
+				sourceMapContents: true,
+				includePaths: ['.']
+			},
+			dist: {
+				// files: {
+				// 	'<%= cfg.app %>/styles/main.css': '<%= cfg.dst %>/styles/main.scss'
+				// }
+				
+				files: [{
+					expand: true,
+					cwd: '<%= cfg.app %>/styles',
+					src: ['*.{scss,sass}'],
+					dest: '.tmp/styles',
+					ext: '.css'
+				}]
+			}
+		},
 
 
 		/**
@@ -188,6 +190,26 @@ module.exports = function (grunt) {
 			}// End copy:dist
 		},// End copy task
 
+		//
+		// TODO: https://github.com/nDmitry/grunt-postcss
+		//
+
+		/**
+		 * Minify CSS
+		 * 
+		 *  npm install grunt-contrib-cssmin --save-dev
+		 */
+		cssmin: {
+			dist: {
+				 files: {
+					 '<%= cfg.dist %>/styles/main.css': [
+						 '.tmp/styles/{,*/}*.css',
+						 '<%= cfg.app %>/styles/{,*/}*.css'
+					 ]
+				 }
+			 }
+		},// End task cssmin
+
 		// Auto save via FTP
 		'ftp-deploy': {
 			build: {
@@ -198,9 +220,52 @@ module.exports = function (grunt) {
 				},
 				src: 'dist/',
 				dest: '/var/www/html/middleofjune/dist/',
-				exclusions: ['dist/.DS_Store', 'dist/Thumbs.db', 'dist/data/' ]
+				exclusions: ['dist/.DS_Store', 'dist/Thumbs.db', 'dist/data/', 'dist/tmp' ]
 			 }
-		}// End ftp-deploy task
+		},// End ftp-deploy task
+
+		'ftpush': {
+			build: {
+				auth: {
+					host: 'sol.apisnetworks.com',
+					port: 21,
+					authKey: 'apisnetworks-key'
+				},
+				src: '<%= cfg.dst %>',
+				dest: '/var/www/html/middleofjune/dist/',
+				exclusions: ['dist/.DS_Store', 'dist/Thumbs.db', 'dist/data/', 'dist/tmp' ],
+				// keep: ['/important/images/at/server/*.jpg'],
+				simple: true,
+				useList: false
+			}
+		}, 
+
+		// Reads HTML for usemin blocks to enable smart builds that automatically
+		// concat, minify and revision files. Creates cfgurations in memory so
+		// additional tasks can operate on them
+		// useminPrepare: {
+		//    options: {
+		//       dest: '<%= cfg.dst %>'
+		//    },
+		//    html: '<%= cfg.app %>/index.html'
+		// },
+
+
+		// Performs rewrites based on rev and the useminPrepare cfguration
+		usemin: {
+			options: {
+				assetsDirs: [
+					'<%= cfg.dst %>',
+					'<%= cfg.dst %>/images',
+					'<%= cfg.dst %>/styles'
+				]
+			},
+			html: ['<%= cfg.dst %>/{,*/}*.html'],
+			css: ['<%= cfg.dst %>/styles/{,*/}*.css']
+		},
+
+		// Watches files for changes and runs tasks based on what's changed
+		watch: require('./grunt-include/watch')
 
 		// Runs JSHint (code quality analysis tool) against app JS files
 		// Rules defined in .jshintrc.
@@ -218,28 +283,6 @@ module.exports = function (grunt) {
 		//watch: require('./grunt-include/watch'),
 		//browserSync: require('./grunt-include/browserSync'),
 
-		// // Reads HTML for usemin blocks to enable smart builds that automatically
-		// // concat, minify and revision files. Creates cfgurations in memory so
-		// // additional tasks can operate on them
-		// useminPrepare: {
-		//    options: {
-		//       dest: '<%= cfg.dst %>'
-		//    },
-		//    html: '<%= cfg.app %>/index.html'
-		// },
-
-		// // Performs rewrites based on rev and the useminPrepare cfguration
-		// usemin: {
-		//    options: {
-		//       assetsDirs: [
-		//          '<%= cfg.dst %>',
-		//          '<%= cfg.dst %>/images',
-		//          '<%= cfg.dst %>/styles'
-		//       ]
-		//    },
-		//    html: ['<%= cfg.dst %>/{,*/}*.html'],
-		//    css: ['<%= cfg.dst %>/styles/{,*/}*.css']
-		// },
 
 		// // The following *-min tasks produce minified files in the dist folder
 		// imagemin: {
@@ -292,39 +335,35 @@ module.exports = function (grunt) {
 		}// End if target !== watch
 	});// End task "test"
 
-	// This is the default Grunt task if you simply run "grunt" in project dir
-	grunt.registerTask('build', [
-		'clean:dist',
-		'postcss',
-		'copy:dist',
-		'uglify',
-		'filerev'
-	//   // 'wiredep',     // turn on only when bower-components is reinstated
-	//   // 'useminPrepare',  // throws processing a template error ('test' is undefined)
-	//   'concurrent:dist',
-		
-	//   // 'concat',
-	//   'cssmin',
-	//   'uglify',
-		
-		// 'filerev'
-	//   'usemin',
-	//   'htmlmin',
-		
-	]);// End register task :: build
-
 	grunt.registerTask('default', [
 		//'newer:eslint',
 		'build',
 		'test'
 	]);// End register task :: default
 
-	grunt.registerTask('production', [
+	// This is the default Grunt task if you simply run "grunt" in project dir
+	grunt.registerTask('build', [
 		'clean:dist',
 		'postcss',
 		'copy:dist',
 		'uglify',
-		'ftp-deploy'
+		'filerev',
+		'usemin'
+		// 'htmlmin',
+
+	//   // 'wiredep',     // turn on only when bower-components is reinstated
+	//   // 'useminPrepare',  // throws processing a template error ('test' is undefined)
+	//   'concurrent:dist',
+		
+	//   'concat',
+	//   'cssmin',		
+	]);// End register task :: build
+
+
+	grunt.registerTask('production', [
+		'build',
+		// 'ftp-deploy'
+		'ftpush'
 	]);
 
 	
@@ -350,17 +389,11 @@ module.exports = function (grunt) {
 	// });// End register task :: server
 
 	
-
 	//   grunt.task.run([
 	//      'browserSync:test',
 	//      'mocha'
 	//   ]);
 	// });// End register task :: test
-
-
-	// Launch Browser-sync & watch files
-	//  grunt.registerTask('watch', ['bs-init', 'watch']);
-	
 
 
 	//
@@ -372,9 +405,13 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-postcss');
+	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-filerev');
 	grunt.loadNpmTasks('grunt-usemin');
 	grunt.loadNpmTasks('grunt-ftp-deploy');
+	grunt.loadNpmTasks('grunt-ftpush');
 
 };// End module.exports

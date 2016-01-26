@@ -85,7 +85,7 @@ a {
 
 .auto-expand {
     display: block;
-    overflow: auto;
+    overflow-y: auto;
 }
 /*-------------------- div IDs -------------------*/
 #content-parent {
@@ -381,7 +381,7 @@ img.artist-profile-pic {
     height: 300px;
 }
 .h320 {
-    height: 320px;
+   min-height: 320px;
 }
 .h340 {
     height: 340px;
@@ -404,6 +404,10 @@ img.artist-profile-pic {
 
 .event-artist {
     min-width: 300px;
+}
+/* override jquery ui */
+.ui-widget-content{
+    overflow: scroll;
 }
 
 /*
