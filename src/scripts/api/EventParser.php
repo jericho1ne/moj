@@ -95,7 +95,7 @@ class EventParser {
 
 				// Date gets formatted
 				$fmt_date = "20" . $dateArray[2] . "-" . $dateArray[0] . "-" . $dateArray[1];
-				$show_year = "20".$dateArray[2];
+				$show_year = "20" . $dateArray[2];
 				// stop if over our set date boundary (1 or 2 weeks ahead, etc)
 				if ($future_max_date < $fmt_date) {
 					break;
@@ -127,6 +127,7 @@ class EventParser {
 				$venue = trim($venue);
 
 				$nice_date = date( "l M j", strtotime($fmt_date) );
+				$short_date = date( "D M j", strtotime($fmt_date) );
 
 				$venues[$count] = $venue;
 
@@ -140,9 +141,10 @@ class EventParser {
 				array_push(
 					$this->eventArray, 		
 					array(
-						"date"		=> $cal_date,	// 1377738000000
+						"raw_date"	=> $cal_date,	// 1377738000000
 						"fmt_date"	=> $fmt_date,	// 2020-12-01
-						"nice_date"	=> $nice_date,	// Sat Jun 15
+						"nice_date"	=> $nice_date,	// Saturday Jun 15
+						"short_date"=> $short_date,	// Sat Jun 15
 						"year"		=> $show_year,
 						"type"		=> "show",  		// TODO: find out if needed for Event Calendar??
 						"artist"	=> $artist,
@@ -223,11 +225,11 @@ class EventParser {
 		$this->checkFileStatus($file);
 		$text = "";
 		// dump header row first
-		$text .= 'date,nice_date,artist,venue,show_url'."\r\n";
+		$text .= 'raw_date,nice_date,artist,venue,show_url'."\r\n";
 
 		foreach($this->eventArray as $show) {
 			$text .= '"'.
-			$show['date'].'","'.
+			$show['raw_date'].'","'.
 			$show["nice_date"].'","'.
 					$show['artist'].'","'.
 					$show['venue'].'","'.

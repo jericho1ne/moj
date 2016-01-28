@@ -2,7 +2,6 @@
 * Events.js
 *
 **/
-
 var Events = {
     // PROPERTIES
     dataBaseURL: 'data/',
@@ -21,20 +20,17 @@ var Events = {
         // Create the deferred object ourselves
         var deferred = $.Deferred();
 
-
-        /*
-        ----- data format ----
-        artist: "Hanson"
-        date: "1446361200000"
-        fmt_date: "2015-11-01"
-        nice_date: "Sunday Nov 1"
-        title: "Hanson @ Fonda Theatre"
-        type: "show"
-        url: "http://www.axs.com/events/280155/hanson-tickets?skin=goldenvoice"
-        venue: "Fonda Theatre"
-        artist: "Hanson"
-        year: "2015"
-        */
+        /*  ----- data format ----
+            date: "1446361200000"
+            fmt_date: "2015-11-01"
+            nice_date: "Sunday Nov 1"
+            short_date: "Sun Nov 1"
+            title: "Hanson @ Fonda Theatre"
+            type: "show"
+            url: "http://www.thing.com/events/199123/event-tickets?refId=xxxxx"
+            venue: "Fonda Theatre"
+            artist: "Hanson"
+            year: "2015"        */
 
         // clear div contents
         $('#' + divId).empty('');
@@ -47,7 +43,6 @@ var Events = {
         //          create a unique id for each
         //          eg, append + year + '-' + month;
         var dataTableUniqueID = 'data-table-01';
-
 
         // Create Datatable table tag
         var $dataTable = $('<table>')
@@ -72,15 +67,38 @@ var Events = {
         // Initialize once, reuse inside upcoming loop
         var row = '';
         var rowCount = 0;
-
+        var prevRawDate = '';
+        
         // Loop through incoming data
         // $(eventsData).each(function() {
         for (var i in data) {
+            // DEBUG
+            // if (rowCount > 100) break;
+
+            var dateArray = data[i].short_date.split(" ");
+
+            if (prevRawDate !== data[i].raw_date) {
+                var $dateHeaderRow = $('<tr>')
+                    .html(
+                        '<th class="date-header w100 text-align-right date-block-xl" data-sort="' + data[i].raw_date + '">'
+                            + dateArray[0] +'</th>'
+                        + '<th class="date-header">'
+                        + '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
+                        + '<span class="text-align-left date-block-lg">' + dateArray[2] + '</span>'
+                        +'</th>'
+                        + '<th class="date-header"></th><th class="date-header"></th>');
+
+                // Append individual date header row
+                $dataTable.append($dateHeaderRow);
+                // displayDate += '&nbsp;';
+            }
+
             // Date | Artist | Venue
             var $dataRow = $('<tr>')
                 .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
-                .html('<td class="left">'
-                    + data[i].nice_date + '</td>'       // ideally, use fmt_date
+                .html('<td class="left" data-sort="' + data[i].raw_date + '">'
+                    + '<span class="opacity-30">' + data[i].short_date + '<span>'
+                    + '</td>'  // ideally, embed fmt_date in a hidden *-data attrib
 
                     // For artist, use a highlighted bg color if a fave
                     // style="background-color:' + expenseCategories[row.label].color + '"
@@ -95,9 +113,8 @@ var Events = {
             // Append individual event row
             $dataTable.append($dataRow);
 
+            prevRawDate = data[i].raw_date;
             rowCount ++;
-
-            // if (rowCount > 40) break;
         }
         // });// End eventsData.each
         
@@ -114,6 +131,9 @@ var Events = {
                 "lengthMenu": [[40, 80, 200, 3], [40, 80, 200, "All"]],
                 // 0 = date, 1 = artist, 2 = venue, 3 = ticket
                 "order": [[ 0, "asc" ]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [ 0, 1, 2, 3 ] }
+                ],
                 "autoWidth": true,
                 "language": {
                     "lengthMenu": "_MENU_ events per page",

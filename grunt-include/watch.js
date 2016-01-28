@@ -5,27 +5,34 @@
  */
 'use strict';
 module.exports = {
-	// babel: {
-	// 	files: ['<%= cfg.app %>/scripts/{,*/}*.js'],
+	//js: {
+	// 	files: ['<%= cfg.src %>/scripts/{,*/}*.js'],
 	// 	tasks: ['babel:dist']
-	// },
+	//},
 	// babelTest: {
 	// 	files: ['test/spec/{,*/}*.js'],
 	// 	tasks: ['babel:test', 'test:watch']
 	// },
-	// gruntfile: {
-	// 	files: ['Gruntfile.js']
-	// },
-	// sass: {
-	// 	files: ['<%= cfg.app %>/styles/{,*/}*.{scss,sass}'],
-	// 	tasks: ['sass', 'postcss']
-	// },
-	styles: {
-		files: ['<%= cfg.app %>/styles/{,*/}*.css'],
-		tasks: ['newer:copy:styles', 'postcss']
+	gruntfile: {
+		files: ['Gruntfile.js'],
+		tasks: ['build']
 	},
-	watch: {
-		files: ['**/*'],
-		tasks: ['jshint']
+	sass: {
+		files: ['<%= cfg.src %>/styles/{,*/}*.{scss,sass}'],
+		tasks: ['clean:maincss', 'sass', 'postcss', 'cssmin']
 	},
+	corefiles: {
+		files: [
+			'<%= cfg.src %>/index.html', 
+			'<%= cfg.src %>/templates/**',
+			'<%= cfg.src %>/scripts/ui/*', 
+			'<%= cfg.src %>/scripts/common/*', 
+			'<%= cfg.src %>/scripts/*.js'
+		],
+		tasks: ['build']
+	},
+	// jsfiles: {
+	// 	files: ['<%= cfg.src %>/scripts/ui/*', '<%= cfg.src %>/scripts/common/*', '<%= cfg.src %>/scripts/*.js'],
+	// 	tasks: ['clean:jsfiles', 'uglify', 'copy:jsfiles', 'filerev', 'usemin', 'htmlmin' ]
+	// }
 };

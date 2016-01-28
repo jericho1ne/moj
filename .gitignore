@@ -1,4 +1,5 @@
 .DS_Store
+.tmp/
 .ftppass
 .grunt
 scripts/api/db/*

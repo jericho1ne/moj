@@ -16,7 +16,7 @@ module.exports = function (grunt) {
 
 	// cfgurable paths
 	var cfg = {
-		app: 'src',
+		src: 'src',
 		dst: 'dist'
 	};
 
@@ -38,33 +38,47 @@ module.exports = function (grunt) {
 					]
 				}]
 			},
+			jsfiles: {
+				files: [{
+					dot: true,
+					src: [
+						'.tmp',
+						'<%= cfg.dst %>/scripts/common/*.js',
+						'<%= cfg.dst %>/scripts/ui/*.js',
+						//'<%= cfg.dst %>/scripts/vendor/*.js'
+					]
+				}]
+			},
+			maincss: {
+				files: [{
+					dot: true,
+					src: [
+						'<%= cfg.dst %>/styles/main.css'
+					]
+				}]
+			},
 			server: '.tmp'
-		},
-
-		// Mocha testing framework cfguration options
-		mocha: {
-			all: {
-				options: {
-					run: true,
-					urls: ['http://<%= browserSync.test.options.host %>:<%= browserSync.test.options.port %>/index.html']
-				}
-			 }
 		},
 	   
 		// Compiles Sass to CSS and generates necessary files if requested
 		sass: {
+			options: {
+				sourceMap: true,
+				sourceMapEmbed: true,
+				sourceMapContents: true,
+				includePaths: ['.']
+			},
 			dist: {
-				files: {
-					'<%= cfg.dst %>/styles/main.css': '<%= cfg.dst %>/styles/main.scss'
-				}
-				
-				// files: [{
-				// 	expand: true,
-				// 	cwd: '<%= cfg.app %>/styles',
-				// 	src: ['*.{scss,sass}'],
-				// 	dest: '.tmp/styles',
-				// 	ext: '.css'
-				// }]
+				// files: {
+				// 	'<%= cfg.dst %>/styles/main.scss': '<%= cfg.dst %>/styles/main.css'
+				// }			
+				files: [{
+					expand: true,
+					cwd: '<%= cfg.src %>/styles',
+					src: ['*.{scss,sass}'],
+					dest: '.tmp/styles',
+					ext: '.css'
+				}]
 			}
 		},
 
@@ -118,7 +132,7 @@ module.exports = function (grunt) {
 				files: {
 					'<%= cfg.dst %>/styles/main.css': [
 						'.tmp/styles/{,*/}*.css',
-						'<%= cfg.app %>/styles/{,*/}*.css'
+						'<%= cfg.src %>/styles/{,*/}*.css'
 					]
 				}
 			}
@@ -134,7 +148,7 @@ module.exports = function (grunt) {
 				preserveComments: false,
 				screwIE8: true,
 				mangle: false,
-				cwd: '<%= cfg.app %>/scripts/vendor/'
+				cwd: '<%= cfg.src %>/scripts/vendor/'
 				// exceptionsFiles: [
 				// 	'datatables.min.js', 
 				// 	'jquery-2.2.0.min.js'
@@ -143,7 +157,7 @@ module.exports = function (grunt) {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: '<%= cfg.app %>/scripts/vendor/',
+					cwd: '<%= cfg.src %>/scripts/vendor/',
 					src: [ '*.js', '!datatables.min.js' ],
 					dest: '<%= cfg.dst %>/scripts/vendor',
 					ext:  '.min.js'
@@ -166,7 +180,7 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
 					dot: true,
-					cwd: '<%= cfg.app %>',
+					cwd: '<%= cfg.src %>',
 					dest: '<%= cfg.dst %>',
 					src: [
 						'{,*/}*.html',
@@ -181,7 +195,32 @@ module.exports = function (grunt) {
 						'styles/*.css'
 					]// End src
 				}]// End copy:dist - files
-			}// End copy:dist
+			},// End copy:dist
+
+			jsfiles: {
+				files: [{
+					expand: true,
+					dot: true,
+					cwd: '<%= cfg.src %>',
+					dest: '<%= cfg.dst %>',
+					src: [
+						'scripts/**/*.js'
+					]// End src
+				}]// End copy:jsfiles - files
+			},// End copy:jsfiles
+
+			htmlfiles: {
+				files: [{
+					expand: true,
+					dot: true,
+					cwd: '<%= cfg.src %>',
+					dest: '<%= cfg.dst %>',
+					src: [
+						'**/*.html'
+					]// End src
+				}]// End copy:htmlfiles - files
+			},// End copy:htmlfiles
+
 		},// End copy task
 
 		//
@@ -198,7 +237,7 @@ module.exports = function (grunt) {
 				 files: {
 					 '<%= cfg.dst %>/styles/main.css': [
 						 '.tmp/styles/{,*/}*.css',
-						 '<%= cfg.app %>/styles/{,*/}*.css'
+						 '<%= cfg.src %>/styles/{,*/}*.css'
 					 ]
 				 }
 			 }
@@ -212,13 +251,23 @@ module.exports = function (grunt) {
 					port: 21,
 					authKey: 'apisnetworks-key'
 				},
-				src: 'dist/',
+				src: '<%= cfg.dst %>',
 				dest: '/var/www/html/middleofjune/dist/',
-				exclusions: ['dist/.DS_Store', 'dist/Thumbs.db', 'dist/data/', 'dist/tmp' ]
+				exclusions: ['<%= cfg.dst %>/.DS_Store', '<%= cfg.dst %>/Thumbs.db', '<%= cfg.dst %>/data/', '<%= cfg.dst %>/tmp' ]
+			 },
+			 live: {
+				auth: {
+					host: 'sol.apisnetworks.com',
+					port: 21,
+					authKey: 'apisnetworks-key'
+				},
+				src: '<%= cfg.dst %>',
+				dest: '/var/www/html/middleofjune/',
+				exclusions: ['<%= cfg.dst %>/.DS_Store', '<%= cfg.dst %>/Thumbs.db', '<%= cfg.dst %>/data/', '<%= cfg.dst %>/tmp' ]
 			 }
 		},// End ftp-deploy task
 
-		'ftpush': {
+		ftpush: {
 			build: {
 				auth: {
 					host: 'sol.apisnetworks.com',
@@ -227,7 +276,7 @@ module.exports = function (grunt) {
 				},
 				src: '<%= cfg.dst %>',
 				dest: '/var/www/html/middleofjune/dist/',
-				exclusions: ['dist/.DS_Store', 'dist/Thumbs.db', 'dist/data/', 'dist/tmp' ],
+				exclusions: ['<%= cfg.dst %>/.DS_Store', '<%= cfg.dst %>/Thumbs.db', '<%= cfg.dst %>/data/', '<%= cfg.dst %>/tmp' ],
 				// keep: ['/important/images/at/server/*.jpg'],
 				simple: true,
 				useList: false
@@ -241,11 +290,11 @@ module.exports = function (grunt) {
 		//    options: {
 		//       dest: '<%= cfg.dst %>'
 		//    },
-		//    html: '<%= cfg.app %>/index.html'
+		//    html: '<%= cfg.src %>/index.html'
 		// },
 
 
-		// Performs rewrites based on rev and the useminPrepare cfguration
+		// Performs rewrites based on rev and the useminPrepare configuration
 		usemin: {
 			options: {
 				assetsDirs: [
@@ -258,6 +307,27 @@ module.exports = function (grunt) {
 			css: ['<%= cfg.dst %>/styles/{,*/}*.css']
 		},
 
+		htmlmin: {    
+			dist: {
+				options: {
+					removeComments: true,
+					collapseWhitespace: true,
+					removeRedundantAttributes: false,
+					removeEmptyAttributes: true,
+					conservativeCollapse: true,
+					removeAttributeQuotes: true,
+					useShortDoctype: true
+				},
+				// Destination : source
+				files: [{
+					expand: true,
+					cwd: '<%= cfg.dst %>',
+					src: '{,*/}*.html',
+					dest: '<%= cfg.dst %>'
+				}]
+			}// End htmlmin:dist
+		},// End task htmlmin
+
 		// Watches files for changes and runs tasks based on what's changed
 		watch: require('./grunt-include/watch')
 
@@ -269,8 +339,8 @@ module.exports = function (grunt) {
 		//    jshintrc: '.jshintrc',
 		//    reporter: require('jshint-stylish')
 		// },
-		// assess: ['<%=cfg.app%>/js/**/*.js'],
-		// all: ['Gruntfile.js', '<%=cfg.app%>/js/**/*.js']
+		// assess: ['<%=cfg.src%>/js/**/*.js'],
+		// all: ['Gruntfile.js', '<%=cfg.src%>/js/**/*.js']
 		//},
 
 		// Watches files for changes and runs tasks based on what's changed
@@ -283,7 +353,7 @@ module.exports = function (grunt) {
 		//    dist: {
 		//       files: [{
 		//          expand: true,
-		//          cwd: '<%= cfg.app %>/images',
+		//          cwd: '<%= cfg.src %>/images',
 		//          src: '{,*/}*.{gif,jpeg,jpg,png}',
 		//          dest: '<%= cfg.dst %>/images'
 		//       }]
@@ -294,6 +364,16 @@ module.exports = function (grunt) {
 		//  dist: {}
 		// },
 
+
+		// Mocha testing framework cfguration options
+		// mocha: {
+		// 	all: {
+		// 		options: {
+		// 			run: true,
+		// 			urls: ['http://<%= browserSync.test.options.host %>:<%= browserSync.test.options.port %>/index.html']
+		// 		}
+		// 	 }
+		// },
 		
 
 
@@ -338,13 +418,14 @@ module.exports = function (grunt) {
 	// This is the default Grunt task if you simply run "grunt" in project dir
 	grunt.registerTask('build', [
 		'clean:dist',
+		'sass', // to be replaced by 'concurrent:dist',
 		'postcss',
 		'cssmin',
 		'uglify',
 		'copy:dist',
 		'filerev',
-		'usemin'
-		// 'htmlmin',
+		'usemin',
+		'htmlmin'
 
 	//   // 'wiredep',     // turn on only when bower-components is reinstated
 	//   // 'useminPrepare',  // throws processing a template error ('test' is undefined)
@@ -355,10 +436,15 @@ module.exports = function (grunt) {
 	]);// End register task :: build
 
 
-	grunt.registerTask('production', [
+	grunt.registerTask('build-prod', [
 		'build',
 		// 'ftp-deploy'
 		'ftpush'
+	]);
+
+	grunt.registerTask('build-prod-live', [
+		'build',
+		'ftp-deploy:live'
 	]);
 
 	
@@ -402,6 +488,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-concurrent');
 	grunt.loadNpmTasks('grunt-postcss');
 	grunt.loadNpmTasks('grunt-sass');
