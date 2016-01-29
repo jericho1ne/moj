@@ -4,13 +4,21 @@
 **/
 var Events = {
     // PROPERTIES
-    dataBaseURL: 'data/',
+    dataFolder: 'data/',
     eventsJSON: 'events.json',
 
     apiScriptsBase: 'scripts/api/',
     eventsScript: 'getEvents.php',
 
-    eventsList: [],
+    $eventData: {},
+
+    /**
+     * getEventData
+     * returns the data table object in its current state
+     */
+    getEventData: function() {
+        return this.$eventData;
+    },// End getEventData
 
     /**
      * displayEvents
@@ -150,9 +158,15 @@ var Events = {
             deferred.resolve();
         }, 600);
        
+        // Save into class property
+        this.$eventData = $dataTable;
         // Always return deferred object regardless
         return deferred.promise();
     },// End displayEvents
+
+    loadModalLinks: function() {
+        console.log( " >>>>>>>> ");
+    },
 
     /**
      * getEvents

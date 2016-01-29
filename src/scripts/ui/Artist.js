@@ -16,9 +16,16 @@
     //
     // Artist Bio, Info, Images, and Top tracks
     //
+    applyPaginationListeners: function($dataTable) {
+        var __this = this;
+        $('.paginate_button').click(function() {
+            // Get venues within 25 miles, max 10 results
+            __this.applyArtistListeners($dataTable);
+        });
+    },// End applyPaginationListeners
 
-    setListeners: function() {
-        $('.artistInfo').click(function() {
+    applyArtistListeners: function($dataTable) {
+        $dataTable.find('.artistInfo').on('click', function() {
             console.log( " artistInfo clicked ");
             // Same as using the more specific $(this).attr('data-val') 
             var artistName = $(this).html();  

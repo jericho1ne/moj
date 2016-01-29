@@ -4,6 +4,7 @@
 
 // On document load
 $(document).ready(function() {
+    window.Events = Events;
 
     //
     // LISTENERS
@@ -47,8 +48,13 @@ $(document).ready(function() {
         })
         .then(function() {
             console.log(" 2nd .then triggered");
-            // Set click listeners 
-            Artist.setListeners();
+            var $eventDataTable = Events.getEventData(); 
+            
+            // Click listeners for currently shown page of events
+            Artist.applyArtistListeners($eventDataTable);
+
+            // Click listeners for pagination change (reapply Artist listeners)
+            Artist.applyPaginationListeners($eventDataTable);
         });
 
  // grab JSON api data, then display
