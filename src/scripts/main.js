@@ -51,10 +51,10 @@ $(document).ready(function() {
             var $eventDataTable = Events.getEventData(); 
             
             // Click listeners for currently shown page of events
-            Artist.applyArtistListeners($eventDataTable);
+            Events.applyArtistListeners();
 
-            // Click listeners for pagination change (reapply Artist listeners)
-            Artist.applyPaginationListeners($eventDataTable);
+            // Click listeners for pagination change (re-applies Artist listeners)
+            Events.applyPaginationListeners();
         });
 
  // grab JSON api data, then display

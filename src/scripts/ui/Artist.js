@@ -18,7 +18,8 @@
     //
     applyPaginationListeners: function($dataTable) {
         var __this = this;
-        $('.paginate_button').click(function() {
+        $dataTable.find('.paginate_button').on('click', function() {
+            console.log( " (+) paginate_button clicked!");
             // Get venues within 25 miles, max 10 results
             __this.applyArtistListeners($dataTable);
         });
@@ -33,14 +34,14 @@
             // Create div to hold modal contents
             var $artistPopup = $('<div>');
 
-             // Initialize dialog box
+            // Initialize dialog box
             $artistPopup.load('templates/artist-popup.html').dialog({
                 autoOpen: false,
                 height: '600',
                 width: '80%',
                 modal: true,
                 resizable: true,
-                dialogClass: 'error-dialog',
+                dialogClass: 'info-dialog',
                 close: function(event, ui) {
                     $(this).dialog('destroy').remove();
                 }
@@ -58,10 +59,26 @@
                     Artist.appendTopTracks('artist-tracks', trackData);
                 });
 
+            $(document).on('click','#closeModal', function(e) {
+                console.log(" >> close the damn modal already >>");
+                    // find the dialog that contains this .closeButton
+                    var $dialog = $(this).parents('.ui-dialog-content');
+                    $dialog.dialog('close');
+            });
+
             setTimeout(function(){
+                // // Assign at the top most parent level (document) like .live()  
+                // $(document).on('click', '#closeModal', function() {
+                //     console.log(" X close modal X");
+                //     $artistPopup.dialog('close');
+                // });
+
+
                 // Pop up the info modal
                 $artistPopup.dialog("open");
-             }, 150);
+
+               
+             }, 50);
             
 
         });// artistInfo .click

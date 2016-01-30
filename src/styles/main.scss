@@ -477,9 +477,33 @@ img.artist-profile-pic {
     margin-bottom: 10px;
 }
 /*------------------- Error popup / modal dialog -----------*/
+#closeModal {
+    display: inline;
+    position: relative;
+    top: 20px;
+    background-color: #000;
+    z-index: 20;
+}
+.artist-info {
+    padding-top: 8px;
+}
+
+.ui-dialog .ui-dialog-content {
+    padding: 8px;
+}
+
 .ui-dialog.error-dialog {
     font-family: "Ruda-Regular";
     font-size: 14px;
+}
+
+.ui-dialog.info-dialog {
+    font-family: "Ruda-Regular";
+    font-size: 12px;
+}
+
+.ui-dialog-titlebar {
+    display: none;
 }
 
 .event-date {
