@@ -1,5 +1,6 @@
 @import "import/colors";
 @import "import/fonts";
+@import "import/position";
 
 $btn-pad: 6px;
 
@@ -140,7 +141,7 @@ h1 {
 
 .link:hover {
     background: #B4CEE7;
-    border-radius: 3px;
+    @include border-radius(3px);
     cursor: pointer;
 }
 .large-text {
@@ -151,7 +152,7 @@ h1 {
     letter-spacing: -4px;
     font-weight: 400;
     background-color: rgba(200, 200, 200, 0.3);
-    border-radius: 6px;
+    @include border-radius(6px);
 }
 
 /*-------------------- Column styles -------------------*/
@@ -272,16 +273,12 @@ h1 {
     font-weight: 200;
     line-height: 1.1;
     background-color: #eee;
-    border-radius: 16px;
+    @include border-radius(16px);
     h1 {
         font-size: $font-xl;
         line-height: 1.1;
         letter-spacing: -1px;
     }
-}
-
-.fa {
-    opacity: 0.68;
 }
 
 .left {
@@ -298,7 +295,7 @@ h1 {
 }
 
 .debug {
-    border-radius: 10px;
+    @include border-radius(6px);
     border: $pink-border;
 }
 
@@ -423,69 +420,17 @@ img.artist-profile-pic {
     overflow-y: scroll;
 }
 
-/* --------------- general -------------------*/
-.hidden {
-    display: none;
-}
-.opacity-30 {
-    opacity: 0.3;
-}
-.opacity-60 {
-    opacity: 0.6;
-}
-.opacity-80 {
-    opacity: 0.8;
-}
-
-.pad4 {
-    padding: 4px;
-}
-.pad10 {
-    padding: 10px;
-}
-.w200 {
-    width: 200px;
-}
-.h40 {
-    height: 40px;
-}
-.h80 {
-    height: 80px;
-}
-.h120 {
-    height: 120px;
-}
-.h160 {
-    height: 160px;
-}
-.h200 {
-    height: 200px;
-}
-.h300 {
-    height: 300px;
-}
-.h320 {
-   min-height: 320px;
-}
-.h340 {
-    height: 340px;
-}
-.h400 {
-    height: 400px;
-}
-.margin-bottom-10 {
-    margin-bottom: 10px;
-}
 /*------------------- Error popup / modal dialog -----------*/
-#closeModal {
+#closeModalBtn {
     display: inline;
     position: relative;
-    top: 20px;
-    background-color: #000;
+    @include border-radius(3px);
+    top: 6px;
+    left: -4px;
+    padding: 5px 8px 5px 8px;
+    background-color: #fff;
+    border: 1px solid #666;
     z-index: 20;
-}
-.artist-info {
-    padding-top: 8px;
 }
 
 .ui-dialog .ui-dialog-content {
