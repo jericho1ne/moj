@@ -32,7 +32,7 @@ module.exports = {
 			'<%= cfg.src %>/scripts/common/*', 
 			'<%= cfg.src %>/scripts/*.js'
 		],
-		tasks: ['build']
+		tasks: ['build', 'ftpush:build']
 	},
 	// jsfiles: {
 	// 	files: ['<%= cfg.src %>/scripts/ui/*', '<%= cfg.src %>/scripts/common/*', '<%= cfg.src %>/scripts/*.js'],

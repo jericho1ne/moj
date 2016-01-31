@@ -251,17 +251,19 @@ module.exports = function (grunt) {
 					port: 21,
 					authKey: 'apisnetworks-key'
 				},
+				// cache: 'sftpCache.json',
 				src: '<%= cfg.dst %>',
 				dest: '/var/www/html/middleofjune/dist/',
 				exclusions: [
-					'/scripts/vendor/',
-					'/styles/fa/',
-					'/styles/images/',
-					'/styles/fonts/',
-					'/.DS_Store', 
-					'/Thumbs.db', 
-					'/data/', 
-					'/tmp' ]
+					'<%= cfg.dst %>/scripts/vendor/**/*',
+					'<%= cfg.dst %>/styles/fa/**/*',
+					'<%= cfg.dst %>/styles/images/**/*',
+					'<%= cfg.dst %>/styles/fonts/**/*',
+					'<%= cfg.dst %>/data/**/*', 
+					'<%= cfg.dst %>/.DS_Store', 
+					'<%= cfg.dst %>/Thumbs.db', 
+					'<%= cfg.dst %>/tmp' ],
+    			progress: true
 			 },
 			 live: {
 				auth: {
@@ -288,7 +290,15 @@ module.exports = function (grunt) {
 				},
 				src: '<%= cfg.dst %>',
 				dest: '/var/www/html/middleofjune/dist/',
-				exclusions: ['<%= cfg.dst %>/.DS_Store', '<%= cfg.dst %>/Thumbs.db', '<%= cfg.dst %>/data/', '<%= cfg.dst %>/tmp' ],
+				exclusions: [
+					'<%= cfg.dst %>/scripts/vendor/**/*',
+					'<%= cfg.dst %>/styles/fa/**/*',
+					'<%= cfg.dst %>/styles/images/**/*',
+					'<%= cfg.dst %>/styles/fonts/**/*',
+					'<%= cfg.dst %>/data/**/*', 
+					'<%= cfg.dst %>/.DS_Store', 
+					'<%= cfg.dst %>/Thumbs.db', 
+					'<%= cfg.dst %>/tmp' ],
 				// keep: ['/important/images/at/server/*.jpg'],
 				simple: true,
 				useList: false
@@ -323,11 +333,12 @@ module.exports = function (grunt) {
 			dist: {
 				options: {
 					removeComments: true,
+					removeScriptTypeAttributes: false,
 					collapseWhitespace: true,
 					removeRedundantAttributes: false,
 					removeEmptyAttributes: true,
 					conservativeCollapse: true,
-					removeAttributeQuotes: true,
+					removeAttributeQuotes: false,
 					useShortDoctype: true
 				},
 				// Destination : source
@@ -523,6 +534,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-filerev');
 	grunt.loadNpmTasks('grunt-usemin');
 	grunt.loadNpmTasks('grunt-ftp-deploy');	// bulk upload
+	grunt.loadNpmTasks('grunt-sftp-deploy');	// bulk upload
 	grunt.loadNpmTasks('grunt-ftpush');		// granular upload
 	grunt.loadNpmTasks('grunt-express');  	// Express server/livereload
 	

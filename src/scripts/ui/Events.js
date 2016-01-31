@@ -11,7 +11,7 @@ var Events = {
     eventsScript: 'getEvents.php',
 
     $eventData: {},
-    maxVideosToShow: 3,
+    maxVideosToShow: 4,
 
     /**
      * getEventData
@@ -209,14 +209,16 @@ var Events = {
 
         // .live() replacement;  used to be $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
         $(document).on("click", '.artistInfo', function() {
+            // Pull artist name from the link that was clicked
             // Same as using the more specific $(this).attr('data-val') 
+            
             var artistName = $(this).html();  
 
             // Create div to hold modal contents
             var $artistPopup = $('<div>');
 
-             // Initialize dialog box
-            $artistPopup.load('templates/artist-popup.html').dialog({
+                         // Initialize dialog box
+            $artistPopup.dialog({
                 autoOpen: false,
                 modal: true,
                 resizable: true,
@@ -225,18 +227,23 @@ var Events = {
                     $(this).dialog('destroy').remove();
                 }
             });
+            $artistPopup.load('templates/artist-popup.html');
+            
 
 
+            console.log(" (!) opening dialog");
             // Pop up the info modal
             $artistPopup.dialog("open");
+            
 
             // Switch to $(document) if this stops firing
             $('.ui-dialog').on('click', '#closeModalBtn', function() {
                 $artistPopup.dialog('close');
             });
 
-            
-            // Promise chain 
+
+            // Delay Promise chain until dialog is popped open!
+            setTimeout(function(){
             //  - get artist info, display it, get top tracks, display them
             Events.getArtistInfo(artistName)
                 .then(function(artistData) {
@@ -245,15 +252,9 @@ var Events = {
 
             Events.getTopTracks(artistName)
                 .then(function(trackData) {
-                    
-
                     Events.appendTopTracks('artist-tracks', trackData);
                 });
-
-            //setTimeout(function(){
-                
-
-            //}, 350);
+            }, 550);
             
 
         });// artistInfo .click
@@ -264,6 +265,7 @@ var Events = {
      */
     getArtistInfo: function (artistName) {
         console.log(" >> 1) getArtistInfo called");
+        
         // Get Artist Info
         //  http://www.last.fm/api/show/artist.getinfo
         // console.log(CACHE[strToLowerNoSpaces(artistName)]);
@@ -304,6 +306,7 @@ var Events = {
      * getTopTracks :: returns top 50 tracks by a given artist
      */
     getTopTracks: function (artistName) {
+        
         console.log(" >> 2) getTopTracks called");
         // Get Artist Top Tracks
         //   http://www.last.fm/api/show/artist.getTopTracks
@@ -339,7 +342,8 @@ var Events = {
      * appendArtistInfo :: display artist info in DOM
      */
     appendArtistInfo: function (divId, data) {
-       
+        
+
         var noInfoOnArtist = false;
         if (data.error === 6) {
             console.log(" ERROR 6: No info on artist. ");
@@ -347,11 +351,11 @@ var Events = {
         }
 
         // Create specific parent div name
-        var $artistInfo = $('#'+divId);
+        var artistInfo = '#' + divId;
 
         if (noInfoOnArtist) {
-            $('#artist-photo', $artistInfo).html('<div class="top60">No Photo found &nbsp;<i class="fa fa-terminal"></i></div>');
-            $('#artist-bio', $artistInfo).html('<div class="top60">No Artist bio either &nbsp;<i class="fa fa-thumbs-o-down fa-2x"></i></div>');
+            $('#artist-photo').html('<div class="top60">No Photo found &nbsp;<i class="fa fa-terminal"></i></div>');
+            $('#artist-bio').html('<div class="top60">No Artist bio either &nbsp;<i class="fa fa-thumbs-o-down fa-2x"></i></div>');
         }// End if no info found on this artist
         else {
             // Create custom info array
@@ -374,14 +378,14 @@ var Events = {
             // If longer than max amount, add "show more" link
             if (fullBio.length > maxChars) {
                 shortBio += ' ... <span class="link">'
-                    + '<a href="' + data.artist.url + '" target="_blank">( read more )</a>'
+                    + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
                     + '<span>';
             }
 
             // Clear existing content        
-            $('#artist-photo', $artistInfo).html();
-            $('#artist-bio', $artistInfo).html();
-            $('#artist-tracks', $artistInfo).html();
+            //$('#artist-photo').html();
+            //$('#artist-bio').html();
+            //$('#artist-tracks').html();
 
             // photoContainer = img + caption
             $photoCaption = $('<h3>')
@@ -389,12 +393,13 @@ var Events = {
                 .html(artist.name);
 
                 
-            $('#artist-photo', $artistInfo).html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
-            $('#artist-photo', $artistInfo).append($photoCaption);
+            $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
+            $('#artist-photo').append($photoCaption);
 
             // Artist bio text
-            $('#artist-bio', $artistInfo).html(shortBio);
+            $('#artist-bio').html(shortBio);
 
+            
             // TODO: loop through artist.tags.tag and print each tag in a button stylee
 
         }// End else we have info to display
@@ -407,6 +412,8 @@ var Events = {
         var topTracks = data.toptracks.track;
         var topTracksLength = topTracks.length;
 
+        
+
         $('#' + divId).empty();
         // $('#' + divId).append('<h3>Tracklist</h3>');
 
@@ -417,7 +424,7 @@ var Events = {
             var artist = topTracks[i].artist.name;
 
             // Search for artist + track name one at a time, 1 max result
-            Events.searchYoutube(stripSpaces(artist + ' ' + song), 4);
+            Events.searchYoutube(stripSpaces(artist + ' ' + song), this.maxVideosToShow);
 
             // Debug - See top track names pulled by Last.fm
             // $('#' + divId).append(song + ' / ');
@@ -425,6 +432,8 @@ var Events = {
             if ((i+1) >= this.maxVideosToShow) {
                 break;
             }
+            
+
         }// End for loop
        
     },// End function appendTopTracks
