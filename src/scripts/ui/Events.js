@@ -137,7 +137,7 @@ var Events = {
         //
         setTimeout(function(){ 
             $('#' + dataTableUniqueID).DataTable({
-                "lengthMenu": [[40, 80, 200, "All"], [40, 80, 200, "All"]],
+                "lengthMenu": [[20, 40, 160, 320, -1], [20, 40, 80, 160, 320, "All"]],
                 // 0 = date, 1 = artist, 2 = venue, 3 = ticket
                 "order": [[ 0, "asc" ]],
                 "aoColumnDefs": [
@@ -164,11 +164,6 @@ var Events = {
         // Always return deferred object regardless
         return deferred.promise();
     },// End displayEvents
-
-    loadModalLinks: function() {
-        console.log( " >>>>>>>> ");
-    },
-
     /**
      * getEvents
      * list of events, bounded by certain input parameters
@@ -182,7 +177,7 @@ var Events = {
             async: false,
             // Success callback will fire even when coupled with an external $.done
             success : function(data) {  // data, status, jqXHR
-                console.log(' >> events XHR success >>');
+                // console.log(' >> events XHR success >>');
                 // Save current artist data in global cache
                 CACHE['eventData'] = data;
             },
@@ -202,21 +197,18 @@ var Events = {
         var __this = this;
 
         // Replacement for .live()
-        $(document).on('click', '.paginate_button', function() {
-            console.log( " (+) paginate_button clicked!");
-  
+        $(document).on('click', '.paginate_button', function() {  
             // Get venues within 25 miles, max 10 results
             __this.applyArtistListeners();
         });
     },// End applyPaginationListeners
 
     applyArtistListeners: function() {
-        console.log( " (++) applyArtistListeners called!");
+        console.log( " (+) applyArtistListeners called!");
 
+
+        // .live() replacement;  used to be $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
         $(document).on("click", '.artistInfo', function() {
-          
-        // $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
-            console.log( " artistInfo clicked ");
             // Same as using the more specific $(this).attr('data-val') 
             var artistName = $(this).html();  
 
@@ -234,6 +226,16 @@ var Events = {
                 }
             });
 
+
+            // Pop up the info modal
+            $artistPopup.dialog("open");
+
+            // Switch to $(document) if this stops firing
+            $('.ui-dialog').on('click', '#closeModalBtn', function() {
+                $artistPopup.dialog('close');
+            });
+
+            
             // Promise chain 
             //  - get artist info, display it, get top tracks, display them
             Events.getArtistInfo(artistName)
@@ -243,19 +245,15 @@ var Events = {
 
             Events.getTopTracks(artistName)
                 .then(function(trackData) {
+                    
+
                     Events.appendTopTracks('artist-tracks', trackData);
                 });
 
-            setTimeout(function(){
-                // Pop up the info modal
-                $artistPopup.dialog("open");
+            //setTimeout(function(){
+                
 
-                // Switch to $(document) if this stops firing
-                $('.ui-dialog').on('click', '#closeModal', function() {
-                    $artistPopup.dialog('close');
-                });
-
-             }, 150);
+            //}, 350);
             
 
         });// artistInfo .click
@@ -282,11 +280,12 @@ var Events = {
             dataType : 'json',
             // Success callback will fire even when couple with an external $.done
             success : function(data) {
+                window.artistData = data;
                 console.log(' >> artistXHR success >>');
              
                 if (data.error !== 6) {
                     // Save current artist data in global cache
-                    CACHE[strToLowerNoSpaces(data.artist.name)] = data;
+                    // CACHE[strToLowerNoSpaces(data.artist.name)] = data;
                 }
                 else {
                     console.log("no data on this artist...");
@@ -325,7 +324,7 @@ var Events = {
                 console.log(' >> topTracksXHR success >>');
 
                 // Cache track data to avoid future calls
-                CACHE[strToLowerNoSpaces(data.toptracks['@attr'].artist) + '_tracks'] = data;
+                // CACHE[strToLowerNoSpaces(data.toptracks['@attr'].artist) + '_tracks'] = data;
             },
             error : function(errorCode, errorMsg) {
                 // Handle error here
@@ -340,53 +339,65 @@ var Events = {
      * appendArtistInfo :: display artist info in DOM
      */
     appendArtistInfo: function (divId, data) {
+       
+        var noInfoOnArtist = false;
+        if (data.error === 6) {
+            console.log(" ERROR 6: No info on artist. ");
+            noInfoOnArtist = true;
+        }
+
         // Create specific parent div name
         var $artistInfo = $('#'+divId);
 
-        // Create custom info array
-        var artist = {
-            'name': data.artist.name,
-            'bio': data.artist.bio,
-            'url': data.artist.url,
-            'images': data.artist.image,
-            'tags': data.artist.tags.tag
-        };
+        if (noInfoOnArtist) {
+            $('#artist-photo', $artistInfo).html('<div class="top60">No Photo found &nbsp;<i class="fa fa-terminal"></i></div>');
+            $('#artist-bio', $artistInfo).html('<div class="top60">No Artist bio either &nbsp;<i class="fa fa-thumbs-o-down fa-2x"></i></div>');
+        }// End if no info found on this artist
+        else {
+            // Create custom info array
+            var artist = {
+                'name': data.artist.name,
+                'bio': data.artist.bio,
+                'url': data.artist.url,
+                'images': data.artist.image,
+                'tags': data.artist.tags.tag
+            };
 
-        var maxChars = 800;
+            var maxChars = 600;
 
-        // Remove any links
-        var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+            // Remove any links
+            var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
 
-        // Clip bio at preset character max
-        var shortBio = fullBio.substring(0, maxChars);
-        
-        // If longer than max amount, add "show more" link
-        if (fullBio.length > maxChars) {
-            shortBio += ' ... <a href="#">( read on )</a>';
-        }
+            // Clip bio at preset character max
+            var shortBio = fullBio.substring(0, maxChars);
+            
+            // If longer than max amount, add "show more" link
+            if (fullBio.length > maxChars) {
+                shortBio += ' ... <span class="link">'
+                    + '<a href="' + data.artist.url + '" target="_blank">( read more )</a>'
+                    + '<span>';
+            }
 
-        // Clear existing content        
-        $('#artist-photo', $artistInfo).html();
-        $('#artist-bio', $artistInfo).html();
-        $('#artist-tracks', $artistInfo).html();
+            // Clear existing content        
+            $('#artist-photo', $artistInfo).html();
+            $('#artist-bio', $artistInfo).html();
+            $('#artist-tracks', $artistInfo).html();
 
-        // photoContainer = img + caption
-        $photoCaption = $('<h3>')
-            .addClass('photo-caption')
-            .html(artist.name);
+            // photoContainer = img + caption
+            $photoCaption = $('<h3>')
+                .addClass('photo-caption')
+                .html(artist.name);
 
-        $('#artist-photo', $artistInfo).html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
-        $('#artist-photo', $artistInfo).append($photoCaption);
+                
+            $('#artist-photo', $artistInfo).html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
+            $('#artist-photo', $artistInfo).append($photoCaption);
 
-        // Artist bio text
-        $('#artist-bio', $artistInfo).html(shortBio);
+            // Artist bio text
+            $('#artist-bio', $artistInfo).html(shortBio);
 
-        // $artistLeftDiv.append($photoContainer);
-        // $artistRightDiv.append($bio);
- 
-        // $('#' + divId)
-        //     .append($artistLeftDiv)
-        //     .append($artistRightDiv);
+            // TODO: loop through artist.tags.tag and print each tag in a button stylee
+
+        }// End else we have info to display
     },// End function appendArtistInfo
 
     /**
@@ -419,9 +430,9 @@ var Events = {
     },// End function appendTopTracks
 
     searchYoutube: function(searchTerm, maxResults) {
-         console.log(searchTerm);
+        console.log(searchTerm);
 
-         var requestBody = {
+        var requestBody = {
             type: "GET",
             url:  YOUTUBE_BASE_URL +
                   "search?part=snippet" +
@@ -429,21 +440,21 @@ var Events = {
                   "&key=" + YOUTUBE_API_KEY +
                   "&maxResults=" + parseInt(maxResults),
             async: false
-         };// End requestBody
+        };// End requestBody
 
-         $.ajax(requestBody).done(function(data, status) {
+        $.ajax(requestBody).done(function(data, status) {
             if (status === 'success') {
                if (data) {
                   // Append video thumb to DOM
                   Events.appendYoutubeVideo('artist-tracks', data.items);
                   return true;
                }
-            }
+            }// End if success
             else {
                alert("No videos found :(");
                return false;
-            }
-         });//End $.ajax
+            }// End if failure
+        });//End $.ajax
     },// End searchYoutube
 
     appendYoutubeVideo: function(divID, vids) {
@@ -480,8 +491,8 @@ var Events = {
             imgContainer.append(wrapperDiv);
 
             window.imgContainer = imgContainer;
-            console.log(" APPENDING NOW >>>>> ");
-            console.log(vids[0]);
+          
+            // console.log(vids[0]);
             $('#' + divID).append(imgContainer);
 
     },

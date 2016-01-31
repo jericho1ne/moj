@@ -253,7 +253,15 @@ module.exports = function (grunt) {
 				},
 				src: '<%= cfg.dst %>',
 				dest: '/var/www/html/middleofjune/dist/',
-				exclusions: ['<%= cfg.dst %>/.DS_Store', '<%= cfg.dst %>/Thumbs.db', '<%= cfg.dst %>/data/', '<%= cfg.dst %>/tmp' ]
+				exclusions: [
+					'/scripts/vendor/',
+					'/styles/fa/',
+					'/styles/images/',
+					'/styles/fonts/',
+					'/.DS_Store', 
+					'/Thumbs.db', 
+					'/data/', 
+					'/tmp' ]
 			 },
 			 live: {
 				auth: {
@@ -263,7 +271,11 @@ module.exports = function (grunt) {
 				},
 				src: '<%= cfg.dst %>',
 				dest: '/var/www/html/middleofjune/',
-				exclusions: ['<%= cfg.dst %>/.DS_Store', '<%= cfg.dst %>/Thumbs.db', '<%= cfg.dst %>/data/', '<%= cfg.dst %>/tmp' ]
+				exclusions: [
+					'/.DS_Store', 
+					'/Thumbs.db', 
+					'/data/', 
+					'/tmp' ]
 			 }
 		},// End ftp-deploy task
 
