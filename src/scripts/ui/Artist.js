@@ -37,8 +37,6 @@
             // Initialize dialog box
             $artistPopup.load('templates/artist-popup.html').dialog({
                 autoOpen: false,
-                height: '600',
-                width: '80%',
                 modal: true,
                 resizable: true,
                 dialogClass: 'info-dialog',
@@ -175,7 +173,7 @@
             'tags': data.artist.tags.tag
         };
 
-        var maxChars = 800;
+        var maxChars = 600;
 
         // Remove any links
         var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");

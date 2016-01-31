@@ -497,9 +497,16 @@ img.artist-profile-pic {
     font-size: 14px;
 }
 
+// this needs room to breathe, and allow for vertical scroll!
 .ui-dialog.info-dialog {
+    position: relative;
+    left: auto;
+    right: auto;
     font-family: "Ruda-Regular";
     font-size: 12px;
+    overflow: visible;
+    min-height: 600px !important;
+    min-width: 90% !important;
 }
 
 .ui-dialog-titlebar {

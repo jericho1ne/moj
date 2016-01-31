@@ -6,8 +6,8 @@
 'use strict';
 
 module.exports = function (grunt) {
-	// Time how long tasks take. Can help when optimizing build times
-	// require('time-grunt')(grunt);
+	// Time how long tasks take;  Optimizing build times!
+	require('time-grunt')(grunt);
 
 	// Automatically load required grunt tasks
 	// require('jit-grunt')(grunt, {
@@ -328,6 +328,19 @@ module.exports = function (grunt) {
 			}// End htmlmin:dist
 		},// End task htmlmin
 
+
+		// Server w/ livereload
+		express: {    
+			all:{
+  				options:{
+  					port: 3000,
+  					hostname: 'localhost',
+  					bases: ['<%= cfg.dist %>'],
+  					livereload:true	
+  				}
+  			}// End express:all
+		},// End task express
+
 		// Watches files for changes and runs tasks based on what's changed
 		watch: require('./grunt-include/watch')
 
@@ -397,7 +410,7 @@ module.exports = function (grunt) {
 	});// End grunt initcfg
 
 	// 
-	// --- GRUNT REGISTER TASKS  -----------------------------------------------
+	//  GRUNT REGISTER TASKS  
 	//
 	grunt.registerTask('test', function (target) {
 		if (target !== 'watch') {
@@ -435,6 +448,9 @@ module.exports = function (grunt) {
 	//   'cssmin',		
 	]);// End register task :: build
 
+	grunt.registerTask(
+		'server',['express', 'watch']
+	);
 
 	grunt.registerTask('build-prod', [
 		'build',
@@ -494,7 +510,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-filerev');
 	grunt.loadNpmTasks('grunt-usemin');
-	grunt.loadNpmTasks('grunt-ftp-deploy');
-	grunt.loadNpmTasks('grunt-ftpush');
+	grunt.loadNpmTasks('grunt-ftp-deploy');	// bulk upload
+	grunt.loadNpmTasks('grunt-ftpush');		// granular upload
+	grunt.loadNpmTasks('grunt-express');  	// Express server/livereload
+	
 
 };// End module.exports

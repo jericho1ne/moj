@@ -226,11 +226,9 @@ var Events = {
              // Initialize dialog box
             $artistPopup.load('templates/artist-popup.html').dialog({
                 autoOpen: false,
-                height: '600',
-                width: '80%',
                 modal: true,
                 resizable: true,
-                dialogClass: 'error-dialog',
+                dialogClass: 'info-dialog',
                 close: function(event, ui) {
                     $(this).dialog('destroy').remove();
                 }

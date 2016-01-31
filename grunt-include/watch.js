@@ -14,14 +14,17 @@ module.exports = {
 	// 	tasks: ['babel:test', 'test:watch']
 	// },
 	gruntfile: {
+		options: {livereload: true},
 		files: ['Gruntfile.js'],
 		tasks: ['build']
 	},
 	sass: {
+		options: {livereload: true},
 		files: ['<%= cfg.src %>/styles/{,*/}*.{scss,sass}'],
 		tasks: ['clean:maincss', 'sass', 'postcss', 'cssmin']
 	},
 	corefiles: {
+		options: {livereload: true},
 		files: [
 			'<%= cfg.src %>/index.html', 
 			'<%= cfg.src %>/templates/**',
