@@ -21,7 +21,7 @@ module.exports = {
 	sass: {
 		options: {livereload: true},
 		files: ['<%= cfg.src %>/styles/{,*/}*.{scss,sass}'],
-		tasks: ['clean:maincss', 'sass', 'postcss', 'cssmin']
+		tasks: ['clean:maincss', 'sass', 'postcss', 'cssmin', 'ftpush:build']
 	},
 	corefiles: {
 		options: {livereload: true},

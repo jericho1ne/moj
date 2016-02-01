@@ -280,20 +280,20 @@
             // vids[0].snippet.thumbnails.default.url      // .width=120, height=90
 
             var imgContainer = $('<li>')
-               .attr('class','yts-list');
+               .attr('class','vid-list');
 
             // div containing image + caption
             var wrapperDiv = $('<div>')
-               .attr('class','yts-photo-wrapper');
+               .attr('class','vid-photo-wrapper');
 
             // image source tag
             var imgTag = $('<img>')
-               .attr('class','yts-photo')
+               .attr('class','vid-photo')
                .attr('src', vids[0].snippet.thumbnails.medium.url);       
 
             // floating image label
             var imgLabel = $('<div>')
-               .attr('class','yts-caption')
+               .attr('class','vid-caption')
                .html(vids[0].snippet.title);
 
             wrapperDiv.append(imgTag);

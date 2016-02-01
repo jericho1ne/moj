@@ -11,8 +11,8 @@ indent_style = space
 indent_size = 4
 
 # CSS indent
-[styles/*.js]
-indent_style = space
+[styles/*]
+indent_style = tab
 indent_size = 4
 
 
