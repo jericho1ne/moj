@@ -125,10 +125,10 @@ h1 {
 }
 
 .loading {
-	@include fontBuilder($font-lg, $font-weight-700);
+	@include fontBuilder($font-md, $font-weight-400);
 	position: relative;
-	margin-left: 10% !important;
-	top: 20% !important;
+	margin-left: 40px !important;
+	top: 40px !important;
 	color: $gray-mid;
 }
 .center {
@@ -359,18 +359,24 @@ h1 {
 	padding: 0.2em 0;
 }
 
+/*------------- Artist Video Clips  -----------*/
+.vid-list {
+	display: inline-block;
+}
+
 .vid-photo-wrapper {
-	@include border-radius(8px);
 	position: relative;
 	display: inline-block;
-	padding: 2px;
+	padding: 4px 4px 1px 4px;
 }
 
 .vid-photo {
 	display: inline-block;
 	vertical-align: text-top;
-	@include border-radius(7px);
-	border: 7px solid #777;
+	@include border-radius(2px);
+	border: 1px solid $gray-light;
+    overflow: hidden;
+    margin: 8px;
 }
 
 .vid-caption {
@@ -383,18 +389,9 @@ h1 {
 	height: auto;
 	width: auto;
 	overflow: hidden;
-	left: 10px;
-	bottom: 14px;
+	left: 1px;
+	top: 14px;
 }
-
-.vid-list {
-	// border: 1px solid gray;
-	display: inline-block;
-	padding: 8px;
-}
-
-
-
 
 
 /*------------------- Artist info  -----------*/

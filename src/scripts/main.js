@@ -49,9 +49,9 @@ $(document).ready(function() {
 
         // .live() replacement;  used to be $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
         $(document).on("click", '.artistInfo', function() {
+
             // Pull artist name from the link that was clicked
             // Same as using the more specific $(this).attr('data-val') 
-            
             var artistName = $(this).html();  
 
             // Create div to hold modal contents
@@ -72,6 +72,7 @@ $(document).ready(function() {
             // Pop up the info modal
             $artistPopup.dialog("open");
 
+            // Add close button listener
             // Switch to $(document) if this stops firing
             $('.ui-dialog').on('click', '#closeModalBtn', function() {
                 // Fade out modal
@@ -82,51 +83,34 @@ $(document).ready(function() {
             });
 
             // Delay Promise chain until dialog is popped open!
-            setTimeout(function(){
+            setTimeout(function() {
                 // get artist info, display it, get top tracks, display them
 
                 // 1
                 // returns $.ajax from Last.fm API
                 Events.getArtistInfo(artistName)
-
-                    // 2
-                    .then(function(artistData) {                      
+                    .then(function(artistData) {        // 2                  
                         console.log (" (+) getArtistInfo  success. ");
 
-                        // Success
-                        // Returns a promise object that will need to be unwrapped 
-                        // with .then()
+                        // Success - Returns a promise object that will need 
+                        // to be unwrapped with .then()
                         return Events.appendArtistInfo('artist-info', artistData);
-                    },
-                    function () {
-                        // Failure
-                        console.log (" (-) getArtistInfo failed. ");
                     })
-
-                    // 3
-                    .then(function(data) {
-                        // debugger;
-                        console.log(" >>>>>>> " + data + "<<<<<<<<<<<");
+                    .then(function(data) {          // 3
+                        console.log(" >>>>>>> appendArtistInfo returned :: <<<");
+                        console.log(data);
+                       
                         // Success 
                         // returns $.ajax from Youtube API
-                        Events.getTopTracks(artistData.artist.name);
-                    },
-                    function () {
-                        // Failure
-                        console.log (" (-) getArtistInfo failed. ");
-                    })  
-
-                    // 4             
-                    .then(function(trackData) {
+                        return Events.getTopTracks(artistData.artist.name);
+                    })// End getTopTracks 
+                    .then(function(trackData) { // 4
+                        // To continue chain, return result of function below
+                        // after promisifying it.
                         Events.appendTopTracks('artist-tracks', trackData);
-                    }, 
-                    function () {
-                        // Failure
-                        console.log (" (-) getArtistInfo failed. ");
-                    }) 
-            }, 550);
+                    })// End getTopTracks  
+            }, 250);
             
-
         });// artistInfo .click
     } // End setListeners
 

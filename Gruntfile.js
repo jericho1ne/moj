@@ -115,8 +115,8 @@ module.exports = function (grunt) {
 			dist: {
 				src: [
 					'<%= cfg.dst %>/scripts/*.js',
-					'<%= cfg.dst %>/scripts/ui/*.js'
-					//'<%= cfg.dst %>/styles/{,*/}*.css',
+					'<%= cfg.dst %>/scripts/ui/*.js',
+					'<%= cfg.dst %>/styles/{,*/}*.css'
 					// '<%= cfg.dst %>/images/{,*/}*.*',
 					// '<%= cfg.dst %>/styles/fonts/{,*/}*.*',
 					// '<%= cfg.dst %>/*.{ico,png}'
