@@ -123,13 +123,14 @@ $(document).ready(function() {
   //      var eventPromise = Events.getEvents(10);
   //      eventPromise.then(function(data)) ...
   //
-  $.when(Events.getEvents(10))
+  Events.getEvents(10)
     // returns $.ajax
     .then(function(data) {
         // JSON data will go into shows-content div
-        return $.when(Events.displayEvents(JSON.parse(data), 'shows-content'));
+        return Events.displayEvents(JSON.parse(data), 'shows-content');
     })
-    .then(function() {
+    .then(function(data) {
+        console.log(data);
         // TODO: save in localStorage so we don't have to reload upon refresh
         // var $eventDataTable = Events.getEventData(); 
       
