@@ -27,7 +27,7 @@ var Events = {
      */
     displayEvents: function(data, divId) {
         // Create the deferred object ourselves
-        // var deferred = $.Deferred();
+        var deferred = $.Deferred();
 
         /*  ----- data format ----
             date: "1446361200000"
@@ -156,19 +156,22 @@ var Events = {
 
         // Give the datatable a chance to complete attaching, then call it quits
         setTimeout(function() {
-            //deferred.resolve();
-        }, 600);
+            deferred.resolve();
+            console.log(" (+) calling displayEvents' deferred.resolve() ");
+        }, 200);
        
         // Save into class property
         //this.$eventData = $dataTable;
         // Always return deferred object regardless
-        //return deferred.promise();
+        return deferred.promise();
     },// End displayEvents
     /**
      * getEvents
      * list of events, bounded by certain input parameters
      */
     getEvents: function(maxResults) {
+        // TODO:  limit on maxResults
+
         // $.ajax method will call resolve() on the deferred it returns
         // when the request completes successfully
         return $.ajax({
@@ -205,7 +208,6 @@ var Events = {
 
     applyArtistListeners: function() {
         console.log( " (+) applyArtistListeners called!");
-
 
         // .live() replacement;  used to be $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
         $(document).on("click", '.artistInfo', function() {
@@ -244,17 +246,47 @@ var Events = {
 
             // Delay Promise chain until dialog is popped open!
             setTimeout(function(){
-                //  - get artist info, display it, get top tracks, display them
+                // get artist info, display it, get top tracks, display them
+
+                // 1
+                // returns $.ajax from Last.fm API
                 Events.getArtistInfo(artistName)
-                    .then(function(artistData) {
-                        return $.when(Events.appendArtistInfo('artist-info', artistData));
+
+                    // 2
+                    .then(function(artistData) {                      
+                        console.log (" (+) getArtistInfo  success. ");
+
+                        // Success
+                        // Returns a promise object that will need to be unwrapped 
+                        // with .then()
+                        return Events.appendArtistInfo('artist-info', artistData);
+                    },
+                    function () {
+                        // Failure
+                        console.log (" (-) getArtistInfo failed. ");
                     })
-                    .then(function(artistName) {
-                        Events.getTopTracks(artistName)
-                    })                
+
+                    // 3
+                    .then(function(data) {
+                        // debugger;
+                        console.log(" >>>>>>> " + data + "<<<<<<<<<<<");
+                        // Success 
+                        // returns $.ajax from Youtube API
+                        Events.getTopTracks(artistData.artist.name);
+                    },
+                    function () {
+                        // Failure
+                        console.log (" (-) getArtistInfo failed. ");
+                    })  
+
+                    // 4             
                     .then(function(trackData) {
                         Events.appendTopTracks('artist-tracks', trackData);
-                    })
+                    }, 
+                    function () {
+                        // Failure
+                        console.log (" (-) getArtistInfo failed. ");
+                    }) 
             }, 550);
             
 
@@ -308,7 +340,7 @@ var Events = {
      */
     getTopTracks: function (artistName) {
         
-        console.log(" >> 2) getTopTracks called");
+        console.log(" >> 2) getTopTracks called (" + artistName + ')');
         // Get Artist Top Tracks
         //   http://www.last.fm/api/show/artist.getTopTracks
         // var topTracksXHR = $.ajax({
@@ -325,8 +357,8 @@ var Events = {
             dataType : 'json',
             // Success callback will fire even when couple with an external $.done
             success : function(data) {
-                console.log(' >> topTracksXHR success >>');
-
+                console.log(' >> topTracksXHR success << ');
+                console.log(data);
                 // Cache track data to avoid future calls
                 // CACHE[strToLowerNoSpaces(data.toptracks['@attr'].artist) + '_tracks'] = data;
             },
@@ -343,67 +375,77 @@ var Events = {
      * appendArtistInfo :: display artist info in DOM
      */
     appendArtistInfo: function (divId, data) {
-        
+        // Create and return a promise object
+        var promise = new Promise(function(resolve, reject) {
+            // Do some logic
+            var noInfoOnArtist = (data.error === 6 ? true : false);
+          
+            if (noInfoOnArtist) {
+                console.log(" ERROR 6: No info on artist. ");
 
-        var noInfoOnArtist = false;
-        if (data.error === 6) {
-            console.log(" ERROR 6: No info on artist. ");
-            noInfoOnArtist = true;
-        }
+                $('#artist-photo').html('<div class="top60">No Photo found &nbsp;'
+                    + ' <i class="fa fa-terminal"></i></div>');
+                $('#artist-bio').html('<div class="top60">No Artist bio either &nbsp;'
+                    + ' <i class="fa fa-thumbs-o-down fa-2x"></i></div>');
 
-        // Create specific parent div name
-        var artistInfo = '#' + divId;
-
-        if (noInfoOnArtist) {
-            $('#artist-photo').html('<div class="top60">No Photo found &nbsp;<i class="fa fa-terminal"></i></div>');
-            $('#artist-bio').html('<div class="top60">No Artist bio either &nbsp;<i class="fa fa-thumbs-o-down fa-2x"></i></div>');
-        }// End if no info found on this artist
-        else {
-            // Create custom info array
-            var artist = {
-                'name': data.artist.name,
-                'bio': data.artist.bio,
-                'url': data.artist.url,
-                'images': data.artist.image,
-                'tags': data.artist.tags.tag
-            };
-
-            var maxChars = 600;
-
-            // Remove any links
-            var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
-
-            // Clip bio at preset character max
-            var shortBio = fullBio.substring(0, maxChars);
-            
-            // If longer than max amount, add "show more" link
-            if (fullBio.length > maxChars) {
-                shortBio += ' ... <span class="link">'
-                    + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
-                    + '<span>';
+                reject(Error("It broke"));
             }
+            else {
+                // Create specific parent div name
+                var artistInfo = '#' + divId;
 
-            // Clear existing content        
-            //$('#artist-photo').html();
-            //$('#artist-bio').html();
-            //$('#artist-tracks').html();
+                // Create custom info array
+                var artist = {
+                    'name': data.artist.name,
+                    'bio': data.artist.bio,
+                    'url': data.artist.url,
+                    'images': data.artist.image,
+                    'tags': data.artist.tags.tag
+                };
 
-            // photoContainer = img + caption
-            $photoCaption = $('<h3>')
-                .addClass('photo-caption')
-                .html(artist.name);
+                var maxChars = 600;
 
+                // Remove any links
+                var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+
+                // Clip bio at preset character max
+                var shortBio = fullBio.substring(0, maxChars);
                 
-            $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
-            $('#artist-photo').append($photoCaption);
+                // If longer than max amount, add "show more" link
+                if (fullBio.length > maxChars) {
+                    shortBio += ' ... <span class="link">'
+                        + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
+                        + '<span>';
+                }
 
-            // Artist bio text
-            $('#artist-bio').html(shortBio);
+                // Clear existing content        
+                $('#artist-photo').html();
+                $('#artist-bio').html();
+                $('#artist-tracks').html();
 
-            
-            // TODO: loop through artist.tags.tag and print each tag in a button stylee
+                // photoContainer = img + caption
+                $photoCaption = $('<h3>')
+                    .addClass('photo-caption')
+                    .html(artist.name);
 
-        }// End else we have info to display
+                    
+                $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
+                $('#artist-photo').append($photoCaption);
+
+                // Artist bio text
+                $('#artist-bio').html(shortBio);
+                
+
+                // TODO: loop through artist.tags.tag and print each tag in a button stylee
+
+                // Return a promise, passing the artist name down the line
+                var artistName = artist.name;
+
+                // Promise resolution - pass along artist name
+                resolve(artistName);
+            }// End else
+        });// End promise object
+        return promise;
     },// End function appendArtistInfo
 
     /**
@@ -412,8 +454,6 @@ var Events = {
     appendTopTracks: function(divId, data) {
         var topTracks = data.toptracks.track;
         var topTracksLength = topTracks.length;
-
-        
 
         $('#' + divId).empty();
         // $('#' + divId).append('<h3>Tracklist</h3>');

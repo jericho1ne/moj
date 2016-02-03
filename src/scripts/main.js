@@ -42,12 +42,14 @@ $(document).ready(function() {
   //      eventPromise.then(function(data)) ...
   //
   $.when(Events.getEvents(10))
+    // returns $.ajax
     .then(function(data) {
       // JSON data will go into shows-content div
       return $.when(Events.displayEvents(JSON.parse(data), 'shows-content'));
     })
     .then(function() {
-      var $eventDataTable = Events.getEventData(); 
+      // TODO: save in localStorage so we don't have to reload upon refresh
+      // var $eventDataTable = Events.getEventData(); 
       
       // Click listeners for currently shown page of events
       Events.applyArtistListeners();

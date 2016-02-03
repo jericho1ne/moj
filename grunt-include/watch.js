@@ -21,7 +21,7 @@ module.exports = {
 	sass: {
 		options: {livereload: true},
 		files: ['<%= cfg.src %>/styles/{,*/}*.{scss,sass}'],
-		tasks: ['clean:maincss', 'sass', 'postcss', 'cssmin', 'ftpush:build']
+		tasks: ['clean:maincss', 'sass', 'postcss', 'cssmin']
 	},
 	corefiles: {
 		options: {livereload: true},
@@ -32,7 +32,7 @@ module.exports = {
 			'<%= cfg.src %>/scripts/common/*', 
 			'<%= cfg.src %>/scripts/*.js'
 		],
-		tasks: ['build', 'ftpush:build']
+		tasks: ['build']
 	},
 	// jsfiles: {
 	// 	files: ['<%= cfg.src %>/scripts/ui/*', '<%= cfg.src %>/scripts/common/*', '<%= cfg.src %>/scripts/*.js'],
