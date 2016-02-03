@@ -367,6 +367,7 @@ h1 {
 .vid-photo-wrapper {
 	position: relative;
 	display: inline-block;
+	padding: 0px 6px 6px 0px;
 }
 
 .vid-photo {
@@ -381,16 +382,15 @@ h1 {
 
 .vid-caption {
 	@include fontBuilder($font-sm, $font-weight-400);
-	color: #fff;
-	background-color: #020D24;
-	opacity: .9;
+	color: #000;
+	background-color: $btn-bg-gold;
 	position: absolute;
 	padding: 4px 6px 4px 6px;
 	height: auto;
-	width: auto;
+	width: 284px;
 	overflow: hidden;
-	left: 18px;
-	top: 18px;
+	left: 5px;
+	top: 24px;
 }
 
 
