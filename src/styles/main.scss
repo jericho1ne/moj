@@ -367,14 +367,14 @@ h1 {
 .vid-photo-wrapper {
 	position: relative;
 	display: inline-block;
-	padding: 4px 4px 1px 4px;
 }
 
 .vid-photo {
 	display: inline-block;
 	vertical-align: text-top;
 	@include border-radius(2px);
-	border: 1px solid $gray-light;
+	padding: 4px 4px 1px 4px;
+	border: 1px solid $gray-mid;
     overflow: hidden;
     margin: 8px;
 }
@@ -389,8 +389,8 @@ h1 {
 	height: auto;
 	width: auto;
 	overflow: hidden;
-	left: 1px;
-	top: 14px;
+	left: 18px;
+	top: 18px;
 }
 
 
