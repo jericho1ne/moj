@@ -32,6 +32,104 @@ $(document).ready(function() {
     setPageState(lastSection);
   });
 
+
+    //
+    // Events table click listeners
+    //
+    function applyPaginationListeners() {
+        // Replacement for .live()
+        $(document).on('click', '.paginate_button', function() {  
+            // Get venues within 25 miles, max 10 results
+            applyArtistListeners();
+        });
+    }// End applyPaginationListeners
+
+    function applyArtistListeners() {
+        console.log( " (+) applyArtistListeners called!");
+
+        // .live() replacement;  used to be $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
+        $(document).on("click", '.artistInfo', function() {
+            // Pull artist name from the link that was clicked
+            // Same as using the more specific $(this).attr('data-val') 
+            
+            var artistName = $(this).html();  
+
+            // Create div to hold modal contents
+            var $artistPopup = $('<div>');
+
+            // Initialize dialog box
+            $artistPopup.dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: true,
+                dialogClass: 'info-dialog',
+                close: function(event, ui) {
+                    $(this).dialog('destroy').remove();
+                }
+            });
+            $artistPopup.load('templates/artist-popup.html');
+            
+            // Pop up the info modal
+            $artistPopup.dialog("open");
+
+            // Switch to $(document) if this stops firing
+            $('.ui-dialog').on('click', '#closeModalBtn', function() {
+                // Fade out modal
+                $artistPopup.fadeOut( "fast", function() {
+                    // Completely destroy modal
+                    $artistPopup.dialog('close');
+                }); 
+            });
+
+            // Delay Promise chain until dialog is popped open!
+            setTimeout(function(){
+                // get artist info, display it, get top tracks, display them
+
+                // 1
+                // returns $.ajax from Last.fm API
+                Events.getArtistInfo(artistName)
+
+                    // 2
+                    .then(function(artistData) {                      
+                        console.log (" (+) getArtistInfo  success. ");
+
+                        // Success
+                        // Returns a promise object that will need to be unwrapped 
+                        // with .then()
+                        return Events.appendArtistInfo('artist-info', artistData);
+                    },
+                    function () {
+                        // Failure
+                        console.log (" (-) getArtistInfo failed. ");
+                    })
+
+                    // 3
+                    .then(function(data) {
+                        // debugger;
+                        console.log(" >>>>>>> " + data + "<<<<<<<<<<<");
+                        // Success 
+                        // returns $.ajax from Youtube API
+                        Events.getTopTracks(artistData.artist.name);
+                    },
+                    function () {
+                        // Failure
+                        console.log (" (-) getArtistInfo failed. ");
+                    })  
+
+                    // 4             
+                    .then(function(trackData) {
+                        Events.appendTopTracks('artist-tracks', trackData);
+                    }, 
+                    function () {
+                        // Failure
+                        console.log (" (-) getArtistInfo failed. ");
+                    }) 
+            }, 550);
+            
+
+        });// artistInfo .click
+    } // End setListeners
+
   // Get user's location and display it
   // getPos();
 
@@ -44,18 +142,18 @@ $(document).ready(function() {
   $.when(Events.getEvents(10))
     // returns $.ajax
     .then(function(data) {
-      // JSON data will go into shows-content div
-      return $.when(Events.displayEvents(JSON.parse(data), 'shows-content'));
+        // JSON data will go into shows-content div
+        return $.when(Events.displayEvents(JSON.parse(data), 'shows-content'));
     })
     .then(function() {
-      // TODO: save in localStorage so we don't have to reload upon refresh
-      // var $eventDataTable = Events.getEventData(); 
+        // TODO: save in localStorage so we don't have to reload upon refresh
+        // var $eventDataTable = Events.getEventData(); 
       
-      // Click listeners for currently shown page of events
-      Events.applyArtistListeners();
+        // Click listeners for currently shown page of events
+        applyArtistListeners();
 
-      // Click listeners for pagination change (re-applies Artist listeners)
-      Events.applyPaginationListeners();
+        // Click listeners for pagination change (re-applies Artist listeners)
+        applyPaginationListeners();
     });
 
 
