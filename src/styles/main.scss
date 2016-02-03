@@ -1,0 +1,561 @@
+@import "import/colors";
+@import "import/fonts";
+@import "import/position";
+
+$btn-pad: 6px;
+
+$div-width: "5%";
+$div-pad: 30px;
+
+$pad-20: 20px;
+$pad-40: 40px;
+$pad-60: 60px;
+
+$col-min-height: 90px;
+
+$phat-margin: 30px auto 40px auto;
+
+$container-max-width: 70%;
+$container-min-width: 320px;
+
+$light-box-shadow: 1px 2px 4px 2px rgba(10, 20, 30, 0.14);
+$pink-border: 1px solid #D953E5;
+
+@font-face {
+	font-family: Ruda-Regular;
+	src: url("fonts/ruda/Ruda-Regular.ttf"),
+		local("Helvetica Neue Bold"),
+		local("HelveticaNeue-Bold");
+}
+
+@font-face {
+	font-family: Ruda-Black;
+	src: 
+		url("fonts/ruda/Ruda-Black.ttf"),
+		local("Helvetica Neue Bold"),
+		local("HelveticaNeue-Bold");
+}
+
+@mixin fontBuilder($size, $weight: 400) {
+	font-size: $size;
+	font-weight: $weight;
+}
+
+@mixin border-radius($px) {
+	-ms-border-radius: $px;
+	-moz-border-radius: $px;
+	-webkit-border-radius: $px;
+	border-radius: $px;
+}
+
+
+/*-------------------- HTML tags -------------------*/
+body {
+	background: $almost-white;
+	@include fontBuilder($font-sm, $font-weight-400);
+	font-family: $font-regular;
+	color: $primary-font-color;
+	overflow-y: scroll;
+}
+
+h1 {
+	font-family: $font-bold;
+	margin: 20px auto 0 auto;
+	width: $div-width;
+	font-size: $font-xl;
+	font-weight: 200;
+	line-height: 36px;
+	background-color: #eee;
+	@include border-radius(6px);
+	padding: 60px;
+	line-height: 1;
+	letter-spacing: -1px;
+}
+
+/*----------------- One offs ----------------------*/
+#logo-banner {
+	background-image: url("images/sax.png");
+	background-repeat: no-repeat;
+	left: 18%;
+	background-size: 300px 300px;
+	width: 300px;
+	height: 300px;
+	position: absolute;
+	z-index: -10;
+}
+
+.auto-expand {
+	display: block;
+	overflow-y: auto;
+}
+
+.div-two-adjacent {
+	width: 100%;
+	display: block;
+	
+	position: relative;
+}
+
+.div-full-length {
+	width: 100%;
+	display: block;
+	overflow: auto;
+}
+
+.div-left { 
+	position: absolute; 
+	left: 0px; 
+	width: 310px; 
+	height: auto;
+	/*margin-right: auto;*/
+	text-align: left;
+}
+
+.div-right {
+	position: absolute; 
+	left: 320px; 
+	height:auto;
+   /* margin-left: 220px;*/
+	text-align: left;
+}
+
+.fa-ticket {
+	font-size: 22px !important;
+	opacity: 0.7;
+}
+
+.loading {
+	@include fontBuilder($font-md, $font-weight-400);
+	position: relative;
+	margin-left: 40px !important;
+	top: 40px !important;
+	color: $gray-mid;
+}
+.center {
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+	vertical-align: inherit;
+	display: inherit;
+}
+
+.link, .link a {
+	background: none;
+	padding: 3px;
+	border: none;
+	color: #698ED0 !important;
+	font-weight: 800;
+}
+
+.link:hover {
+	background-color: #B4CEE7 !important;
+	@include border-radius(3px);
+	cursor: pointer;
+}
+
+.large-text {
+	@include fontBuilder($font-xl, $font-weight-400);
+	line-height: 1.2;
+	margin: 20px auto 20px auto;
+	padding: $pad-40;
+	letter-spacing: -4px;
+	font-weight: 400;
+	background-color: rgba(200, 200, 200, 0.3);
+	@include border-radius(6px);
+}
+
+/*-------------------- Column styles -------------------*/
+.col-2 {
+	min-width: 50%;
+	min-height: $col-min-height;
+	position: relative;
+	float: left;
+}
+.col-3 {
+	min-width: 33%;
+	min-height: $col-min-height;
+	position: relative;
+	float: left;
+}
+.col-4 {
+	min-width: 25%;
+	min-height: $col-min-height;
+	position: relative;
+	float: left;
+}
+
+/*-------------------- Row styles ---------------------------*/
+.row-sm {
+	display: block;
+	font-size: $font-md;
+	font-weight: 300;
+	height: 60px;
+	padding: $pad-20;
+	margin: 0 2px;
+	max-width: none;
+	width: auto;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+.row {
+	margin: 0 6px;
+	max-width: none;
+	width: auto;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
+/*-------------------- div IDs -------------------*/
+#map {
+	height: 180px;
+	width: 180px;
+	margin: 8px;
+	padding: $pad-20;
+	overflow: hidden;
+	display: inline-block;
+	border: $pink-border;
+	
+}
+
+#map img {
+	width: 180px;
+	@include border-radius(180px);
+}
+
+#shows-content {
+	padding: $pad-20;
+}
+
+#nearby-shows {
+	@include fontBuilder($font-sm, $font-weight-400); 
+}
+
+#parent {
+	max-width: $div-width;
+	height: auto;
+}
+
+#stuff {
+	@extend .stacked-boxes-common;
+	border: $pink-border;
+}
+
+
+/*-------------------- Classes -------------------*/
+.content {
+	box-shadow: $light-box-shadow;
+	@include border-radius(8px);
+	background: #fff;
+	margin-top: $pad-20;
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+	padding: $pad-20;
+}
+
+.container {
+	padding: 2px;
+	float: left;
+	min-height: $pad-20;
+	width: 100%;
+}
+
+.btn-active {
+	color: $gray-light;
+	background-color: $active-color;
+}
+.btn-inactive {
+	color: $gray-mid;
+	background-color: $inactive-color;
+}
+
+.stacked-boxes-common {
+	max-width: $container-max-width;
+	min-width: $container-min-width;
+	padding: $pad-60;
+	margin: $phat-margin;
+	// margin: 20px auto 0 auto;
+}
+.banner {
+	@extend .stacked-boxes-common;
+	font-size: $font-md;
+	font-weight: 200;
+	line-height: 1.1;
+	background-color: #eee;
+	@include border-radius(16px);
+	h1 {
+		font-size: $font-xl;
+		line-height: 1.1;
+		letter-spacing: -1px;
+	}
+}
+
+.left {
+	margin-left: 0px;
+	margin-right: auto;
+	text-align: left;
+}
+.center {
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+	vertical-align: inherit;
+	display: inherit;
+}
+
+.debug {
+	@include border-radius(6px);
+	border: $pink-border;
+}
+
+.faveButton {
+	outline: none;
+	@include border-radius(22px);
+	color: $gray-light;
+	margin: 0 6px 0 0;
+	padding: 6px;
+	border: 0px;
+	width: 44px;
+	height: 44px;
+	opacity: 0.88;
+}
+.faveButton:hover {
+	color: $gray-dark;
+	outline: none;
+	opacity: 1;
+}
+.faveButton:active {
+	color: $gray-dark;
+	border: 1px solid red;
+	outline: none;
+	opacity: 1;
+}
+
+.phatButton {
+	@include border-radius(4px);
+	font-family: $font-regular;
+	color: $gray-mid;
+	font-size: $font-md;
+	background-color: $btn-bg-green;
+	padding: $btn-pad;
+	border: 1px solid #18ab29;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.phatButton:hover {
+	background-color:#5cbf2a
+}
+
+.phatButton:active{
+	position: relative;
+	top:1px
+}
+
+.browsehappy {
+	margin: 0.2em 0;
+	background: #ccc;
+	color: #000;
+	padding: 0.2em 0;
+}
+
+/*------------- Artist Video Clips  -----------*/
+.vid-list {
+	display: inline-block;
+}
+
+.vid-photo-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.vid-photo {
+	display: inline-block;
+	vertical-align: text-top;
+	@include border-radius(2px);
+	padding: 4px 4px 1px 4px;
+	border: 1px solid $gray-mid;
+    overflow: hidden;
+    margin: 8px;
+}
+
+.vid-caption {
+	@include fontBuilder($font-sm, $font-weight-400);
+	color: #fff;
+	background-color: #020D24;
+	opacity: .9;
+	position: absolute;
+	padding: 4px 6px 4px 6px;
+	height: auto;
+	width: auto;
+	overflow: hidden;
+	left: 18px;
+	top: 18px;
+}
+
+
+/*------------------- Artist info  -----------*/
+img.artist-profile-pic {
+	border-radius: 0px;
+	border: 1px solid #333;
+}
+.photo-container {
+	left: 0px;
+	width: 300px;
+	height: 300px;
+}
+
+.photo-caption {
+	color: #fff;
+	position: absolute;
+	bottom: 10px;
+	background: rgba(0, 0, 0, 0.5);
+	padding: 20px;
+	left: 12px;
+}
+.scroll-y {
+	overflow-y: scroll;
+}
+
+/*------------------- Error popup / modal dialog -----------*/
+#closeModalBtn {
+	display: inline;
+	position: relative;
+	@include border-radius(3px);
+	top: 6px;
+	left: -4px;
+	padding: 5px 8px 5px 8px;
+	background-color: #fff;
+	border: 1px solid #666;
+	z-index: 20;
+}
+
+.ui-dialog .ui-dialog-content {
+	padding: 8px;
+}
+
+.ui-dialog.error-dialog {
+	font-family: "Ruda-Regular";
+	font-size: 14px;
+}
+
+// this needs room to breathe, and allow for vertical scroll!
+.ui-dialog.info-dialog {
+	position: relative;
+	left: auto;
+	right: auto;
+	font-family: "Ruda-Regular";
+	font-size: 12px;
+	overflow: visible;
+	min-height: 700px !important;
+	min-width: 90% !important;
+}
+
+.ui-dialog-titlebar {
+	display: none;
+}
+
+.event-date {
+	min-width: 100px;
+}
+
+.event-artist {
+	min-width: 300px;
+}
+/* override jquery ui */
+.ui-widget-content{
+	overflow: scroll;
+}
+
+/*
+		override datatables.min.css + related classes
+														*/
+input[type=search] {
+	height: 30px;
+	width: 160px;
+	padding: 4px 2px 4px 2px;
+	margin-bottom: 10px;
+	border: 0px solid #999;
+	border-radius: 20px;
+	background: #eee;
+	cursor: pointer;
+	outline: 0;
+	font-family: "Ruda-Regular";
+	color: #999;
+	font-size: 14px;
+	-webkit-box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
+	-moz-box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
+	box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
+}
+
+select {
+	padding: 6px;
+	min-width: 20px;
+	margin: 0 6px 0 6px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
+	-moz-box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
+	box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
+	background: #eee;
+	border: 1px solid #eee;
+	outline:none;
+	display: inline-block;
+	font-family: "Ruda-Regular";
+	color: #999;
+	font-size: 14px;
+	-webkit-appearance:none;
+	-moz-appearance:none;
+	appearance:none;
+	cursor:pointer;
+}
+
+.dataTables_wrapper {
+	max-width: 100%;
+}
+
+.dataTables_wrapper table thead {
+	display:none;
+}
+
+.alternate-bgcolor {
+	background-color: #FEFEFE;
+}
+
+table.dataTable tbody td {
+	padding: 10px !important;
+	margin: 2px !important;
+}
+
+table.dataTable .date-header {
+	background-color: $gray-light !important;
+	padding: 8px;
+	left: -6px;
+	line-height: .8;
+}
+
+.text-align-left {
+	text-align: left;
+}
+
+.text-align-right {
+	text-align: right;
+}
+
+.date-block-xl {
+	font-family: $font-bold;
+	@include fontBuilder($font-xl, $font-weight-900);
+}
+
+.date-block-md {
+	@include fontBuilder($font-md, $font-weight-900);
+}
+
+.date-block-lg {
+	@include fontBuilder($font-lg, $font-weight-900);
+}
+
+/*           end datatables.min.css override        */
+
+
