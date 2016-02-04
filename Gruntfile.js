@@ -189,7 +189,6 @@ module.exports = function (grunt) {
 						// 'scripts/**/*.php',
 						'*.{ico,png,txt}',
 						// 'images/{,*/}*.webp',
-						'data/*',
 						'styles/fonts/{,*/}*.*',
 						'styles/fa/{,*/}*.*',
 						'styles/images/**/*.{gif,jpeg,jpg,png}',

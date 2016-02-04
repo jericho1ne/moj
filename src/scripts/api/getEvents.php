@@ -5,21 +5,17 @@ include_once('EventParser.php');
 // require_once("db/__db_upd.php");
 // require_once("db/__db_connex.php");
 // require_once("Geocoder.php");
-
 //============================================================
 
 // Current (potentially outdated JSON data)
 $jsonFile = "../../data/events.json";
+$rawJson = json_decode(file_get_contents($jsonFile));
+$hrsElapsed = 999;
 
-
-$jsonData = json_decode($jsonFile);
-pr(">>>");
-
-var_dump( $jsonData );
-
-die;
-// Find out time elapsed in hours
-$hrsElapsed = (time() - filemtime($jsonFile)) / (60*60);
+if (isset($rawJson->timestamp)) {
+	// Find out time elapsed in hours - formerly was using filemtime($jsonFile)
+	$hrsElapsed = (time() - $rawJson->timestamp) / (60*60);
+}
 
 // Check JSON events file timestamp, 
 // only grab new data if stale AND the file is writable

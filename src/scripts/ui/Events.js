@@ -256,7 +256,7 @@ var Events = {
                 console.log(" ERROR 6: No info on artist. ");
 
                 $('#artist-photo').html('<div class="top60">'
-                    + '<img src="/media/images/no-photo.png" alt="No Photo found"</i></div>');
+                    + '<img src="/media/images/no-artist-photo.png" alt=" found"</i></div>');
 
                 $('#artist-bio').html('<div class="top100">No Artist bio on Last.fm.  Check AllMusic. &nbsp;'
                     + ' <i class="fa fa-terminal fa-2x"></i></div>');
@@ -442,14 +442,13 @@ var Events = {
            //.attr('class','vid-clip')
            //.attr('src', vids[0].snippet.thumbnails.medium.url);       
         
-
         // Embed Youtube video clip
-        // append ?version=3&enablejsapi=1 to enable dynamic play/stop functionality
-
+        // Enable dynamic play/stop functionality:  ?version=3&enablejsapi=1 
         // if Flash <object> stops working switch to .html('<iframe frameborder="0" 
+
         var $imgTag = $('<div>')
             .attr('class','vid-clip')
-            .html('<object data="' + videoId + '" src="http://www.youtube.com/embed/' 
+            .html('<object id="' + videoId + '" data="http://www.youtube.com/embed/' 
                 + videoId + '"></object>'); 
 
         // floating image label
