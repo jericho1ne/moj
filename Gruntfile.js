@@ -94,6 +94,7 @@ module.exports = function (grunt) {
 				map: true,
 				processors: [
 					// Add vendor prefixed styles
+					// Run this on any new box: npm install --save-dev grunt-postcss pixrem autoprefixer cssnano
 					require('autoprefixer')({
 						browsers: ['> 1%', 'last 2 versions', 'Firefox ESR']
 					})
@@ -192,6 +193,7 @@ module.exports = function (grunt) {
 						'styles/fonts/{,*/}*.*',
 						'styles/fa/{,*/}*.*',
 						'styles/images/**/*.{gif,jpeg,jpg,png}',
+						'media/images/**/*.{gif,jpeg,jpg,png}',
 						'styles/*.css'
 					]// End src
 				}]// End copy:dist - files
@@ -208,6 +210,19 @@ module.exports = function (grunt) {
 					]// End src
 				}]// End copy:jsfiles - files
 			},// End copy:jsfiles
+
+			phpfiles: {
+				files: [{
+					expand: true,
+					dot: true,
+					cwd: '<%= cfg.src %>',
+					dest: '<%= cfg.dst %>',
+					src: [
+						'scripts/api/*.php',
+						'scripts/common/*.php'
+					]// End src
+				}]// End copy:phpfiles - files
+			},// End copy:phpfiles
 
 			htmlfiles: {
 				files: [{
@@ -295,8 +310,8 @@ module.exports = function (grunt) {
 					'<%= cfg.dst %>/styles/fa/**/*',
 					'<%= cfg.dst %>/styles/images/**/*',
 					'<%= cfg.dst %>/styles/fonts/**/*',
-					'<%= cfg.dst %>/data/*', 
-					'<%= cfg.dst %>/.DS_Store', 
+					'<%= cfg.dst %>/data/**', 
+					'<%= cfg.dst %>/.*', 
 					'<%= cfg.dst %>/Thumbs.db', 
 					'<%= cfg.dst %>/tmp' ],
 				// keep: ['/important/images/at/server/*.jpg'],
@@ -480,7 +495,9 @@ module.exports = function (grunt) {
 		'postcss',
 		'cssmin',
 		'uglify',
-		'copy:dist',
+
+		// stuff after this task happens in the destination folder
+		'copy:dist',		
 		'filerev',
 		'usemin',
 		'htmlmin'
@@ -497,15 +514,15 @@ module.exports = function (grunt) {
 		'server',['express', 'watch']
 	);
 
-	grunt.registerTask('build-prod', [
-		'build',
+	grunt.registerTask('watch:dev', [
+		'watch',
 		// 'ftp-deploy'
-		'ftpush:'
+		'ftpush:dev'
 	]);
 
-	grunt.registerTask('build-prod-live', [
-		'build',
-		'ftp-deploy:live'
+	grunt.registerTask('watch:live', [
+		'watch',
+		'ftpush:live'
 	]);
 
 	
@@ -555,10 +572,10 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-filerev');
 	grunt.loadNpmTasks('grunt-usemin');
-	grunt.loadNpmTasks('grunt-ftp-deploy');	// bulk upload
+	grunt.loadNpmTasks('grunt-ftp-deploy');		// bulk upload
 	grunt.loadNpmTasks('grunt-sftp-deploy');	// bulk upload
-	grunt.loadNpmTasks('grunt-ftpush');		// granular upload
-	grunt.loadNpmTasks('grunt-express');  	// Express server/livereload
+	grunt.loadNpmTasks('grunt-ftpush');			// granular upload
+	grunt.loadNpmTasks('grunt-express');  		// Express server/livereload
 	
 
 };// End module.exports

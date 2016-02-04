@@ -74,12 +74,13 @@ h1 {
 
 /*----------------- One offs ----------------------*/
 #logo-banner {
-	background-image: url("images/sax.png");
+	background-image: url("../media/images/sax.png");
 	background-repeat: no-repeat;
-	left: 18%;
-	background-size: 300px 300px;
-	width: 300px;
-	height: 300px;
+	right: 12%;
+	opacity: 0.4;
+	background-size: 200px 200px;
+	width: 200px;
+	height: 200px;
 	position: absolute;
 	z-index: -10;
 }
@@ -364,13 +365,13 @@ h1 {
 	display: inline-block;
 }
 
-.vid-photo-wrapper {
+.vid-clip-wrapper {
 	position: relative;
 	display: inline-block;
 	padding: 0px 6px 6px 0px;
 }
 
-.vid-photo {
+.vid-clip {
 	display: inline-block;
 	vertical-align: text-top;
 	@include border-radius(2px);

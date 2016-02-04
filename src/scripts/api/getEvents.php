@@ -11,6 +11,13 @@ include_once('EventParser.php');
 // Current (potentially outdated JSON data)
 $jsonFile = "../../data/events.json";
 
+
+$jsonData = json_decode($jsonFile);
+pr(">>>");
+
+var_dump( $jsonData );
+
+die;
 // Find out time elapsed in hours
 $hrsElapsed = (time() - filemtime($jsonFile)) / (60*60);
 

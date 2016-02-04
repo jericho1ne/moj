@@ -6,7 +6,8 @@ class EventParser {
 	//
 	private $venueArray = array();
 	private $eventArray = array();
-	private $todays_date;    // formatted as Scenestar likes it
+	private $today_formatted;    // formatted as Scenestar likes it
+	private $trrow_formatted;    // formatted as Scenestar likes it
 	private $url;
 
 	//
@@ -19,7 +20,11 @@ class EventParser {
 	* 	@param string $url
 	**/
 	public function __construct($url) {
-		$this->todays_date = date('m.d.y');
+		// Get today and tomorrow's date with leading zeros for month and day
+		$this->today_formatted = date('m.d.y');
+		$today = date('Y-m-d');
+		$this->trrow_formatted = date('m.d.y', strtotime($today . "+1 days"));
+
 		// TODO:  abstract final formatting logic, break up into different parsers
 		//	eg: Flavorpill, LA Weekly, Enclave LA, Songkick, etc
 		$this->parseUrl($url);			// build up array of live music events, save to events array
@@ -43,23 +48,26 @@ class EventParser {
 		fill in the eventArray & venueArray
 	*********************************************************************************/
 	public function parseUrl($url) {
-		//echo " scraping shows starting with today's date > [<b>".$this->todays_date."</b>] <";
+		// Search for shows beginning with today's date
+		$searchDate = $this->today_formatted;
 
-		// TODO: if time is nearing midnight, grab next day's shows (d+1)
+		// Ingest webpage source
+		$source = file_get_contents($url);							
 
-		// Reference:  http://php.net/manual/en/function.date.php
-		//	 date('n j y')   << no leading zeros
-
-		// Get today's date with leading zeros for month and day
-		$todays_date = date('m') . '.' . date('d') . '.' . date('y');
-		//  echo $todays_date . "<hr>";
-
-		$source   = file_get_contents($url);							// first ingestion
-
-		$start	  = strpos($source, $todays_date);	// find today's date, use as start markerposition
-		$end      = strpos($source, '<div id="gamma">');	// find the end marker (hope it doesn't change often)
-		$data_size = $end - $start;										// find character length up to the end marker
-		$rough_chunk  = substr($source, $start-1, $data_size);	// grab only the repeated, relevant show data
+		// If time is nearing midnight, we may get no results
+		// Therefore, grab next day's shows (d+1)
+		if (strpos($source, $this->today_formatted) === -1) {
+			$searchDate = $this->trrow_formatted;
+		}
+		
+		// Look for our start date, mark as entry point
+		$start = strpos($source, $searchDate);	
+		// find the end marker (this *may* change every so often)	
+		$end = strpos($source, '<div id="gamma">');	
+		// find character length up to the end marker
+		$data_size = $end - $start;		
+		// grab only the repeated, relevant show data							
+		$rough_chunk = substr($source, $start-1, $data_size);	
 
 		// get rid of funky characters like <®> or <â€™>
 		$rough_chunk = html_entity_decode($rough_chunk, ENT_QUOTES, "UTF-8");
@@ -71,13 +79,14 @@ class EventParser {
 		$lines = explode($break_point, $rough_chunk);      // break up table rows into lines (strings)
 
 		$future_max_date = strtotime(date('Y-m-d') . ' +10 week');
-		$future_max_date = date('Y-m-d',$future_max_date );
+		$future_max_date = date('Y-m-d', $future_max_date );
 
 		$json_data = array();
 		$count = 0;
 		$venues = array();	// will temporarily store all venues
 
 		foreach ($lines as $val) {
+			
 			// Extract date of show using regular expressions
 			// [0-9]{2}.[0-9]{2}.[0-9]{2}  << pattern to look for (eg 01.31.2013)
 
@@ -171,10 +180,24 @@ class EventParser {
 	public function saveJsonToFile($which, $file) {
 		$this->checkFileStatus($file);
 		if ($which=="events") {
-			file_put_contents($file, json_encode($this->eventArray));
+			file_put_contents($file, 
+				json_encode(
+					array(
+		 				'timestamp' => time(),
+		 				'events' => $this->eventArray
+		 			)
+		 		)
+			);
 		}
 		else if ($which=="venues") {
-			file_put_contents($file, json_encode($this->venueArray));
+			file_put_contents($file, 
+				json_encode(
+					array(
+			 			'timestamp' => time(),
+			 			'events' => $this->venueArray
+			 		)
+			 	)
+			);
 		}
 	}
 
@@ -192,8 +215,14 @@ class EventParser {
 		return event array in JSON format
 	*********************************************************************************/
 	public function getEventsJson() {
-		return json_encode($this->eventArray);
-	}
+		// Return timestamp + data
+		return json_encode(
+		 	array(
+		 		'timestamp' => time(),
+		 		'events' => $this->eventArray
+		 	)
+		);
+	}// End function getEventsJson
 
 	/**********************************************************************************
 		getVenues()

@@ -45,9 +45,7 @@ $(document).ready(function() {
     }// End applyPaginationListeners
 
     function applyArtistListeners() {
-        console.log( " (+) applyArtistListeners called!");
-
-        // .live() replacement;  used to be $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
+        // .on is .live() replacement;  used to be $('.dataTables_wrapper').find('.artistInfo').on('click', function() {
         $(document).on("click", '.artistInfo', function() {
 
             // Pull artist name from the link that was clicked
@@ -97,8 +95,8 @@ $(document).ready(function() {
                         return Events.appendArtistInfo('artist-info', artistData);
                     })
                     .then(function(data) {          // 3
-                        console.log(" >>>>>>> appendArtistInfo returned :: <<<");
-                        console.log(data);
+                        //console.log(" >>>>>>> appendArtistInfo returned :: <<<");
+                        //console.log(data);
                        
                         // Success 
                         // returns $.ajax from Youtube API
@@ -114,14 +112,11 @@ $(document).ready(function() {
         });// artistInfo .click
     } // End setListeners
 
-  // Get user's location and display it
+  // Automatically get user's location and display it
   // getPos();
 
+  // 
   // Get list of shows, display them, set click listeners on each Artist
-  //
-  // $when is same as:
-  //      var eventPromise = Events.getEvents(10);
-  //      eventPromise.then(function(data)) ...
   //
   Events.getEvents(10)
     // returns $.ajax
@@ -130,7 +125,8 @@ $(document).ready(function() {
         return Events.displayEvents(JSON.parse(data), 'shows-content');
     })
     .then(function(data) {
-        console.log(data);
+        //console.log(data);
+        
         // TODO: save in localStorage so we don't have to reload upon refresh
         // var $eventDataTable = Events.getEventData(); 
       
@@ -138,7 +134,7 @@ $(document).ready(function() {
         applyArtistListeners();
 
         // Click listeners for pagination change (re-applies Artist listeners)
-        applyPaginationListeners();
+        //applyPaginationListeners();
     });
 
 
