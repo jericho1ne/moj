@@ -6,3 +6,4 @@ scripts/api/db/*
 __*
 node_modules/
 dist/
+data/

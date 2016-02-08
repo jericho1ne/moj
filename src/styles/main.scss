@@ -2,7 +2,7 @@
 @import "import/fonts";
 @import "import/position";
 
-$btn-pad: 6px;
+$btn-pad: 6px 8px;
 
 $div-width: "5%";
 $div-pad: 30px;
@@ -333,13 +333,14 @@ h1 {
 }
 
 .phatButton {
-	@include border-radius(4px);
+	@include border-radius(3px);
 	font-family: $font-regular;
-	color: $gray-mid;
+	color: $gray-light;
 	font-size: $font-md;
 	background-color: $btn-bg-green;
 	padding: $btn-pad;
-	border: 1px solid #18ab29;
+	border: 0px;
+	margin: 4px;
 	cursor: pointer;
 	text-decoration: none;
 }

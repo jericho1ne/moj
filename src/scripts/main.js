@@ -4,33 +4,49 @@
 
 // On document load
 $(document).ready(function() {
-  window.Events = Events;
+    // window.Events = Events;
+    
+    //
+    // LISTENERS
+    //
+     $('#gPlusLogin').click(function() {
+        var ref = new Firebase("https://blinding-torch-6251.firebaseio.com");
+        ref.onAuth(function(authData) {
+            if (authData !== null) {
+                console.log("Login Success!", authData);
+            } 
+            else {
+                ref.authWithOAuthRedirect("google", function(error, authData) {
+                    if (error) {
+                        console.log("Problems Houston...", error);
+                    }
+                });// End authWithOAuthRedirect
+            }// End else
+        })// End ref.onAuth
+    });
 
-  //
-  // LISTENERS
-  //
-  $('#getPos').click(function() {
-    // Get venues within 25 miles, max 10 results
-    getPos();
-  });
+    $('#getPos').click(function() {
+        // Get venues within 25 miles, max 10 results
+        getPos();
+    });
 
-  // Get events data ajax call, push to DOM
-  $('#getEvents').click(function() {
+    // Get events data ajax call, push to DOM
+    $('#getEvents').click(function() {
     // 
-  });// End getEvents
+    });// End getEvents
 
-  $('#getNearbyVenues').click(function() {
+    $('#getNearbyVenues').click(function() {
     // Get venues within 25 miles, max 10 results
     getNearbyVenues(25, 4);
-  });
+    });
 
-  $('#setPageState').click(function() {
+    $('#setPageState').click(function() {
     // Parse the hashtag section from URL
     var lastSection = window.location.href.split("/").pop();
 
     // Save the last visited page
     setPageState(lastSection);
-  });
+    });
 
 
     //
@@ -88,15 +104,14 @@ $(document).ready(function() {
                 // returns $.ajax from Last.fm API
                 Events.getArtistInfo(artistName)
                     .then(function(artistData) {        // 2                  
-                        console.log (" (+) getArtistInfo  success. ");
-
+                        // console.log (" (+) getArtistInfo  success. ");
                         // Success - Returns a promise object that will need 
                         // to be unwrapped with .then()
                         return Events.appendArtistInfo('artist-info', artistData);
                     })
-                    .then(function(data) {          // 3
+                    .then(function(data) {        // 3
                         //console.log(" >>>>>>> appendArtistInfo returned :: <<<");
-                        //console.log(data);
+                        // console.log(data);
                        
                         // Success 
                         // returns $.ajax from Youtube API
@@ -112,13 +127,13 @@ $(document).ready(function() {
         });// artistInfo .click
     } // End setListeners
 
-  // Automatically get user's location and display it
-  // getPos();
+    // Automatically get user's location and display it
+    // getPos();
 
-  // 
-  // Get list of shows, display them, set click listeners on each Artist
-  //
-  Events.getEvents(10)
+    // 
+    // Get list of shows, display them, set click listeners on each Artist
+    //
+    Events.getEvents(10)
     // returns $.ajax
     .then(function(data) {
         // JSON data will go into shows-content div
@@ -138,63 +153,63 @@ $(document).ready(function() {
     });
 
 
-  // grab JSON api data, then display
-  /*$.when(YouTubeSearch.getVideos("Dilated", 30))
+    // grab JSON api data, then display
+    /*$.when(YouTubeSearch.getVideos("Dilated", 30))
     .done(YouTubeSearch.displayVideos()); */
 
- //
- //  ACTIONS
- //
+    //
+    //  ACTIONS
+    //
 
-  // 1) Get user location
-  // 2) Get nearby venues, current distance to each, and related shows
-  //     EG:
-//         - Troubadour (2.3 mi)
-//             * Show 1
-//             * Show 2
-//             * Show 3
-//         - Molly malone's (5 mi)
-//             *
-//             *
-//             *
-  //         etc...
-  // 3) Save nearby venues in global object
-  // 3) Display in div
+    // 1) Get user location
+    // 2) Get nearby venues, current distance to each, and related shows
+    //     EG:
+    //         - Troubadour (2.3 mi)
+    //             * Show 1
+    //             * Show 2
+    //             * Show 3
+    //         - Molly malone's (5 mi)
+    //             *
+    //             *
+    //             *
+    //         etc...
+    // 3) Save nearby venues in global object
+    // 3) Display in div
 
-  // UserState.setNearbyVenues(venues);
+    // UserState.setNearbyVenues(venues);
 
-// $.when(UserState.geoLocateUser())
-//   .done(
-//     Venues.getVenues(
-//        UserState.getSavedUserPosition(),  // sends lat, lon, etc array
-//        25, // in miles
-//        3
-//     )
-//   );
+    // $.when(UserState.geoLocateUser())
+    //   .done(
+    //     Venues.getVenues(
+    //        UserState.getSavedUserPosition(),  // sends lat, lon, etc array
+    //        25, // in miles
+    //        3
+    //     )
+    //   );
 
- // Pass in a callback to our user location finder function,
- // in this case, to redraw the nearby place list
+    // Pass in a callback to our user location finder function,
+    // in this case, to redraw the nearby place list
 
- // TODO FUTURE:  Include node geolocation module
- // var geo = require("includes/geolocation.js");
+    // TODO FUTURE:  Include node geolocation module
+    // var geo = require("includes/geolocation.js");
 
- /*
- function savePageState() {
+    /*
+    function savePageState() {
     // Get current selection from DOM, save in current session
     // $('#pageState').val();
     UserSession.saveLastPageState("index");
     console.log(" >> savePageState called >> ");
- }
+    }
 
- $.getJSON('../dist/data/shows.json', function(data) {
+    $.getJSON('../dist/data/shows.json', function(data) {
      console.log(data);
      console.log("hi");
- });
+    });
 
- function getVideoStats(videoId) {
+    function getVideoStats(videoId) {
     console.log("videoId :: " + videoId);
- }
- */
+    }
+    */
 
 
 });// End on Document Load

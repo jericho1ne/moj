@@ -1,5 +1,5 @@
 /**
- * @file Grunt watch and related tasks
+ * @file watch.js
  * @author Mihai Peteu <mihai.peteu@gmail.com>
  * @copyright 2015 Middle of June.  All rights reserved.
  */
@@ -25,18 +25,33 @@ module.exports = {
 	sass: {
 		options: {livereload: true},
 		files: ['<%= cfg.src %>/styles/{,*/}*.{scss,sass}'],
-		tasks: ['clean:maincss', 'sass', 'postcss', 'cssmin', 'copy:dist', 'filerev', 'usemin', 'htmlmin']
+		tasks: [
+			'clean:maincss', 
+			'sass', 
+			'postcss', 
+			'cssmin', 
+			'copy:dist', 
+			'filerev', 
+			'usemin', 
+			'htmlmin'
+		]
 	},
 	jsfiles: {
 		options: {livereload: true},
 		files: [
 			'<%= cfg.src %>/index.html', 
-			'<%= cfg.src %>/templates/**',
 			'<%= cfg.src %>/scripts/ui/*', 
 			'<%= cfg.src %>/scripts/common/*.js', 
 			'<%= cfg.src %>/scripts/*.js'
 		],
-		tasks: ['build']
+		tasks: [
+			'clean:jsfiles',
+			'uglify',
+			'copy',
+			'filerev',
+			'usemin',
+			'htmlmin'
+		]
 	},// End jsfiles subtask
 
 	phpfiles: {

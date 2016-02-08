@@ -26,61 +26,19 @@ module.exports = function (grunt) {
 		// Project settings
 		cfg: cfg,
 
-		// Empties folders to start fresh
-		clean: {
-			dist: {
-				files: [{
-					dot: true,
-					src: [
-						'.tmp',
-						'<%= cfg.dst %>/*',
-						'!<%= cfg.dst %>/.git*'
-					]
-				}]
-			},
-			jsfiles: {
-				files: [{
-					dot: true,
-					src: [
-						'.tmp',
-						'<%= cfg.dst %>/scripts/common/*.js',
-						'<%= cfg.dst %>/scripts/ui/*.js',
-						//'<%= cfg.dst %>/scripts/vendor/*.js'
-					]
-				}]
-			},
-			maincss: {
-				files: [{
-					dot: true,
-					src: [
-						'<%= cfg.dst %>/styles/main.css'
-					]
-				}]
-			},
-			server: '.tmp'
-		},
-	   
-		// Compiles Sass to CSS and generates necessary files if requested
-		sass: {
-			options: {
-				sourceMap: true,
-				sourceMapEmbed: true,
-				sourceMapContents: true,
-				includePaths: ['.']
-			},
-			dist: {
-				// files: {
-				// 	'<%= cfg.dst %>/styles/main.scss': '<%= cfg.dst %>/styles/main.css'
-				// }			
-				files: [{
-					expand: true,
-					cwd: '<%= cfg.src %>/styles',
-					src: ['*.{scss,sass}'],
-					dest: '.tmp/styles',
-					ext: '.css'
-				}]
-			}
-		},
+		// Clean targeted directories to start fresh
+	   	clean: require('./grunt-include/clean'),
+
+	   	// Copies remaining files to places other tasks can use
+		copy: require('./grunt-include/copy'),
+
+		// Watches files for changes and runs tasks based on what's changed
+		watch: require('./grunt-include/watch'),
+
+		// FTP files to live / dev domain incrementally
+		ftpush: require('./grunt-include/ftpush'),
+
+		sass: require('./grunt-include/sass'),
 
 
 		/**
@@ -149,7 +107,7 @@ module.exports = function (grunt) {
 				preserveComments: false,
 				screwIE8: true,
 				mangle: false,
-				cwd: '<%= cfg.src %>/scripts/vendor/'
+				// cwd: '<%= cfg.src %>/scripts/vendor/'
 				// exceptionsFiles: [
 				// 	'datatables.min.js', 
 				// 	'jquery-2.2.0.min.js'
@@ -163,84 +121,9 @@ module.exports = function (grunt) {
 					dest: '<%= cfg.dst %>/scripts/vendor',
 					ext:  '.min.js'
 				}]
-				// files: {
-				// 	// This does not remove the original source files 
-				// 	// { 
-				// 	// 	src: 'src/scripts/vendor/jquery-ui.js', 
-				// 	// 	dest: 'dist/scripts/vendor/jquery-ui.min.js'
-				// 	// }
-				// 	'<%= cfg.dst %>/scripts/vendor/jquery-ui.min.js':['<%= cfg.dst %>/scripts/vendor/jquery-ui.js'],
-				// 	'<%= cfg.dst %>/scripts/vendor/modernizr.min.js':['<%= cfg.dst %>/scripts/vendor/modernizr.js']
-				// }
 			}// End uglify:dist
 		},// End uglify task
-
-		// Copies remaining files to places other tasks can use
-		copy: {
-			dist: {
-				files: [{
-					expand: true,
-					dot: true,
-					cwd: '<%= cfg.src %>',
-					dest: '<%= cfg.dst %>',
-					src: [
-						'{,*/}*.html',
-						'scripts/**/*.{js,php}',
-						// 'scripts/**/*.php',
-						'*.{ico,png,txt}',
-						// 'images/{,*/}*.webp',
-						'styles/fonts/{,*/}*.*',
-						'styles/fa/{,*/}*.*',
-						'styles/images/**/*.{gif,jpeg,jpg,png}',
-						'media/images/**/*.{gif,jpeg,jpg,png}',
-						'styles/*.css'
-					]// End src
-				}]// End copy:dist - files
-			},// End copy:dist
-
-			jsfiles: {
-				files: [{
-					expand: true,
-					dot: true,
-					cwd: '<%= cfg.src %>',
-					dest: '<%= cfg.dst %>',
-					src: [
-						'scripts/**/*.js'
-					]// End src
-				}]// End copy:jsfiles - files
-			},// End copy:jsfiles
-
-			phpfiles: {
-				files: [{
-					expand: true,
-					dot: true,
-					cwd: '<%= cfg.src %>',
-					dest: '<%= cfg.dst %>',
-					src: [
-						'scripts/api/*.php',
-						'scripts/common/*.php'
-					]// End src
-				}]// End copy:phpfiles - files
-			},// End copy:phpfiles
-
-			htmlfiles: {
-				files: [{
-					expand: true,
-					dot: true,
-					cwd: '<%= cfg.src %>',
-					dest: '<%= cfg.dst %>',
-					src: [
-						'**/*.html'
-					]// End src
-				}]// End copy:htmlfiles - files
-			},// End copy:htmlfiles
-
-		},// End copy task
-
-		//
-		// TODO: https://github.com/nDmitry/grunt-postcss
-		//
-
+		
 		/**
 		 * Minify CSS
 		 * 
@@ -295,52 +178,6 @@ module.exports = function (grunt) {
 			 }
 		},// End ftp-deploy task
 
-		ftpush: {
-			dev: {
-				auth: {
-					host: 'sol.apisnetworks.com',
-					port: 21,
-					authKey: 'apisnetworks-key'
-				},
-				src: '<%= cfg.dst %>',
-				dest: '/var/www/html/middleofjune/dist/',
-				exclusions: [
-					'<%= cfg.dst %>/scripts/vendor/**/*',
-					'<%= cfg.dst %>/styles/fa/**/*',
-					'<%= cfg.dst %>/styles/images/**/*',
-					'<%= cfg.dst %>/styles/fonts/**/*',
-					'<%= cfg.dst %>/data/**', 
-					'<%= cfg.dst %>/.*', 
-					'<%= cfg.dst %>/Thumbs.db', 
-					'<%= cfg.dst %>/tmp' ],
-				// keep: ['/important/images/at/server/*.jpg'],
-				simple: true,
-				useList: false
-			},// End ftpush:dev
-			live: {
-				auth: {
-					host: 'sol.apisnetworks.com',
-					port: 21,
-					authKey: 'apisnetworks-key'
-				},
-				src: '<%= cfg.dst %>',
-				dest: '/var/www/html/middleofjune/',
-				exclusions: [
-					'<%= cfg.dst %>/scripts/vendor/**/*',
-					'<%= cfg.dst %>/styles/fa/**/*',
-					'<%= cfg.dst %>/styles/images/**/*',
-					'<%= cfg.dst %>/styles/fonts/**/*',
-					'<%= cfg.dst %>/data/*', 
-					'<%= cfg.dst %>/.DS_Store', 
-					'<%= cfg.dst %>/Thumbs.db', 
-					'<%= cfg.dst %>/tmp' ],
-				// keep: ['/important/images/at/server/*.jpg'],
-				simple: true,
-				useList: false
-			}// End ftppush:live
-
-		}, 
-
 		// Reads HTML for usemin blocks to enable smart builds that automatically
 		// concat, minify and revision files. Creates cfgurations in memory so
 		// additional tasks can operate on them
@@ -357,6 +194,7 @@ module.exports = function (grunt) {
 			options: {
 				assetsDirs: [
 					'<%= cfg.dst %>',
+					'<%= cfg.dst %>/scripts/',
 					'<%= cfg.dst %>/images',
 					'<%= cfg.dst %>/styles'
 				]
@@ -400,8 +238,7 @@ module.exports = function (grunt) {
   			}// End express:all
 		},// End task express
 
-		// Watches files for changes and runs tasks based on what's changed
-		watch: require('./grunt-include/watch')
+		
 
 		// Runs JSHint (code quality analysis tool) against app JS files
 		// Rules defined in .jshintrc.
@@ -494,7 +331,6 @@ module.exports = function (grunt) {
 		'postcss',
 		'cssmin',
 		'uglify',
-
 		// stuff after this task happens in the destination folder
 		'copy:dist',		
 		'filerev',

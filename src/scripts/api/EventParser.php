@@ -269,6 +269,41 @@ class EventParser {
 		file_put_contents($file, $text);
 	}
 
+
+	/**********************************************************************************
+		saveEvent()
+		____
+	*********************************************************************************/
+	public function saveEventsToFile($e) {
+		$text = "";
+		// dump header row first
+		$text .= 'raw_date,nice_date,artist,venue,show_url'."\r\n";
+
+		pr($e);
+		echo '<hr>';
+		
+		if (0) {
+			// Prepare insert query
+			$statement = $dblink->prepare(
+				"INSERT INTO events(raw_date, type, artist, venue, title, url) ".
+					"VALUES(:raw_date, :type, :artist, :venue, :title, :url) ".
+					"ON DUPLICATE KEY UPDATE url = :new_url");
+
+			$statement->execute(array(
+				"name" => $v_name,
+				"address" => $v_addy,
+				"city" => $v_city,
+				"zip"  => $v_zipc,
+				"lat" => $geoResult["payload"]["lat"],
+				"lon" => $geoResult["payload"]["lon"],
+				"lat2" => $geoResult["payload"]["lat"],
+				"lon2" => $geoResult["payload"]["lon"]
+			));// End statement array
+
+		}// End if all the data is ready to insert
+
+	}
+
 	/**********************************************************************************
 		saveToDatabase(event_array)
 		insert only new/unique records

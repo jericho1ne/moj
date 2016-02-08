@@ -148,9 +148,10 @@ var Events = {
                         ],
                         "autoWidth": true,
                         "language": {
-                            "lengthMenu": "_MENU_ events per page",
+                            "lengthMenu": "show _MENU_",
+                            "sSearch": "search",
                             "zeroRecords": "Nothing found.",
-                            "info": "",  // "Page _PAGE_ of _PAGES_",
+                            "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
                             "infoEmpty": "No records available",
                             "infoFiltered": ""
                         }
@@ -162,8 +163,8 @@ var Events = {
                     // Save into class property
                     //this.$eventData = $dataTable;
                     resolve("Event data loaded");
-                }, 450);
-           }// End else data received
+                }, 0);
+            }// End else data received
            
         });// End Promise
     },// End displayEvents
@@ -173,25 +174,29 @@ var Events = {
      */
     getEvents: function(maxResults) {
         // TODO:  limit on maxResults
+        var _this = this;
 
         // $.ajax method will call resolve() on the deferred it returns
         // when the request completes successfully
-        return $.ajax({
-            type: 'GET',
-            url: this.apiScriptsBase + this.eventsScript,
-            async: false,
-            // Success callback will fire even when coupled with an external $.done
-            success : function(data) {  // data, status, jqXHR
-                // Save current artist data in global cache
-                CACHE['eventData'] = data;
-            },
-            // if the request fails, deferred.reject() is called
-            error : function(code, message){
-                // Handle error here
-                // TODO:  change to jquery UI modal that autofades and has (X) button
-                alert("Unable to load Event data =(");
-            }
-        });// End getEvents $.ajax 
+        return new Promise(function(resolve, reject) { 
+            $.ajax({
+                type: 'GET',
+                url: _this.apiScriptsBase + _this.eventsScript,
+                async: false,
+                // Success callback will fire even when coupled with an external $.done
+                success : function(data) {  // data, status, jqXHR
+                    // Save current artist data in global cache
+                    CACHE['eventData'] = data;
+                    resolve(data);
+                },
+                // if the request fails, deferred.reject() is called
+                error : function(code, message){
+                    // Handle error here
+                    // TODO:  change to jquery UI modal that autofades and has (X) button
+                    reject("Unable to load Event data =(");
+                }
+            });// End getEvents $.ajax
+        });
     },// End getEvents
 
     //
@@ -247,77 +252,75 @@ var Events = {
      */
     appendArtistInfo: function (divId, data) {
         // Create and return a promise object
-        return new Promise(function(resolve, reject) {
             // Figure out whether data is clean or not
-            var noInfoOnArtist = (data.error === 6 ? true : false);
-          
-            // Display some placeholder text and image
-            if (noInfoOnArtist) {
-                console.log(" ERROR 6: No info on artist. ");
+        var noInfoOnArtist = (data.error === 6 ? true : false);
+      
+        // Display some placeholder text and image
+        if (noInfoOnArtist) {
+            console.log(" ERROR 6: No info on artist. ");
 
-                $('#artist-photo').html('<div class="top60">'
-                    + '<img src="/media/images/no-artist-photo.png" alt=" found"</i></div>');
+            $('#artist-photo').html('<div class="top60">'
+                + '<img src="/media/images/no-artist-photo.png" alt=" found"</i></div>');
 
-                $('#artist-bio').html('<div class="top100">No Artist bio on Last.fm.  Check AllMusic. &nbsp;'
-                    + ' <i class="fa fa-terminal fa-2x"></i></div>');
+            $('#artist-bio').html('<div class="top100">No Artist bio on Last.fm.  Check AllMusic. &nbsp;'
+                + ' <i class="fa fa-terminal fa-2x"></i></div>');
 
-                reject(Error("appendArtistInfo kinda sorta failed just now  ='()"));
+            return Promise.reject(new Error("appendArtistInfo kinda sorta failed just now  ='()"));
+        }
+        // Data is good, append it to the given selector
+        else {
+            // Create specific parent div name
+            var artistInfo = '#' + divId;
+
+            // Create custom info array
+            var artist = {
+                'name': data.artist.name,
+                'bio': data.artist.bio,
+                'url': data.artist.url,
+                'images': data.artist.image,
+                'tags': data.artist.tags.tag
+            };
+
+            // Arbitrary limit on how much biography text to show
+            var maxCharsInBio = 600;
+
+            // Remove any links
+            var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+
+            // Clip bio at preset character max
+            var shortBio = fullBio.substring(0, maxCharsInBio);
+            
+            // If longer than max amount, add "show more" link
+            if (fullBio.length > maxCharsInBio) {
+                shortBio += ' ... <span class="link">'
+                    + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
+                    + '<span>';
             }
-            // Data is good, append it to the given selector
-            else {
-                // Create specific parent div name
-                var artistInfo = '#' + divId;
 
-                // Create custom info array
-                var artist = {
-                    'name': data.artist.name,
-                    'bio': data.artist.bio,
-                    'url': data.artist.url,
-                    'images': data.artist.image,
-                    'tags': data.artist.tags.tag
-                };
+            // Clear existing content        
+            $('#artist-photo').html();
+            $('#artist-bio').html();
+            $('#artist-tracks').html();
 
-                // Arbitrary limit on how much biography text to show
-                var maxCharsInBio = 600;
+            // photoContainer = artist photo + name caption
+            $photoCaption = $('<h3>')
+                .addClass('photo-caption')
+                .html(artist.name);
 
-                // Remove any links
-                var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+            // Set the img tag    
+            $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
+            $('#artist-photo').append($photoCaption);
 
-                // Clip bio at preset character max
-                var shortBio = fullBio.substring(0, maxCharsInBio);
-                
-                // If longer than max amount, add "show more" link
-                if (fullBio.length > maxCharsInBio) {
-                    shortBio += ' ... <span class="link">'
-                        + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
-                        + '<span>';
-                }
-
-                // Clear existing content        
-                $('#artist-photo').html();
-                $('#artist-bio').html();
-                $('#artist-tracks').html();
-
-                // photoContainer = artist photo + name caption
-                $photoCaption = $('<h3>')
-                    .addClass('photo-caption')
-                    .html(artist.name);
-
-                // Set the img tag    
-                $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
-                $('#artist-photo').append($photoCaption);
-
-                // Append the artist bio text
-                $('#artist-bio').html(shortBio);
-                
-                //
-                // TODO: loop through artist.tags.tag and print each tag in a button
-                //
-                
-                // Promise resolution - pass along artist name
-                resolve(artist.name);
-            }// End else
-        });// End promise object
+            // Append the artist bio text
+            $('#artist-bio').html(shortBio);
+            
+            //
+            // TODO: loop through artist.tags.tag and print each tag in a button
+            //
+            
+            // Promise resolution - pass along artist name
+            return Promise.resolve(artist.name);
+        }// End else
     },// End function appendArtistInfo
 
 
