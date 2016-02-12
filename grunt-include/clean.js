@@ -5,7 +5,7 @@
  */
 'use strict';
 module.exports = {
-	dist: {
+	all: {
 		files: [{
 			dot: true,
 			src: [
@@ -26,7 +26,7 @@ module.exports = {
 			]
 		}]
 	},
-	maincss: {
+	cssfiles: {
 		files: [{
 			dot: true,
 			src: [

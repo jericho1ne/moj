@@ -4,16 +4,15 @@
 
 // On document load
 $(document).ready(function() {
-    // window.Events = Events;
-    
     //
     // LISTENERS
     //
-     $('#gPlusLogin').click(function() {
+    $('#gPlusLogin').click(function() {
         var ref = new Firebase("https://blinding-torch-6251.firebaseio.com");
         ref.onAuth(function(authData) {
             if (authData !== null) {
                 console.log("Login Success!", authData);
+                window.authData = authData;
             } 
             else {
                 ref.authWithOAuthRedirect("google", function(error, authData) {
@@ -109,15 +108,15 @@ $(document).ready(function() {
                         // to be unwrapped with .then()
                         return Events.appendArtistInfo('artist-info', artistData);
                     })
-                    .then(function(data) {        // 3
-                        //console.log(" >>>>>>> appendArtistInfo returned :: <<<");
-                        // console.log(data);
+                    .then(function(artistName) {        // 3
+                        console.log(" >>>>>>> appendArtistInfo returned :: <<<");
+                        console.log(artistName);
                        
-                        // Success 
                         // returns $.ajax from Youtube API
-                        return Events.getTopTracks(artistData.artist.name);
+                        return Events.getTopTracks(artistName);
                     })// End getTopTracks 
                     .then(function(trackData) { // 4
+                        console.log(trackData);
                         // To continue chain, return result of function below
                         // after promisifying it.
                         Events.appendTopTracks('artist-tracks', trackData);

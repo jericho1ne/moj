@@ -5,7 +5,7 @@
  */
 'use strict';
 module.exports = {
-	dist: {
+	all: {
 		files: [{
 			expand: true,
 			dot: true,
@@ -16,53 +16,59 @@ module.exports = {
 				'scripts/**/*.{js,php}',
 				'data/**/*',
 				'*.{ico,png,txt}',
-				// 'images/{,*/}*.webp',
+				'media/images/**/*.{gif,jpeg,jpg,png}',
 				'styles/fonts/{,*/}*.*',
 				'styles/fa/{,*/}*.*',
 				'styles/images/**/*.{gif,jpeg,jpg,png}',
-				'media/images/**/*.{gif,jpeg,jpg,png}',
-				'styles/*.css'
+				'styles/**/*.css'
+			]// End src
+		}]// End copy:dist - files
+	},// End copy:dist
+
+	cssfiles: {
+		files: [{
+			cwd: '<%= cfg.src %>',
+			dest: '<%= cfg.dst %>',
+			src: [
+				'styles/fonts/{,*/}*.*',
+				'styles/fa/{,*/}*.*',
+				'styles/images/**/*.{gif,jpeg,jpg,png}',
+				'styles/**/*.css'
 			]// End src
 		}]// End copy:dist - files
 	},// End copy:dist
 
 	jsfiles: {
 		files: [{
-			expand: true,
-			dot: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
-				'/*.html',
+				'*.html',
 				'scripts/*.js',
 				'scripts/common/*.js',
 				'scripts/ui/*.js'
-			]// End src
+			]
 		}]// End copy:jsfiles - files
 	},// End copy:jsfiles
 
 	phpfiles: {
 		files: [{
-			expand: true,
-			dot: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
 				'scripts/api/*.php',
 				'scripts/common/*.php'
-			]// End src
+			]
 		}]// End copy:phpfiles - files
 	},// End copy:phpfiles
 
 	htmlfiles: {
 		files: [{
-			expand: true,
-			dot: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
 				'**/*.html'
-			]// End src
+			]	
 		}]// End copy:htmlfiles - files
 	}// End copy:htmlfiles
 };

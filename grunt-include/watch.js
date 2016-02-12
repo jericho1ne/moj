@@ -13,25 +13,21 @@ module.exports = {
 	// 	files: ['test/spec/{,*/}*.js'],
 	// 	tasks: ['babel:test', 'test:watch']
 	// },
-	// jsfiles: {
-	// 	files: ['<%= cfg.src %>/scripts/ui/*', '<%= cfg.src %>/scripts/common/*', '<%= cfg.src %>/scripts/*.js'],
-	// 	tasks: ['clean:jsfiles', 'uglify', 'copy:jsfiles', 'filerev', 'usemin', 'htmlmin' ]
-	// }, 
 	gruntfile: {
 		options: {livereload: true},
 		files: ['Gruntfile.js'],
 		tasks: ['build']
 	},
-	sass: {
+	cssfiles: {
 		options: {livereload: true},
 		files: ['<%= cfg.src %>/styles/{,*/}*.{scss,sass}'],
 		tasks: [
-			'clean:maincss', 
+			'clean:cssfiles', 
 			'sass', 
 			'postcss', 
 			'cssmin', 
-			'copy:dist', 
-			'filerev', 
+			'copy:cssfiles', 
+			'filerev:cssfiles', 
 			'usemin', 
 			'htmlmin'
 		]
@@ -47,8 +43,8 @@ module.exports = {
 		tasks: [
 			'clean:jsfiles',
 			'uglify',
-			'copy',
-			'filerev',
+			'copy:jsfiles',
+			'filerev:jsfiles',
 			'usemin',
 			'htmlmin'
 		]

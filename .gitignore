@@ -7,3 +7,6 @@ __*
 node_modules/
 dist/
 data/
+vendor/composer/*
+vendor/autoload*
+composer.json

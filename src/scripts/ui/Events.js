@@ -208,8 +208,6 @@ var Events = {
      * getArtistInfo :: gets bio, images, etc
      */
     getArtistInfo: function (artistName) {
-        console.log(" >> 1) getArtistInfo called");
-        
         // Get Artist Info
         //  http://www.last.fm/api/show/artist.getinfo
         // console.log(CACHE[strToLowerNoSpaces(artistName)]);
@@ -225,10 +223,7 @@ var Events = {
                    'format=json',
             dataType : 'json',
             // Success callback will fire even when couple with an external $.done
-            success : function(data) {
-                window.artistData = data;
-                console.log(' >> artistXHR success >>');
-             
+            success : function(data) {            
                 if (data.error !== 6) {
                     // Save current artist data in global cache
                     // CACHE[strToLowerNoSpaces(data.artist.name)] = data;
@@ -257,7 +252,7 @@ var Events = {
       
         // Display some placeholder text and image
         if (noInfoOnArtist) {
-            console.log(" ERROR 6: No info on artist. ");
+            // console.log(" ERROR 6: No info on artist. ");
 
             $('#artist-photo').html('<div class="top60">'
                 + '<img src="/media/images/no-artist-photo.png" alt=" found"</i></div>');
@@ -265,7 +260,7 @@ var Events = {
             $('#artist-bio').html('<div class="top100">No Artist bio on Last.fm.  Check AllMusic. &nbsp;'
                 + ' <i class="fa fa-terminal fa-2x"></i></div>');
 
-            return Promise.reject(new Error("appendArtistInfo kinda sorta failed just now  ='()"));
+            return new Error("appendArtistInfo kinda sorta failed just now  ='()");
         }
         // Data is good, append it to the given selector
         else {
@@ -319,7 +314,7 @@ var Events = {
             //
             
             // Promise resolution - pass along artist name
-            return Promise.resolve(artist.name);
+            return artist.name;
         }// End else
     },// End function appendArtistInfo
 
@@ -328,7 +323,7 @@ var Events = {
      * getTopTracks :: returns top 50 tracks by a given artist
      */
     getTopTracks: function (artistName) {
-        console.log(" >> 2) getTopTracks called (" + artistName + ')');
+        // console.log(" >> 2) getTopTracks called (" + artistName + ')');
         // Get Artist Top Tracks
         //   http://www.last.fm/api/show/artist.getTopTracks
         // var topTracksXHR = $.ajax({
@@ -362,35 +357,43 @@ var Events = {
      * appendTopTracks :: display artist's top tracks
      */
     appendTopTracks: function(divId, data) {
-        var topTracks = data.toptracks.track;
-        var topTracksLength = topTracks.length;
-
+        // Clear current contents of div (shouldn't be any)
         $('#' + divId).empty();
-        // $('#' + divId).append('<h3>Tracklist</h3>');
+
+        if (typeof data !== undefined && data.length) {
+            var topTracks = data.toptracks.track;
+            var topTracksLength = topTracks.length;
         
-        var $videoList = $('<ul>')
-           .attr('class','vid-list');
-        
-        $('#' + divId).append($videoList);
+            // $('#' + divId).append('<h3>Tracklist</h3>');
+            
+            var $videoList = $('<ul>')
+               .attr('class','vid-list');
+            
+            $('#' + divId).append($videoList);
 
-        // Create artist info element to be displayed
-        for (i = 0; i < topTracksLength; i++) { 
-            // TODO:  create playlist of individual tracks via YouTube API hook
-            var song = topTracks[i].name;
-            var artist = topTracks[i].artist.name;
+            var searchString = '';
 
-            // Search for artist + track name one at a time, 1 max result
-            Events.searchYoutube(stripSpaces(artist + ' ' + song), this.maxVideosToShow);
+            // Create artist info element to be displayed
+            for (i = 0; i < topTracksLength; i++) { 
+                // TODO:  create playlist of individual tracks via YouTube API hook
+                var searchString = topTracks[i].name + ' ' + topTracks[i].artist.name;
 
-            // Debug - See top track names pulled by Last.fm
-            // $('#' + divId).append(song + ' / ');
+                // Search for artist + track name one at a time
+                // Limit to 1 result max since we're doing individual calls
+                Events.searchYoutube(stripSpaces(searchString), 1);
 
-            // Limit number of clips shown
-            if ((i+1) >= this.maxVideosToShow) {
-                break;
-            }
-        }// End for loop through Artists' top tracks
-       
+                // Debug - See top track names pulled by Last.fm
+                // $('#' + divId).append(song + ' / ');
+
+                // Limit number of clips shown
+                if ((i+1) >= this.maxVideosToShow) {
+                    break;
+                }
+            }// End for loop through Artists' top tracks
+        }// End if data
+        else {
+            console.log("appendTopTracks got no data :'(")
+        }
     },// End function appendTopTracks
 
     /**
@@ -402,17 +405,19 @@ var Events = {
             url:  YOUTUBE_BASE_URL +
                   "search?part=snippet" +
                   "&q=" + searchTerm +
-                  "&key=" + YOUTUBE_API_KEY +
-                  "&maxResults=" + parseInt(maxResults),
+                  "&key=" + YOUTUBE_API_KEY_NEW,
+                  // "&maxResults=" + parseInt(maxResults),
             async: false
         };// End requestBody
 
         $.ajax(requestBody).done(function(data, status) {
             if (status === 'success') {
                if (data) {
-                  // Append video thumb to DOM
-                  Events.appendYoutubeVideo('artist-tracks', data.items);
-                  return true;
+                    //console.log(data.items);
+                    //console.log("=====================================");
+                    // Append video thumb to DOM
+                    Events.appendYoutubeVideo('artist-tracks', data.items);
+                    return true;
                }
             }// End if success
             else {
@@ -425,22 +430,18 @@ var Events = {
     /**
      * appendYoutubeVideo :: add video clip thumbs to DOM
      */
-    appendYoutubeVideo: function(divID, vids) {
-        console.log(' >> displayVideos >> ');
-        
+    appendYoutubeVideo: function(divID, vids) {   
         var videoId = vids[0].id.videoId;
 
-        // vids[0].id
-        // vids[0].snippet.thumbnails.title
         // vids[0].snippet.thumbnails.medium.url     // .width=320, height=180
-        // vids[0].snippet.thumbnails.high.url          // .width=480, height=360
-        // vids[0].snippet.thumbnails.default.url      // .width=120, height=90
+        // vids[0].snippet.thumbnails.high.url       // .width=480, height=360
+        // vids[0].snippet.thumbnails.default.url    // .width=120, height=90
 
         // div containing image + caption
         var $wrapperDiv = $('<li>')
            .attr('class','vid-clip-wrapper');
 
-        // image source tag
+        // Image source tag
         // var imgTag = $('<img>')
            //.attr('class','vid-clip')
            //.attr('src', vids[0].snippet.thumbnails.medium.url);       

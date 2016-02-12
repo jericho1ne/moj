@@ -1,18 +1,13 @@
 /**
  * @file Gruntfile.js in all its greatness
  * @author Mihai Peteu <mihai.peteu@gmail.com>
- * @copyright 2015 Middle of June.  All rights reserved.
+ * @copyright 2016 Middle of June.  All rights reserved.
  */
 'use strict';
 
 module.exports = function (grunt) {
 	// Time how long tasks take;  Optimizing build times!
 	require('time-grunt')(grunt);
-
-	// Automatically load required grunt tasks
-	// require('jit-grunt')(grunt, {
-	//   useminPrepare: 'grunt-usemin'
-	// });
 
 	// cfgurable paths
 	var cfg = {
@@ -38,8 +33,11 @@ module.exports = function (grunt) {
 		// FTP files to live / dev domain incrementally
 		ftpush: require('./grunt-include/ftpush'),
 
+		// Compile Sass to CSS
 		sass: require('./grunt-include/sass'),
 
+		// Cachebuster! - appends random alphanumeric string before file extension 
+		filerev: require('./grunt-include/filerev'),
 
 		/**
 		* These plugins can lint your CSS, support variables and mixins, 
@@ -68,24 +66,7 @@ module.exports = function (grunt) {
 			}
 		},
 
-		// Renames files for browser caching purposes
-		// https://www.npmjs.com/package/grunt-filerev
-		filerev: {
-			dist: {
-				src: [
-					'<%= cfg.dst %>/scripts/*.js',
-					'<%= cfg.dst %>/scripts/ui/*.js',
-					'<%= cfg.dst %>/styles/{,*/}*.css'
-					// '<%= cfg.dst %>/images/{,*/}*.*',
-					// '<%= cfg.dst %>/styles/fonts/{,*/}*.*',
-					// '<%= cfg.dst %>/*.{ico,png}'
-				]
-			}
-		},
-
-		// By default, your `index.html`'s <!-- Usemin block --> will take care
-		// of minification. These next options are pre-cfgured if you do not
-		// wish to use the Usemin blocks.
+		// Manual css minification (usemin is not maintained)
 		cssmin: {
 			dist: {
 				files: {
@@ -178,18 +159,9 @@ module.exports = function (grunt) {
 			 }
 		},// End ftp-deploy task
 
-		// Reads HTML for usemin blocks to enable smart builds that automatically
-		// concat, minify and revision files. Creates cfgurations in memory so
-		// additional tasks can operate on them
-		// useminPrepare: {
-		//    options: {
-		//       dest: '<%= cfg.dst %>'
-		//    },
-		//    html: '<%= cfg.src %>/index.html'
-		// },
-
-
-		// Performs rewrites based on rev and the useminPrepare configuration
+		// Performs index.html embedded js + css rewrites 
+		//	based on filerev (we don't use the useminPrepare config)
+		// UNMAINTAINED - find a replacement
 		usemin: {
 			options: {
 				assetsDirs: [
@@ -225,7 +197,6 @@ module.exports = function (grunt) {
 			}// End htmlmin:dist
 		},// End task htmlmin
 
-
 		// Server w/ livereload
 		express: {    
 			all:{
@@ -238,7 +209,19 @@ module.exports = function (grunt) {
   			}// End express:all
 		},// End task express
 
-		
+		// Run some tasks in parallel to speed up build process
+		concurrent: {
+		// server: [
+		//    'babel:dist',
+		//    'sass'
+		// ],
+			dist: [
+				'copy',
+				'uglify',
+				'imagemin',
+				'svgmin'
+			]
+		},
 
 		// Runs JSHint (code quality analysis tool) against app JS files
 		// Rules defined in .jshintrc.
@@ -269,54 +252,7 @@ module.exports = function (grunt) {
 		//    }
 		// },
 
-		// concat: {
-		//  dist: {}
-		// },
-
-
-		// Mocha testing framework cfguration options
-		// mocha: {
-		// 	all: {
-		// 		options: {
-		// 			run: true,
-		// 			urls: ['http://<%= browserSync.test.options.host %>:<%= browserSync.test.options.port %>/index.html']
-		// 		}
-		// 	 }
-		// },
-		
-
-
-		// Run some tasks in parallel to speed up build process
-		// concurrent: {
-		//    server: [
-		//       'babel:dist',
-		//       'sass'
-		//    ],
-		//    test: [
-		//       'babel'
-		//    ],
-		//    dist: [
-		//       'babel',
-		//       'sass',
-		//       'imagemin',
-		//       'svgmin'
-		//    ]
-		// },
-
 	});// End grunt initcfg
-
-	// 
-	//  GRUNT REGISTER TASKS  
-	//
-	grunt.registerTask('test', function (target) {
-		if (target !== 'watch') {
-			grunt.task.run([
-				'clean:server',
-				// 'concurrent:test',
-				'postcss'
-			]);
-		}// End if target !== watch
-	});// End task "test"
 
 	grunt.registerTask('default', [
 		//'newer:eslint',
@@ -326,69 +262,27 @@ module.exports = function (grunt) {
 
 	// This is the default Grunt task if you simply run "grunt" in project dir
 	grunt.registerTask('build', [
-		'clean:dist',
+		'clean:all',
 		'sass', // to be replaced by 'concurrent:dist',
 		'postcss',
 		'cssmin',
 		'uglify',
 		// stuff after this task happens in the destination folder
-		'copy:dist',		
-		'filerev',
+		'copy:all',		
+		'filerev:all',
 		'usemin',
 		'htmlmin'
-
-	//   // 'wiredep',     // turn on only when bower-components is reinstated
-	//   // 'useminPrepare',  // throws processing a template error ('test' is undefined)
-	//   'concurrent:dist',
-		
-	//   'concat',
-	//   'cssmin',		
 	]);// End register task :: build
 
 	grunt.registerTask(
 		'server',['express', 'watch']
 	);
 
-	grunt.registerTask('watch:dev', [
-		'watch',
-		// 'ftp-deploy'
-		'ftpush:dev'
-	]);
+	grunt.registerTask('pushtodev', ['watch', 'ftpush:dev']);
 
-	grunt.registerTask('watch:live', [
-		'watch',
-		'ftpush:live'
-	]);
+	grunt.registerTask('pushtolive', ['watch', 'ftpush:live']);
 
-	
-	//grunt.registerTask('serve', 'start the server and preview your app', function (target) {
-	  // if (target === 'dist') {
-	  //    return grunt.task.run(['build', 'browserSync:dist']);
-	  // }
-
-	  // grunt.task.run([
-	  //    'clean:server',
-	  //    // 'wiredep',     // turn on only when bower-components is reinstated
-	  //    'concurrent:server',
-	  //    'postcss',
-	  //    'browserSync:livereload',
-	  //    // 'ftp-deploy',
-	  //    'watch'
-	  // ]);
-	//});// End serve task
-
-	// grunt.registerTask('server', function (target) {
-	//   grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-	//   grunt.task.run([target ? ('serve:' + target) : 'serve']);
-	// });// End register task :: server
-
-	
-	//   grunt.task.run([
-	//      'browserSync:test',
-	//      'mocha'
-	//   ]);
-	// });// End register task :: test
-
+	grunt.registerTask('default', ['concurrent:target1']);
 
 	//
 	// LOAD NPM TASKS
@@ -405,12 +299,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-concurrent');
 	grunt.loadNpmTasks('grunt-postcss');
 	grunt.loadNpmTasks('grunt-sass');
-	grunt.loadNpmTasks('grunt-filerev');
 	grunt.loadNpmTasks('grunt-usemin');
+	grunt.loadNpmTasks('grunt-filerev');
 	grunt.loadNpmTasks('grunt-ftp-deploy');		// bulk upload
 	grunt.loadNpmTasks('grunt-sftp-deploy');	// bulk upload
 	grunt.loadNpmTasks('grunt-ftpush');			// granular upload
 	grunt.loadNpmTasks('grunt-express');  		// Express server/livereload
-	
 
 };// End module.exports
