@@ -1,12 +1,10 @@
-/*
- * common.js
+/**
+ * @file common.js
+ * @author Mihai Peteu <mihai.peteu@gmail.com>
+ * @copyright 2016 Middle of June.  All rights reserved.
  *
- **/
-
-// TODO:
-//    grab current user location, then look for nearby venues
-//    $.when(getUserPosition())
-//      .done(YouTubeSearch.displayVideos());
+ * Helper functions
+ */
 
 
 function throwModalError(errorMsg) {
@@ -113,10 +111,10 @@ function setPageState(lastPgVisited) {
 }
 
 /**
- * setUserPosition
+ * getPosition
  * save user geographic location, then do some promise chaining
  */
-function getPos() {
+function getPosition() {
    console.log(" >> getPos() called >> ");
 
    UserState.geoLocateUser()
@@ -151,7 +149,6 @@ function getPos() {
       .done()
    */
 }// End function getPos
-
 
 
 /**

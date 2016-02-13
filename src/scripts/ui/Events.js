@@ -1,7 +1,11 @@
-/*
-* Events.js
-*
-**/
+/**
+ * @file Events.js
+ * @author Mihai Peteu <mihai.peteu@gmail.com>
+ * @copyright 2016 Middle of June.  All rights reserved.
+ *
+ * Everything needed to get Events and Artist info
+ */
+
 var Events = {
     // PROPERTIES
     dataFolder: 'data/',
@@ -114,7 +118,11 @@ var Events = {
 
                             // For artist, use a highlighted bg color if a fave
                             // style="background-color:' + expenseCategories[row.label].color + '"
-                            + '<td class="left"><span class="link artistInfo">' + events[i].artist + '</span></td>'
+                            + '<td class="left"><span class="link artistInfo" ' 
+                            // Append old school JS onClick for mobile browser compatibility 
+                            + 'onclick="lookupArtist(\'' + events[i].artist + '\')" '+ '>' 
+                            + events[i].artist + ''
+                            + '</span></td>'
                             
                             + '<td class="left">' + events[i].venue + '</td>'
                             
@@ -250,17 +258,22 @@ var Events = {
             // Figure out whether data is clean or not
         var noInfoOnArtist = (data.error === 6 ? true : false);
       
+        // TODO: Check for existence of photo and bio separately
+
         // Display some placeholder text and image
         if (noInfoOnArtist) {
-            // console.log(" ERROR 6: No info on artist. ");
+            console.log(" ERROR 6: No info on artist. ");
 
             $('#artist-photo').html('<div class="top60">'
-                + '<img src="/media/images/no-artist-photo.png" alt=" found"</i></div>');
+                + '<img src="media/images/no-artist-photo.png" class="opacity-80" alt="no artist photo"</i></div>');
 
-            $('#artist-bio').html('<div class="top100">No Artist bio on Last.fm.  Check AllMusic. &nbsp;'
-                + ' <i class="fa fa-terminal fa-2x"></i></div>');
+            $('#artist-bio').html(
+                '<br><br><br>'
+                + ' <i class="fa fa-terminal fa-2x"></i></div>'
+                +'<div>Last.fm has no information on this artist.&nbsp;'
+            );
 
-            return new Error("appendArtistInfo kinda sorta failed just now  ='()");
+            return Error("appendArtistInfo kinda sorta failed just now  ='()");
         }
         // Data is good, append it to the given selector
         else {
@@ -318,7 +331,6 @@ var Events = {
         }// End else
     },// End function appendArtistInfo
 
-
     /**
      * getTopTracks :: returns top 50 tracks by a given artist
      */
@@ -352,17 +364,17 @@ var Events = {
         });// End topTracksXHR $.ajax 
     },// End function getTopTracks
 
-
     /**
      * appendTopTracks :: display artist's top tracks
      */
     appendTopTracks: function(divId, data) {
+        // Keep an eye on this in case Last.fm changes their object structure
+        var artistTracks = data.toptracks.track;
+      
         // Clear current contents of div (shouldn't be any)
         $('#' + divId).empty();
 
-        if (typeof data !== undefined && data.length) {
-            var topTracks = data.toptracks.track;
-            var topTracksLength = topTracks.length;
+        if (typeof artistTracks !== undefined && artistTracks.length) {
         
             // $('#' + divId).append('<h3>Tracklist</h3>');
             
@@ -374,9 +386,9 @@ var Events = {
             var searchString = '';
 
             // Create artist info element to be displayed
-            for (i = 0; i < topTracksLength; i++) { 
+            for (i = 0; i < artistTracks.length; i++) { 
                 // TODO:  create playlist of individual tracks via YouTube API hook
-                var searchString = topTracks[i].name + ' ' + topTracks[i].artist.name;
+                var searchString = artistTracks[i].name + ' ' + artistTracks[i].artist.name;
 
                 // Search for artist + track name one at a time
                 // Limit to 1 result max since we're doing individual calls

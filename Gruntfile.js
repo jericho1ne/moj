@@ -211,15 +211,16 @@ module.exports = function (grunt) {
 
 		// Run some tasks in parallel to speed up build process
 		concurrent: {
-		// server: [
-		//    'babel:dist',
-		//    'sass'
-		// ],
-			dist: [
+			target1: [
 				'copy',
-				'uglify',
-				'imagemin',
-				'svgmin'
+				'cssmin',
+				'uglify'
+				// 'imagemin'
+				// 'svgmin'
+			],
+			target2: [
+				'usemin',
+				'htmlmin'
 			]
 		},
 
@@ -278,11 +279,11 @@ module.exports = function (grunt) {
 		'server',['express', 'watch']
 	);
 
-	grunt.registerTask('pushtodev', ['watch', 'ftpush:dev']);
+	grunt.registerTask('pushtodev', ['build', 'ftpush:dev']);
 
-	grunt.registerTask('pushtolive', ['watch', 'ftpush:live']);
+	grunt.registerTask('pushtolive', ['build', 'ftpush:live']);
 
-	grunt.registerTask('default', ['concurrent:target1']);
+	grunt.registerTask('default', ['concurrent:target1'], ['concurrent:target2']);
 
 	//
 	// LOAD NPM TASKS

@@ -430,8 +430,9 @@ img.artist-profile-pic {
 	top: 6px;
 	left: -4px;
 	padding: 5px 8px 5px 8px;
-	background-color: #fff;
+	background-color: #F0F0F0;
 	border: 1px solid #666;
+	opacity: 0.92;
 	z-index: 20;
 }
 
@@ -446,14 +447,17 @@ img.artist-profile-pic {
 
 // this needs room to breathe, and allow for vertical scroll!
 .ui-dialog.info-dialog {
-	position: relative;
-	left: auto;
-	right: auto;
+	left: 0px !important;
+	top: 0px !important;
 	font-family: "Ruda-Regular";
 	font-size: 12px;
 	overflow: visible;
 	min-height: 700px !important;
 	min-width: 90% !important;
+}
+
+.ui-dialog-content.ui-widget-content {
+	width: auto !important;
 }
 
 .ui-dialog-titlebar {
