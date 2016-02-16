@@ -14,7 +14,7 @@
  * Needs to be outside document.ready or it'll throw undefined error
  */
 function lookupArtist(artistName) {
-    // Create div to hold modal contents
+      // Create div to hold modal contents
     var $artistPopup = $('<div>');
 
     // Initialize dialog box
@@ -56,11 +56,7 @@ function lookupArtist(artistName) {
 
         // returns $.ajax from Last.fm API
         Events.getArtistInfo(artistName)
-            .then(function(artistData) {                    
-                console.log(" (+) getArtistInfo  success. ");
-                console.log(artistData);
-                debugger;
-              
+            .then(function(artistData) {
                 return Events.appendArtistInfo('artist-info', artistData);
             })
             .then(function(artistName) {       
@@ -131,6 +127,17 @@ $(document).ready(function() {
         .then(function(data) {
             // JSON data will go into shows-content div
             Events.displayEvents(JSON.parse(data), 'shows-content');
+        })
+        .then(function(){
+            // Add old school 
+            // https://davidwalsh.name/event-delegate
+            document.getElementById('shows-content').addEventListener("click", function(e) {
+                // If any child element was clicked, grab the artist name
+                if (e.target && e.target.innerHTML !== '') {
+                    // Lookup the artist name
+                    lookupArtist(e.target.innerHTML);
+                }
+            });// End addEventListener
         });
 
 });// End on Document Load

@@ -30,151 +30,149 @@ var Events = {
      * display events inside the div id we've passed in
      */
     displayEvents: function(data, divId) {
-        // Return the Promise object
-        return new Promise(function(resolve, reject) {
-            var events = data.events;
+        var events = data.events;
 
-            if (!events.length || typeof events === 'undefined') {
-                reject(Error("displayEvents did not receive any data ='()"));
-            }
-            else {
-                /*  ----- events format ----
-                    date: "1446361200000"
-                    fmt_date: "2015-11-01"
-                    nice_date: "Sunday Nov 1"
-                    short_date: "Sun Nov 1"
-                    title: "Hanson @ Fonda Theatre"
-                    type: "show"
-                    url: "http://www.thing.com/events/199123/event-tickets?refId=xxxxx"
-                    venue: "Fonda Theatre"
-                    artist: "Hanson"
-                    year: "2015"        */
+        if (!events.length || typeof events === 'undefined') {
+            reject(Error("displayEvents did not receive any data ='()"));
+        }
+        else {
+            /*  ----- events format ----
+                date: "1446361200000"
+                fmt_date: "2015-11-01"
+                nice_date: "Sunday Nov 1"
+                short_date: "Sun Nov 1"
+                title: "Hanson @ Fonda Theatre"
+                type: "show"
+                url: "http://www.thing.com/events/199123/event-tickets?refId=xxxxx"
+                venue: "Fonda Theatre"
+                artist: "Hanson"
+                year: "2015"        */
 
-                // clear div contents
-                $('#' + divId).empty('');
+            // clear div contents
+            $('#' + divId).empty('');
 
-                // Start building the datatable container
+            // Start building the datatable container
 
-                // TODO:  if ever more than one datatable is present
-                //          create a unique id for each
-                //          eg, append + year + '-' + month;
-                var dataTableUniqueID = 'data-table-01';
+            // TODO:  if ever more than one datatable is present
+            //          create a unique id for each
+            //          eg, append + year + '-' + month;
+            var dataTableUniqueID = 'data-table-01';
 
-                // Create Datatable table tag
-                var $dataTable = $('<table>')
-                    .attr('id', dataTableUniqueID)
-                    .addClass('display container dataTable border');
-
-                // Create Datatable header row
-                var $tableHeader = $('<thead>')
-                        .addClass('row-bold')
-                        .html('<tr><th class="left event-date">date</th>'
-                            + '<th class="left event-artist">artist</th>'
-                            + '<th class="left event-venue">venue</th>'
-                            + '<th class="left">tix</th>'
-                            + '</tr>');
-
-
-                // Append Datatable header row
-                $dataTable.append($tableHeader);
-
-                $dataTable.append('<tbody>');
-
-                // Initialize once, reuse inside upcoming loop
-                var row = '';
-                var rowCount = 0;
-                var prevRawDate = '';
+            // Create Datatable table tag, appending old school JS onClick
+            // (for mobile browser compatibility)
+                         
+            var $dataTable = $('<table>')
+                .attr('id', dataTableUniqueID)
+                .addClass('display container dataTable border');
                 
-                // Loop through incoming data
-                // $(eventsData).each(function() {
-                for (var i in events) {
-                    // DEBUG
-                    // if (rowCount > 100) break;
+            // Create Datatable header row
+            var $tableHeader = $('<thead>')
+                    .addClass('row-bold')
+                    .html('<tr><th class="left event-date">date</th>'
+                        + '<th class="left event-artist">artist</th>'
+                        + '<th class="left event-venue">venue</th>'
+                        + '<th class="left">tix</th>'
+                        + '</tr>');
 
-                    var dateArray = events[i].short_date.split(" ");
 
-                    if (prevRawDate !== events[i].raw_date) {
-                        var $dateHeaderRow = $('<tr>')
-                            .html(
-                                '<th class="date-header w100 text-align-right date-block-xl" data-sort="' + events[i].raw_date + '">'
-                                    + dateArray[0] +'</th>'
-                                + '<th class="date-header">'
-                                + '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
-                                + '<span class="text-align-left date-block-lg">' + dateArray[2] + '</span>'
-                                +'</th>'
-                                + '<th class="date-header"></th><th class="date-header"></th>');
+            // Append Datatable header row
+            $dataTable.append($tableHeader);
+            
+            // Append table body tag (required by dataTables)
+            $dataTable.append('<tbody>');
 
-                        // Append individual date header row
-                        $dataTable.append($dateHeaderRow);
-                        // displayDate += '&nbsp;';
-                    }
+            // Initialize once, reuse inside upcoming loop
+            var row = '';
+            var rowCount = 0;
+            var prevRawDate = '';
+            
+            // Loop through incoming data
+            // $(eventsData).each(function() {
+            for (var i in events) {
+                // DEBUG
+                // if (rowCount > 100) break;
 
-                    // Date | Artist | Venue
-                    var $dataRow = $('<tr>')
-                        .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
-                        .html('<td class="left" data-sort="' + events[i].raw_date + '">'
-                            + '<span class="opacity-30">' + events[i].short_date + '<span>'
-                            + '</td>'  // ideally, embed fmt_date in a hidden *-data attrib
+                var dateArray = events[i].short_date.split(" ");
 
-                            // For artist, use a highlighted bg color if a fave
-                            // style="background-color:' + expenseCategories[row.label].color + '"
-                            + '<td class="left"><span class="link artistInfo" ' 
-                            // Append old school JS onClick for mobile browser compatibility 
-                            + 'onclick="lookupArtist(\'' + events[i].artist + '\')" '+ '>' 
-                            + events[i].artist + ''
-                            + '</span></td>'
-                            
-                            + '<td class="left">' + events[i].venue + '</td>'
-                            
-                            + '<td class="left"><a href="' + events[i].url + '">' 
-                            + '<i class="fa fa-ticket fa-4"></i>' + '</a></td>'
-                            + '</tr>' );
+                if (prevRawDate !== events[i].raw_date) {
+                    var $dateHeaderRow = $('<tr>')
+                        .html(
+                            '<th class="date-header w100 text-align-right date-block-xl" data-sort="' + events[i].raw_date + '">'
+                                + dateArray[0] +'</th>'
+                            + '<th class="date-header">'
+                            + '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
+                            + '<span class="text-align-left date-block-lg">' + dateArray[2] + '</span>'
+                            +'</th>'
+                            + '<th class="date-header"></th><th class="date-header"></th>');
 
-                    // Append individual event row
-                    $dataTable.append($dataRow);
-
-                    prevRawDate = events[i].raw_date;
-                    rowCount ++;
+                    // Append individual date header row
+                    $dataTable.append($dateHeaderRow);
+                    // displayDate += '&nbsp;';
                 }
-                // });// End eventsData.each
-                
-                $dataTable.append('</tbody>');
 
-                // The final append to DOM
-                $('#' + divId).append($dataTable);
+                // Date | Artist | Venue
+                var $dataRow = $('<tr>')
+                    .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
+                    .html('<td class="left" data-sort="' + events[i].raw_date + '">'
+                        + '<span class="opacity-30">' + events[i].short_date + '<span>'
+                        + '</td>'  // ideally, embed fmt_date in a hidden *-data attrib
 
-                //
-                //  Initialize DataTables
-                //
-                //setTimeout(function(){ 
-                    $('#' + dataTableUniqueID).DataTable({
-                        "lengthMenu": [[20, 40, 160, 320, -1], [20, 40, 80, 160, 320, "All"]],
-                        // 0 = date, 1 = artist, 2 = venue, 3 = ticket
-                        "order": [[ 0, "asc" ]],
-                        "aoColumnDefs": [
-                            { 'bSortable': false, 'aTargets': [ 0, 1, 2, 3 ] }
-                        ],
-                        "autoWidth": true,
-                        "language": {
-                            "lengthMenu": "show _MENU_",
-                            "sSearch": "search",
-                            "zeroRecords": "Nothing found.",
-                            "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
-                            "infoEmpty": "No records available",
-                            "infoFiltered": ""
-                        }
-                    });
-                //}, 200);
+                        // For artist, use a highlighted bg color if a fave
+                        // style="background-color:' + expenseCategories[row.label].color + '"
+                        + '<td class="left"><span class="link artistInfo">' 
+                        + events[i].artist + ''
+                        + '</span></td>'
+                        
+                        + '<td class="left">' + events[i].venue + '</td>'
+                        
+                        + '<td class="left"><a href="' + events[i].url + '">' 
+                        + '<i class="fa fa-ticket fa-4"></i>' + '</a></td>'
+                        + '</tr>' );
 
-                // Give the datatable a chance to complete attaching, then call it quits
-                setTimeout(function() {
-                    // Save into class property
-                    //this.$eventData = $dataTable;
-                    resolve("Event data loaded");
-                }, 0);
-            }// End else data received
-           
-        });// End Promise
+                // Append individual event row
+                $dataTable.append($dataRow);
+
+                prevRawDate = events[i].raw_date;
+                rowCount ++;
+            }
+            // });// End eventsData.each
+            
+            $dataTable.append('</tbody>');
+
+            // The final append to DOM
+            $('#' + divId).append($dataTable);
+
+            //
+            //  Initialize DataTables
+            //
+            //setTimeout(function(){ 
+                $('#' + dataTableUniqueID).DataTable({
+                    "lengthMenu": [[20, 40, 160, 320, -1], [20, 40, 80, 160, 320, "All"]],
+                    // 0 = date, 1 = artist, 2 = venue, 3 = ticket
+                    "order": [[ 0, "asc" ]],
+                    "aoColumnDefs": [
+                        { 'bSortable': false, 'aTargets': [ 0, 1, 2, 3 ] }
+                    ],
+                    "autoWidth": true,
+                    "language": {
+                        "lengthMenu": "show _MENU_",
+                        "sSearch": "search",
+                        "zeroRecords": "Nothing found.",
+                        "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        "infoFiltered": ""
+                    }
+                });
+            //}, 200);
+
+            // Give the datatable a chance to complete attaching, then call it quits
+            setTimeout(function() {
+                // Save into class property
+                //this.$eventData = $dataTable;
+                return("Event data loaded");
+            }, 0);
+        }// End else data received
+       
     },// End displayEvents
     /**
      * getEvents
