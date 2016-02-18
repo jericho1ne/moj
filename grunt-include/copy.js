@@ -27,6 +27,8 @@ module.exports = {
 
 	cssfiles: {
 		files: [{
+			expand: true,
+			dot: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
@@ -40,6 +42,8 @@ module.exports = {
 
 	jsfiles: {
 		files: [{
+			expand: true,
+			dot: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [

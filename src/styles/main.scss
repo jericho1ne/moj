@@ -37,6 +37,7 @@ $pink-border: 1px solid #D953E5;
 }
 
 @mixin fontBuilder($size, $weight: 400) {
+	font-family: "Ruda-Regular" !important;
 	font-size: $size;
 	font-weight: $weight;
 }
@@ -447,12 +448,13 @@ img.artist-profile-pic {
 
 // this needs room to breathe, and allow for vertical scroll!
 .ui-dialog.info-dialog {
-	left: 0px !important;
-	top: 0px !important;
+	left: 8px !important;
+	top: 8px !important;
+	background-color: $almost-white !important;
 	font-family: "Ruda-Regular";
 	font-size: 12px;
 	overflow: visible;
-	min-height: 700px !important;
+	min-height: 80% !important;
 	min-width: 90% !important;
 }
 

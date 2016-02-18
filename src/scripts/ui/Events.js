@@ -63,7 +63,7 @@ var Events = {
                          
             var $dataTable = $('<table>')
                 .attr('id', dataTableUniqueID)
-                .addClass('display container dataTable border');
+                .addClass('display dataTable border');
                 
             // Create Datatable header row
             var $tableHeader = $('<thead>')
@@ -77,7 +77,7 @@ var Events = {
 
             // Append Datatable header row
             $dataTable.append($tableHeader);
-            
+
             // Append table body tag (required by dataTables)
             $dataTable.append('<tbody>');
 
