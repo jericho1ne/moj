@@ -119,7 +119,12 @@ var Events = {
 
                         // For artist, use a highlighted bg color if a fave
                         // style="background-color:' + expenseCategories[row.label].color + '"
-                        + '<td class="left"><span class="link artistInfo">' 
+                        + '<td class="left">' 
+                        + '<span class="link artistInfo" ' 
+                        + 'data-url="' +  events[i].url + '" '
+                        + 'data-artist="' + events[i].artist + '" '
+                        + 'data-venue="' + events[i].venue + '" '
+                        + '>' 
                         + events[i].artist + ''
                         + '</span></td>'
                         
