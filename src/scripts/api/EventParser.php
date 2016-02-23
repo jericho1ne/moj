@@ -25,6 +25,8 @@ class EventParser {
 		$today = date('Y-m-d');
 		$this->trrow_formatted = date('m.d.y', strtotime($today . "+1 days"));
 
+		echo $today;
+		
 		// TODO:  abstract final formatting logic, break up into different parsers
 		//	eg: Flavorpill, LA Weekly, Enclave LA, Songkick, etc
 		$this->parseUrl($url);			// build up array of live music events, save to events array

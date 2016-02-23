@@ -26,6 +26,15 @@ module.exports = {
 			]
 		}]
 	},
+	phpfiles: {
+		files: [{
+			dot: true,
+			src: [
+				'<%= cfg.dst %>/scripts/api/*.php',
+				'<%= cfg.dst %>/scripts/common/*.php'	
+			]
+		}]
+	},
 	cssfiles: {
 		files: [{
 			dot: true,

@@ -57,6 +57,8 @@ module.exports = {
 
 	phpfiles: {
 		files: [{
+			expand: true,
+			dot: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
@@ -67,12 +69,14 @@ module.exports = {
 	},// End copy:phpfiles
 
 	htmlfiles: {
+		expand: true,
+		dot: true,
+		cwd: '<%= cfg.src %>',
+		dest: '<%= cfg.dst %>',
 		files: [{
-			cwd: '<%= cfg.src %>',
-			dest: '<%= cfg.dst %>',
 			src: [
 				'**/*.html'
-			]	
+			]
 		}]// End copy:htmlfiles - files
 	}// End copy:htmlfiles
 };

@@ -19,24 +19,20 @@ if (isset($rawJson->timestamp)) {
 
 // Check JSON events file timestamp, 
 // only grab new data if stale AND the file is writable
-if ($hrsElapsed > 12 && is_writable($jsonFile)) {
+//if ($hrsElapsed > 12 && is_writable($jsonFile)) {
 	// Constructor automatically calls parseURL
 	$eventParser = new EventParser('http://thescenestar.typepad.com/shows/');
 
+	echo ">>>>>>>>>>>>";
 	// Format the data as JSON, save file in data directory
-	$json_events = $eventParser->getEventsJson();
-	$eventParser->saveJsonToFile('events', $jsonFile);
+	// $json_events = $eventParser->getEventsJson();
+	// $eventParser->saveJsonToFile('events', $jsonFile);
 
 	// Also print out to screen, to satisfy the $.ajax call
 	echo $json_events;
-}
+//}
 // Data still fairly recent, Use cached file
-else {
-	// TODO: trim data to only show from today's date onwards
-
-	// Print JSON data 
-	echo file_get_contents( $jsonFile );
-}
+// //}
 
 // Save to CSV (if necessary)
 // $eventParser->saveVenuesCsv("../../data/venues.csv");

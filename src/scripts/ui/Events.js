@@ -33,7 +33,7 @@ var Events = {
         var events = data.events;
 
         if (!events.length || typeof events === 'undefined') {
-            reject(Error("displayEvents did not receive any data ='()"));
+            return Error("displayEvents did not receive any data ='()");
         }
         else {
             /*  ----- events format ----

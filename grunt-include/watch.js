@@ -14,26 +14,26 @@ module.exports = {
 	// 	tasks: ['babel:test', 'test:watch']
 	// },
 	gruntfile: {
-		options: {livereload: true},
+		// options: {livereload: true},
 		files: ['Gruntfile.js'],
 		tasks: ['build']
 	},
 	cssfiles: {
-		options: {livereload: true},
+		// options: {livereload: true},
 		files: ['<%= cfg.src %>/styles/{,*/}*.{scss,sass}'],
 		tasks: [
 			'clean:cssfiles', 
 			'sass', 
 			'postcss', 
 			'cssmin', 
-			'copy:cssfiles', 
+			'copy:css=files', 
 			'filerev:cssfiles', 
 			'usemin', 
 			'htmlmin'
 		]
 	},
 	jsfiles: {
-		options: {livereload: true},
+		// options: {livereload: true},
 		files: [
 			'<%= cfg.src %>/index.html', 
 			'<%= cfg.src %>/scripts/ui/*', 
@@ -51,11 +51,11 @@ module.exports = {
 	},// End jsfiles subtask
 
 	phpfiles: {
-		options: {livereload: true},
+		// options: {livereload: true},
 		files: [
 			'<%= cfg.src %>/scripts/api/*.php', 
 			'<%= cfg.src %>/scripts/common/*.php', 
 		],
-		tasks: ['copy:phpfiles']
+		tasks: ['clean:phpfiles', 'copy:phpfiles']
 	}// End corefiles subtask
 };
