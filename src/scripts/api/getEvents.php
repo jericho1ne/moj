@@ -1,5 +1,7 @@
 <?php
 include_once('../common/common.php');
+require_once("db/__db_upd.php");
+require_once("db/__db_connex.php");
 include_once('EventParser.php');
 
 // require_once("db/__db_upd.php");
@@ -23,13 +25,28 @@ if (isset($rawJson->timestamp)) {
 	// Constructor automatically calls parseURL
 	$eventParser = new EventParser('http://thescenestar.typepad.com/shows/');
 
-	echo ">>>>>>>>>>>>";
+	echo ">>>>>>>>>>>><br>";
 	// Format the data as JSON, save file in data directory
 	// $json_events = $eventParser->getEventsJson();
+
+	$event = array(
+		"raw_date" => '2016-02-20',
+		"type" => 'rap show',
+		"artist" => 'J-Dilla! - Various Artists',
+		"venue" => "The Regent",
+		"title"  => 'Dilla Day 2.0',
+		"url" => 'wwww.regentthtre.com'
+	);
+
+	$result = $eventParser->saveToDatabase($dblink, $event);
+	echo $result;
+
 	// $eventParser->saveJsonToFile('events', $jsonFile);
 
-	// Also print out to screen, to satisfy the $.ajax call
-	echo $json_events;
+	// Also print out to screen, to satisfy the $.ajax from calling script
+	//pr($events);
+	// echo $json_events;
+
 //}
 // Data still fairly recent, Use cached file
 // //}
