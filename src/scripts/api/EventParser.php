@@ -145,10 +145,6 @@ class EventParser {
 				$venue = str_replace('"', '', $venue); 				// get rid of double quotes!
 				$venue = str_replace(', ', '-', $venue);
 				$venue = trim($venue);
-
-				$nice_date = date( "l M j", strtotime($ymd_date) );
-				$short_date = date( "D M j", strtotime($ymd_date) );
-
 				$venues[$count] = $venue;
 
 				$cal_date = strtotime($ymd_date).'000';
@@ -163,8 +159,6 @@ class EventParser {
 					array(
 						"raw_date"	=> $cal_date,	// 1377738000000
 						"ymd_date"	=> $ymd_date,	// 2020-12-01
-						"nice_date"	=> $nice_date,	// Saturday Jun 15
-						"short_date"=> $short_date,	// Sat Jun 15
 						"year"		=> $show_year,
 						"type"		=> "show",  		// TODO: find out if needed for Event Calendar??
 						"artist"	=> $artist,
@@ -304,54 +298,18 @@ class EventParser {
 		$this->checkFileStatus($file);
 		$text = "";
 		// dump header row first
-		$text .= 'raw_date,nice_date,artist,venue,show_url'."\r\n";
+		$text .= 'nice_date,artist,venue,show_url'."\r\n";
 
 		foreach($this->eventArray as $show) {
 			$text .= '"'.
-			$show['raw_date'].'","'.
 			$show["nice_date"].'","'.
-					$show['artist'].'","'.
-					$show['venue'].'","'.
-					$show['url'].'"'.
-					"\r\n";
+			$show['artist'].'","'.
+			$show['venue'].'","'.
+			$show['url'].'"'.
+			"\r\n";
 		}
 		//$text = html_entity_decode($text);
 		file_put_contents($file, $text);
-	}
-
-
-	/**********************************************************************************
-		saveEvent()
-		____
-	*********************************************************************************/
-	public function saveEventsToFile($e) {
-		$text = "";
-		// dump header row first
-		$text .= 'raw_date,nice_date,artist,venue,show_url'."\r\n";
-
-		pr($e);
-		echo '<hr>';
-		
-		if (0) {
-			// Prepare insert query
-			$statement = $dbLink->prepare(
-				"INSERT INTO events(raw_date, type, artist, venue, title, url) ".
-					"VALUES(:raw_date, :type, :artist, :venue, :title, :url) ".
-					"ON DUPLICATE KEY UPDATE url = :new_url");
-
-			$statement->execute(array(
-				"name" => $v_name,
-				"address" => $v_addy,
-				"city" => $v_city,
-				"zip"  => $v_zipc,
-				"lat" => $geoResult["payload"]["lat"],
-				"lon" => $geoResult["payload"]["lon"],
-				"lat2" => $geoResult["payload"]["lat"],
-				"lon2" => $geoResult["payload"]["lon"]
-			));// End statement array
-
-		}// End if all the data is ready to insert
-
 	}
 
 	/**

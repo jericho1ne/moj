@@ -121,10 +121,10 @@ var Events = {
             for (var i in events) {
                  var dateArray = events[i].short_date.split(" ");
 
-                if (prevRawDate !== events[i].raw_date) {
+                if (prevRawDate !== events[i].ymd_date) {
                     var $dateHeaderRow = $('<tr>')
                         .html(
-                            '<th class="date-header w100 text-align-right date-block-xl" data-sort="' + events[i].raw_date + '">'
+                            '<th class="date-header w100 text-align-right date-block-xl" data-sort="' + events[i].ymd_date + '">'
                                 + dateArray[0] +'</th>'
                             + '<th class="date-header">'
                             + '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
@@ -140,7 +140,7 @@ var Events = {
                 // Date | Artist | Venue
                 var $dataRow = $('<tr>')
                     .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
-                    .html('<td class="left" data-sort="' + events[i].raw_date + '">'
+                    .html('<td class="left" data-sort="' + events[i].ymd_date + '">'
                         + '<span class="opacity-30">' + events[i].short_date + '<span>'
                         + '</td>'  // ideally, embed ymd_date in a hidden *-data attrib
 
@@ -164,7 +164,7 @@ var Events = {
                 // Append individual event row
                 $dataTable.append($dataRow);
 
-                prevRawDate = events[i].raw_date;
+                prevRawDate = events[i].ymd_date;
                 rowCount ++;
             }
             // });// End eventsData.each
