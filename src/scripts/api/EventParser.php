@@ -9,6 +9,7 @@ class EventParser {
 	//
 	// PROPERTIES
 	//
+	private $dbLink;			// Gotta have legit db connection first!
 	private $venueArray = array();
 	private $eventArray = array();
 	private $today_formatted;    // formatted as Scenestar likes it
@@ -24,18 +25,21 @@ class EventParser {
 	*	save incoming URL, scrape some live show data
 	* 	@param string $url
 	**/
-	public function __construct($url) {
-		// Get today and tomorrow's date with leading zeros for month and day
+	public function __construct($database_link) {
+		// Save db link
+		$this->dbLink = $database_link;
+
+		// Get today's date w/ leading zeros for month and day
 		$this->today_formatted = date('m.d.y');
+		
+		// Get tomorrow's date w/ leading zeros for month and day
 		$today = date('Y-m-d');
 		$this->trrow_formatted = date('m.d.y', strtotime($today . "+1 days"));
 
-		echo $today;
-
 		// TODO:  abstract final formatting logic, break up into different parsers
 		//	eg: Flavorpill, LA Weekly, Enclave LA, Songkick, etc
-		$this->parseUrl($url);			// build up array of live music events, save to events array
-		return $this->eventArray;
+		// 			// build up array of live music events, save to events array
+		// return $this->eventArray;
 	}
 
 	/**********************************************************************************
@@ -51,10 +55,10 @@ class EventParser {
 	}
 
 	/**********************************************************************************
-		parseUrl( $url )
+		parseScenestarUrl( $url )
 		fill in the eventArray & venueArray
 	*********************************************************************************/
-	public function parseUrl($url) {
+	public function parseScenestarUrl($url) {
 		// Search for shows beginning with today's date
 		$searchDate = $this->today_formatted;
 
@@ -110,14 +114,14 @@ class EventParser {
 				}
 
 				// Date gets formatted
-				$fmt_date = "20" . $dateArray[2] . "-" . $dateArray[0] . "-" . $dateArray[1];
+				$ymd_date = "20" . $dateArray[2] . "-" . $dateArray[0] . "-" . $dateArray[1];
 				$show_year = "20" . $dateArray[2];
 				// stop if over our set date boundary (1 or 2 weeks ahead, etc)
-				if ($future_max_date < $fmt_date) {
+				if ($future_max_date < $ymd_date) {
 					break;
 				}
 
-				$month = date("F", strtotime($fmt_date));
+				$month = date("F", strtotime($ymd_date));
 
 				// Extract show URL (hint: '<a href=' >> 'target="_blank"')
 				$url_start_pos = strrpos($val, '<a href=');
@@ -142,23 +146,23 @@ class EventParser {
 				$venue = str_replace(', ', '-', $venue);
 				$venue = trim($venue);
 
-				$nice_date = date( "l M j", strtotime($fmt_date) );
-				$short_date = date( "D M j", strtotime($fmt_date) );
+				$nice_date = date( "l M j", strtotime($ymd_date) );
+				$short_date = date( "D M j", strtotime($ymd_date) );
 
 				$venues[$count] = $venue;
 
-				$cal_date = strtotime($fmt_date).'000';
+				$cal_date = strtotime($ymd_date).'000';
 
 				// ********** DEBUG ******
 				// Uncomment line below to see what the f is wrong
-				// echo $fmt_date . " " . $artist . " @ " . $venue ."<br>";
+				// echo $ymd_date . " " . $artist . " @ " . $venue ."<br>";
 
 				// Save all of our event info to the private class property (eventArray)
 				array_push(
 					$this->eventArray, 		
 					array(
 						"raw_date"	=> $cal_date,	// 1377738000000
-						"fmt_date"	=> $fmt_date,	// 2020-12-01
+						"ymd_date"	=> $ymd_date,	// 2020-12-01
 						"nice_date"	=> $nice_date,	// Saturday Jun 15
 						"short_date"=> $short_date,	// Sat Jun 15
 						"year"		=> $show_year,
@@ -178,10 +182,10 @@ class EventParser {
 		arsort( $sortedVenues );
 		$this->venueArray = $sortedVenues;
 		// return $json_data;			// TODO:  should return TRUE (if eventsArray was hydrated) or FALSE (if error)
-	}// End method parseUrl
+	}// End method parseScenestarUrl
 
 	/**********************************************************************************
-		saveEventsToFile( filename )
+		saveJsonToFile( filename )
 		dump JSON data to a file
 	*********************************************************************************/
 	public function saveJsonToFile($which, $file) {
@@ -210,11 +214,50 @@ class EventParser {
 
 	/**********************************************************************************
 		getEvents()
-		return event array and print to screen
+		return event array
 	*********************************************************************************/
 	public function getEvents() {
 		// echo "<pre>"; print_r($this->eventArray); echo "</pre>";
 		return $this->eventArray;
+	}
+
+	/**********************************************************************************
+		getEventsFromDb()
+		return events from database
+	*********************************************************************************/
+	public function getEventsFromDb($format = '', $cutoffDate = '') {
+		if ($this->dbLink) {
+
+			$query = "SELECT *, DATE_FORMAT(ymd_date,'%W %M %D') AS nice_date, " . 
+				"DATE_FORMAT(ymd_date,'%a %b %e') AS short_date " . 
+				"FROM events ";
+
+			if ($cutoffDate != '') {
+				$query .= ' WHERE ymd_date >= :ymd_date';
+			}
+
+			// Prepare SELECT query
+			$statement = $this->dbLink->prepare($query);
+
+			if ($cutoffDate != '') {
+				$statement->execute(array(':ymd_date' => $cutoffDate));
+			}
+			else {
+				$statement->execute();
+			}
+
+			$dataRows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+			//		DEBUG
+			// $statement->debugDumpParams();
+
+			if ($format === 'json') {
+				return json_encode($dataRows);
+			}
+			else {
+				return $dataRows;
+			}
+		}// End if db link is set
 	}
 
 	/**********************************************************************************
@@ -291,7 +334,7 @@ class EventParser {
 		
 		if (0) {
 			// Prepare insert query
-			$statement = $dblink->prepare(
+			$statement = $dbLink->prepare(
 				"INSERT INTO events(raw_date, type, artist, venue, title, url) ".
 					"VALUES(:raw_date, :type, :artist, :venue, :title, :url) ".
 					"ON DUPLICATE KEY UPDATE url = :new_url");
@@ -311,36 +354,53 @@ class EventParser {
 
 	}
 
+	/**
+	 * saveEventsToDb()
+	 */
+	public function saveEventsToDb($dbLink) {
+		foreach ($this->eventArray as $key => $eachEvent) {
+			$this->saveSingleEventToDb($dbLink, $eachEvent);
+		}
+	}
+
 	/**********************************************************************************
 		saveToDatabase(event_array)
 		insert only new/unique records
 	*********************************************************************************/
-	public function saveToDatabase($dblink, $event) {
+	public function saveSingleEventToDb($dbLink, $event) {
 		// TODO: insert into db if record isn't already present; could be very taxing
 		// return ( true if all good, false if db insert failed );
 
 		pr($event);
 
 		// Prepare insert query
-		$statement = $dblink->prepare(
-			"INSERT INTO events(raw_date, type, artist, venue, title, url) ".
-   			"VALUES(:raw_date, :type, :artist, :venue, :title, :url) ".
-   			"ON DUPLICATE KEY UPDATE url = :url2");
+		$statement = $dbLink->prepare(
+			"INSERT INTO events(ymd_date, type, artist, venue, title, url) ".
+   			"VALUES(:ymd_date, :type, :artist, :venue, :title, :url) ".
+   			"ON DUPLICATE KEY UPDATE title = :title2, url = :url2");
 
-		// Map statement column names to event that was passed in
-		$result = $statement->execute(array(
-			"raw_date" => $event['raw_date'],
+		$eventObject = array(
+			"ymd_date" => $event['ymd_date'],
 			"type" => $event['type'],
 			"artist" => $event['artist'],
 			"venue" => $event['venue'],
-			"title"  => $event['title'],
+			"title" => $event['title'],
+			"title2" => $event['title'],
 			"url" => $event['url'],
 			"url2" => $event['url']
-		));
+		);
 
-		$statement->debugDumpParams();
-		
-		return $result;
+		// Map statement column names to event that was passed in
+		$result = $statement->execute($eventObject);
+
+		// echo "<pre>";
+		// $statement->debugDumpParams();
+		// echo "</pre>";
+
+		return array(
+			"result" => $result, 
+			"errorCode" => $statement->errorCode()
+		);
 
 	}
 }// End class Events

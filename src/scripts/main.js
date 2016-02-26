@@ -137,27 +137,32 @@ $(document).ready(function() {
     // Get list of shows, display them, set click listeners on each Artist
     //
     Events.getEvents(10)
-        // returns $.ajax
+        // Return events $.ajax request
         .then(function(data) {
+            // console.log(data);
+
+            // Parse the data into JSON object
+            var eventData = JSON.parse(data);
+
+            // Save data to local storage
+            UserState.events = eventData.events;
+
             // JSON data will go into shows-content div
-            Events.displayEvents(JSON.parse(data), 'shows-content');
+            Events.displayEvents(eventData, 'shows-content');
         })
-        .then(function(){
-            // Add old school 
+        // Add old school click listener on parent div (will bubble up)
+        .then(function(){  
             // https://davidwalsh.name/event-delegate
             document.getElementById('shows-content').addEventListener("click", function(e) {
                 // If any child element was clicked, grab the artist name
                 if (e.target && e.target.innerHTML !== '') {
-                    window.thing = e.target;
-
-
                     // If the click was on an actual link, 
-                    // lookup the artist name, sending along the entire selector
+                    //  lookup the artist name, sending along the entire selector
                     if ($(e.target).data('artist') !== undefined) {
                         lookupArtist(e.target);
                     }
-                }
+                }// End if event.target and artist name not blank
             });// End addEventListener
-        });
+        });// End add old school click listener
 
 });// End on Document Load

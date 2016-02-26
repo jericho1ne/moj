@@ -4,6 +4,8 @@
  **/
 
   var UserState = {
+    // DATA CACHING
+    events: [],
     // PROPERTIES
     faveVenues: [{id: 25, name: 'Echoplex'}, {id: 16, name: 'The Troubadour'} ],
     nearbyVenues: [],

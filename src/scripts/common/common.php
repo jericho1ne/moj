@@ -1,4 +1,5 @@
 <?php
+// SET DEFAULTS
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 date_default_timezone_set('America/Los_Angeles');
@@ -6,8 +7,6 @@ date_default_timezone_set('America/Los_Angeles');
 // Let's not forget the constants
 require_once("__constants.php");
 
-// And the geocoder
-require_once("../api/Geocoder.php");
 
 //------------------------------------------------------------------------------
 //  Name:     set

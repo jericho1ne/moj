@@ -9,6 +9,7 @@ module.exports = {
 		files: [{
 			expand: true,
 			dot: true,
+			mode: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
@@ -29,6 +30,7 @@ module.exports = {
 		files: [{
 			expand: true,
 			dot: true,
+			mode: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
@@ -44,6 +46,7 @@ module.exports = {
 		files: [{
 			expand: true,
 			dot: true,
+			mode: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
@@ -59,6 +62,7 @@ module.exports = {
 		files: [{
 			expand: true,
 			dot: true,
+			mode: true,
 			cwd: '<%= cfg.src %>',
 			dest: '<%= cfg.dst %>',
 			src: [
@@ -71,6 +75,7 @@ module.exports = {
 	htmlfiles: {
 		expand: true,
 		dot: true,
+		mode: true,
 		cwd: '<%= cfg.src %>',
 		dest: '<%= cfg.dst %>',
 		files: [{

@@ -465,9 +465,11 @@ img.artist-profile-pic {
 	overflow: scroll;
 }
 
-/*
-		override datatables.min.css + related classes
-														*/
+/*	override datatables.min.css + related classes			*/
+table.dataTable {
+	padding-top: 20px;
+}
+
 input[type=search] {
 	height: 30px;
 	width: 160px;
@@ -527,10 +529,10 @@ table.dataTable tbody td {
 }
 
 table.dataTable .date-header {
+	padding: 18px 6px 12px 1px;
 	background-color: $gray-light !important;
-	padding: 8px;
 	left: -6px;
-	line-height: .8;
+	line-height: .9;
 }
 
 .text-align-left {

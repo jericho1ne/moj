@@ -12,7 +12,7 @@ var Events = {
     eventsJSON: 'events.json',
 
     apiScriptsBase: 'scripts/api/',
-    eventsScript: 'getEvents.php',
+    eventsScript: 'getEventsJson.php',
 
     $eventData: {},
     maxVideosToShow: 4,
@@ -26,19 +26,49 @@ var Events = {
     },// End getEventData
 
     /**
+     * getEvents
+     * list of events, bounded by certain input parameters
+     */
+    getEvents: function(maxResults) {
+        // TODO:  limit on maxResults
+        var _this = this;
+
+        // $.ajax method will call resolve() on the deferred it returns
+        // when the request completes successfully
+        return $.ajax({
+                type: 'GET',
+                url: _this.apiScriptsBase + _this.eventsScript,
+                async: false,
+                // Success callback will fire even when coupled with an external $.done
+                success : function(data) {  // data, status, jqXHR
+                    // Save current artist data in global cache
+                    CACHE['eventData'] = data;
+                    return(data);
+                },
+                // if the request fails, deferred.reject() is called
+                error : function(code, message){
+                    // Handle error here
+                    // TODO:  change to jquery UI modal that autofades and has (X) button
+                    return Error("Unable to load Event data =(");
+                }
+        });// End getEvents $.ajax
+    },// End getEvents
+
+    /**
      * displayEvents
      * display events inside the div id we've passed in
      */
     displayEvents: function(data, divId) {
-        var events = data.events;
+        if (data.success) {
+            var events = data.events;
+        }
 
         if (!events.length || typeof events === 'undefined') {
             return Error("displayEvents did not receive any data ='()");
         }
         else {
             /*  ----- events format ----
-                date: "1446361200000"
-                fmt_date: "2015-11-01"
+                ymd_date: "2016-01-31"
                 nice_date: "Sunday Nov 1"
                 short_date: "Sun Nov 1"
                 title: "Hanson @ Fonda Theatre"
@@ -89,10 +119,7 @@ var Events = {
             // Loop through incoming data
             // $(eventsData).each(function() {
             for (var i in events) {
-                // DEBUG
-                // if (rowCount > 100) break;
-
-                var dateArray = events[i].short_date.split(" ");
+                 var dateArray = events[i].short_date.split(" ");
 
                 if (prevRawDate !== events[i].raw_date) {
                     var $dateHeaderRow = $('<tr>')
@@ -115,7 +142,7 @@ var Events = {
                     .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
                     .html('<td class="left" data-sort="' + events[i].raw_date + '">'
                         + '<span class="opacity-30">' + events[i].short_date + '<span>'
-                        + '</td>'  // ideally, embed fmt_date in a hidden *-data attrib
+                        + '</td>'  // ideally, embed ymd_date in a hidden *-data attrib
 
                         // For artist, use a highlighted bg color if a fave
                         // style="background-color:' + expenseCategories[row.label].color + '"
@@ -179,36 +206,6 @@ var Events = {
         }// End else data received
        
     },// End displayEvents
-    /**
-     * getEvents
-     * list of events, bounded by certain input parameters
-     */
-    getEvents: function(maxResults) {
-        // TODO:  limit on maxResults
-        var _this = this;
-
-        // $.ajax method will call resolve() on the deferred it returns
-        // when the request completes successfully
-        return new Promise(function(resolve, reject) { 
-            $.ajax({
-                type: 'GET',
-                url: _this.apiScriptsBase + _this.eventsScript,
-                async: false,
-                // Success callback will fire even when coupled with an external $.done
-                success : function(data) {  // data, status, jqXHR
-                    // Save current artist data in global cache
-                    CACHE['eventData'] = data;
-                    resolve(data);
-                },
-                // if the request fails, deferred.reject() is called
-                error : function(code, message){
-                    // Handle error here
-                    // TODO:  change to jquery UI modal that autofades and has (X) button
-                    reject("Unable to load Event data =(");
-                }
-            });// End getEvents $.ajax
-        });
-    },// End getEvents
 
     //
     // Artist Bio, Info, Images, and Top tracks
