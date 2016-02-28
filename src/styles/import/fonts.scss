@@ -1,20 +1,5 @@
 /*  Font Face declarations and Font sizes */
 @font-face {
-	font-family: Ruda-Regular;
-	src: url("fonts/ruda/Ruda-Regular.ttf"),
-		local("Helvetica Neue Bold"),
-		local("HelveticaNeue-Bold");
-}
-
-@font-face {
-	font-family: Ruda-Black;
-	src: 
-		url("fonts/ruda/Ruda-Black.ttf"),
-		local("Helvetica Neue Bold"),
-		local("HelveticaNeue-Bold");
-}
-
-@font-face {
     font-family: 'Nexa';
     src: url('fonts/nexa/Nexa_Light.eot');
     src: url('fonts/nexa/Nexa_Light.eot?#iefix') format('embedded-opentype'),
@@ -28,8 +13,8 @@
 
 $font-regular: "Nexa", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-$font-xs: 8px;
-$font-sm: 12px;
+$font-xs: 10px;
+$font-sm: 14px;
 $font-md: 18px;
 $font-lg: 24px;
 $font-xl: 44px;

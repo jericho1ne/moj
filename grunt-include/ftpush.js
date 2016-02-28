@@ -34,7 +34,7 @@ module.exports = {
 			authKey: 'apisnetworks-key'
 		},
 		src: '<%= cfg.dst %>',
-		dest: '/var/www/html/middleofjune/',
+		dest: '/var/www/html/middleofjune/app',
 		exclusions: [
 			'scripts/vendor/**/*',
 			'styles/fa/**/*',

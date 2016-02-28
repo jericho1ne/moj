@@ -101,11 +101,10 @@ body {
 }
 
 .link, .link a {
+	@include buildBoldFont($font-sm);
 	background: none;
-	padding: 3px;
 	border: none;
 	color: #698ED0 !important;
-	font-weight: bold;
 }
 
 .link:hover {
@@ -403,8 +402,7 @@ img.artist-profile-pic {
 }
 
 .ui-dialog.error-dialog {
-	font-family: "Ruda-Regular";
-	font-size: 14px;
+	@include buildRegularFont($font-sm);
 }
 
 // this needs room to breathe, and allow for vertical scroll!
@@ -412,8 +410,7 @@ img.artist-profile-pic {
 	left: 8px !important;
 	top: 8px !important;
 	background-color: $almost-white !important;
-	font-family: "Ruda-Regular";
-	font-size: 12px;
+	@include buildRegularFont($font-sm);
 	overflow: visible;
 	min-height: 80% !important;
 	min-width: 90% !important;
@@ -460,7 +457,6 @@ input[type=search] {
 	background: #eee;
 	cursor: pointer;
 	outline: 0;
-	font-family: "Ruda-Regular";
 	color: #999;
 	font-size: 14px;
 	-webkit-box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
@@ -482,7 +478,6 @@ select {
 	border: 1px solid #eee;
 	outline:none;
 	display: inline-block;
-	font-family: "Ruda-Regular";
 	color: #999;
 	font-size: 14px;
 	-webkit-appearance:none;
@@ -504,7 +499,7 @@ select {
 }
 
 table.dataTable tbody td {
-	padding: 10px !important;
+	padding: 6px 10px 6px 10px!important;
 	margin: 2px !important;
 }
 
