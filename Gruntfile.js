@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 	// cfgurable paths
 	var cfg = {
 		src: 'src',
-		dst: 'dist'
+		dst: 'app'
 	};
 
 	// Define the cfguration for all the tasks
@@ -131,7 +131,7 @@ module.exports = function (grunt) {
 				},
 				// cache: 'sftpCache.json',
 				src: '<%= cfg.dst %>',
-				dest: '/var/www/html/middleofjune/dist/',
+				dest: '/var/www/html/middleofjune/dev/',
 				exclusions: [
 					'<%= cfg.dst %>/scripts/vendor/**/*',
 					'<%= cfg.dst %>/styles/fa/**/*',
@@ -196,18 +196,6 @@ module.exports = function (grunt) {
 				}]
 			}// End htmlmin:dist
 		},// End task htmlmin
-
-		// Server w/ livereload
-		express: {    
-			all:{
-  				options:{
-  					port: 3000,
-  					hostname: 'localhost',
-  					bases: ['<%= cfg.dist %>'],
-  					livereload:true	
-  				}
-  			}// End express:all
-		},// End task express
 
 		// Run some tasks in parallel to speed up build process
 		concurrent: {
@@ -275,9 +263,6 @@ module.exports = function (grunt) {
 		'htmlmin'
 	]);// End register task :: build
 
-	grunt.registerTask(
-		'server',['express', 'watch']
-	);
 
 	grunt.registerTask('pushtodev', ['build', 'ftpush:dev']);
 

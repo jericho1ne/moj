@@ -230,6 +230,9 @@ class EventParser {
 				$query .= ' WHERE ymd_date >= :ymd_date';
 			}
 
+			// For now, add a secondary order by on last modified date 
+			$query .= ' ORDER BY ymd_date ASC, updated DESC';
+
 			// Prepare SELECT query
 			$statement = $this->dbLink->prepare($query);
 

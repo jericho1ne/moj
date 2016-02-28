@@ -5,7 +5,7 @@
 scripts/api/db/*
 __*
 node_modules/
-dist/
+app/
 data/
 vendor/composer/*
 vendor/autoload*

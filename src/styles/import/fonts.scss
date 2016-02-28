@@ -1,15 +1,37 @@
+/*  Font Face declarations and Font sizes */
+@font-face {
+	font-family: Ruda-Regular;
+	src: url("fonts/ruda/Ruda-Regular.ttf"),
+		local("Helvetica Neue Bold"),
+		local("HelveticaNeue-Bold");
+}
 
-// Ruda available in: 400,700,900 weight
-$font-regular: "Ruda-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$font-bold: "Ruda-Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-face {
+	font-family: Ruda-Black;
+	src: 
+		url("fonts/ruda/Ruda-Black.ttf"),
+		local("Helvetica Neue Bold"),
+		local("HelveticaNeue-Bold");
+}
+
+@font-face {
+    font-family: 'Nexa';
+    src: url('fonts/nexa/Nexa_Light.eot');
+    src: url('fonts/nexa/Nexa_Light.eot?#iefix') format('embedded-opentype'),
+         url('fonts/nexa/Nexa_Light.woff2') format('woff2'),
+         url('fonts/nexa/Nexa_Light.woff') format('woff'),			
+         url('fonts/nexa/Nexa_Light.ttf') format('truetype'),
+         url('fonts/nexa/Nexa_Light.svg#fonts/nexa/Nexa_Lightregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+$font-regular: "Nexa", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 $font-xs: 8px;
 $font-sm: 12px;
 $font-md: 18px;
 $font-lg: 24px;
-$font-xl: 48px;
+$font-xl: 44px;
 
-$font-weight-400: 400;
-$font-weight-700: 700;
-$font-weight-900: 900;
 // END FONTS

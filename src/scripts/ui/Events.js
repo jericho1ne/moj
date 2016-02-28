@@ -101,7 +101,7 @@ var Events = {
                     .html('<tr><th class="left event-date">date</th>'
                         + '<th class="left event-artist">artist</th>'
                         + '<th class="left event-venue">venue</th>'
-                        + '<th class="left">tix</th>'
+                        + '<th class="left w80">tix</th>'
                         + '</tr>');
 
 
@@ -114,34 +114,34 @@ var Events = {
             // Initialize once, reuse inside upcoming loop
             var row = '';
             var rowCount = 0;
-            var prevRawDate = '';
+            var prevDate = '';
             
             // Loop through incoming data
-            // $(eventsData).each(function() {
             for (var i in events) {
-                 var dateArray = events[i].short_date.split(" ");
-
-                if (prevRawDate !== events[i].ymd_date) {
+                var dateArray = events[i].short_date.split(" ");
+                
+                // If the date has changed, it's time for the spacer row with large text
+                if (String(prevDate.trim()) != String(events[i].ymd_date.trim())) {
+                    // Create new date row
                     var $dateHeaderRow = $('<tr>')
                         .html(
-                            '<th class="date-header w100 text-align-right date-block-xl" data-sort="' + events[i].ymd_date + '">'
+                            '<th class="date-header w80 text-align-right date-block-xl" data-sort="' + events[i].ymd_date + '">'
                                 + dateArray[0] +'</th>'
                             + '<th class="date-header">'
                             + '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
-                            + '<span class="text-align-left date-block-lg">' + dateArray[2] + '</span>'
-                            +'</th>'
+                            + '<span class="text-align-left date-block-md">' + dateArray[2] + '</span>'
+                            + '</th>'
                             + '<th class="date-header"></th><th class="date-header"></th>');
 
                     // Append individual date header row
                     $dataTable.append($dateHeaderRow);
-                    // displayDate += '&nbsp;';
-                }
+                }// End if new date row is to be display
 
                 // Date | Artist | Venue
                 var $dataRow = $('<tr>')
                     .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
-                    .html('<td class="left" data-sort="' + events[i].ymd_date + '">'
-                        + '<span class="opacity-30">' + events[i].short_date + '<span>'
+                    .html('<td class="text-align-right w100" data-sort="' + events[i].ymd_date + '" nowrap>'
+                        + '<span class="opacity-40">' + events[i].short_date + '<span>'
                         + '</td>'  // ideally, embed ymd_date in a hidden *-data attrib
 
                         // For artist, use a highlighted bg color if a fave
@@ -158,17 +158,17 @@ var Events = {
                         + '<td class="left">' + events[i].venue + '</td>'
                         
                         + '<td class="left"><a href="' + events[i].url + '">' 
-                        + '<i class="fa fa-ticket fa-4"></i>' + '</a></td>'
+                        + '<i class="fa fa-ticket"></i>' + '</a></td>'
                         + '</tr>' );
 
                 // Append individual event row
                 $dataTable.append($dataRow);
 
-                prevRawDate = events[i].ymd_date;
+                prevDate = events[i].ymd_date;
                 rowCount ++;
             }
-            // });// End eventsData.each
-            
+
+            // End the table body            
             $dataTable.append('</tbody>');
 
             // The final append to DOM
@@ -187,7 +187,7 @@ var Events = {
                     ],
                     "autoWidth": true,
                     "language": {
-                        "lengthMenu": "show _MENU_",
+                        "lengthMenu": "show _MENU_ events",
                         "sSearch": "search",
                         "zeroRecords": "Nothing found.",
                         "info": "",  // Default:  "Page _PAGE_ of _PAGES_",

@@ -51,9 +51,7 @@ module.exports = {
 			dest: '<%= cfg.dst %>',
 			src: [
 				'*.html',
-				'scripts/*.js',
-				'scripts/common/*.js',
-				'scripts/ui/*.js'
+				'scripts/**/*.js'
 			]
 		}]// End copy:jsfiles - files
 	},// End copy:jsfiles
