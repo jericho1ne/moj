@@ -2,6 +2,9 @@
 .absolute {
     position: absolute;
 }
+.relative  {
+    position: relative;
+}
 .hidden {
     display: none;
 }
@@ -59,12 +62,25 @@
 .top200 {
     top: 200px;
 }
+
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.margin-top-20 {
+    margin-top: 20px;
+}
+
 .margin-bottom-10 {
     margin-bottom: 10px;
 }
 
 .padtop10 {
     padding-top: 10px;
+}
+
+.padbot20 {
+    padding-bottom: 20px;
 }
 
 

@@ -1,0 +1,64 @@
+<div id="artistModal" class="modal" role="dialog" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<!-- Title -->
+			<div class="modal-header">
+				<button type="button" data-dismiss="modal" class="close">
+					<i id="closeModalBtn" class="fa fa-close"></i>
+				</button>
+				<h4 class="modal-title"></h4>
+			</div>
+
+			<!-- Body -->
+			<div class="modal-body container-fluid">
+
+				<!-- Photo & Bio row -->
+				<div id="artist-info" class="row">
+
+					<div id="artist-photo" class="col-md-4 w200">
+						<span class="loading opacity-80">
+							<i class="fa fa-refresh fa-spin fa-1x"></i>
+						</span>
+					</div>
+					<div id="artist-bio" class="col-md-8 margin-top-10">
+						<span class="loading opacity-80">
+							<i class="fa fa-refresh fa-spin fa-1x"></i>
+						</span>
+					</div>
+
+				</div>
+
+				<!-- Event Link row -->
+				<div class="margin-top-20">
+					<div id="artist-event" class="col-md-12 jumbotron"></div>
+				</div>
+
+				<!-- Top Songs row -->
+				<div id="artist-tracks" class="row margin-top-10 h100">
+				</div>
+
+			</div>
+
+			<!-- Footer -->
+			<div class="modal-footer">	
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Close
+				</button>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function() {
+	$('#artistModal').appendTo("body");
+	$("#artistModal").on('hidden.bs.modal', function () {
+		$(this).data('bs.modal', null);
+		clearDiv('artist-tracks', true);
+		clearDiv('artist-photo', true);
+		clearDiv('artist-bio', true);
+	});
+});
+</script>

@@ -147,13 +147,17 @@ var Events = {
                         // For artist, use a highlighted bg color if a fave
                         // style="background-color:' + expenseCategories[row.label].color + '"
                         + '<td class="left">' 
+                        // + '<a href="#" data-toggle="modal">'
                         + '<span class="link artistInfo" ' 
                         + 'data-url="' +  events[i].url + '" '
                         + 'data-artist="' + events[i].artist + '" '
                         + 'data-venue="' + events[i].venue + '" '
+                        + 'data-nicedate="' + events[i].nice_date + '" '
                         + '>' 
                         + events[i].artist + ''
-                        + '</span></td>'
+                        + '</span>'
+                        // + '</a>'
+                        + '</td>'
                         
                         + '<td class="left">' + events[i].venue + '</td>'
                         
@@ -305,18 +309,18 @@ var Events = {
                     + '<span>';
             }
 
-            // Clear existing content        
-            $('#artist-photo').html();
+            // $('#artist-photo').html();
             $('#artist-bio').html();
             $('#artist-tracks').html();
 
             // photoContainer = artist photo + name caption
-            $photoCaption = $('<h3>')
-                .addClass('photo-caption')
+            $photoCaption = $('<span>')
+                .addClass('photo-caption absolute')
                 .html(artist.name);
 
             // Set the img tag    
-            $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic">');
+            $('#artist-photo').addClass('relative');
+            $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic ">');
             $('#artist-photo').append($photoCaption);
 
             // Append the artist bio text

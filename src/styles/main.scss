@@ -7,6 +7,7 @@ $btn-pad: 12px 8px;
 $div-width: "5%";
 $div-pad: 30px;
 
+$pad-10: 10px;
 $pad-20: 20px;
 $pad-40: 40px;
 $pad-60: 60px;
@@ -54,7 +55,7 @@ body {
 	background-image: url("../media/images/sax.png");
 	background-repeat: no-repeat;
 	right: 12%;
-	opacity: 0.28;
+	opacity: 0;
 	background-size: 200px 200px;
 	width: 200px;
 	height: 200px;
@@ -88,7 +89,7 @@ body {
 }
 
 .fa-ticket {
-	font-size: 2.5em !important;
+	font-size: 2.15em !important;
 	opacity: 0.7;
 }
 
@@ -114,19 +115,30 @@ body {
 }
 
 .large-text {
-	@include buildRegularFont($font-xl);
+	@include buildRegularFont($font-lg);
+	color: #fff;
 	line-height: 1.2;
 	margin: 20px auto 20px auto;
-	padding: $pad-40;
-	letter-spacing: -2px;
-	background-color: rgba(200, 200, 200, 0.3);
+	padding: 14px;
+	letter-spacing: -1px;
 	@include border-radius(6px);
 }
 
 .medium-text {
 	@include buildRegularFont($font-md);
 	line-height: 1.2;
+	padding: $pad-10;
 	margin: 20px auto 20px auto;
+}
+
+.subtitle {
+	@include buildRegularFont($font-sm);
+	margin-top: -35px;
+	color: $gray-mid;
+}
+
+.bg-dk-gray {
+	background-color: $gray-dark;
 }
 
 /*-------------------- Column styles -------------------*/
@@ -161,13 +173,13 @@ body {
 	margin-left: 0 !important;
 	margin-right: 0 !important;
 }
-.row {
-	margin: 0 6px;
-	max-width: none;
-	width: auto;
-	margin-left: 0 !important;
-	margin-right: 0 !important;
-}
+// .row {
+// 	margin: 0 6px;
+// 	max-width: none;
+// 	width: auto;
+// 	margin-left: 0 !important;
+// 	margin-right: 0 !important;
+// }
 
 /*-------------------- div IDs -------------------*/
 #map {
@@ -324,12 +336,14 @@ body {
 /*------------- Artist Video Clips  -----------*/
 .vid-list {
 	display: inline-block;
+	padding: 0;
+    list-style-type: none;
 }
 
 .vid-clip-wrapper {
 	position: relative;
 	display: inline-block;
-	padding: 0px 6px 6px 0px;
+	padding: 0px 6px 2px 0px;
 }
 
 .vid-clip {
@@ -358,11 +372,11 @@ body {
 
 /*------------------- Artist info  -----------*/
 #artist-info {
-	overflow: auto;
+	min-height: 240px;
 }
-
 img.artist-profile-pic {
-	border-radius: 0px;
+	width: 236px;
+	padding: 1px;
 	border: 1px solid #333;
 }
 .photo-container {
@@ -372,11 +386,12 @@ img.artist-profile-pic {
 }
 
 .photo-caption {
+	@include buildRegularFont($font-md);
 	color: #fff;
 	position: absolute;
-	bottom: 10px;
+	bottom: 6px;
 	background: rgba(0, 0, 0, 0.5);
-	padding: 20px;
+	padding: 6px 10px 6px 10px;
 	left: 12px;
 }
 .scroll-y {
@@ -384,45 +399,32 @@ img.artist-profile-pic {
 }
 
 /*------------------- Error popup / modal dialog -----------*/
-#closeModalBtn {
-	display: inline;
-	position: relative;
-	@include border-radius(3px);
-	top: 6px;
-	left: -4px;
-	padding: 5px 8px 5px 8px;
-	background-color: #F0F0F0;
-	border: 1px solid #666;
-	opacity: 0.92;
-	z-index: 20;
-}
+// .ui-dialog .ui-dialog-content {
+// 	padding: 8px;
+// }
 
-.ui-dialog .ui-dialog-content {
-	padding: 8px;
-}
+// .ui-dialog.error-dialog {
+// 	@include buildRegularFont($font-sm);
+// }
 
-.ui-dialog.error-dialog {
-	@include buildRegularFont($font-sm);
-}
+// // this needs room to breathe, and allow for vertical scroll!
+// .ui-dialog.info-dialog {
+// 	left: 8px !important;
+// 	top: 8px !important;
+// 	background-color: $almost-white !important;
+// 	@include buildRegularFont($font-sm);
+// 	overflow: visible;
+// 	min-height: 80% !important;
+// 	min-width: 90% !important;
+// }
 
-// this needs room to breathe, and allow for vertical scroll!
-.ui-dialog.info-dialog {
-	left: 8px !important;
-	top: 8px !important;
-	background-color: $almost-white !important;
-	@include buildRegularFont($font-sm);
-	overflow: visible;
-	min-height: 80% !important;
-	min-width: 90% !important;
-}
+// .ui-dialog-content.ui-widget-content {
+// 	width: auto !important;
+// }
 
-.ui-dialog-content.ui-widget-content {
-	width: auto !important;
-}
-
-.ui-dialog-titlebar {
-	display: none;
-}
+// .ui-dialog-titlebar {
+// 	display: none;
+// }
 
 .event-date {
 	min-width: 100px;

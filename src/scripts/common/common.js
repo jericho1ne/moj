@@ -24,6 +24,15 @@ function stripSpaces(textString) {
     return textString.toLowerCase().replace(/\W+/g,"+");
 }
 
+function clearDiv(divId, loading) {
+  $('#' + divId).html('');
+  if (loading) {
+    $('#' + divId).html('<span class="col-md-12 loading opacity-80">'+
+      '<i class="fa fa-refresh fa-spin fa-1x"></i>' +
+      '</span>');
+  }
+}
+
 
 /**
  * getDistance
