@@ -225,7 +225,6 @@ var Events = {
         // console.log(CACHE[strToLowerNoSpaces(artistName)]);
        
         //var promise = CACHE[strToLowerNoSpaces(artistName)];
-        //if (!promise) {
         return $.ajax({
             type: 'POST',
             url: 'http://ws.audioscrobbler.com/2.0/',
@@ -258,73 +257,85 @@ var Events = {
      * appendArtistInfo :: display artist info in DOM
      */
     appendArtistInfo: function (divId, data) {
-        // Create and return a promise object
-            // Figure out whether data is clean or not
+        window.data = data;
+        
+        // Figure out exactly what data is available
         var noInfoOnArtist = (data.error === 6 ? true : false);
-      
-        // TODO: Check for existence of photo and bio separately
 
         // Display some placeholder text and image
         if (noInfoOnArtist) {
             console.log(" ERROR 6: No info on artist. ");
 
             $('#artist-photo').html('<div class="top60">'
-                + '<img src="media/images/no-artist-photo.png" class="opacity-80" alt="no artist photo"</i></div>');
+                + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
 
             $('#artist-bio').html(
-                '<br><br><br>'
-                + ' <i class="fa fa-terminal fa-2x"></i></div>'
-                +'<div>Last.fm has no information on this artist.&nbsp;'
+                '<br><br>' + ' <i class="fa fa-terminal fa-2x"></i></div>'
+                +'<div>No information found on this artist.&nbsp;'
             );
 
             return Error("appendArtistInfo kinda sorta failed just now  ='()");
         }
-        // Data is good, append it to the given selector
+        // Data is potentially good, check futher for blanks
         else {
+            var noPhoto = (data.artist.image[3] === '' ? true : false);
+            var noBio = (data.artist.bio.content.trim() === '' ? true : false);
+
             // Create specific parent div name
             var artistInfo = '#' + divId;
-
+            
             // Create custom info array
             var artist = {
                 'name': data.artist.name,
-                'bio': data.artist.bio,
+                'bio': data.artist.bio.content,
                 'url': data.artist.url,
                 'images': data.artist.image,
                 'tags': data.artist.tags.tag
             };
 
-            // Arbitrary limit on how much biography text to show
-            var maxCharsInBio = 600;
-
-            // Remove any links
-            var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
-
-            // Clip bio at preset character max
-            var shortBio = fullBio.substring(0, maxCharsInBio);
-            
-            // If longer than max amount, add "show more" link
-            if (fullBio.length > maxCharsInBio) {
-                shortBio += ' ... <span class="link">'
-                    + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
-                    + '<span>';
+            if (noBio) {
+                $('#artist-bio').html(
+                    '<br><br>' + ' <i class="fa fa-terminal fa-2x"></i></div>'
+                    +'<div>No information found on this artist.&nbsp;'
+                );
+            } 
+            else {
+                $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
+                // Arbitrary limit on how much biography text to show
+                var maxCharsInBio = 600;
+                // Remove any links
+                var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+                // Clip bio at preset character max
+                var shortBio = fullBio.substring(0, maxCharsInBio);
+                // If longer than max amount, add "show more" link
+                if (fullBio.length > maxCharsInBio) {
+                    shortBio += ' ... <span class="link">'
+                        + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
+                        + '<span>';
+                }
+                
+                // Append the artist bio text
+                $('#artist-bio').html(shortBio);
             }
 
-            // $('#artist-photo').html();
-            $('#artist-bio').html();
+            if (noPhoto) {
+                 $('#artist-photo').html('<div class="top60">'
+                    + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
+            }
+            else {
+                // photoContainer = artist photo + name caption
+                $photoCaption = $('<span>')
+                    .addClass('photo-caption absolute')
+                    .html(artist.name);
+
+                // Set the img tag    
+                $('#artist-photo').addClass('relative');
+                $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic ">');
+                $('#artist-photo').append($photoCaption);  
+            }
+           
+            // NECESSARY ??
             $('#artist-tracks').html();
-
-            // photoContainer = artist photo + name caption
-            $photoCaption = $('<span>')
-                .addClass('photo-caption absolute')
-                .html(artist.name);
-
-            // Set the img tag    
-            $('#artist-photo').addClass('relative');
-            $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic ">');
-            $('#artist-photo').append($photoCaption);
-
-            // Append the artist bio text
-            $('#artist-bio').html(shortBio);
             
             //
             // TODO: loop through artist.tags.tag and print each tag in a button
@@ -372,41 +383,43 @@ var Events = {
      * appendTopTracks :: display artist's top tracks
      */
     appendTopTracks: function(divId, data) {
-        // Keep an eye on this in case Last.fm changes their object structure
-        var artistTracks = data.toptracks.track;
-      
         // Clear current contents of div (shouldn't be any)
         $('#' + divId).empty();
 
-        if (typeof artistTracks !== undefined && artistTracks.length) {
-        
-            // $('#' + divId).append('<h3>Tracklist</h3>');
-            
-            var $videoList = $('<ul>')
-               .attr('class','vid-list');
-            
-            $('#' + divId).append($videoList);
+        // If actual track data was returned
+        if (data.error !== 6) {
+            // Keep an eye on this in case Last.fm changes their object structure
+            var artistTracks = data.toptracks.track;
+          
+            // If tracks available
+            if (typeof artistTracks !== undefined && artistTracks.length) {
+                                
+                var $videoList = $('<ul>')
+                   .attr('class','vid-list');
+                
+                $('#' + divId).append($videoList);
 
-            var searchString = '';
+                var searchString = '';
 
-            // Create artist info element to be displayed
-            for (i = 0; i < artistTracks.length; i++) { 
-                // TODO:  create playlist of individual tracks via YouTube API hook
-                var searchString = artistTracks[i].name + ' ' + artistTracks[i].artist.name;
+                // Create artist info element to be displayed
+                for (i = 0; i < artistTracks.length; i++) { 
+                    // TODO:  create playlist of individual tracks via YouTube API hook
+                    var searchString = artistTracks[i].name + ' ' + artistTracks[i].artist.name;
 
-                // Search for artist + track name one at a time
-                // Limit to 1 result max since we're doing individual calls
-                Events.searchYoutube(stripSpaces(searchString), 1);
+                    // Search for artist + track name one at a time
+                    // Limit to 1 result max since we're doing individual calls
+                    Events.searchYoutube(stripSpaces(searchString), 1);
 
-                // Debug - See top track names pulled by Last.fm
-                // $('#' + divId).append(song + ' / ');
+                    // Debug - See top track names pulled by Last.fm
+                    // $('#' + divId).append(song + ' / ');
 
-                // Limit number of clips shown
-                if ((i+1) >= this.maxVideosToShow) {
-                    break;
-                }
-            }// End for loop through Artists' top tracks
-        }// End if data
+                    // Limit number of clips shown
+                    if ((i+1) >= this.maxVideosToShow) {
+                        break;
+                    }
+                }// End for loop through Artists' top tracks
+            }// End if data
+        }
         else {
             console.log("appendTopTracks got no data :'(")
         }

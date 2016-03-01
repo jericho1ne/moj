@@ -375,15 +375,20 @@ body {
 	min-height: 240px;
 }
 img.artist-profile-pic {
+	border: 1px solid $gray-light;
+	border-radius: 3px;
+	-webkit-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
 	width: 236px;
-	padding: 1px;
-	border: 1px solid #333;
+	padding: 3px;
 }
 .photo-container {
 	left: 0px;
 	width: 300px;
 	height: 300px;
 }
+
 
 .photo-caption {
 	@include buildRegularFont($font-md);
