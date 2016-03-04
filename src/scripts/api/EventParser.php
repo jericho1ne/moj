@@ -30,6 +30,7 @@ class EventParser {
 		$this->dbLink = $database_link;
 
 		// Get today's date w/ leading zeros for month and day
+		// TODO:  leave today and trrow as Y-m-d and custom format inside each scraper
 		$this->today_formatted = date('m.d.y');
 		
 		// Get tomorrow's date w/ leading zeros for month and day
@@ -63,22 +64,22 @@ class EventParser {
 		$searchDate = $this->today_formatted;
 
 		// Ingest webpage source
-		$source = file_get_contents($url);							
+		$scenestarHTML = file_get_contents($url);							
 
 		// If time is nearing midnight, we may get no results
 		// Therefore, grab next day's shows (d+1)
-		if (strpos($source, $this->today_formatted) === -1) {
+		if (strpos($scenestarHTML, $this->today_formatted) === -1) {
 			$searchDate = $this->trrow_formatted;
 		}
 		
 		// Look for our start date, mark as entry point
-		$start = strpos($source, $searchDate);	
+		$start = strpos($scenestarHTML, $searchDate);	
 		// find the end marker (this *may* change every so often)	
-		$end = strpos($source, '<div id="gamma">');	
+		$end = strpos($scenestarHTML, '<div id="gamma">');	
 		// find character length up to the end marker
 		$data_size = $end - $start;		
 		// grab only the repeated, relevant show data							
-		$rough_chunk = substr($source, $start-1, $data_size);	
+		$rough_chunk = substr($scenestarHTML, $start-1, $data_size);	
 
 		// get rid of funky characters like <®> or <â€™>
 		$rough_chunk = html_entity_decode($rough_chunk, ENT_QUOTES, "UTF-8");
@@ -115,7 +116,6 @@ class EventParser {
 
 				// Date gets formatted
 				$ymd_date = "20" . $dateArray[2] . "-" . $dateArray[0] . "-" . $dateArray[1];
-				$show_year = "20" . $dateArray[2];
 				// stop if over our set date boundary (1 or 2 weeks ahead, etc)
 				if ($future_max_date < $ymd_date) {
 					break;
@@ -147,8 +147,6 @@ class EventParser {
 				$venue = trim($venue);
 				$venues[$count] = $venue;
 
-				$cal_date = strtotime($ymd_date).'000';
-
 				// ********** DEBUG ******
 				// Uncomment line below to see what the f is wrong
 				// echo $ymd_date . " " . $artist . " @ " . $venue ."<br>";
@@ -157,14 +155,15 @@ class EventParser {
 				array_push(
 					$this->eventArray, 		
 					array(
-						"raw_date"	=> $cal_date,	// 1377738000000
 						"ymd_date"	=> $ymd_date,	// 2020-12-01
-						"year"		=> $show_year,
+						"source" 	=> "scenestar",
 						"type"		=> "show",  		// TODO: find out if needed for Event Calendar??
 						"artist"	=> $artist,
 						"venue"		=> $venue,
 						"title"		=> $artist . " @ " . $venue,	// needed for Event Calendar!
-						"url"		=> $url
+						"description" => "",
+						"url"		=> $url,
+						"media"		=> "",
 					)
 				);
 				$count ++;
@@ -177,6 +176,96 @@ class EventParser {
 		$this->venueArray = $sortedVenues;
 		// return $json_data;			// TODO:  should return TRUE (if eventsArray was hydrated) or FALSE (if error)
 	}// End method parseScenestarUrl
+
+	public function parseExpLAxml($url) {
+		// Grab in XML format		
+		$simpleXML = simplexml_load_file($url);
+		
+		// print_r($simpleXML);
+		/*
+		[title] => Father, Son & Holy Coach
+		    [link] => http://www.experiencela.com/calendar/event/68113
+		    [description] => Southern storytelling at its best! [...]
+		    [guid] => http://www.experiencela.com/calendar/event/68113
+		    [datetime] => March 4, 2016; 8:00 PM - 9:15 PM
+		    [startDate] => Fri, 04 Mar 2016 20:00:00 GMT -08:00
+		    [endDate] => Fri, 04 Mar 2016 21:15:00 GMT -08:00
+		    [image] => http://ww1.experiencela.com/Uploads/20070904124551-63848.jpg
+		    [organizationEntryId] => 3480
+		    [organization] => Lucy Pollak Public Relations
+		    [region] => Beverly Hills / Westside
+		    [eventWebsite] => http://www.holycoach.net/.
+		    [location] => Odyssey Theatre
+		    [eventAddress] => 2055 S. Sepulveda Blvd., Los Angeles, 90025
+		    [eventLocationStreetIntersection1] => S. Sepulveda Blvd.
+		    [eventLocationStreetIntersection2] => Mississippi Ave.
+		    [toolsMetroTripPlanner] => http://www.experiencela.com/MetroTripPlanner?value1=2055 S. Sepulveda Blvd., Los Angeles, 90025
+		    [category] => Array
+		        (
+		            [0] => Visual Arts
+		            [1] => Live Theater
+		            [2] => Educational
+		            [3] => Museums/Zoos/Aquariums
+		        )
+
+		    [eventLocationHearing] => False
+		    [eventLocationWheelChair] => True
+		    [eventKidFamily] => False
+		    [eventFree] => False
+		    [eventCostExplain] => $15 - $25
+		*/
+	
+		
+
+		foreach($simpleXML->channel->item as $Item) {		
+			// Categories is an array
+			$categoryArray = (array) $Item->category;
+			$categories = implode(', ', $categoryArray);
+
+			// Format Date as Y-m-d
+			$rssDate = (string) $Item->startDate;
+			$ymd_date = date('Y-m-d', strtotime($rssDate));
+		
+			$event = array(
+				'ymd_date' 		=> $ymd_date,
+				'source'		=> 'Experience LA',
+				'startDate' 	=> (string) $Item->startDate,
+				'url' 			=> (string) $Item->link,
+				'title' 		=> (string) $Item->title,
+				'organization' 	=> (string) $Item->organization,
+				'media'			=> (string) $Item->image,
+				'description' 	=> (string) $Item->description,
+				'venue' 		=> (string) $Item->location,
+				'address' 		=> (string) $Item->eventAddress,
+				'category' 		=> $categories,
+			);
+
+			// Minor formatting if these next fields are all CAPS (eek!)
+			if (strtoupper($event['title']) == $event['title']) {
+				$event['title'] = ucwords(strtolower($event['title']));
+			}
+			if (strtoupper($event['description']) == $event['description']) {
+				$event['description'] = ucwords(strtolower($event['description']));
+			}
+
+			// Save all of our event info to the private class property (eventArray)
+			array_push(
+				$this->eventArray, 		
+				array(
+					"ymd_date"	=> $ymd_date,	// 2020-12-01
+					"type"		=> $event['category'],
+					"source"	=> "experiencela",
+					"artist"	=> $event['organization'],
+					"venue"		=> $event['venue'],
+					"title"		=> $event['title'],
+					"description" => $event['description'],
+					"url"		=> $event['url'],
+					"media"		=> $event['media'],
+				)
+			);// End array_push
+
+		}// End foreach simpleXML
+	}// End parseExLAxml
 
 	/**********************************************************************************
 		saveJsonToFile( filename )
@@ -336,27 +425,28 @@ class EventParser {
 
 		// Prepare insert query
 		$statement = $dbLink->prepare(
-			"INSERT INTO events(ymd_date, type, artist, venue, title, url) ".
-   			"VALUES(:ymd_date, :type, :artist, :venue, :title, :url) ".
+			"INSERT INTO events(ymd_date, source, type, artist, venue, title, description, url, media) ".
+   			"VALUES(:ymd_date, :source, :type, :artist, :venue, :title, :description, :url, :media) ".
    			"ON DUPLICATE KEY UPDATE title = :title2, url = :url2");
 
 		$eventObject = array(
 			"ymd_date" => $event['ymd_date'],
-			"type" => $event['type'],
-			"artist" => $event['artist'],
-			"venue" => $event['venue'],
-			"title" => $event['title'],
-			"title2" => $event['title'],
-			"url" => $event['url'],
-			"url2" => $event['url']
+			"source" 	=> $event['source'],
+			"type" 		=> $event['type'],
+			"artist" 	=> $event['artist'],
+			"venue" 	=> $event['venue'],
+			"description" => $event['description'],
+			"media" 	=> $event['media'],
+			"title" 	=> $event['title'],
+			"title2" 	=> $event['title'],
+			"url" 		=> $event['url'],
+			"url2" 		=> $event['url']
 		);
 
 		// Map statement column names to event that was passed in
 		$result = $statement->execute($eventObject);
 
-		// echo "<pre>";
-		// $statement->debugDumpParams();
-		// echo "</pre>";
+		echo "<pre>"; $statement->debugDumpParams(); echo "</pre>";
 
 		return array(
 			"result" => $result, 

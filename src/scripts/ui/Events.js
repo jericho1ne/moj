@@ -71,7 +71,8 @@ var Events = {
                 ymd_date: "2016-01-31"
                 nice_date: "Sunday Nov 1"
                 short_date: "Sun Nov 1"
-                title: "Hanson @ Fonda Theatre"
+                title: "Hanson @ Fonda Theatre" (if source = scenestar)
+                    or "Laluzapalooza - 30th Annual Juried Group Show" (if source = experiencela)
                 type: "show"
                 url: "http://www.thing.com/events/199123/event-tickets?refId=xxxxx"
                 venue: "Fonda Theatre"
@@ -137,6 +138,15 @@ var Events = {
                     $dataTable.append($dateHeaderRow);
                 }// End if new date row is to be display
 
+                // Set title based on source and content
+                var eventTitle = events[i].artist;
+             
+                if (events[i].artist.trim() === events[i].venue.trim() || 
+                    eventTitle == "") {
+                    eventTitle = events[i].title;
+                }
+                
+
                 // Date | Artist | Venue
                 var $dataRow = $('<tr>')
                     .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
@@ -150,11 +160,11 @@ var Events = {
                         // + '<a href="#" data-toggle="modal">'
                         + '<span class="link artistInfo" ' 
                         + 'data-url="' +  events[i].url + '" '
-                        + 'data-artist="' + events[i].artist + '" '
+                        + 'data-artist="' + eventTitle + '" '
                         + 'data-venue="' + events[i].venue + '" '
                         + 'data-nicedate="' + events[i].nice_date + '" '
                         + '>' 
-                        + events[i].artist + ''
+                        + eventTitle + ''
                         + '</span>'
                         // + '</a>'
                         + '</td>'
