@@ -20,7 +20,8 @@ $container-max-width: 70%;
 $container-min-width: 320px;
 
 $light-box-shadow: 1px 2px 4px 2px rgba(10, 20, 30, 0.14);
-$pink-border: 1px solid #D953E5;
+$pink-border: 1px solid $pink;
+$gray-light-border: 1px solid $gray-light;
 
 @mixin buildRegularFont($size) {   //, $weight: 400) {
 	font-family: $font-regular !important;
@@ -444,14 +445,13 @@ img.artist-profile-pic {
 }
 
 /*	override datatables.min.css + related classes			*/
+.dataTable {
+	width: 100%;
+}
+
 .dataTables_length {
-	margin-left: 40px;
-}
-.dataTables_filter {	
-	margin-right: 40px;
-}
-table.dataTable {
-	padding-top: 20px;
+	width: auto;
+	text-align: left;
 }
 
 input[type=search] {
@@ -460,7 +460,7 @@ input[type=search] {
 	padding: 4px 2px 4px 2px;
 	margin-bottom: 10px;
 	border: 0px solid #999;
-	border-radius: 20px;
+	border-radius: 2px;
 	background: #eee;
 	cursor: pointer;
 	outline: 0;
@@ -477,7 +477,7 @@ select {
 	margin: 0 6px 0 6px;
 	-webkit-border-radius:4px;
 	-moz-border-radius:4px;
-	border-radius: 4px;
+	border-radius: 2px;
 	-webkit-box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
 	-moz-box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
 	box-shadow: 0 3px 2px #ccc, 0 -1px #fff inset;
@@ -494,20 +494,28 @@ select {
 }
 
 .dataTables_wrapper {
-	max-width: 100%;
+	width: 96%;
+	margin: auto;
+	padding-top: 20px;
+	border: $gray-light-border;
+    border-radius: 3px;
 }
 
 .dataTables_wrapper table thead {
-	display:none;
+	display: none;
 }
 
 .alternate-bgcolor {
-	background-color: #FEFEFE;
+	background-color: $gray-xlight;
 }
 
 table.dataTable tbody td {
-	padding: 6px 10px 6px 10px!important;
+	padding: 6px 10px 6px 10px !important;
 	margin: 2px !important;
+}
+
+.dataTables_paginate {
+	position: absolute !important;
 }
 
 table.dataTable .date-header {

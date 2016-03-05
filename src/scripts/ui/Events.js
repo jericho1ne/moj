@@ -150,7 +150,7 @@ var Events = {
                 // Date | Artist | Venue
                 var $dataRow = $('<tr>')
                     .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
-                    .html('<td class="text-align-right w100" data-sort="' + events[i].ymd_date + '" nowrap>'
+                    .html('<td class="text-align-right w80" data-sort="' + events[i].ymd_date + '" nowrap>'
                         + '<span class="opacity-40">' + events[i].short_date + '<span>'
                         + '</td>'  // ideally, embed ymd_date in a hidden *-data attrib
 
@@ -191,25 +191,29 @@ var Events = {
             //
             //  Initialize DataTables
             //
-            //setTimeout(function(){ 
-                $('#' + dataTableUniqueID).DataTable({
-                    "lengthMenu": [[20, 40, 160, 320, -1], [20, 40, 80, 160, 320, "All"]],
-                    // 0 = date, 1 = artist, 2 = venue, 3 = ticket
-                    "order": [[ 0, "asc" ]],
-                    "aoColumnDefs": [
-                        { 'bSortable': false, 'aTargets': [ 0, 1, 2, 3 ] }
-                    ],
-                    "autoWidth": true,
-                    "language": {
-                        "lengthMenu": "show _MENU_ events",
-                        "sSearch": "search",
-                        "zeroRecords": "Nothing found.",
-                        "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
-                        "infoEmpty": "No records available",
-                        "infoFiltered": ""
-                    }
-                });
-            //}, 200);
+           
+            $('#' + dataTableUniqueID).DataTable({
+                "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
+                // 0 = date, 1 = artist, 2 = venue, 3 = ticket
+                "order": [[ 0, "asc" ]],
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [ 0, 1, 2, 3 ] }
+                ],
+                "autoWidth": false,
+                // Pagination and info bars on top and bottom
+               //  "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
+                // Prev and Next buttons only
+                "pagingType": "simple",     
+                "language": {
+                    "lengthMenu": "show _MENU_ events",
+                    "sSearch": "search",
+                    "zeroRecords": "Nothing found.",
+                    "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": ""
+                }
+            });
+      
 
             // Give the datatable a chance to complete attaching, then call it quits
             setTimeout(function() {
