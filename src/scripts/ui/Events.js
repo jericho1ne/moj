@@ -269,6 +269,67 @@ var Events = {
         });// End artistXHR $.ajax 
     },// End getArtistInfo
 
+    /**
+     * displayStaticShowInfo ::
+     */
+    displayStaticShowInfo: function (divId, event) {
+        // Create specific parent div name
+        var artistInfo = '#' + divId;
+
+        // Figure out exactly what data is available
+        // Display some placeholder text and image
+        if (event.media === "") {
+            $('#artist-photo').html('<div class="top60">'
+                + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
+        }
+        else {
+            // photoContainer = artist photo + name caption
+            $photoCaption = $('<span>')
+                .addClass('photo-caption absolute')
+                .html(event.artist);
+
+            // Set the img tag    
+            $('#artist-photo').addClass('relative');
+            $('#artist-photo').html('<img src="' + event.media + '" class="artist-profile-pic ">');
+            $('#artist-photo').append($photoCaption);  
+        }
+
+        if (event.description === "") {
+            $('#artist-bio').html(
+                '<br><br>' + ' <i class="fa fa-terminal fa-2x"></i></div>'
+                +'<div>No information found on this artist.&nbsp;'
+            );
+        }
+        else {
+            $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
+
+            // Arbitrary limit on how much biography text to show
+            var maxCharsInBio = 2400;
+          
+            // Remove any links
+            var fullBio = event.description.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+            
+            // Clip bio at preset character max
+            var shortBio = fullBio.substring(0, maxCharsInBio);
+            
+            // If longer than max amount, add "show more" link
+            if (fullBio.length > maxCharsInBio) {
+                shortBio += ' <span class="link">'
+                    + '<a href="' + event.url + '" target="_blank">( read more )</a>'
+                    + '<span>';
+            }
+            
+            // Append the artist bio text
+            $('#artist-bio').html(shortBio);
+        }
+
+        // NECESSARY ??
+        $('#artist-tracks').html();
+            
+        //
+        // TODO: loop through event categories and print each tag in a button
+        //
+    },// End function ....
 
     /**
      * appendArtistInfo :: display artist info in DOM
@@ -319,7 +380,7 @@ var Events = {
             else {
                 $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
                 // Arbitrary limit on how much biography text to show
-                var maxCharsInBio = 600;
+                var maxCharsInBio = 1000;
                 // Remove any links
                 var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
                 // Clip bio at preset character max
