@@ -73,6 +73,11 @@ $(document).ready(function() {
     //
     // LISTENERS
     //
+    $('#eml').click(function() {
+        var emailaddy = reverse($("#eml").data("u")) + '@' + reverse($("#eml").data("d"));
+        document.location.href = 'ma' + 'il' + 'to' + ':' + emailaddy;
+    });
+
     $('#gPlusLogin').click(function() {
         var ref = new Firebase("https://blinding-torch-6251.firebaseio.com");
         ref.onAuth(function(authData) {

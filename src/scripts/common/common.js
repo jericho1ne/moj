@@ -191,6 +191,9 @@ function reattachListeners() {
     }// End else
   });// End faveButton click
 
+  function rvStr() {
+    return s.split('').reverse().join('');
+  }
 
 }// End function reattachListeners
 

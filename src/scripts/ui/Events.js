@@ -102,7 +102,7 @@ var Events = {
                     .html('<tr><th class="left event-date">date</th>'
                         + '<th class="left event-artist">artist</th>'
                         + '<th class="left event-venue">venue</th>'
-                        + '<th class="left w80">tix</th>'
+                        + '<th class="left w60">tix</th>'
                         + '</tr>');
 
 
@@ -119,7 +119,7 @@ var Events = {
             
             // Loop through incoming data
             for (var i in events) {
-                var dateArray = events[i].short_date.split(" ");
+                var dateArray = events[i].semi_nice_date.split(" ");
                 
                 // If the date has changed, it's time for the spacer row with large text
                 if (String(prevDate.trim()) != String(events[i].ymd_date.trim())) {

@@ -89,9 +89,30 @@ body {
 	text-align: left;
 }
 
+/*  Font Awesome Customness */
+
+.fa-envelope-o {	
+	padding: 8px;
+    font-size: 1.5em;
+    color: $gray-xlight;
+    opacity: 0.8;
+    display: inline-block;
+    border-radius: 100px;
+    box-shadow: 0 0 4px #000;
+    background-color: transparent;
+}
+
 .fa-ticket {
-	font-size: 2.15em !important;
-	opacity: 0.7;
+	font-size: 1.5em !important;
+	opacity: 0.85;
+	padding: 8px;
+    display: inline-block;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    border-radius: 100px;
+    -moz-box-shadow: 0px 0px 1px $gray-dark;
+    -webkit-box-shadow: 0px 0px 1px $gray-dark;
+    box-shadow: 0px 0px 1px $gray-dark;
 }
 
 .loading {
@@ -119,10 +140,8 @@ body {
 	@include buildRegularFont($font-lg);
 	color: #fff;
 	line-height: 1.2;
-	margin: 20px auto 20px auto;
-	padding: 14px;
+	margin: 10px auto 10px auto;
 	letter-spacing: -1px;
-	@include border-radius(6px);
 }
 
 .medium-text {
@@ -134,7 +153,6 @@ body {
 
 .subtitle {
 	@include buildRegularFont($font-sm);
-	margin-top: -35px;
 	color: $gray-mid;
 }
 
@@ -278,7 +296,7 @@ body {
 }
 
 .debug {
-	@include border-radius(6px);
+	@include border-radius(0px);
 	border: $pink-border;
 }
 
@@ -404,34 +422,6 @@ img.artist-profile-pic {
 	overflow-y: scroll;
 }
 
-/*------------------- Error popup / modal dialog -----------*/
-// .ui-dialog .ui-dialog-content {
-// 	padding: 8px;
-// }
-
-// .ui-dialog.error-dialog {
-// 	@include buildRegularFont($font-sm);
-// }
-
-// // this needs room to breathe, and allow for vertical scroll!
-// .ui-dialog.info-dialog {
-// 	left: 8px !important;
-// 	top: 8px !important;
-// 	background-color: $almost-white !important;
-// 	@include buildRegularFont($font-sm);
-// 	overflow: visible;
-// 	min-height: 80% !important;
-// 	min-width: 90% !important;
-// }
-
-// .ui-dialog-content.ui-widget-content {
-// 	width: auto !important;
-// }
-
-// .ui-dialog-titlebar {
-// 	display: none;
-// }
-
 .event-date {
 	min-width: 100px;
 }
@@ -439,16 +429,14 @@ img.artist-profile-pic {
 .event-artist {
 	min-width: 300px;
 }
+
+
 /* override jquery ui */
 .ui-widget-content{
 	overflow: scroll;
 }
 
 /*	override datatables.min.css + related classes			*/
-.dataTable {
-	width: 100%;
-}
-
 .dataTables_length {
 	width: auto;
 	text-align: left;
@@ -494,9 +482,8 @@ select {
 }
 
 .dataTables_wrapper {
-	width: 96%;
+	// width: 96%;
 	margin: auto;
-	padding-top: 20px;
 	border: $gray-light-border;
     border-radius: 3px;
 }
@@ -510,7 +497,7 @@ select {
 }
 
 table.dataTable tbody td {
-	padding: 6px 10px 6px 10px !important;
+	padding: 4px 8px 4px 8px !important;
 	margin: 2px !important;
 }
 
@@ -523,14 +510,6 @@ table.dataTable .date-header {
 	background-color: $gray-light !important;
 	left: -6px;
 	line-height: 1;
-}
-
-.text-align-left {
-	text-align: left;
-}
-
-.text-align-right {
-	text-align: right;
 }
 
 .date-block-xl {

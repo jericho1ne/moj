@@ -21,6 +21,22 @@
     opacity: 0.8;
 }
 
+.fa-rotate-45 {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
 /* Font size & Line Height */
 .em2 {
     font-size: 2em;
@@ -38,6 +54,9 @@
 }
 .line-height-150 {
     line-height: 150%;
+}
+.line-height-125 {
+    line-height: 125%;
 }
 .line-height-100 {
     line-height: 100%;
@@ -96,6 +115,10 @@
 }
 
 /*       Dimensions              */
+.w100p {
+    width: 100%;
+}
+
 .w60 {
     width: 60px;
 }
@@ -105,6 +128,7 @@
 .w100 {
     width: 100px;
 }
+
 .w200 {
     width: 200px;
 }

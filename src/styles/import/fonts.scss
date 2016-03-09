@@ -17,6 +17,10 @@ $font-xs: 10px;
 $font-sm: 14px;
 $font-md: 18px;
 $font-lg: 24px;
-$font-xl: 44px;
+$font-xl: 40px;
+
+.letter-spc-min-1 {
+	letter-spacing: -1px;
+}
 
 // END FONTS

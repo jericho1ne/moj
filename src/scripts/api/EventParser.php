@@ -312,6 +312,8 @@ class EventParser {
 		if ($this->dbLink) {
 
 			$query = "SELECT *, DATE_FORMAT(ymd_date,'%W %M %D') AS nice_date, " . 
+				"DATE_FORMAT(ymd_date,'%a %M %D') AS semi_nice_date, " . 
+				"DATE_FORMAT(ymd_date,'%b %e') AS short_weekday, " . 
 				"DATE_FORMAT(ymd_date,'%a %b %e') AS short_date " . 
 				"FROM events ";
 
