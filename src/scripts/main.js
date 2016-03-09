@@ -26,12 +26,9 @@ function lookupArtist(clickEvent) {
 
     // Delay Promise chain until dialog is popped open!
     setTimeout(function() {
-       
         // Clear existing modal content 
         $('#artist-event').empty();
         $('.modal-title').html(); 
-
-           
 
         // Append venue name + link
         $('#artist-event').html(
@@ -140,6 +137,7 @@ $(document).ready(function() {
         .then(function(){  
             // https://davidwalsh.name/event-delegate
             document.getElementById('shows-content').addEventListener("click", function(e) {
+                window.target = e.target;
                 // If any child element was clicked, grab the artist name
                 if (e.target && e.target.innerHTML !== '') {
                     // If the click was on an actual link, 

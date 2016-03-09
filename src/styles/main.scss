@@ -125,9 +125,10 @@ body {
 
 .link, .link a {
 	@include buildBoldFont($font-sm);
+	padding: 6px 4px;
 	background: none;
 	border: none;
-	color: #698ED0 !important;
+	color: $lazy-blue !important;
 }
 
 .link:hover {
@@ -141,7 +142,6 @@ body {
 	color: #fff;
 	line-height: 1.2;
 	margin: 10px auto 10px auto;
-	letter-spacing: -1px;
 }
 
 .medium-text {
@@ -508,7 +508,7 @@ table.dataTable tbody td {
 table.dataTable .date-header {
 	padding: 18px 6px 12px 1px;
 	background-color: $gray-light !important;
-	left: -6px;
+	left: -4px;
 	line-height: 1;
 }
 

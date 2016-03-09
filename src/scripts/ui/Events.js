@@ -149,7 +149,7 @@ var Events = {
 
                 // Date | Artist | Venue
                 var $dataRow = $('<tr>')
-                    .addClass('line-item' + (rowCount % 2 ? '' : ' alternate-bgcolor'))
+                    .addClass('line-item')
                     .html('<td class="text-align-right w80" data-sort="' + events[i].ymd_date + '" nowrap>'
                         + '<span class="opacity-40">' + events[i].short_date + '<span>'
                         + '</td>'  // ideally, embed ymd_date in a hidden *-data attrib
@@ -159,6 +159,7 @@ var Events = {
                         + '<td class="left">' 
                         // + '<a href="#" data-toggle="modal">'
                         + '<span class="link artistInfo" ' 
+                        + 'data-eventid="' +  i + '" '
                         + 'data-url="' +  events[i].url + '" '
                         + 'data-artist="' + eventTitle + '" '
                         + 'data-venue="' + events[i].venue + '" '
@@ -194,6 +195,8 @@ var Events = {
            
             $('#' + dataTableUniqueID).DataTable({
                 "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
+                // Alternating row color
+                "asStripeClasses": [ '', 'alternate-bgcolor' ],
                 // 0 = date, 1 = artist, 2 = venue, 3 = ticket
                 "order": [[ 0, "asc" ]],
                 "aoColumnDefs": [
