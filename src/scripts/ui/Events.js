@@ -323,8 +323,9 @@ var Events = {
             $('#artist-bio').html(shortBio);
         }
 
-        // NECESSARY ??
-        $('#artist-tracks').html();
+        // Clear out the loading spinner since we won't be pulling youtube track
+        $('#artist-tracks').empty();
+       
             
         //
         // TODO: loop through event categories and print each tag in a button

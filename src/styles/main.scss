@@ -125,7 +125,9 @@ body {
 
 .link, .link a {
 	@include buildBoldFont($font-sm);
-	padding: 6px 4px;
+	// Never add left padding or text breaking 
+	// across two rows will make top line seem intended
+	padding: 6px 4px 6px 0px;
 	background: none;
 	border: none;
 	color: $lazy-blue !important;
@@ -400,6 +402,8 @@ img.artist-profile-pic {
 	-o-transition: all .2s ease-in-out;
 	transition: all .2s ease-in-out;
 	width: 236px;
+	// To account for potentially empty images
+	min-height: 120px;
 	padding: 3px;
 }
 .photo-container {
