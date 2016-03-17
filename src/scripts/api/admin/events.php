@@ -54,6 +54,18 @@ if ($dblink && $action !== "") {
 
 		$eventsList = $Events->getEvents();
 	}
+	// Ticketfly! 
+	else if ($action === 'getNewTicketflyevents') {
+		$url = "http://www.ticketfly.com/api/events/upcoming.json?orgId=1&fieldGroup=light&city=Los%20Angeles&maxResults=2000";
+		
+		// Figure out today's date (format 2016-1-1)
+		$today = date('Y-n-j');
+
+		// Get events from today onwards
+		$Events->parseTicketflyEvents($url);
+
+		// $eventsList = $Events->getEvents();
+	}
 
 	//
 	// If Save to DB checkbox is on
@@ -99,6 +111,7 @@ if ($dblink && $action !== "") {
 <hr>
 <input type="radio" name="action" value="getNewScenestarShows"> Get Scenestar Shows<br>
 <input type="radio" name="action" value="getNewExpLAevents"> Get Experience LA Events<br>
+<input type="radio" name="action" value="getNewTicketflyevents"> Hit Ticketfly API for the latest<br>
 <br>
 <input type="checkbox" name="saveToDB" value="1"> Save to DB!<br>
 <hr>

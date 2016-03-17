@@ -56,6 +56,36 @@ class EventParser {
 	}
 
 	/**********************************************************************************
+		parseTicketflyEvents( $url )
+		save events to database, possibly saving venues as well
+	*********************************************************************************/
+	public function parseTicketflyEvents($url) {
+		$rawJson = file_get_contents($url);
+
+		// Return array instead of StdClass object by passing 'true' as second arg
+		$jsonData = json_decode($rawJson, true);
+
+		pr($jsonData['totalResults']);
+
+		foreach($jsonData['events'] as $event) {
+			$pushIt = array(
+				'venue' => $event['venue']['name'],
+				'artist' => $event['headlinersName'],
+				'title' => $event['name'] . ' @ ' . $event['venue']['name'],
+				'ymd_date' => $event['startDate'],
+				'url' => $event['ticketPurchaseUrl'],
+				'price' => $event['ticketPrice'],
+			);
+
+			pr($pushIt);
+		}
+
+		
+
+		pr();
+
+	}
+	/**********************************************************************************
 		parseScenestarUrl( $url )
 		fill in the eventArray & venueArray
 	*********************************************************************************/
