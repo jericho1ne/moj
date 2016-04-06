@@ -53,6 +53,13 @@ body {
 }
 
 /*----------------- One offs ----------------------*/
+#secondaryHeader {
+    z-index: 1000;
+    top: 0px;
+    position: fixed;
+    width: 108%;
+}
+
 #content-parent {
 	padding: 0px;
 	margin: 0px;

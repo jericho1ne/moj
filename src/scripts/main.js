@@ -155,5 +155,17 @@ $(document).ready(function() {
                 }
             });// End addEventListener
         });// End add old school click listener
+    //
+    // End Events.getEvents promise chain
+    // 
+    $(window).scroll(function(e) { 
+        var $secondaryHeader = $('#secondaryHeader'); 
+        if ($(this).scrollTop() > 80){ 
+            $secondaryHeader.toggleClass('hidden', false); 
+        }
+        if ($(this).scrollTop() < 80) {
+            $secondaryHeader.toggleClass('hidden', true);
+        } 
+    });
 
 });// End on Document Load
