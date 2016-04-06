@@ -96,13 +96,13 @@ var Events = {
                 .attr('id', dataTableUniqueID)
                 .addClass('display dataTable border');
                 
-            // Create Datatable header row
+            // Create Datatable header row (HIDDEN)
             var $tableHeader = $('<thead>')
                     .addClass('row-bold')
-                    .html('<tr><th class="left event-date">date</th>'
-                        + '<th class="left event-artist">artist</th>'
-                        + '<th class="left event-venue">venue</th>'
-                        + '<th class="left w60">tix</th>'
+                    .html('<tr><th class="left w10">blank</th>'
+                        + '<th class="left mw200">date/artist</th>'
+                        + '<th class="left mw100">venue</th>'
+                        + '<th class="left w40">tix</th>'
                         + '</tr>');
 
 
@@ -123,16 +123,22 @@ var Events = {
                 
                 // If the date has changed, it's time for the spacer row with large text
                 if (String(prevDate.trim()) != String(events[i].ymd_date.trim())) {
+                    
                     // Create new date row
                     var $dateHeaderRow = $('<tr>')
+                        .addClass('date-header-row')
                         .html(
-                            '<th class="date-header w80 text-align-right date-block-xl" data-sort="' + events[i].ymd_date + '">'
-                                + dateArray[0] +'</th>'
-                            + '<th class="date-header">'
-                            + '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
-                            + '<span class="text-align-left date-block-md">' + dateArray[2] + '</span>'
+                              '<th class="date-header text-align-right" data-sort="' + events[i].ymd_date + '">'
                             + '</th>'
-                            + '<th class="date-header"></th><th class="date-header"></th>');
+
+                            + '<th class="date-header">'
+                            +   '<span class="date-block-xl">' + dateArray[0] + '</span>'
+                            +   '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
+                            +   '<span class="text-align-left date-block-md">' + dateArray[2] + '</span>'
+                            + '</th>'
+
+                            + '<th class="date-header"></th><th class="date-header">' 
+                            + '</th>');
 
                     // Append individual date header row
                     $dataTable.append($dateHeaderRow);
@@ -150,30 +156,34 @@ var Events = {
                 // Date | Artist | Venue
                 var $dataRow = $('<tr>')
                     .addClass('line-item')
-                    .html('<td class="text-align-right w80" data-sort="' + events[i].ymd_date + '" nowrap>'
-                        + '<span class="opacity-40">' + events[i].short_date + '<span>'
+                    .html('<td class="text-align-right" data-sort="' + events[i].ymd_date + '" nowrap>'
+                        // + '<span class="short-date">' + events[i].short_date + '<span>'
                         + '</td>'  // ideally, embed ymd_date in a hidden *-data attrib
 
                         // For artist, use a highlighted bg color if a fave
                         // style="background-color:' + expenseCategories[row.label].color + '"
                         + '<td class="left">' 
                         // + '<a href="#" data-toggle="modal">'
-                        + '<span class="link artistInfo" ' 
-                        + 'data-eventid="' +  i + '" '
-                        + 'data-url="' +  events[i].url + '" '
-                        + 'data-artist="' + eventTitle + '" '
-                        + 'data-venue="' + events[i].venue + '" '
-                        + 'data-nicedate="' + events[i].nice_date + '" '
-                        + '>' 
-                        + eventTitle + ''
-                        + '</span>'
+                        +   '<span class="link artistInfo" ' 
+                        +       'data-eventid="' +  i + '" '
+                        +       'data-url="' +  events[i].url + '" '
+                        +       'data-artist="' + eventTitle + '" '
+                        +       'data-venue="' + events[i].venue + '" '
+                        +       'data-nicedate="' + events[i].nice_date + '" '
+                        +   '>' 
+                        +       eventTitle + ''
+                        +   '</span>'
                         // + '</a>'
                         + '</td>'
                         
+                        // Column 2 :: Venue
                         + '<td class="left">' + events[i].venue + '</td>'
                         
+                        // Column 3 :: Ticket link
                         + '<td class="left"><a href="' + events[i].url + '">' 
-                        + '<i class="fa fa-ticket"></i>' + '</a></td>'
+                        +   '<i class="fa fa-ticket"></i>' + '</a>'
+                        + '</td>'
+
                         + '</tr>' );
 
                 // Append individual event row

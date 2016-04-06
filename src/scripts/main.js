@@ -82,8 +82,8 @@ $(document).ready(function() {
     //
     // LISTENERS
     //
-    $('#eml').click(function() {
-        var emailaddy = reverse($("#eml").data("u")) + '@' + reverse($("#eml").data("d"));
+    $('#eml-blk').click(function() {
+        var emailaddy = rvStr($("#eml").data("u")) + '@' + rvStr($("#eml").data("d"));
         document.location.href = 'ma' + 'il' + 'to' + ':' + emailaddy;
     });
 

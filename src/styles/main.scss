@@ -104,8 +104,8 @@ body {
 
 .fa-ticket {
 	font-size: 1.5em !important;
-	opacity: 0.85;
-	padding: 8px;
+	opacity: 0.9;
+	padding: 3px;
     display: inline-block;
     -moz-border-radius: 50px;
     -webkit-border-radius: 50px;
@@ -124,7 +124,7 @@ body {
 }
 
 .link, .link a {
-	@include buildBoldFont($font-sm);
+	@include buildRegularFont($font-sm);
 	// Never add left padding or text breaking 
 	// across two rows will make top line seem intended
 	padding: 6px 4px 6px 0px;
@@ -426,15 +426,6 @@ img.artist-profile-pic {
 	overflow-y: scroll;
 }
 
-.event-date {
-	min-width: 100px;
-}
-
-.event-artist {
-	min-width: 300px;
-}
-
-
 /* override jquery ui */
 .ui-widget-content{
 	overflow: scroll;
@@ -501,23 +492,33 @@ select {
 }
 
 table.dataTable tbody td {
-	padding: 4px 8px 4px 8px !important;
-	margin: 2px !important;
+	padding: 3px 4px 3px 6px !important;
+	// border: 1px solid #ccc;
+}
+table.dataTable tbody td, th {
+	border: 1px solid #B70FD5;
 }
 
 .dataTables_paginate {
 	position: absolute !important;
 }
 
-table.dataTable .date-header {
-	padding: 18px 6px 12px 1px;
+
+table.dataTable .date-header-row {
 	background-color: $gray-light !important;
+}
+
+table.dataTable .date-header {
+	padding: 12px 6px 8px 0px;
 	left: -4px;
 	line-height: 1;
 }
 
 .date-block-xl {
 	@include buildBoldFont($font-xl);
+	padding-right: 6px;
+	float: left;
+	letter-spacing: -1px;
 }
 
 .date-block-md {
@@ -528,6 +529,10 @@ table.dataTable .date-header {
 	@include buildRegularFont($font-lg);
 }
 
+.short-date {
+	opacity: 0.4;
+	letter-spacing: -0.5px;
+}
 /*           end datatables.min.css override        */
 
 

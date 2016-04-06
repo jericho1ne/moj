@@ -6,9 +6,12 @@
  * Helper functions
  */
 
+function rvStr(s) {
+  return s.split('').reverse().join('');
+}
 
 function throwModalError(errorMsg) {
-    alert(errorMsg);
+	alert(errorMsg);
 }
 
 function deg2rad(deg) {
@@ -16,20 +19,20 @@ function deg2rad(deg) {
 }
 
 function strToLowerNoSpaces(textString) {
-    return textString.toLowerCase().replace(/ /g,"_");
+	return textString.toLowerCase().replace(/ /g,"_");
 }
 
 function stripSpaces(textString) {
-    // originally / /g
-    return textString.toLowerCase().replace(/\W+/g,"+");
+	// originally / /g
+	return textString.toLowerCase().replace(/\W+/g,"+");
 }
 
 function clearDiv(divId, loading) {
   $('#' + divId).html('');
   if (loading) {
-    $('#' + divId).html('<span class="col-md-12 loading opacity-80">'+
-      '<i class="fa fa-refresh fa-spin fa-1x"></i>' +
-      '</span>');
+	$('#' + divId).html('<span class="col-md-12 loading opacity-80">'+
+	  '<i class="fa fa-refresh fa-spin fa-1x"></i>' +
+	  '</span>');
   }
 }
 
@@ -48,9 +51,9 @@ function getDistance(lat1, lon1, lat2, lon2) {
    var dLat = deg2rad(lat2-lat1);  // deg2rad below
    var dLon = deg2rad(lon2-lon1);
    var a =
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon/2) * Math.sin(dLon/2);
+	  Math.sin(dLat/2) * Math.sin(dLat/2) +
+	  Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+	  Math.sin(dLon/2) * Math.sin(dLon/2);
    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
    // Distance in miles
@@ -72,39 +75,39 @@ function getDistance(lat1, lon1, lat2, lon2) {
  */
 function getNearbyVenues(position, radius, limit) {
 
-    if (typeof position === 'undefined') {
-        position = UserState.getSavedUserPosition();
-        // TODO:  in case this is not part of a Promise chain,
-        // or if globally saved position is still blank, fire off
-        // a separate call to geolocate user
-    }
+	if (typeof position === 'undefined') {
+		position = UserState.getSavedUserPosition();
+		// TODO:  in case this is not part of a Promise chain,
+		// or if globally saved position is still blank, fire off
+		// a separate call to geolocate user
+	}
 
-    var image_url =
-        "http://maps.google.com/maps/api/staticmap?sensor=true&center=" +
-        position.lat + "," + position.lon +
-        "&zoom=15&size=300x300&markers=color:black|" +
-        position.lat + ',' + position.lon;
+	var image_url =
+		"http://maps.google.com/maps/api/staticmap?sensor=true&center=" +
+		position.lat + "," + position.lon +
+		"&zoom=15&size=300x300&markers=color:black|" +
+		position.lat + ',' + position.lon;
 
-    // Map
-    $('#map').fadeOut(1000);
-    $('#map').empty();
-    var mapImage = $('<img>')
-        .attr('src', image_url)
-        .addClass('');
+	// Map
+	$('#map').fadeOut(1000);
+	$('#map').empty();
+	var mapImage = $('<img>')
+		.attr('src', image_url)
+		.addClass('');
 
-    //$('#map').hide();
-    $('#map').append(mapImage);
-    $('#map').fadeIn(750);
+	//$('#map').hide();
+	$('#map').append(mapImage);
+	$('#map').fadeIn(750);
 
-    // Shows content
-    $("#nearby-shows").html('<i class="fa fa-cog fa-spin fa-5x center"></i>');
+	// Shows content
+	$("#nearby-shows").html('<i class="fa fa-cog fa-spin fa-5x center"></i>');
 
-    // TODO:  move to LINE 127-ish
-    Venues.getVenues(
-        position,
-        radius, // in miles
-        limit
-    );
+	// TODO:  move to LINE 127-ish
+	Venues.getVenues(
+		position,
+		radius, // in miles
+		limit
+	);
 }
 
 /**
@@ -127,35 +130,35 @@ function getPosition() {
    console.log(" >> getPos() called >> ");
 
    UserState.geoLocateUser()
-    .then(function(position) {
-      console.dir(" >> 1 then >> ");
-      console.dir(position);
-      var coordinates = {
-          lat: position.coords.latitude,
-          lon: position.coords.longitude
-      };
-      return coordinates;
-    })
-    .then(function(coordinates) {
-      console.dir(" >> 2 then >> ");
-      getNearbyVenues(coordinates, 25, 10);
-    })
-    .then(function() {
-      reattachListeners();
-    })
-    .fail(function(err) {
-      console.error(err);
-    });
+	.then(function(position) {
+	  console.dir(" >> 1 then >> ");
+	  console.dir(position);
+	  var coordinates = {
+		  lat: position.coords.latitude,
+		  lon: position.coords.longitude
+	  };
+	  return coordinates;
+	})
+	.then(function(coordinates) {
+	  console.dir(" >> 2 then >> ");
+	  getNearbyVenues(coordinates, 25, 10);
+	})
+	.then(function() {
+	  reattachListeners();
+	})
+	.fail(function(err) {
+	  console.error(err);
+	});
 
    /*
    $.when(UserState.geoUserPosition())
-      .then(
-         getDistance(
-            vLat, vLon,
-            UserState.getUserPosition().lat,
-            UserState.getUserPosition().lon
-         ))
-      .done()
+	  .then(
+		 getDistance(
+			vLat, vLon,
+			UserState.getUserPosition().lat,
+			UserState.getUserPosition().lon
+		 ))
+	  .done()
    */
 }// End function getPos
 
@@ -168,32 +171,28 @@ function reattachListeners() {
 
   // Bookmark favorite venues
   $('.faveButton').on('click', function() {
-    console.log(" venue id " + $(this).data("id"));
+	console.log(" venue id " + $(this).data("id"));
 
-    // Save this to favorites
-    if ($(this).hasClass('btn-inactive')) {
-        UserState.faveVenues.push({
-            id: $(this).data("id")
-        });
-        $(this).removeClass('btn-inactive');
-        $(this).addClass('btn-active');
-    }// End if
-    // Remove venue from favorites
-    else {
-        $(this).removeClass('btn-active');
-        $(this).addClass('btn-inactive');
+	// Save this to favorites
+	if ($(this).hasClass('btn-inactive')) {
+		UserState.faveVenues.push({
+			id: $(this).data("id")
+		});
+		$(this).removeClass('btn-inactive');
+		$(this).addClass('btn-active');
+	}// End if
+	// Remove venue from favorites
+	else {
+		$(this).removeClass('btn-active');
+		$(this).addClass('btn-inactive');
 
-        for(var i = UserState.faveVenues.length; i--; ) {
-            if (UserState.faveVenues[i]['id'] === $(this).id) {
-                UserState.faveVenues.splice(i, 1);
-            }
-        }
-    }// End else
+		for(var i = UserState.faveVenues.length; i--; ) {
+			if (UserState.faveVenues[i]['id'] === $(this).id) {
+				UserState.faveVenues.splice(i, 1);
+			}
+		}
+	}// End else
   });// End faveButton click
-
-  function rvStr() {
-    return s.split('').reverse().join('');
-  }
 
 }// End function reattachListeners
 

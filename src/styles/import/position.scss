@@ -63,6 +63,9 @@
 }
 
 /*       Padding and Margins      */
+.pad4 {
+    padding: 6px !important;
+}
 .top20 {
     top: 20px;
 }
@@ -119,6 +122,18 @@
     width: 100%;
 }
 
+.w10 {
+    width: 10px;
+}
+.w40 {
+    width: 40px;
+}
+.w45 {
+    width: 45px;
+}
+.w50 {
+    width: 50px;
+}
 .w60 {
     width: 60px;
 }
@@ -134,6 +149,15 @@
 }
 .w300 {
     width: 300px;
+}
+.mw300 {
+    min-width: 300px;
+}
+.mw200 {
+    min-width: 200px;
+}
+.mw100 {
+    min-width: 100px;
 }
 .w320 {
     width: 320px;
