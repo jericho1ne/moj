@@ -14,13 +14,22 @@
 $font-regular: "Nexa", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 $font-xs: 10px;
-$font-sm: 14px;
-$font-md: 18px;
+$font-sm: 12px;
+$font-md: 16px;
 $font-lg: 24px;
-$font-xl: 40px;
+$font-xl: 36px;
+
 
 .letter-spc-min-1 {
 	letter-spacing: -1px;
+}
+
+.white {
+    color: #fff;
+}
+
+.off-white {
+    color: $almost-white;
 }
 
 // END FONTS

@@ -99,10 +99,10 @@ var Events = {
             // Create Datatable header row (HIDDEN)
             var $tableHeader = $('<thead>')
                     .addClass('row-bold')
-                    .html('<tr><th class="left w10">blank</th>'
-                        + '<th class="left mw200">date/artist</th>'
-                        + '<th class="left mw100">venue</th>'
-                        + '<th class="left w40">tix</th>'
+                    .html('<tr>'
+                        + '<th class="left">date/artist</th>'
+                        + '<th class="left">venue</th>'
+                        + '<th class="left">tix</th>'
                         + '</tr>');
 
 
@@ -128,17 +128,16 @@ var Events = {
                     var $dateHeaderRow = $('<tr>')
                         .addClass('date-header-row')
                         .html(
-                              '<th class="date-header text-align-right" data-sort="' + events[i].ymd_date + '">'
+                            '<th mw200 class="date-header" data-sort="' + events[i].ymd_date + '">'
+                            +   '<span class="date-block-xl white">' + dateArray[0] + '</span>'
+                            +   '<span class="align-left date-block-md off-white opacity-60">' 
+                                + dateArray[1] + '</span><br>' 
+                            +   '<span class="align-left date-block-md off-white opacity-60">' 
+                                + dateArray[2] + '</span>'
                             + '</th>'
 
-                            + '<th class="date-header">'
-                            +   '<span class="date-block-xl">' + dateArray[0] + '</span>'
-                            +   '<span class="text-align-left date-block-md">' + dateArray[1] + '</span><br>' 
-                            +   '<span class="text-align-left date-block-md">' + dateArray[2] + '</span>'
-                            + '</th>'
-
-                            + '<th class="date-header"></th><th class="date-header">' 
-                            + '</th>');
+                            + '<th class="date-header"></th>' 
+                            + '<th class="date-header"></th>');
 
                     // Append individual date header row
                     $dataTable.append($dateHeaderRow);
@@ -156,13 +155,10 @@ var Events = {
                 // Date | Artist | Venue
                 var $dataRow = $('<tr>')
                     .addClass('line-item')
-                    .html('<td class="text-align-right" data-sort="' + events[i].ymd_date + '" nowrap>'
-                        // + '<span class="short-date">' + events[i].short_date + '<span>'
-                        + '</td>'  // ideally, embed ymd_date in a hidden *-data attrib
-
+                    .html(
                         // For artist, use a highlighted bg color if a fave
                         // style="background-color:' + expenseCategories[row.label].color + '"
-                        + '<td class="left">' 
+                        '<td class="left" data-sort="' + events[i].ymd_date + '">' 
                         // + '<a href="#" data-toggle="modal">'
                         +   '<span class="link artistInfo" ' 
                         +       'data-eventid="' +  i + '" '
@@ -184,7 +180,7 @@ var Events = {
                         +   '<i class="fa fa-ticket"></i>' + '</a>'
                         + '</td>'
 
-                        + '</tr>' );
+                    + '</tr>' );
 
                 // Append individual event row
                 $dataTable.append($dataRow);
@@ -204,25 +200,25 @@ var Events = {
             //
            
             $('#' + dataTableUniqueID).DataTable({
-                "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
+                "bPaginate": false,
+                //  "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
+               
                 // Alternating row color
-                "asStripeClasses": [ '', 'alternate-bgcolor' ],
-                // 0 = date, 1 = artist, 2 = venue, 3 = ticket
+                "asStripeClasses": [ 'even-bgcolor', 'odd-bgcolor' ],
                 "order": [[ 0, "asc" ]],
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 0, 1, 2, 3 ] }
+                    // 0 = date, 1 = artist, 2 = venue, 3 = ticket
+                    { 'bSortable': false, 'aTargets': [ 0, 1 ] }
                 ],
                 "autoWidth": false,
-                // Pagination and info bars on top and bottom
-               //  "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
-                // Prev and Next buttons only
-                "pagingType": "simple",     
+                
+                // "pagingType": "simple",      // Prev and Next buttons only 
                 "language": {
-                    "lengthMenu": "show _MENU_ events",
+                    //  "lengthMenu": "_MENU_ per pg",
                     "sSearch": "search",
                     "zeroRecords": "Nothing found.",
                     "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
-                    "infoEmpty": "No records available",
+                    "infoEmpty": "No shows available",
                     "infoFiltered": ""
                 }
             });

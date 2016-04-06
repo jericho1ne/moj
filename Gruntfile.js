@@ -255,7 +255,7 @@ module.exports = function (grunt) {
 		'sass', // to be replaced by 'concurrent:dist',
 		'postcss',
 		'cssmin',
-		// 'uglify',
+		'uglify',
 		
 		// stuff after this task happens in the destination folder
 		'copy:all',		
