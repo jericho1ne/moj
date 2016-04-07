@@ -159,12 +159,20 @@ $(document).ready(function() {
     // End Events.getEvents promise chain
     // 
     $(window).scroll(function(e) { 
+        var divHeight = 35;
         var $secondaryHeader = $('#secondaryHeader'); 
-        if ($(this).scrollTop() > 80){ 
+        if ($(this).scrollTop() > divHeight) { 
+            // Gradual fade in then show
+            $secondaryHeader.fadeIn(150, function() {
+                $('nav > ul').removeClass('show');
+            });
             $secondaryHeader.toggleClass('hidden', false); 
         }
-        if ($(this).scrollTop() < 80) {
-            $secondaryHeader.toggleClass('hidden', true);
+        if ($(this).scrollTop() < divHeight) {
+            // Gradual fade, then hide
+            $secondaryHeader.fadeOut(300, function() {
+                $secondaryHeader.toggleClass('hidden', true);
+            });
         } 
     });
 

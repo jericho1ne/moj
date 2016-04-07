@@ -54,10 +54,11 @@ body {
 
 /*----------------- One offs ----------------------*/
 #secondaryHeader {
-    z-index: 1000;
+    z-index: 101;
+    left: 0px;
     top: 0px;
     position: fixed;
-    width: 108%;
+    width: 106%;
 }
 
 #content-parent {
@@ -106,8 +107,8 @@ body {
 }
 
 /*  Font Awesome Customness */
-
 .fa-envelope-o {	
+	cursor: pointer;
 	padding: 8px;
     font-size: 1.5em;
     color: $gray-xlight;
