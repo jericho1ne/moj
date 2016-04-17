@@ -15,11 +15,15 @@ module.exports = function (grunt) {
 		dst: 'app'
 	};
 
+
 	// Define the cfguration for all the tasks
 	grunt.initConfig({
 
 		// Project settings
 		cfg: cfg,
+
+		// Webhost credentials
+		scpConfig: grunt.file.readJSON('scp.json'),
 
 		// Clean targeted directories to start fresh
 	   	clean: require('./grunt-include/clean'),
@@ -159,6 +163,35 @@ module.exports = function (grunt) {
 			 }
 		},// End ftp-deploy task
 
+		// Grunt SCP file upload task
+		scp: {    
+			options: {
+				host: '<%= scpConfig.host %>',
+				username: '<%= scpConfig.username %>',
+				password: '<%= scpConfig.password %>'
+			},
+			your_target: {
+				files: [{
+					cwd: '<%= cfg.src %>',
+					src: [
+						'media/**/*',
+						'scripts/**/*', 
+						'styles/*.css', 
+						'templates/**/*',
+						// robots.txt, index.html, png icons
+						'**/*',  
+		
+						//'images/_grey-bg.png',
+						// 'images/*',
+					],
+					filter: 'isFile',
+					// path on the server
+					dest: '<%= scpConfig.directory %>'
+				}]
+			},
+		},// End task grunt-scp
+
+
 		// Performs index.html embedded js + css rewrites 
 		//	based on filerev (we don't use the useminPrepare config)
 		// UNMAINTAINED - find a replacement
@@ -229,17 +262,6 @@ module.exports = function (grunt) {
 		//browserSync: require('./grunt-include/browserSync'),
 
 
-		// // The following *-min tasks produce minified files in the dist folder
-		// imagemin: {
-		//    dist: {
-		//       files: [{
-		//          expand: true,
-		//          cwd: '<%= cfg.src %>/images',
-		//          src: '{,*/}*.{gif,jpeg,jpg,png}',
-		//          dest: '<%= cfg.dst %>/images'
-		//       }]
-		//    }
-		// },
 
 	});// End grunt initcfg
 
@@ -264,6 +286,8 @@ module.exports = function (grunt) {
 		'htmlmin'
 	]);// End register task :: build
 
+
+	grunt.registerTask('scp', ['scp']);
 
 	grunt.registerTask('pushtodev', ['build', 'ftpush:dev']);
 
@@ -291,6 +315,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-ftp-deploy');		// bulk upload
 	grunt.loadNpmTasks('grunt-sftp-deploy');	// bulk upload
 	grunt.loadNpmTasks('grunt-ftpush');			// granular upload
+	grunt.loadNpmTasks('grunt-scp');			// SCP/SSH file upload
 	grunt.loadNpmTasks('grunt-express');  		// Express server/livereload
 
 };// End module.exports
