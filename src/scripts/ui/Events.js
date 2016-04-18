@@ -202,7 +202,7 @@ var Events = {
             $('#' + dataTableUniqueID).DataTable({
                 "bPaginate": true,
                 "pagingType": "simple",      // Prev and Next buttons only 
-                "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
+                "dom": '<"top"iflp<"clear">>rt<"bottom"p<"clear">>',
                 //  "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
                
                 // Alternating row color
