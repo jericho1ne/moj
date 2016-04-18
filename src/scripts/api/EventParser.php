@@ -79,17 +79,14 @@ class EventParser {
 
 			pr($pushIt);
 		}
+	}// End parseTicketflyEvents
 
-		
 
-		pr();
-
-	}
 	/**********************************************************************************
-		parseScenestarUrl( $url )
+		parseScenestarEvents( $url )
 		fill in the eventArray & venueArray
 	*********************************************************************************/
-	public function parseScenestarUrl($url) {
+	public function parseScenestarEvents($url) {
 		// Search for shows beginning with today's date
 		$searchDate = $this->today_formatted;
 
@@ -192,7 +189,7 @@ class EventParser {
 						"venue"		=> $venue,
 						"title"		=> $artist . " @ " . $venue,	// needed for Event Calendar!
 						"description" => "",
-						"url"		=> $url,
+						"url"		=> $this->cleansePurchaseUrl($url),
 						"media"		=> "",
 					)
 				);
@@ -205,7 +202,7 @@ class EventParser {
 		arsort( $sortedVenues );
 		$this->venueArray = $sortedVenues;
 		// return $json_data;			// TODO:  should return TRUE (if eventsArray was hydrated) or FALSE (if error)
-	}// End method parseScenestarUrl
+	}// End method parseScenestarEvents
 
 	public function parseExpLAxml($url) {
 		// Grab in XML format		
@@ -245,8 +242,6 @@ class EventParser {
 		    [eventCostExplain] => $15 - $25
 		*/
 	
-		
-
 		foreach($simpleXML->channel->item as $Item) {		
 			// Categories is an array
 			$categoryArray = (array) $Item->category;
@@ -289,13 +284,83 @@ class EventParser {
 					"venue"		=> $event['venue'],
 					"title"		=> $event['title'],
 					"description" => $event['description'],
-					"url"		=> $event['url'],
+					"url"		=> $this->cleansePurchaseUrl($event['url']),
 					"media"		=> $event['media'],
 				)
 			);// End array_push
 
 		}// End foreach simpleXML
 	}// End parseExLAxml
+
+	/**
+	 * search for an array of needle inside a given string (purchase URL)
+	 * Called only for scraped data sources (links prepended w/: shareasale, awin1)
+	 * - url decode actual link
+	 * - remove existing referral ids
+	 *
+	 * Test with:
+	 * SELECT ymd_date, source, artist, venue, url FROM `events` 
+	 *     WHERE (url LIKE "%shareasale%" OR url LIKE "awin1") AND ymd_date >= CURDATE()
+	 * SELECT * FROM `events` WHERE url NOT LIKE "%http%" AND ymd_date >= CURDATE()
+	 */
+	public function cleansePurchaseUrl($url) {
+		// No type by default (eg: ticketfly API doesn't need cleaning)
+		$urlType = "";
+
+		// Set to original url by default so we don't returning blanks
+		$newUrl = $url;
+
+		// Parse the URL string to access individual params
+		parse_str($url, $params);
+		
+		// Figure out what reseller we're dealing with
+		if (strpos($url, 'awin1.com') !== false) {
+			$urlType = "awin1";
+		}
+		else if (strpos($url, 'shareasale.com') !== false) {
+			$urlType = "shareasale";
+		}
+		
+		// Actions to perform based on URL/Referrer type
+		switch ($urlType) {
+			// A-Win
+		    case "awin1":
+				// Parse the URL string to access individual params
+				parse_str($url, $params);
+
+				// URL is usually embedded in "clickref"
+				if (isset($params['p']) 
+					&& strpos($params['p'], 'http') !== false ) {
+					$newUrl = $params['p'];
+				}
+				// If not, check "awinaffid", which is usually a mistake
+				else if (isset($params['awinaffid']) 
+					&& strpos($params['awinaffid'], 'http') !== false) {
+					$newUrl = $params['awinaffid'];
+				}
+				// Fallback to original url
+				else {
+					$newUrl = $url;
+				}
+
+				break;
+			// Share-a-sale
+		    case "shareasale":
+				if (isset($params['urllink']) 
+					&& strpos($params['urllink'], 'www') !== false ) {
+					$newUrl = (strpos($params['urllink'], "http") ? "" : "http://") . $params['urllink'];
+				}
+				break;
+			
+			// This bad bwoy is clean, return as is 
+			default:
+				// no processing
+				break;
+		}// End urlType switch
+		
+		// Return cleansed url
+		return $newUrl;
+	}// End cleansePurchaseUrl
 
 	/**********************************************************************************
 		saveJsonToFile( filename )
@@ -452,9 +517,7 @@ class EventParser {
 	public function saveSingleEventToDb($dbLink, $event) {
 		// TODO: insert into db if record isn't already present; could be very taxing
 		// return ( true if all good, false if db insert failed );
-
-		pr($event);
-
+		
 		// Prepare insert query
 		$statement = $dbLink->prepare(
 			"INSERT INTO events(ymd_date, source, type, artist, venue, title, description, url, media) ".
@@ -474,6 +537,9 @@ class EventParser {
 			"url" 		=> $event['url'],
 			"url2" 		=> $event['url']
 		);
+
+
+		pr($eventObject);
 
 		// Map statement column names to event that was passed in
 		$result = $statement->execute($eventObject);

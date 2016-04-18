@@ -114,6 +114,15 @@ function timeElapsed ($time) {
 }// End timeElapsed
 
 
+/**
+ * throwError description
+ * @param  [type] $errno      [description]
+ * @param  [type] $errstr     [description]
+ * @param  [type] $errfile    [description]
+ * @param  [type] $errline    [description]
+ * @param  array  $errcontext [description]
+ * @return [type]             [description]
+ */
 function throwError($errno, $errstr, $errfile, $errline, array $errcontext) {
     // error was suppressed with the @-operator
     if (0 === error_reporting()) {

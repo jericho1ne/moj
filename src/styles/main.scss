@@ -455,11 +455,13 @@ img.artist-profile-pic {
 
 .dataTables_filter {
 	text-align: left;
+	@include buildRegularFont($font-md); 
 	float:left;
 }
 
-input[type=search] {
-	height: 1.8em;
+.dataTables_filter input[type=search] {
+	height: 30px;
+	@include buildRegularFont($font-md);
 	width: 160px !important;
 	padding: 4px 2px 4px 2px;
 	margin-bottom: 10px;
@@ -469,7 +471,6 @@ input[type=search] {
 	cursor: pointer;
 	outline: 0;
 	color: #333;
-	font-size: 12px;
 	-webkit-box-shadow: 0 2px 2px #ccc, 0 -1px #fff inset;
 	-moz-box-shadow: 0 2px 2px #ccc, 0 -1px #fff inset;
 	box-shadow: 0 2px 2px #ccc, 0 -1px #fff inset;
@@ -524,7 +525,8 @@ table.dataTable tbody td, th {
 }
 
 .dataTables_paginate {
-	position: absolute !important;
+	margin-right: 20px;
+	// position: absolute !important;
 }
 
 

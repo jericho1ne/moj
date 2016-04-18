@@ -200,7 +200,9 @@ var Events = {
             //
            
             $('#' + dataTableUniqueID).DataTable({
-                "bPaginate": false,
+                "bPaginate": true,
+                "pagingType": "simple",      // Prev and Next buttons only 
+                "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
                 //  "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
                
                 // Alternating row color
@@ -211,8 +213,6 @@ var Events = {
                     { 'bSortable': false, 'aTargets': [ 0, 1 ] }
                 ],
                 "autoWidth": false,
-                
-                // "pagingType": "simple",      // Prev and Next buttons only 
                 "language": {
                     //  "lengthMenu": "_MENU_ per pg",
                     "sSearch": "search",

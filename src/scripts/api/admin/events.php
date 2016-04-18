@@ -12,6 +12,15 @@ include_once('../EventParser.php');
 // }
 // $hrsElapsed = (time() - $rawJson->timestamp) / (60*60);
 
+
+// Get total number of shows from today onwards
+$upcomingQuery  = "SELECT * FROM events WHERE ymd_date >= CURDATE()";
+
+$results = $dblink->query($upcomingQuery);
+
+echo " Upcoming events: <b>" . $results->rowCount() . "</b><br><br>";
+
+
 // Grab submitted action from POSTed form
 $action = set($_POST['action']);
 $saveToDB = set($_POST['saveToDB']);
@@ -29,16 +38,18 @@ if ($dblink && $action !== "") {
 		// echo $date;
 
 		// Get shows from today onwards
-		$localEvents = $Events->getEventsFromDb('text', $date);
+		$existingEvents = $Events->getEventsFromDb('text', $date);
 
-		pr($localEvents);
+		pr($existingEvents);
 	}
 	// Scrape Scenestar
 	else if ($action === 'getNewScenestarShows') {
 		// Get newest shows
-		$Events->parseScenestarUrl('http://thescenestar.typepad.com/shows/');
+		$Events->parseScenestarEvents('http://thescenestar.typepad.com/shows/');
 		// Grab resulting events aray
-		// $eventsList = $Events->getEvents();
+		$eventsList = $Events->getEvents();
+		pr($eventsList);
+		
 	}
 	// Experience LA
 	else if ($action === 'getNewExpLAevents') {
@@ -78,28 +89,6 @@ if ($dblink && $action !== "") {
 	}
 }// End if dblink is set and there is a POST submit
 
-
-// // Check JSON events file timestamp, 
-// // only grab new data if stale AND the file is writable
-// //if ($hrsElapsed > 12 && is_writable($jsonFile)) {
-
-// 	// Format the data as JSON, save file in data directory
-// 	// $json_events = $Events->getEventsJson();
-// 	// $result = $Events->saveSingleEventToDb($dblink, $event);
-// 	// pr($result);
-
-// 	// $Events->saveJsonToFile('events', $jsonFile);
-
-// 	// Also print out to screen, to satisfy the $.ajax from calling script
-// 	//pr($events);
-// 	// echo $json_events;
-
-// //}
-// // Data still fairly recent, Use cached file
-// // //}
-// // Save to CSV (if necessary)
-// // $Events->saveVenuesCsv("../../data/venues.csv");
-// // $Events->saveEventsCsv("../../data/events.csv");
 
 ?>
 <html>
