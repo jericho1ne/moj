@@ -43,7 +43,7 @@ function lookupArtist(event) {
     $('#artist-event').html(
         'Go see ' + showTitle + ' at ' + '<a href="' + event.url + '" class="link">' 
         + event.venue + ' <i class="fa fa-music"></i></a>');
-    $('.modal-title').html(event.artist + ' / ' + event.venue + ' / ' + event.nice_date);
+    $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date);
 
 }// End lookupArtist
 
@@ -55,10 +55,24 @@ function lookupArtist(event) {
  */
 function startPromiseChain(event) {
     // returns $.ajax from Last.fm API
-    Events.getArtistInfo(event.artist)
+    Events.getArtistInfo(event.artist, 'getinfo')
         .then(function(artistData) {
-            // returns artist name, used in the next .then
-            return Events.appendArtistInfo('artist-info', artistData);
+            console.log(artistData);
+
+            if (artistData.error === 6) {
+                console.log(' ... first .then got no info ...');
+                return Events.getArtistInfo(event.artist, 'search')
+                    .then(function(artistData) {
+                        console.log(" FALL BACK TIME .");
+                        console.log(artistData);
+                        // Returns artistInfo, even if blank
+                        return Events.appendArtistInfo('artist-info', artistData);
+                    });
+            }
+            else {
+                // returns artist name, used in the next .then
+                return Events.appendArtistInfo('artist-info', artistData);
+            }
         })
         .then(function(artistName) {      
             // returns $.ajax from Youtube API

@@ -7,7 +7,10 @@
 module.exports = {
 	dist: {
 		files: ['<%= cfg.src %>/**/{,*/}*.*'],
-		tasks: ['build']
+		tasks: [
+			'build', 
+			//'pushtodev'
+		]
 	},
 	gruntfile: {
 		// options: {livereload: true},

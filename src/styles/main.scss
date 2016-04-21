@@ -1,6 +1,7 @@
 @import "import/colors";
 @import "import/fonts";
 @import "import/position";
+@import "import/icons";
 
 $btn-pad: 12px 8px;
 
@@ -26,13 +27,13 @@ $gray-light-border: 1px solid $gray-light;
 
 @mixin buildRegularFont($size) {   //, $weight: 400) {
 	font-family: $font-regular !important;
-	font-size: $size;
+	font-size: $size !important;
 }
 
 @mixin buildBoldFont($size) {
 	font-family: $font-regular !important;
-	font-weight: bold;
-	font-size: $size;
+	font-weight: bold !important;
+	font-size: $size !important;
 }
 
 @mixin border-radius($px) {
@@ -46,7 +47,7 @@ $gray-light-border: 1px solid $gray-light;
 /*-------------------- HTML tags -------------------*/
 body {
 	background: $almost-white;
-	@include buildRegularFont($font-sm);
+	@include buildRegularFont($font-md);
 	font-family: $font-regular;
 	color: $primary-font-color;
 	overflow-y: scroll;
@@ -141,7 +142,7 @@ body {
 }
 
 .link, .link a {
-	@include buildRegularFont($font-sm);
+	@include buildRegularFont($font-md);
 	// Never add left padding or text breaking 
 	// across two rows will make top line seem intended
 	padding: 6px 4px 6px 0px;
@@ -380,17 +381,19 @@ body {
 .vid-clip-wrapper {
 	position: relative;
 	display: inline-block;
-	padding: 0px 6px 2px 0px;
+	padding: 0px 0px 2px 0px;
+	width: 99%;
 }
 
 .vid-clip {
 	display: inline-block;
 	vertical-align: text-top;
+	width: 92%;
 	@include border-radius(2px);
-	padding: 4px 4px 1px 4px;
+	padding: 2px;
 	border: 1px solid $gray-mid;
     overflow: hidden;
-    margin: 8px;
+    margin: 2px 0px 2px 8px;
 }
 
 .vid-caption {
@@ -400,10 +403,10 @@ body {
 	position: absolute;
 	padding: 4px 6px 4px 6px;
 	height: auto;
-	width: 284px;
+	width: 88%;
 	overflow: hidden;
 	left: 5px;
-	top: 24px;
+	top: 22px;
 }
 
 
@@ -456,7 +459,8 @@ img.artist-profile-pic {
 .dataTables_filter {
 	text-align: left;
 	@include buildRegularFont($font-md); 
-	float:left;
+	float: left;
+	margin-bottom: 10px;
 }
 
 .dataTables_filter input[type=search] {

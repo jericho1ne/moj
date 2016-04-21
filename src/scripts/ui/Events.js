@@ -105,7 +105,6 @@ var Events = {
                         + '<th class="left">tix</th>'
                         + '</tr>');
 
-
             // Append Datatable header row
             $dataTable.append($tableHeader);
 
@@ -173,7 +172,7 @@ var Events = {
                         + '</td>'
                         
                         // Column 2 :: Venue
-                        + '<td class="left">' + events[i].venue + '</td>'
+                        + '<td class="left medium-text">' + events[i].venue + '</td>'
                         
                         // Column 3 :: Ticket link
                         + '<td class="left"><a href="' + events[i].url + '">' 
@@ -202,9 +201,11 @@ var Events = {
             $('#' + dataTableUniqueID).DataTable({
                 "bPaginate": true,
                 "pagingType": "simple",      // Prev and Next buttons only 
-                "dom": '<"top"iflp<"clear">>rt<"bottom"p<"clear">>',
+                "pageLength": 25, 
+                "lengthChange": false,
                 //  "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
-               
+                "dom": '<"top"ifl<"clear">>rt<"bottom"p<"clear">>',
+                
                 // Alternating row color
                 "asStripeClasses": [ 'even-bgcolor', 'odd-bgcolor' ],
                 "order": [[ 0, "asc" ]],
@@ -242,19 +243,39 @@ var Events = {
     /**
      * getArtistInfo :: gets bio, images, etc
      */
-    getArtistInfo: function (artistName) {
+    getArtistInfo: function (artistName, method) {
+
+        if (typeof method !== 'undefined' || typeof method !== '') {
+            // getinfo (confident search), ...
+            method = 'artist.' + method; 
+        }
+        // fall back on basic search
+        else {
+            method = 'artist.search';
+        }
+    
         // Get Artist Info
-        //  http://www.last.fm/api/show/artist.getinfo
+        //  http://www.last.fm/api/show/artist.getinfo OR artist.search
         // console.log(CACHE[strToLowerNoSpaces(artistName)]);
-       
+        
+        // First, format the artist name so last.fm call doesn't fail
+        var formattedArtistName = cleanArtistName(artistName);
+
+        // Prepare full query url
+        var baseUrl = 'http://ws.audioscrobbler.com/2.0/?';
+
+        var httpGetVars = 'method=' + method + '&' +
+                   'artist=' + formattedArtistName + '&' +
+                   'api_key=' + LASTFM_API_KEY + '&' +
+                   'format=json';
+
+        console.log(baseUrl + httpGetVars);
+
         //var promise = CACHE[strToLowerNoSpaces(artistName)];
         return $.ajax({
             type: 'POST',
-            url: 'http://ws.audioscrobbler.com/2.0/',
-            data: 'method=artist.getInfo&' +
-                   'artist=' + artistName + '&' +
-                   'api_key=' + LASTFM_API_KEY + '&' +
-                   'format=json',
+            url: baseUrl,
+            data: httpGetVars,
             dataType : 'json',
             // Success callback will fire even when couple with an external $.done
             success : function(data) {            
@@ -341,11 +362,12 @@ var Events = {
     /**
      * appendArtistInfo :: display artist info in DOM
      */
-    appendArtistInfo: function (divId, data) {
-        window.data = data;
-        
+    appendArtistInfo: function (divId, data) {        
         // Figure out exactly what data is available
-        var noInfoOnArtist = (data.error === 6 ? true : false);
+        var noInfoOnArtist = 
+            data.error === 6 || typeof data === 'undefined' 
+                ? true 
+                : false;
 
         // Display some placeholder text and image
         if (noInfoOnArtist) {
@@ -363,19 +385,35 @@ var Events = {
         }
         // Data is potentially good, check futher for blanks
         else {
-            var noPhoto = (data.artist.image[3] === '' ? true : false);
-            var noBio = (data.artist.bio.content.trim() === '' ? true : false);
+            console.log(" xxxx WHY OH WHY ");
+            // If using the search API call, grab first artist in array
+            if (typeof data.artist === 'undefined') {
+                artist = data.results.artistmatches.artist[0];
+            }
+            else {
+                artist = data.artist;
+            }
+
+            window.data = artist;
+
+            // Fallbacks in case we haven't received the extraneous info 
+            var artistBio = (typeof artist.bio !== 'undefined' ? artist.bio.content.trim() : '');
+            var artistTags = (typeof artist.tags !== 'undefined' ? artist.tags.tag : '');
+            var artistPhoto = (typeof artist.image !== 'undefined' ? artist.image[3] : '');
+            var noBio = (artistBio === '' ? true : false);
+
+            var noPhoto = (artistPhoto === '' ? true : false);
 
             // Create specific parent div name
             var artistInfo = '#' + divId;
             
             // Create custom info array
             var artist = {
-                'name': data.artist.name,
-                'bio': data.artist.bio.content,
-                'url': data.artist.url,
-                'images': data.artist.image,
-                'tags': data.artist.tags.tag
+                'name': artist.name,
+                'bio': artistBio,
+                'url': artist.url,
+                'images': artist.image,
+                'tags': artistTags
             };
 
             if (noBio) {
@@ -389,7 +427,7 @@ var Events = {
                 // Arbitrary limit on how much biography text to show
                 var maxCharsInBio = 1000;
                 // Remove any links
-                var fullBio = data.artist.bio.content.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+                var fullBio = artistBio.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
                 // Clip bio at preset character max
                 var shortBio = fullBio.substring(0, maxCharsInBio);
                 // If longer than max amount, add "show more" link
@@ -564,10 +602,13 @@ var Events = {
         // Enable dynamic play/stop functionality:  ?version=3&enablejsapi=1 
         // if Flash <object> stops working switch to .html('<iframe frameborder="0" 
 
-        var $imgTag = $('<div>')
+        var $imgTag = $('<object>')
             .attr('class','vid-clip')
-            .html('<object id="' + videoId + '" data="http://www.youtube.com/embed/' 
-                + videoId + '"></object>'); 
+            .attr('id', videoId)
+            .attr('data', 'http://www.youtube.com/embed/' + videoId);
+            //    + videoId + '"></object>'); )
+           //.html('<object id="' + videoId + '" data="http://www.youtube.com/embed/' 
+            //    + videoId + '"></object>'); 
 
         // floating image label
         var $imgLabel = $('<div>')

@@ -30,12 +30,31 @@ function stripSpaces(textString) {
 function clearDiv(divId, loading) {
   $('#' + divId).html('');
   if (loading) {
-	$('#' + divId).html('<span class="col-md-12 loading opacity-80">'+
-	  '<i class="fa fa-refresh fa-spin fa-1x"></i>' +
-	  '</span>');
+	$('#' + divId).html('<div class="col-md-12 opacity-80">'+
+	  '<div class="loading"></div>' +
+	  '</div>');
   }
 }
 
+function cleanArtistName(artistName) {
+	var formattedName = artistName;
+
+	// Search for "w/" and grab only first half
+	if (formattedName.search('w/') !== -1) {
+		console.log(formattedName);
+		tempArray = formattedName.split('w/');
+		formattedName = tempArray[0].trim();
+		console.log(formattedName);
+	}
+
+	// First check whether this artist has an alias
+	if (typeof ARTIST_ALIASES[artistName] !== 'undefined') {
+		formattedName = ARTIST_ALIASES[artistName];
+	}
+	
+	// Replace spaces with +
+	return formattedName.replace(/ /g, "+");
+}
 
 /**
  * getDistance
@@ -100,7 +119,7 @@ function getNearbyVenues(position, radius, limit) {
 	$('#map').fadeIn(750);
 
 	// Shows content
-	$("#nearby-shows").html('<i class="fa fa-cog fa-spin fa-5x center"></i>');
+	$("#nearby-shows").html('<div class="loading center"></div>');
 
 	// TODO:  move to LINE 127-ish
 	Venues.getVenues(
