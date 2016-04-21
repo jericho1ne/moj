@@ -172,14 +172,20 @@ module.exports = function (grunt) {
 			},
 			your_target: {
 				files: [{
-					cwd: '<%= cfg.src %>',
+					cwd: '<%= cfg.dst %>',
 					src: [
-						'media/**/*',
-						'scripts/**/*', 
+						'index.html',
+						'scripts/ui/**/*',
+						'scripts/api/**/*',
+						// Be specific, don't overwrite db stuff
+						'scripts/common/*.js',
+						'scripts/common/common.php',
 						'styles/*.css', 
+						'styles/**/*',	// remove later
 						'templates/**/*',
+						// 'media/**/*',
 						// robots.txt, index.html, png icons
-						'**/*',  
+						// '**/*',  
 		
 						//'images/_grey-bg.png',
 						// 'images/*',
