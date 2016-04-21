@@ -54,30 +54,35 @@ function lookupArtist(event) {
  * @param {array} event Object containing all of the related show info
  */
 function startPromiseChain(event) {
+
     // returns $.ajax from Last.fm API
     Events.getArtistInfo(event.artist, 'getinfo')
-        .then(function(artistData) {
-            console.log(artistData);
 
+        // Process results of original Last.fm API call
+        .then(function(artistData) {
+            // Get artist info wasn't so lucky
             if (artistData.error === 6) {
-                console.log(' ... first .then got no info ...');
+                console.log(' (+) Get info failed ...');
                 return Events.getArtistInfo(event.artist, 'search')
                     .then(function(artistData) {
-                        console.log(" FALL BACK TIME .");
-                        console.log(artistData);
+                        console.log(" (+) Falling back on Search");
                         // Returns artistInfo, even if blank
                         return Events.appendArtistInfo('artist-info', artistData);
                     });
-            }
+            }// End if getInfo call failed
+
+            // Yay, direct hit on artist name
             else {
                 // returns artist name, used in the next .then
                 return Events.appendArtistInfo('artist-info', artistData);
             }
-        })
+        })// End what to do after getArtistInfo
+
         .then(function(artistName) {      
             // returns $.ajax from Youtube API
             return Events.getTopTracks(artistName);
-        })
+        })// End what to do after appendArtistInfo
+
         .then(function(trackData) {
             Events.appendTopTracks('artist-tracks', trackData);
         });

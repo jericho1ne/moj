@@ -284,7 +284,7 @@ var Events = {
                     // CACHE[strToLowerNoSpaces(data.artist.name)] = data;
                 }
                 else {
-                    console.log("no data on this artist...");
+                    console.log(" (x) No data from Last.fm");
                     // TODO: fallback to another API
                 }
             },
@@ -323,8 +323,7 @@ var Events = {
 
         if (event.description === "") {
             $('#artist-bio').html(
-                '<br><br>' + ' <i class="fa fa-terminal fa-2x"></i></div>'
-                +'<div>No information found on this artist.&nbsp;'
+                '<br><br>' + '<div>No info on this artist.&nbsp;</div>'
             );
         }
         else {
@@ -362,12 +361,26 @@ var Events = {
     /**
      * appendArtistInfo :: display artist info in DOM
      */
-    appendArtistInfo: function (divId, data) {        
-        // Figure out exactly what data is available
-        var noInfoOnArtist = 
-            data.error === 6 || typeof data === 'undefined' 
-                ? true 
-                : false;
+    appendArtistInfo: function (divId, data) {
+        // In case of getinfo direct API call, data.error may exist
+        var noInfoOnArtist = (data.error === 6) ? true : false;
+
+        // If using the search API call, grab first artist in array
+        if (typeof data.artist === 'undefined') {
+            if (typeof data.results.artistmatches.artist[0] === 'undefined') {
+                noInfoOnArtist = true;
+            }
+            else {
+                artist = data.results.artistmatches.artist[0];
+            }
+        }// End if coming from a "search" API call
+        else {
+            // if ()
+            artist = data.artist;
+        }
+
+        // DEBUG
+        window.data = artist;        
 
         // Display some placeholder text and image
         if (noInfoOnArtist) {
@@ -377,25 +390,13 @@ var Events = {
                 + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
 
             $('#artist-bio').html(
-                '<br><br>' + ' <i class="fa fa-terminal fa-2x"></i></div>'
-                +'<div>No information found on this artist.&nbsp;'
+                '<br><br>' + '<div>No info found on this artist.&nbsp;</div>'
             );
 
             return Error("appendArtistInfo kinda sorta failed just now  ='()");
         }
         // Data is potentially good, check futher for blanks
         else {
-            console.log(" xxxx WHY OH WHY ");
-            // If using the search API call, grab first artist in array
-            if (typeof data.artist === 'undefined') {
-                artist = data.results.artistmatches.artist[0];
-            }
-            else {
-                artist = data.artist;
-            }
-
-            window.data = artist;
-
             // Fallbacks in case we haven't received the extraneous info 
             var artistBio = (typeof artist.bio !== 'undefined' ? artist.bio.content.trim() : '');
             var artistTags = (typeof artist.tags !== 'undefined' ? artist.tags.tag : '');
@@ -416,12 +417,14 @@ var Events = {
                 'tags': artistTags
             };
 
+            // No bio returned
             if (noBio) {
                 $('#artist-bio').html(
                     '<br><br>' + ' <i class="fa fa-terminal fa-2x"></i></div>'
                     +'<div>No information found on this artist.&nbsp;'
                 );
-            } 
+            }// If no bio
+            // Bio exists, append content to modal
             else {
                 $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
                 // Arbitrary limit on how much biography text to show
@@ -439,12 +442,14 @@ var Events = {
                 
                 // Append the artist bio text
                 $('#artist-bio').html(shortBio);
-            }
+            }// Else case for bio content
 
+            // No artist photo. Show De La Soul is Dead cover =)
             if (noPhoto) {
                  $('#artist-photo').html('<div class="top60">'
                     + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
             }
+            // Append artist photo
             else {
                 // photoContainer = artist photo + name caption
                 $photoCaption = $('<span>')
@@ -455,7 +460,7 @@ var Events = {
                 $('#artist-photo').addClass('relative');
                 $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic ">');
                 $('#artist-photo').append($photoCaption);  
-            }
+            }// End artist photo exists
            
             // NECESSARY ??
             $('#artist-tracks').html();
