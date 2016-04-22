@@ -176,7 +176,7 @@ var Events = {
                         
                         // Column 3 :: Ticket link
                         + '<td class="left"><a href="' + events[i].url + '">' 
-                        +   '<i class="fa fa-ticket"></i>' + '</a>'
+                        +   '<img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" />' + '</a>'
                         + '</td>'
 
                     + '</tr>' );
@@ -420,8 +420,7 @@ var Events = {
             // No bio returned
             if (noBio) {
                 $('#artist-bio').html(
-                    '<br><br>' + ' <i class="fa fa-terminal fa-2x"></i></div>'
-                    +'<div>No information found on this artist.&nbsp;'
+                    '<div><br><br>No information found on this artist.&nbsp;</div>'
                 );
             }// If no bio
             // Bio exists, append content to modal

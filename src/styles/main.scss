@@ -51,6 +51,7 @@ body {
 	font-family: $font-regular;
 	color: $primary-font-color;
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 /*----------------- One offs ----------------------*/
@@ -63,6 +64,7 @@ body {
 }
 
 #content-parent {
+	max-width: 100%;
 	padding: 0px;
 	margin: 0px;
 	text-align: center;
@@ -107,45 +109,19 @@ body {
 	text-align: left;
 }
 
-/*  Font Awesome Customness */
-.fa-envelope-o {	
-	cursor: pointer;
-	padding: 8px;
-    font-size: 1.5em;
-    color: $gray-xlight;
-    opacity: 0.8;
-    display: inline-block;
-    border-radius: 100px;
-    box-shadow: 0 0 4px #000;
-    background-color: transparent;
-}
-
-.fa-ticket {
-	font-size: 1.5em !important;
-	opacity: 0.9;
-	padding: 3px;
-    display: inline-block;
-    -moz-border-radius: 50px;
-    -webkit-border-radius: 50px;
-    border-radius: 100px;
-    -moz-box-shadow: 0px 0px 1px $gray-dark;
-    -webkit-box-shadow: 0px 0px 1px $gray-dark;
-    box-shadow: 0px 0px 1px $gray-dark;
-}
-
-.loading {
-	@include buildRegularFont($font-md);
-	position: relative;
-	margin-left: 40px !important;
-	top: 40px !important;
-	color: $gray-mid;
-}
+// .loading {
+// 	@include buildRegularFont($font-md);
+// 	position: relative;
+// 	margin-left: 40px !important;
+// 	top: 40px !important;
+// 	color: $gray-mid;
+// }
 
 .link, .link a {
 	@include buildRegularFont($font-md);
 	// Never add left padding or text breaking 
 	// across two rows will make top line seem intended
-	padding: 6px 4px 6px 0px;
+	padding: 2px 2px 2px 4px;
 	background: none;
 	border: none;
 	color: $lazy-blue !important;
@@ -153,6 +129,7 @@ body {
 
 .link:hover {
 	background-color: #B4CEE7 !important;
+	padding: 2px 2px 2px 4px;
 	@include border-radius(3px);
 	cursor: pointer;
 }
@@ -565,4 +542,12 @@ table.dataTable .date-header {
 }
 /*           end datatables.min.css override        */
 
+/*  override bootstrap */
+button.close {
+	font-size: 50px;
+	opacity: 0.67;
+	color: $gray-mid;
+	padding-top: 2px;
+	line-height: 0.5;
+}
 

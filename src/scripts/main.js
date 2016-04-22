@@ -42,7 +42,7 @@ function lookupArtist(event) {
       // Append venue name + link
     $('#artist-event').html(
         'Go see ' + showTitle + ' at ' + '<a href="' + event.url + '" class="link">' 
-        + event.venue + ' <i class="fa fa-music"></i></a>');
+        + event.venue + ' <img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" /></a>');
     $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date);
 
 }// End lookupArtist

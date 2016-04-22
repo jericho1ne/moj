@@ -76,7 +76,7 @@ var Venues = {
             venuesHtml =
                 '<div class="row-sm">' +
                 '<button class="faveButton ' + btnClass + '" data-id="' + this.id + '">' +
-                '<i class="fa fa-heart-o fa-2x"></i>' +
+                '<img src="media/svg/heart.svg" class="icon-link" alt="Save Favorite" />' +
                 '</button>' +
                 '<a href="#' + this.id + '">' + this.name + '</a> • ' +
                 this.city + ' - ' + parseFloat(this.distance.toFixed(1)) + ' mi. away' +
