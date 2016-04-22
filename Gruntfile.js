@@ -175,6 +175,7 @@ module.exports = function (grunt) {
 					cwd: '<%= cfg.dst %>',
 					src: [
 						'index.html',
+						'scripts/*.js',
 						'scripts/ui/**/*',
 						'scripts/api/**/*',
 						// Be specific, don't overwrite db stuff
@@ -183,7 +184,7 @@ module.exports = function (grunt) {
 						'styles/*.css', 
 						'styles/**/*',	// remove later
 						'templates/**/*',
-						// 'media/**/*',
+						'media/**/*',
 						// robots.txt, index.html, png icons
 						// '**/*',  
 		

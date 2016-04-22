@@ -56,16 +56,15 @@ body {
 
 /*----------------- One offs ----------------------*/
 #secondaryHeader {
-    z-index: 101;
-    left: 0px;
-    top: 0px;
-    position: fixed;
-    width: 106%;
+	z-index: 101;
+	left: 0px;
+	top: 0px;
+	position: fixed;
+	width: 106%;
 }
 
 #content-parent {
 	max-width: 100%;
-	padding: 0px;
 	margin: 0px;
 	text-align: center;
 	margin-right: auto;
@@ -215,7 +214,8 @@ body {
 }
 
 #shows-content {
-	padding: $pad-xsm;
+	margin-left: -8px;
+	margin-right: -8px;
 }
 
 #nearby-shows {
@@ -352,7 +352,7 @@ body {
 .vid-list {
 	display: inline-block;
 	padding: 0;
-    list-style-type: none;
+	list-style-type: none;
 }
 
 .vid-clip-wrapper {
@@ -369,8 +369,8 @@ body {
 	@include border-radius(2px);
 	padding: 2px;
 	border: 1px solid $gray-mid;
-    overflow: hidden;
-    margin: 2px 0px 2px 8px;
+	overflow: hidden;
+	margin: 2px 0px 2px 8px;
 }
 
 .vid-caption {
@@ -483,7 +483,7 @@ select {
 	background: url("../media/images/grey-diag-bg.png");
 	margin: auto;
 	border: $gray-light-border;
-    border-radius: 3px;
+	border-radius: 3px;
 }
 
 .dataTables_wrapper table thead {
