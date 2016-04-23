@@ -123,7 +123,7 @@ $(document).ready(function() {
         })// End ref.onAuth
     });
 
-    $('#action-getPos').click(function() {
+    $('#action-getPosition').click(function() {
         // Get venues within 25 miles, max 10 results
         getPosition();
     });
@@ -156,12 +156,23 @@ $(document).ready(function() {
             // Parse the data into JSON object
             var eventData = JSON.parse(data);
 
-            // Save data to local storage
+            // Save event data to local storage
             UserState.events = eventData.events;
+            Events.eventData = eventData.events;
 
             // JSON data will go into shows-content div
             Events.displayEvents(eventData, 'shows-content');
+
+            // Once data is loaded, parse URL for a direct show link
+            var requestedEvent = Events.getEventById(3767);
+
+            setTimeout(function() {
+                lookupArtist(requestedEvent);
+            }, 700);
+            
+            console.log(requestedEvent);
         })
+
         // Add old school click listener on parent div (will bubble up)
         .then(function(){  
             // https://davidwalsh.name/event-delegate
@@ -174,12 +185,16 @@ $(document).ready(function() {
                 }
             });// End addEventListener
         });// End add old school click listener
+
+
     //
-    // End Events.getEvents promise chain
+    // Replace regular action bar w/ mini action bar upon downward scroll
     // 
     $(window).scroll(function(e) { 
         var divHeight = 35;
         var $secondaryHeader = $('#secondaryHeader'); 
+
+        // Append mini header
         if ($(this).scrollTop() > divHeight) { 
             // Gradual fade in then show
             $secondaryHeader.fadeIn(150, function() {
@@ -187,12 +202,13 @@ $(document).ready(function() {
             });
             $secondaryHeader.toggleClass('hidden', false); 
         }
-        if ($(this).scrollTop() < divHeight) {
+        // Remove mini header
+        else if ($(this).scrollTop() < divHeight) {
             // Gradual fade, then hide
             $secondaryHeader.fadeOut(300, function() {
                 $secondaryHeader.toggleClass('hidden', true);
             });
         } 
-    });
+    });// End window.scroll trigger
 
 });// End on Document Load

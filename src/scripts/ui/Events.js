@@ -14,7 +14,7 @@ var Events = {
     apiScriptsBase: 'scripts/api/',
     eventsScript: 'getEventsJson.php',
 
-    $eventData: {},
+    eventData: {},
     maxVideosToShow: 4,
 
     /**
@@ -22,7 +22,7 @@ var Events = {
      * returns the data table object in its current state
      */
     getEventData: function() {
-        return this.$eventData;
+        return this.eventData;
     },// End getEventData
 
     /**
@@ -53,6 +53,18 @@ var Events = {
                 }
         });// End getEvents $.ajax
     },// End getEvents
+
+
+    getEventById: function(eventId) {
+        // work with a copy of the data
+        var tempEventData = this.getEventData();
+        
+        for(var i=0; i< tempEventData.length; i++) {
+            if (tempEventData[i].eventid == eventId) {
+                return tempEventData[i];
+            }
+        }// End for events loop
+    },// End getEventById
 
     /**
      * displayEvents
@@ -228,7 +240,7 @@ var Events = {
             // Give the datatable a chance to complete attaching, then call it quits
             setTimeout(function() {
                 // Save into class property
-                //this.$eventData = $dataTable;
+                //this.eventData = $dataTable;
                 return("Event data loaded");
             }, 0);
         }// End else data received
