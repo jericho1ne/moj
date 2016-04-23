@@ -127,13 +127,13 @@
     * geoLocateUser
     * attempts to grab the device coordinates
     */
-    geoLocateUser: function() {
+    geoLocateUser: function(timeout) {
       var def = $.Deferred();
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(def.resolve, def.reject, {
           enableHighAccuracy: true,
-          timeout: 7000
+          timeout: timeout
         });
       }
       else {

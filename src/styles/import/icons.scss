@@ -1,4 +1,6 @@
-/* Mixins */
+/** 
+ *    Duplicate mixins from main.scss  
+ */
 @mixin border-radius($px) {
     -ms-border-radius: $px;
     -moz-border-radius: $px;
@@ -6,35 +8,31 @@
     border-radius: $px;
 }
 
-/*      FA replacements       */
-.svg-envelope {
-    background: url("../media/svg/envelope.svg");
-    background-repeat: no-repeat;
-    background-position: center top;
-    cursor: pointer;
-    padding: 8px;
-    width: 44px;
-    height: 44px;
-    color: $gray-xlight;
-    opacity: 0.8;
-    display: inline-block;
-    border-radius: 60px;
-    box-shadow: 0 0 4px #eee;
-    background-color: transparent;
-}
+/** 
+ *    FA replacements, ohh yeahhh  
+ */
 
-.icon {
-    width: 48px;
-    height: 36px;
+// Action bar links
+.icon-action {
+    width: 44px;
+    height: 40px;
     cursor: pointer;
-    padding: 0px;
-    margin: 6px;
-    opacity: .7;
+    padding: 4px;
+    margin: 4px;
+    opacity: .65;
     display: inline-block;
-    border-radius: 6px;
+    @include border-radius(8px);
     background-color: #fafafa;
 }
+.icon-action:hover {
+    background-color:#5cbf2a;
+    opacity: .9;
+    transition: all 0.12s cubic-bezier(0.53, 0.26, 1, 1);
+}
 
+/** 
+ *    Body Link Styles 
+ */
 .icon-link {
     width: 36px;
     height: 36px;
@@ -46,12 +44,15 @@
     display: inline-block;
     background-color: #fff;
 }
-
 .icon-link:hover{
     background-color: #B4CEE7 !important;
     transition: all 0.12s cubic-bezier(0.53, 0.26, 1, 1);
 }
 
+
+/** 
+ *    Loading spinner  
+ */
 .loading {
   font-size: 10px;
   margin: 10px auto;

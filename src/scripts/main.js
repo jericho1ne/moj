@@ -101,9 +101,9 @@ $(document).ready(function() {
     //
     // LISTENERS
     //
-    $('#eml-blk').click(function() {
-        var emailaddy = rvStr($("#eml").data("u")) + '@' + rvStr($("#eml").data("d"));
-        document.location.href = 'ma' + 'il' + 'to' + ':' + emailaddy;
+    $('#action-eml').click(function() {
+        var emlad = rvStr($("#eml").data("u")) + '@' + rvStr($("#eml").data("dom"));
+        document.location.href = 'ma' + 'il' + 'to' + ':' + emlad;
     });
 
     $('#gPlusLogin').click(function() {
@@ -123,7 +123,7 @@ $(document).ready(function() {
         })// End ref.onAuth
     });
 
-    $('#getPosition').click(function() {
+    $('#action-getPos').click(function() {
         // Get venues within 25 miles, max 10 results
         getPosition();
     });
