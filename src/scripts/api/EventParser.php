@@ -67,6 +67,8 @@ class EventParser {
 
 		pr($jsonData['totalResults']);
 
+		$venues = [];
+
 		foreach($jsonData['events'] as $event) {
 			$pushIt = array(
 				'venue' => $event['venue']['name'],
@@ -77,8 +79,13 @@ class EventParser {
 				'price' => $event['ticketPrice'],
 			);
 
-			pr($pushIt);
+			$venues[] = array($event['venue']['id'] => $event['venue']['name']);
+
+			//pr($event);
+			//pr($pushIt);
+
 		}
+		pr($venues);
 	}// End parseTicketflyEvents
 
 

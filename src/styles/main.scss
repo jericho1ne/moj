@@ -120,7 +120,7 @@ body {
 	@include buildRegularFont($font-md);
 	// Never add left padding or text breaking 
 	// across two rows will make top line seem intended
-	padding: 2px 2px 2px 4px;
+	padding: 2px 2px 2px 0px;
 	background: none;
 	border: none;
 	color: $lazy-blue !important;
@@ -128,7 +128,7 @@ body {
 
 .link:hover {
 	background-color: #B4CEE7 !important;
-	padding: 2px 2px 2px 4px;
+	padding: 2px 2px 2px 0px;
 	@include border-radius(3px);
 	cursor: pointer;
 }

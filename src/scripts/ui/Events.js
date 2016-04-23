@@ -259,7 +259,13 @@ var Events = {
         // console.log(CACHE[strToLowerNoSpaces(artistName)]);
         
         // First, format the artist name so last.fm call doesn't fail
-        var formattedArtistName = cleanArtistName(artistName);
+        var returnedName = cleanArtistName(artistName);
+
+        var formattedArtistName = returnedName;
+
+        if ($.isArray(returnedName)) {
+            formattedArtistName = returnedName[1];
+        }
 
         // Prepare full query url
         var baseUrl = 'http://ws.audioscrobbler.com/2.0/?';
@@ -269,7 +275,7 @@ var Events = {
                    'api_key=' + LASTFM_API_KEY + '&' +
                    'format=json';
 
-        console.log(baseUrl + httpGetVars);
+        // console.log(baseUrl + httpGetVars);
 
         //var promise = CACHE[strToLowerNoSpaces(artistName)];
         return $.ajax({
@@ -291,7 +297,8 @@ var Events = {
             error : function(code, message){
                 // Handle error here
                 // TODO:  change to jquery UI modal that autofades and has (X) button
-                alert("Unable to load Artist data =(");
+                alert('Unable to load Artist data =( ' 
+                    + 'Please check your internet connection');
             }
         });// End artistXHR $.ajax 
     },// End getArtistInfo

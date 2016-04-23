@@ -37,14 +37,25 @@ function clearDiv(divId, loading) {
 }
 
 function cleanArtistName(artistName) {
-	var formattedName = artistName;
+	var formattedName = String(artistName);
 
-	// Search for "w/" and grab only first half
+	// Strip unnecessary stuff
+	formattedName.replace('& more', '');
+	formattedName.replace('&more', '');
+
+	// Replace spaces w/ pluses
+	formattedName.replace(/ /g, "+");
+
+	// Search for "w/" and return both halves,
+	// hoping that one of the two will yield a result
 	if (formattedName.search('w/') !== -1) {
-		console.log(formattedName);
+		//console.log(formattedName);
 		tempArray = formattedName.split('w/');
-		formattedName = tempArray[0].trim();
-		console.log(formattedName);
+		formattedName = [
+			tempArray[0].trim(), 
+			tempArray[1].trim()
+		];
+		//console.log(formattedName);
 	}
 
 	// First check whether this artist has an alias
@@ -53,7 +64,7 @@ function cleanArtistName(artistName) {
 	}
 	
 	// Replace spaces with +
-	return formattedName.replace(/ /g, "+");
+	return formattedName;
 }
 
 /**
