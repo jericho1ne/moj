@@ -148,7 +148,7 @@ body {
 }
 
 .subtitle {
-	@include buildRegularFont($font-sm);
+	@include buildRegularFont($font-md);
 	color: $gray-mid;
 }
 
@@ -376,7 +376,7 @@ body {
 .vid-caption {
 	@include buildRegularFont($font-sm);
 	color: #000;
-	background-color: $btn-bg-gold;
+	background-color: $gold;
 	position: absolute;
 	padding: 4px 6px 4px 6px;
 	height: auto;

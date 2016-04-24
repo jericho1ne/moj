@@ -13,7 +13,11 @@ $gray-dark: #565656;
 $purple-i-like: #B70FD5;
 
 $pink: #D953E5;
-$btn-bg-gold: #DBD12C;
+$gold: #DBD12C;
 
 $active-color: #CA2667;
 $inactive-color: 'transparent';
+
+.color-gold {
+	color: $gold;
+}

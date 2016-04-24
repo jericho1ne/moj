@@ -39,11 +39,13 @@ function lookupArtist(event) {
     }// End switch based on event Source
 
 
-      // Append venue name + link
+    // Append venue name + link
     $('#artist-event').html(
         'Go see ' + showTitle + ' at ' + '<a href="' + event.url + '" class="link">' 
         + event.venue + ' <img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" /></a>');
-    $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date);
+    $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date +
+       ' <a href="' + event.url + '"><img src="media/svg/share.svg" class="icon-link" alt="Share URL" /></a>'
+    );
 
 }// End lookupArtist
 
@@ -164,13 +166,16 @@ $(document).ready(function() {
             Events.displayEvents(eventData, 'shows-content');
 
             // Once data is loaded, parse URL for a direct show link
+            var request  = window.location.href.split('#');
+
+            console.log(request[1]);
+            
             var requestedEvent = Events.getEventById(3767);
 
+            // Allow bootstrap modal to load
             setTimeout(function() {
                 lookupArtist(requestedEvent);
             }, 700);
-            
-            console.log(requestedEvent);
         })
 
         // Add old school click listener on parent div (will bubble up)
@@ -205,7 +210,7 @@ $(document).ready(function() {
         // Remove mini header
         else if ($(this).scrollTop() < divHeight) {
             // Gradual fade, then hide
-            $secondaryHeader.fadeOut(300, function() {
+            $secondaryHeader.fadeOut(100, function() {
                 $secondaryHeader.toggleClass('hidden', true);
             });
         } 
