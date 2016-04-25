@@ -156,26 +156,6 @@ body {
 	background-color: $gray-dark;
 }
 
-/*-------------------- Column styles -------------------*/
-.col-2 {
-	min-width: 50%;
-	min-height: $col-min-height;
-	position: relative;
-	float: left;
-}
-.col-3 {
-	min-width: 33%;
-	min-height: $col-min-height;
-	position: relative;
-	float: left;
-}
-.col-4 {
-	min-width: 25%;
-	min-height: $col-min-height;
-	position: relative;
-	float: left;
-}
-
 /*-------------------- Row styles ---------------------------*/
 .row-sm {
 	display: block;

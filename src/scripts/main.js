@@ -43,9 +43,13 @@ function lookupArtist(event) {
     $('#artist-event').html(
         'Go see ' + showTitle + ' at ' + '<a href="' + event.url + '" class="link">' 
         + event.venue + ' <img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" /></a>');
-    $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date +
-       ' <a href="' + event.url + '"><img src="media/svg/share.svg" class="icon-link" alt="Share URL" /></a>'
-    );
+
+    // Sharing link first
+    $('.modal-share-link').html('<a href="' + buildSharingLink(event.eventid) + '">' 
+        + '<img src="media/svg/share.svg" class="icon-action" alt="Share URL" /></a>');
+
+    // Modal title (Artist @ venue on date)
+    $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date);
 
 }// End lookupArtist
 
@@ -67,7 +71,7 @@ function startPromiseChain(event) {
                 console.log(' (+) Get info failed ...');
                 return Events.getArtistInfo(event.artist, 'search')
                     .then(function(artistData) {
-                        console.log(" (+) Falling back on Search");
+                        console.log(' (+) Falling back on Search');
                         // Returns artistInfo, even if blank
                         return Events.appendArtistInfo('artist-info', artistData);
                     });
@@ -116,7 +120,7 @@ $(document).ready(function() {
                 window.authData = authData;
             } 
             else {
-                ref.authWithOAuthRedirect("google", function(error, authData) {
+                ref.authWithOAuthRedirect('google', function(error, authData) {
                     if (error) {
                         console.log("Problems Houston...", error);
                     }
@@ -140,12 +144,16 @@ $(document).ready(function() {
     getNearbyVenues(25, 4);
     });
 
-    $('#setPageState').click(function() {
-    // Parse the hashtag section from URL
-    var lastSection = window.location.href.split("/").pop();
 
-    // Save the last visited page
-    setPageState(lastSection);
+    // Should be calling set/loadPageState automatically!
+    // 
+    $('#setPageState').click(function() {
+        // Parse the hashtag section from URL
+        var lastSection = window.location.href.split("/").pop();
+        console.log(lastSection);
+
+        // Save the last visited page
+        setPageState(lastSection);
     });
 
 
@@ -167,21 +175,35 @@ $(document).ready(function() {
 
             // Once data is loaded, parse URL for a direct show link
             var request  = window.location.href.split('#');
-
-            console.log(request[1]);
             
-            var requestedEvent = Events.getEventById(3767);
+            var tempVar = request[1].split('=');
 
-            // Allow bootstrap modal to load
-            setTimeout(function() {
-                lookupArtist(requestedEvent);
-            }, 700);
-        })
+            console.log(tempVar);
 
-        // Add old school click listener on parent div (will bubble up)
+            // if a hashtag passed in, figure out what to load
+            if (!isBlank(tempVar[1])) {
+  
+                if (tempVar[0] === 'event') {
+                    var requestedEvent = Events.getEventById(tempVar[1]);
+
+                    // If event info exists
+                    if (!isBlank(requestedEvent)) {
+                        // Allow bootstrap modal to load
+                        setTimeout(function() {
+                            lookupArtist(requestedEvent);
+                        }, 700);
+                    }// End if event info exists
+                }
+
+            }// End if hastag found in the url
+            
+            
+        })// End events.getEvents().then
+
+        // Add old school click listener on parent div (will bubble up from Datatable)
         .then(function(){  
             // https://davidwalsh.name/event-delegate
-            document.getElementById('shows-content').addEventListener("click", function(e) {
+            document.getElementById('shows-content').addEventListener('click', function(e) {
                 var eventid = $(e.target).data('eventid');
                 var event = UserState.events[eventid];
                 // Ensure that user has clicked on an actual link

@@ -228,3 +228,20 @@ function reattachListeners() {
     });// End faveButton click
 
 }// End function reattachListeners
+
+function buildSharingLink(eventId) {
+    var url = window.location.href.split('/');
+    return url[0] + '/app/#event=' + eventId;
+}
+
+function isBlank(thisVar) {
+    if (typeof thisVar !== 'undefined') {
+        if (typeof thisVar === 'object') { // figure out object.length substitute} && thisVar.length) {
+            return false;
+        }
+        else if (typeof thisVar === 'string' && thisVar.length > 0) {
+            return false;
+        }
+    }
+    return true;
+}

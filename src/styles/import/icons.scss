@@ -23,6 +23,7 @@
     display: inline-block;
     @include border-radius(8px);
     background-color: #fafafa;
+    border: 1px solid #ccc;
 }
 .icon-action:hover {
     background-color:#5cbf2a;
