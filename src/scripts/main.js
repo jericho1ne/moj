@@ -41,12 +41,12 @@ function lookupArtist(event) {
 
     // Append venue name + link
     $('#event-tickets').html(
-        showTitle + ' ' + '<a href="' + event.url + '">' 
-        + ' <img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" title="Get tickets"/></a>');
+        '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/></a>'
+        + showTitle + ' ' + '<a href="' + event.url + '">');
 
     // Sharing link first
     $('#share-link').html('<a href="' + buildSharingLink(event.eventid) + '">' 
-        + '<img src="media/svg/share.svg" class="icon-action" alt="Share URL" /></a>');
+        + '<img src="media/svg/share.svg" class="icon-action" alt="Share Link" title="Share Link"/></a>');
 
     // Modal title (Artist @ venue on date)
     $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date);
