@@ -230,8 +230,8 @@ function reattachListeners() {
 }// End function reattachListeners
 
 function buildSharingLink(eventId) {
-    var url = window.location.href.split('/');
-    return url[0] + '/app/#event=' + eventId;
+    return window.location.origin + window.location.pathname 
+        + '#event=' + eventId;
 }
 
 function isBlank(thisVar) {
@@ -245,3 +245,40 @@ function isBlank(thisVar) {
     }
     return true;
 }
+
+function parseUrlHashtag() {
+    var host = window.location.host;
+    var path = window.location.pathname;
+    var request = window.location.href.split('#');
+    var urlString = request[1];
+
+    // See if there was even a hashtag passed in
+    if (!isBlank(urlString)) {
+        var params = request[1].split('=');
+
+        // If there's stuff to do
+        if (!isBlank(params[0]) && !isBlank(params[1])) {
+            // Load artist/show data differently based on source
+            switch(params[0]) {
+                case 'event':
+                    var requestedEvent = Events.getEventById(params[1]);
+                    // If event info exists
+                    if (!isBlank(requestedEvent)) {
+                        // Allow bootstrap modal to load
+                        setTimeout(function() {
+                            lookupArtist(requestedEvent);
+                        }, 500);
+                    }// End if event info exists
+                    break;
+                case 'venue':
+                    break;
+                case 'zip':
+                    break;
+                default:
+                    // default case 
+            }// End switch
+        }
+    }// End if urlString is not blank
+
+}// End parseUrlHashtag
+

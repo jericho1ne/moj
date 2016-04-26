@@ -8,6 +8,20 @@
 .hidden {
     display: none;
 }
+
+.inline-block { 
+    position: relative !important; 
+    display: inline-block;
+    height: auto;
+    text-align: left;
+}
+.float-left {
+    float: left;
+}
+.float-right {
+    float: right;
+}
+
 .opacity-30 {
     opacity: 0.3;
 }

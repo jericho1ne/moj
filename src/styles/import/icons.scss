@@ -23,31 +23,32 @@
     display: inline-block;
     @include border-radius(8px);
     background-color: #fafafa;
-    border: 1px solid #ccc;
+    border: 1px solid $gray-mid;
 }
 .icon-action:hover {
-    background-color:#5cbf2a;
+    background-color: #B4CEE7 !important;
     opacity: .9;
-    transition: all 0.12s cubic-bezier(0.53, 0.26, 1, 1);
+    transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
 
 /** 
  *    Body Link Styles 
  */
 .icon-link {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     cursor: pointer;
     @include border-radius(30px);
-    padding: 2px;
+    padding: 3px;
     margin: 1px;
     opacity: .8;
     display: inline-block;
     background-color: #fff;
+    border: 1px solid $gray-xlight;
 }
 .icon-link:hover{
     background-color: #B4CEE7 !important;
-    transition: all 0.12s cubic-bezier(0.53, 0.26, 1, 1);
+    transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
 
 

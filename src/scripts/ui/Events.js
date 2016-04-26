@@ -326,7 +326,8 @@ var Events = {
         // Display some placeholder text and image
         if (event.media === "") {
             $('#artist-photo').html('<div class="top60">'
-                + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
+                + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available">'
+                + '</div>');
         }
         else {
             // photoContainer = artist photo + name caption
@@ -336,7 +337,8 @@ var Events = {
 
             // Set the img tag    
             $('#artist-photo').addClass('relative');
-            $('#artist-photo').html('<img src="' + event.media + '" class="artist-profile-pic ">');
+            $('#artist-photo').html('<a href="' + artist.url + '">' 
+                + '<img src="' + event.media + '" class="artist-profile-pic "></a>');
             $('#artist-photo').append($photoCaption);  
         }
 
@@ -476,7 +478,9 @@ var Events = {
 
                 // Set the img tag    
                 $('#artist-photo').addClass('relative');
-                $('#artist-photo').html('<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic ">');
+                $('#artist-photo').html('<a href="' + artist.url + '">'
+                    + '<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic "></a>');
+
                 $('#artist-photo').append($photoCaption);  
             }// End artist photo exists
            

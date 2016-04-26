@@ -91,7 +91,8 @@ module.exports = function (grunt) {
 			options: {
 				preserveComments: false,
 				screwIE8: true,
-				mangle: false,
+				mangle: true,
+				compress: true,
 				// cwd: '<%= cfg.src %>/scripts/vendor/'
 				// exceptionsFiles: [
 				// 	'datatables.min.js', 
@@ -101,10 +102,10 @@ module.exports = function (grunt) {
 			dist: {
 				files: [{
 					expand: true,
-					cwd: '<%= cfg.src %>/scripts/vendor/',
-					src: [ '*.js', '!datatables.min.js' ],
-					dest: '<%= cfg.dst %>/scripts/vendor',
-					ext:  '.min.js'
+					cwd: '<%= cfg.src %>/scripts/',
+					src: [ 'main.js', 'ui/*.js', 'common/*.js' ],
+					dest: '<%= cfg.dst %>/scripts/',
+					ext:  '.js'
 				}]
 			}// End uglify:dist
 		},// End uglify task
@@ -116,13 +117,13 @@ module.exports = function (grunt) {
 		 */
 		cssmin: {
 			dist: {
-				 files: {
-					 '<%= cfg.dst %>/styles/main.css': [
-						 '.tmp/styles/{,*/}*.css',
-						 '<%= cfg.src %>/styles/{,*/}*.css'
-					 ]
-				 }
-			 }
+				files: {
+				 	'<%= cfg.dst %>/styles/main.css': [
+						'.tmp/styles/{,*/}*.css',
+						'<%= cfg.src %>/styles/{,*/}*.css'
+				 	]
+				}
+			}// End dist
 		},// End task cssmin
 
 		// Auto save via FTP
@@ -146,8 +147,8 @@ module.exports = function (grunt) {
 					'<%= cfg.dst %>/Thumbs.db', 
 					'<%= cfg.dst %>/tmp' ],
     			progress: true
-			 },
-			 live: {
+			},// End build
+			live: {
 				auth: {
 					host: 'sol.apisnetworks.com',
 					port: 21,
@@ -160,7 +161,7 @@ module.exports = function (grunt) {
 					'/Thumbs.db', 
 					'/data/', 
 					'/tmp' ]
-			 }
+			}// End live
 		},// End ftp-deploy task
 
 		// Grunt SCP file upload task
@@ -170,7 +171,33 @@ module.exports = function (grunt) {
 				username: '<%= scpConfig.username %>',
 				password: '<%= scpConfig.password %>'
 			},
-			your_target: {
+			dev: {
+				files: [{
+					cwd: '<%= cfg.dst %>',
+					src: [
+						'index.html',
+						'scripts/*.js',
+						'scripts/ui/**/*',
+						'scripts/api/**/*',
+						// Be specific, don't overwrite db stuff
+						'scripts/common/*.js',
+						'scripts/common/common.php',
+						'styles/*.css', 
+						'styles/**/*',	// remove later
+						'templates/**/*',
+						'media/**/*',
+						// robots.txt, index.html, png icons
+						// '**/*',  
+		
+						//'images/_grey-bg.png',
+						//'images/*',
+					],
+					filter: 'isFile',
+					// path on the server
+					dest: '<%= scpConfig.dev %>'
+				}]
+			},
+			live: {
 				files: [{
 					cwd: '<%= cfg.dst %>',
 					src: [
@@ -193,7 +220,7 @@ module.exports = function (grunt) {
 					],
 					filter: 'isFile',
 					// path on the server
-					dest: '<%= scpConfig.directory %>'
+					dest: '<%= scpConfig.live %>'
 				}]
 			},
 		},// End task grunt-scp
@@ -284,10 +311,10 @@ module.exports = function (grunt) {
 		'sass', // to be replaced by 'concurrent:dist',
 		'postcss',
 		'cssmin',
-		'uglify',
 		
 		// stuff after this task happens in the destination folder
-		'copy:all',		
+		'copy:all',	
+		'uglify',	
 		'filerev:all',
 		'usemin',
 		'htmlmin'

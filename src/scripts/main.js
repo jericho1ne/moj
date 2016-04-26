@@ -40,12 +40,12 @@ function lookupArtist(event) {
 
 
     // Append venue name + link
-    $('#artist-event').html(
-        'Go see ' + showTitle + ' at ' + '<a href="' + event.url + '" class="link">' 
-        + event.venue + ' <img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" /></a>');
+    $('#event-tickets').html(
+        showTitle + ' ' + '<a href="' + event.url + '">' 
+        + ' <img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" title="Get tickets"/></a>');
 
     // Sharing link first
-    $('.modal-share-link').html('<a href="' + buildSharingLink(event.eventid) + '">' 
+    $('#share-link').html('<a href="' + buildSharingLink(event.eventid) + '">' 
         + '<img src="media/svg/share.svg" class="icon-action" alt="Share URL" /></a>');
 
     // Modal title (Artist @ venue on date)
@@ -173,30 +173,9 @@ $(document).ready(function() {
             // JSON data will go into shows-content div
             Events.displayEvents(eventData, 'shows-content');
 
-            // Once data is loaded, parse URL for a direct show link
-            var request  = window.location.href.split('#');
-            
-            var tempVar = request[1].split('=');
-
-            console.log(tempVar);
-
-            // if a hashtag passed in, figure out what to load
-            if (!isBlank(tempVar[1])) {
-  
-                if (tempVar[0] === 'event') {
-                    var requestedEvent = Events.getEventById(tempVar[1]);
-
-                    // If event info exists
-                    if (!isBlank(requestedEvent)) {
-                        // Allow bootstrap modal to load
-                        setTimeout(function() {
-                            lookupArtist(requestedEvent);
-                        }, 700);
-                    }// End if event info exists
-                }
-
-            }// End if hastag found in the url
-            
+            // Once data is loaded, parse URL for a direct link (after the #)
+            var request = parseUrlHashtag();
+            window.location.href.split('#');           
             
         })// End events.getEvents().then
 

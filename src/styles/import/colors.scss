@@ -21,3 +21,25 @@ $inactive-color: 'transparent';
 .color-gold {
 	color: $gold;
 }
+.color-dk-gray {
+	color: $gray-dark;
+}
+.color-mid-gray {
+	color: $gray-mid;
+}
+.color-light-gray {
+	color: $gray-light;
+}
+
+
+.bg-dk-gray {
+	background-color: $gray-dark;
+}
+
+.bg-mid-gray {
+	background-color: $gray-mid;
+}
+
+.bg-lt-gray {
+	background-color: $gray-light;
+}
