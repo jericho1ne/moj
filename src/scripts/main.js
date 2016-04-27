@@ -41,15 +41,34 @@ function lookupArtist(event) {
 
     // Append venue name + link
     $('#event-tickets').html(
-        '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/></a>'
-        + showTitle + ' ' + '<a href="' + event.url + '">');
+        showTitle + ' ' 
+        + '<a href="' + event.url + '">' 
+        + '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/>'
+        + '</a>');
+
+
+    // Append Event Tags
+    var tags = event.type.split(',');
+    // Strip whitespace, format, save to Tags array
+    for (var i = 0; i < tags.length; i++) {
+        $tag = $('<div>')
+            .addClass('event-tag')
+            .html($.trim(tags[i]));
+
+        $('#event-tags').append($tag);
+    }// End event tag loop
 
     // Sharing link first
-    $('#share-link').html('<a href="' + buildSharingLink(event.eventid) + '">' 
-        + '<img src="media/svg/share.svg" class="icon-action" alt="Share Link" title="Share Link"/></a>');
+    var shareLink = buildSharingLink(event.eventid);
+    $('#share-link').html('<a href="' + shareLink + '">' 
+        + '<img src="media/svg/share.svg" class="icon-action h30" alt="Share Link" title="Share Link"/></a>'
+        + '<input type="text" class="text-input w80p" value="' + shareLink + '">');
 
     // Modal title (Artist @ venue on date)
-    $('.modal-title').html(event.artist + ' @ ' + event.venue + ' on ' + event.nice_date);
+    $('.modal-title').html(
+        (!isBlank(event.artist) ? event.artist + ' @ ' : '') 
+        + event.venue 
+        + ' on ' + event.nice_date);
 
 }// End lookupArtist
 

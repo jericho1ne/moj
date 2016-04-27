@@ -353,7 +353,8 @@ body {
 
 /*------------------- Artist info  -----------*/
 #artist-info {
-	min-height: 240px;
+	min-height: 120px;
+	height: auto;
 }
 img.artist-profile-pic {
 	border: 1px solid $gray-light;
@@ -377,7 +378,6 @@ img.artist-profile-pic:hover {
 	height: 300px;
 }
 
-
 .photo-caption {
 	@include buildRegularFont($font-md);
 	color: #fff;
@@ -391,6 +391,18 @@ img.artist-profile-pic:hover {
 	overflow-y: scroll;
 }
 
+
+
+/*------------------- Event info  -----------*/
+.event-tag {
+	display: inline-block;
+	@include buildRegularFont($font-sm);
+	@include border-radius(2px);
+	padding: 1px 3px;
+	margin: 0px 4px 3px 0px;
+	background-color: $gold;
+}
+
 /* override jquery ui */
 .ui-widget-content{
 	overflow: scroll;
@@ -400,6 +412,14 @@ img.artist-profile-pic:hover {
 	padding: 10px;
 	background-color: $gray-xlight;
 	border: 1px solid $gray-light;
+}
+.text-input {
+	padding: 3px;
+	margin-left: 8px;
+	@include border-radius(6px);
+	background-color: $gray-mid;
+	border: 0px;
+	text-align: center;
 }
 
 /*	override datatables.min.css + related classes			*/

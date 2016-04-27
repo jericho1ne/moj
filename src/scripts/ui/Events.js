@@ -258,7 +258,7 @@ var Events = {
     getArtistInfo: function (artistName, method) {
 
         if (typeof method !== 'undefined' || typeof method !== '') {
-            // getinfo (confident search), ...
+            // getinfo (confident search), 
             method = 'artist.' + method; 
         }
         // fall back on basic search
@@ -322,26 +322,32 @@ var Events = {
         // Create specific parent div name
         var artistInfo = '#' + divId;
 
-        // Figure out exactly what data is available
-        // Display some placeholder text and image
-        if (event.media === "") {
+
+        // Display artist/show photo
+        if (event.media !== '') {
+            // Set the img tag    
+            $('#artist-photo').addClass('relative');
+            $('#artist-photo').html('<a href="' + event.url + '">' 
+                + '<img src="' + event.media + '" class="artist-profile-pic "></a>');
+        }
+        // Display placeholder text and image
+        else {
             $('#artist-photo').html('<div class="top60">'
-                + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available">'
+                + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available" title="No artist photo available">'
                 + '</div>');
         }
-        else {
-            // photoContainer = artist photo + name caption
+
+
+        // Artist photo + name caption
+        if (!isBlank(event.artist)) {
             $photoCaption = $('<span>')
                 .addClass('photo-caption absolute')
                 .html(event.artist);
-
-            // Set the img tag    
-            $('#artist-photo').addClass('relative');
-            $('#artist-photo').html('<a href="' + artist.url + '">' 
-                + '<img src="' + event.media + '" class="artist-profile-pic "></a>');
             $('#artist-photo').append($photoCaption);  
         }
 
+
+        // Event Description
         if (event.description === "") {
             $('#artist-bio').html(
                 '<br><br>' + '<div>No info on this artist.&nbsp;</div>'
@@ -377,12 +383,14 @@ var Events = {
         //
         // TODO: loop through event categories and print each tag in a button
         //
-    },// End function ....
+    },// End function displayStaticShowInfo
 
     /**
      * appendArtistInfo :: display artist info in DOM
      */
     appendArtistInfo: function (divId, data) {
+        console.log(data);
+
         // In case of getinfo direct API call, data.error may exist
         var noInfoOnArtist = (data.error === 6) ? true : false;
 

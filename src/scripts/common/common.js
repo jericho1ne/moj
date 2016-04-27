@@ -11,20 +11,48 @@ function rvStr(s) {
 }
 
 function throwModalError(errorMsg) {
-    alert(errorMsg);
+  alert(errorMsg);
 }
 
 function deg2rad(deg) {
-   return deg * (Math.PI/180);
+  return deg * (Math.PI/180);
 }
 
-function strToLowerNoSpaces(textString) {
-    return textString.toLowerCase().replace(/ /g,"_");
+function strToLowerNoSpaces(str) {
+  return str.toLowerCase().replace(/ /g,"_");
 }
 
-function stripSpaces(textString) {
+String.prototype.ucwords = function() {
+  str = this.toLowerCase();
+  return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+    function($1){
+        return $1.toUpperCase();
+    });
+}
+
+function fileExists(fileUrl) {
+  var http = new XMLHttpRequest();
+  http.open('HEAD', fileUrl, false);
+  http.send();
+  return http.status != 404;
+}
+
+function fileExistsAjax(fileUrl) {
+  $.ajax({
+    url: fileUrl,
+    type:'HEAD',
+    error: function() {
+      return false;
+    },
+    success: function() {
+      return true;
+    }
+  });
+}
+
+function stripSpaces(str) {
     // originally / /g
-    return textString.toLowerCase().replace(/\W+/g,"+");
+    return str.toLowerCase().replace(/\W+/g,"+");
 }
 
 function clearDiv(divId, loading) {
