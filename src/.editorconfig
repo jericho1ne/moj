@@ -5,6 +5,11 @@
 end_of_line = lf
 insert_final_newline = true
 
+# PHP indent
+[scripts/*.php]
+indent_style = tab
+indent_size = 4
+
 # JS indent
 [scripts/*.js]
 indent_style = space
@@ -15,11 +20,9 @@ indent_size = 4
 indent_style = tab
 indent_size = 4
 
-
 [Gruntfile.js]
 indent_style = tab
 indent_size = 4
-
 
 # Indentation override for all JS under vendor directory
 [scripts/vendor/**.js]

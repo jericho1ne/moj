@@ -248,7 +248,8 @@ class EventParser {
 		    [eventFree] => False
 		    [eventCostExplain] => $15 - $25
 		*/
-	
+		$count = 0;
+
 		foreach($simpleXML->channel->item as $Item) {		
 			// Categories is an array
 			$categoryArray = (array) $Item->category;
@@ -257,7 +258,7 @@ class EventParser {
 			// Format Date as Y-m-d
 			$rssDate = (string) $Item->startDate;
 			$ymd_date = date('Y-m-d', strtotime($rssDate));
-		
+			
 			$event = array(
 				'ymd_date' 		=> $ymd_date,
 				'source'		=> 'Experience LA',
@@ -280,6 +281,17 @@ class EventParser {
 				$event['description'] = ucwords(strtolower($event['description']));
 			}
 
+			// Check that image doesn't throw a 404
+			$image = trim($event['media']);
+			
+
+			if ($image != "") {
+				$image = remoteFileExists($image) ? $image : "";
+			}
+			else {
+				echo " >> 404 " . $image;
+			}
+
 			// Save all of our event info to the private class property (eventArray)
 			array_push(
 				$this->eventArray, 		
@@ -292,11 +304,14 @@ class EventParser {
 					"title"		=> $event['title'],
 					"description" => $event['description'],
 					"url"		=> $this->cleansePurchaseUrl($event['url']),
-					"media"		=> $event['media'],
+					"media"		=> $image,
 				)
 			);// End array_push
 
+			$count++;
 		}// End foreach simpleXML
+
+		echo $count;
 	}// End parseExLAxml
 
 	/**
@@ -546,7 +561,7 @@ class EventParser {
 		);
 
 
-		pr($eventObject);
+		pr($eventObject['media']);
 
 		// Map statement column names to event that was passed in
 		$result = $statement->execute($eventObject);

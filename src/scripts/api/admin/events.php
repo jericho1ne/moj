@@ -97,7 +97,7 @@ if ($dblink && $action !== "") {
 
 	// If Save to DB checkbox is checked
 	if ($saveToDB) {
-		pr($eventsList);
+		//pr($eventsList);
 
 		// Save received events to DB, updating only if show link or title have changed
 		$Events->saveEventsToDb($dblink);

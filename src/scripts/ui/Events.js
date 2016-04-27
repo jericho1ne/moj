@@ -588,11 +588,11 @@ var Events = {
      */
     searchYoutube: function(searchTerm, maxResults) {
         var requestBody = {
-            type: "GET",
+            type: 'GET',
             url:  YOUTUBE_BASE_URL +
-                  "search?part=snippet" +
-                  "&q=" + searchTerm +
-                  "&key=" + YOUTUBE_API_KEY_NEW,
+                  'search?part=snippet' +
+                  '&q=' + searchTerm +
+                  '&key=' + YOUTUBE_API_KEY_NEW,
                   // "&maxResults=" + parseInt(maxResults),
             async: false
         };// End requestBody
@@ -640,7 +640,13 @@ var Events = {
         var $imgTag = $('<object>')
             .attr('class','vid-clip')
             .attr('id', videoId)
-            .attr('data', 'http://www.youtube.com/embed/' + videoId);
+            // Embed video at low quality
+            // 144p: &vq=tiny 
+            // 240p: &vq=small 
+            // 360p: &vq=medium 
+            // 480p: &vq=large 
+            // 720p: &vq=hd720 
+            .attr('data', 'http://www.youtube.com/embed/' + videoId + '?vq=small');
             //    + videoId + '"></object>'); )
            //.html('<object id="' + videoId + '" data="http://www.youtube.com/embed/' 
             //    + videoId + '"></object>'); 
