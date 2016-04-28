@@ -108,7 +108,7 @@ body {
 // }
 
 .link, .link a {
-	@include buildRegularFont($font-md);
+	@include buildRegularFont($font-sm);
 	// Never add left padding or text breaking 
 	// across two rows will make top line seem intended
 	padding: 2px 2px 2px 0px;
@@ -134,12 +134,25 @@ body {
 	@include buildRegularFont($font-md);
 	line-height: 1.2;
 	padding: $pad-sm;
-	margin: 20px auto 20px auto;
+	margin: 10px auto 10px auto;
+}
+
+.small-text {
+	@include buildRegularFont($font-sm);
+	line-height: 1.1;
+	padding: $pad-sm;
+	margin: 4px auto 4px auto;
 }
 
 .subtitle {
 	@include buildRegularFont($font-md);
 }
+
+/*-------- Range Slider ----------*/
+#range-slider .slider-selection {
+	background: #BABABA;
+}
+
 
 /*-------------------- Row styles ---------------------------*/
 .row-sm {
@@ -220,6 +233,9 @@ body {
 	background-color: $inactive-color;
 }
 
+.border {
+	border: 1px solid pink;
+}
 // #stuff {
 // 	@extend .stacked-boxes-common;
 // 	border: $pink-border;
@@ -352,6 +368,10 @@ body {
 }
 
 /*------------------- Artist info  -----------*/
+#artist-bio {
+	@include buildRegularFont($font-sm);
+}
+
 #artist-info {
 	min-height: 120px;
 	height: auto;
@@ -396,7 +416,7 @@ img.artist-profile-pic:hover {
 /*------------------- Event info  -----------*/
 .event-tag {
 	display: inline-block;
-	@include buildRegularFont($font-sm);
+	@include buildRegularFont($font-xsm);
 	@include border-radius(2px);
 	padding: 1px 3px;
 	margin: 0px 4px 3px 0px;
@@ -409,15 +429,17 @@ img.artist-profile-pic:hover {
 }
 .block-notice {
 	@include border-radius(4px);
-	padding: 10px;
+	padding: 2px;
 	background-color: $gray-xlight;
 	border: 1px solid $gray-light;
 }
 .text-input {
-	padding: 3px;
-	margin-left: 8px;
-	@include border-radius(6px);
-	background-color: $gray-mid;
+	@include buildRegularFont($font-xsm);
+	padding: 2px;
+	margin-left: 5px;
+	max-width: 240px;
+	@include border-radius(5px);
+	background-color: $gray-light;
 	border: 0px;
 	text-align: center;
 }
@@ -429,16 +451,21 @@ img.artist-profile-pic:hover {
 }
 
 .dataTables_filter {
+	width: 100% !important;
 	text-align: left;
 	@include buildRegularFont($font-md); 
 	float: left;
 	margin-bottom: 10px;
 }
 
+.dataTables_filter label {
+	width: 100%;
+}
+
 .dataTables_filter input[type=search] {
 	height: 30px;
 	@include buildRegularFont($font-md);
-	width: 160px !important;
+	width: 70% !important;
 	padding: 4px 2px 4px 2px;
 	margin-bottom: 10px;
 	border: 1px solid #aaa;
@@ -533,7 +560,13 @@ table.dataTable .date-header {
 
 /*  override bootstrap */
 .modal-header {
-	padding: 8px !important;
+	padding: 6px !important;
+}
+.modal-dialog {
+	margin: 6px !important;
+}
+#artistModal {
+	padding: 0px !important;
 }
 
 button.close {

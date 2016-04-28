@@ -21,7 +21,8 @@ function lookupArtist(event) {
     // Delay Promise chain until dialog is popped open!
     // Clear existing modal content 
     $('#artist-event').empty();
-    $('.modal-title').html(); 
+    $('.modal-title').empty();
+    $('#event-tags').empty();
 
     var showTitle = event.artist;
 
@@ -46,14 +47,14 @@ function lookupArtist(event) {
         + '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/>'
         + '</a>');
 
-
     // Append Event Tags
     var tags = event.type.split(',');
+
     // Strip whitespace, format, save to Tags array
     for (var i = 0; i < tags.length; i++) {
         $tag = $('<div>')
             .addClass('event-tag')
-            .html($.trim(tags[i]));
+            .html($.trim(tags[i]).ucwords());
 
         $('#event-tags').append($tag);
     }// End event tag loop
@@ -61,7 +62,7 @@ function lookupArtist(event) {
     // Sharing link first
     var shareLink = buildSharingLink(event.eventid);
     $('#share-link').html('<a href="' + shareLink + '">' 
-        + '<img src="media/svg/share.svg" class="icon-action h30" alt="Share Link" title="Share Link"/></a>'
+        + '<img src="media/svg/share.svg" class="icon-action h30 w30" alt="Share Link" title="Share Link"/></a>'
         + '<input type="text" class="text-input w80p" value="' + shareLink + '">');
 
     // Modal title (Artist @ venue on date)
@@ -117,6 +118,35 @@ function startPromiseChain(event) {
 // Methods registered after document.ready
 //
 $(document).ready(function() {
+    // 00.  INITIALIZE DISTANCE SLIDER
+    $('#range-slider').slider({
+        tooltip: 'always',
+        formatter: function(value) {
+            return value + ' miles';
+        }
+    });
+    // Set slide listener
+    $("#range-slider").on("slide", function(e) {
+        console.log(e.value);
+        //$("#ex6SliderVal").text(e.value);
+    });
+
+    // 01.  Get user position
+    UserState.geoLocateUser(10000)   
+        .then(function(position) {
+            var coordinates = {
+                lat: position.coords.latitude,
+                lon: position.coords.longitude
+            };
+
+            console.log(coordinates); 
+            window.coords = coordinates; 
+
+            if (!isBlank(coordinates.lat)) {
+                $('#range-slider').slider('enable');
+            }
+        });
+
     // Asynchronously load modal template
     $.get('templates/artist-modal.html', function(template) {
         // Inject all those templates at the end of the document.
@@ -124,7 +154,7 @@ $(document).ready(function() {
     });
 
     //
-    // LISTENERS
+    // XX.  SET LISTENERS
     //
     $('#action-eml').click(function() {
         var emlad = rvStr($("#eml").data("u")) + '@' + rvStr($("#eml").data("dom"));
@@ -147,22 +177,15 @@ $(document).ready(function() {
             }// End else
         })// End ref.onAuth
     });
-
     $('#action-getPosition').click(function() {
         // Get venues within 25 miles, max 10 results
         getPosition();
     });
 
-    // Get events data ajax call, push to DOM
-    $('#getEvents').click(function() {
-    // 
-    });// End getEvents
-
     $('#getNearbyVenues').click(function() {
     // Get venues within 25 miles, max 10 results
     getNearbyVenues(25, 4);
     });
-
 
     // Should be calling set/loadPageState automatically!
     // 
@@ -193,7 +216,7 @@ $(document).ready(function() {
             Events.displayEvents(eventData, 'shows-content');
 
             // Once data is loaded, parse URL for a direct link (after the #)
-            var request = parseUrlHashtag();
+            var request = parseUrlAction();
             window.location.href.split('#');           
             
         })// End events.getEvents().then

@@ -184,7 +184,7 @@ var Events = {
                         + '</td>'
                         
                         // Column 2 :: Venue
-                        + '<td class="left medium-text">' + events[i].venue + '</td>'
+                        + '<td class="left small-text">' + events[i].venue + '</td>'
                         
                         // Column 3 :: Ticket link
                         + '<td class="left"><a href="' + events[i].url + '">' 
@@ -322,7 +322,6 @@ var Events = {
         // Create specific parent div name
         var artistInfo = '#' + divId;
 
-
         // Display artist/show photo
         if (event.media !== '') {
             // Set the img tag    
@@ -347,24 +346,16 @@ var Events = {
         }
 
 
-        // Event Description
-        if (event.description === "") {
-            $('#artist-bio').html(
-                '<br><br>' + '<div>No info on this artist.&nbsp;</div>'
-            );
-        }
-        else {
-            $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
+        $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
 
+        // Event Description
+        if (event.description !== "") {
             // Arbitrary limit on how much biography text to show
             var maxCharsInBio = 2400;
-          
             // Remove any links
             var fullBio = event.description.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
-            
             // Clip bio at preset character max
             var shortBio = fullBio.substring(0, maxCharsInBio);
-            
             // If longer than max amount, add "show more" link
             if (fullBio.length > maxCharsInBio) {
                 shortBio += ' <span class="link">'
@@ -374,7 +365,7 @@ var Events = {
             
             // Append the artist bio text
             $('#artist-bio').html(shortBio);
-        }
+        }// End if bio is not blank
 
         // Clear out the loading spinner since we won't be pulling youtube track
         $('#artist-tracks').empty();
@@ -389,8 +380,6 @@ var Events = {
      * appendArtistInfo :: display artist info in DOM
      */
     appendArtistInfo: function (divId, data) {
-        console.log(data);
-
         // In case of getinfo direct API call, data.error may exist
         var noInfoOnArtist = (data.error === 6) ? true : false;
 
@@ -418,20 +407,20 @@ var Events = {
             $('#artist-photo').html('<div class="top60">'
                 + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
 
-            $('#artist-bio').html(
-                '<br><br>' + '<div>No info found on this artist.&nbsp;</div>'
-            );
+            var msg = '<div>No info found on this artist.&nbsp;</div>'
+            $('#artist-bio').empty();
 
-            return Error("appendArtistInfo kinda sorta failed just now  ='()");
+            //return Error("appendArtistInfo kinda sorta failed just now  ='()");
         }
         // Data is potentially good, check futher for blanks
         else {
             // Fallbacks in case we haven't received the extraneous info 
             var artistBio = (typeof artist.bio !== 'undefined' ? artist.bio.content.trim() : '');
             var artistTags = (typeof artist.tags !== 'undefined' ? artist.tags.tag : '');
-            var artistPhoto = (typeof artist.image !== 'undefined' ? artist.image[3] : '');
+            var artistPhoto = (typeof artist.image 
+                ? !isBlank(artist.image[3]['#text']) ? artist.image[3]['#text'] : ''
+                : '');
             var noBio = (artistBio === '' ? true : false);
-
             var noPhoto = (artistPhoto === '' ? true : false);
 
             // Create specific parent div name
@@ -446,15 +435,10 @@ var Events = {
                 'tags': artistTags
             };
 
-            // No bio returned
-            if (noBio) {
-                $('#artist-bio').html(
-                    '<div><br><br>No information found on this artist.&nbsp;</div>'
-                );
-            }// If no bio
+            $('#artist-bio').empty();        // MOVE THIS TO MODAL RESET METHOD
+
             // Bio exists, append content to modal
-            else {
-                $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
+            if (!noBio) {
                 // Arbitrary limit on how much biography text to show
                 var maxCharsInBio = 1000;
                 // Remove any links
@@ -467,10 +451,9 @@ var Events = {
                         + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
                         + '<span>';
                 }
-                
                 // Append the artist bio text
                 $('#artist-bio').html(shortBio);
-            }// Else case for bio content
+            }// If case for bio content
 
             // No artist photo. Show De La Soul is Dead cover =)
             if (noPhoto) {
@@ -487,7 +470,7 @@ var Events = {
                 // Set the img tag    
                 $('#artist-photo').addClass('relative');
                 $('#artist-photo').html('<a href="' + artist.url + '">'
-                    + '<img src="' + artist.images[3]['#text'] + '" class="artist-profile-pic "></a>');
+                    + '<img src="' + artistPhoto + '" class="artist-profile-pic "></a>');
 
                 $('#artist-photo').append($photoCaption);  
             }// End artist photo exists
@@ -640,7 +623,7 @@ var Events = {
         var $imgTag = $('<object>')
             .attr('class','vid-clip')
             .attr('id', videoId)
-            // Embed video at low quality
+            // Embed video at specific quality by appending "vq="
             // 144p: &vq=tiny 
             // 240p: &vq=small 
             // 360p: &vq=medium 

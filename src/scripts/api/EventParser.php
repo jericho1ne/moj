@@ -191,7 +191,7 @@ class EventParser {
 					array(
 						"ymd_date"	=> $ymd_date,	// 2020-12-01
 						"source" 	=> "scenestar",
-						"type"		=> "show",  		// TODO: find out if needed for Event Calendar??
+						"type"		=> "Live Show",  		// TODO: find out if needed for Event Calendar??
 						"artist"	=> $artist,
 						"venue"		=> $venue,
 						"title"		=> $artist . " @ " . $venue,	// needed for Event Calendar!

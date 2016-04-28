@@ -22,7 +22,7 @@ else {
 }
 
 // DEBUG
-// pr($userLat . ' / ' . $userLon . ' / ' . $max);
+pr($userLat . ' / ' . $userLon . ' / ' . $max);
 
 // TODO: sanitize lat / lon?
 

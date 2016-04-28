@@ -187,9 +187,8 @@ function setPageState(lastPgVisited) {
 function getPosition() {
    console.log(" >> getPosition() called >> ");
 
-
    // Try to find the user's position, passing in timeout in ms
-   UserState.geoLocateUser(500)
+   UserState.geoLocateUser(10000)
    
     .then(function(position) {
         console.dir(" >> 1 then >> ");
@@ -205,23 +204,13 @@ function getPosition() {
         getNearbyVenues(coordinates, 25, 10);
     })
     .then(function() {
-        reattachListeners();
+        // reattachListeners();
+        $('#range-slider').slider('enable')
     })
     .fail(function(err) {
         console.error(err);
     });
-
-   /*
-   $.when(UserState.geoUserPosition())
-      .then(
-         getDistance(
-            vLat, vLon,
-            UserState.getUserPosition().lat,
-            UserState.getUserPosition().lon
-         ))
-      .done()
-   */
-}// End function getPos
+}// End function getPosition
 
 
 /**
@@ -267,14 +256,15 @@ function isBlank(thisVar) {
         if (typeof thisVar === 'object') { // figure out object.length substitute} && thisVar.length) {
             return false;
         }
-        else if (typeof thisVar === 'string' && thisVar.length > 0) {
+        else if ((typeof thisVar === 'string' || typeof thisVar === 'number') 
+          && thisVar != '') {
             return false;
         }
     }
     return true;
 }
 
-function parseUrlHashtag() {
+function parseUrlAction() {
     var host = window.location.host;
     var path = window.location.pathname;
     var request = window.location.href.split('#');
