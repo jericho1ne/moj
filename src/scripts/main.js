@@ -61,8 +61,10 @@ function lookupArtist(event) {
 
     // Sharing link first
     var shareLink = buildSharingLink(event.eventid);
-    $('#share-link').html('<a href="' + shareLink + '">' 
-        + '<img src="media/svg/share.svg" class="icon-action h30 w30" alt="Share Link" title="Share Link"/></a>'
+    $('#share-link').html(''
+        //+'<a href="' + shareLink + '">' 
+        //+ '<img src="media/svg/share.svg" class="icon-action h30 w30" alt="Share Link" title="Share Link"/></a>'
+        + '<img src="media/svg/share.svg" class="icon-basic" alt="Share Link" title="Share Link"/>'
         + '<input type="text" class="text-input w80p" value="' + shareLink + '">');
 
     // Modal title (Artist @ venue on date)
@@ -71,6 +73,10 @@ function lookupArtist(event) {
         + event.venue 
         + ' on ' + event.nice_date);
 
+    // Select all text in sharing link input on click or tap
+    $('#share-link input:text').focus(function() { 
+        $(this).select(); 
+    });
 }// End lookupArtist
 
 
@@ -227,8 +233,13 @@ $(document).ready(function() {
             document.getElementById('shows-content').addEventListener('click', function(e) {
                 var eventid = $(e.target).data('eventid');
                 var event = UserState.events[eventid];
+                
                 // Ensure that user has clicked on an actual link
                 if (event !== undefined && event.hasOwnProperty('source')) {
+                    // Manually change URL in address bar
+                    window.history.pushState('', 'Live Show', '#event=' + Events.getEventByIndex(eventid).eventid);
+                    
+                    // Pop up artist info modal
                     lookupArtist(event);
                 }
             });// End addEventListener

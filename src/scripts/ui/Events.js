@@ -56,14 +56,16 @@ var Events = {
 
 
     getEventById: function(eventId) {
-        // work with a copy of the data
-        var tempEventData = this.getEventData();
-        
-        for(var i=0; i< tempEventData.length; i++) {
-            if (tempEventData[i].eventid == eventId) {
-                return tempEventData[i];
+            
+        for(var i=0; i< this.eventData.length; i++) {
+            if (this.eventData[i].eventid == eventId) {
+                return this.eventData[i];
             }
         }// End for events loop
+    },// End getEventById
+
+    getEventByIndex: function(arrayIndex) {
+        return this.eventData[arrayIndex];
     },// End getEventById
 
     /**
@@ -106,7 +108,7 @@ var Events = {
                          
             var $dataTable = $('<table>')
                 .attr('id', dataTableUniqueID)
-                .addClass('display dataTable border');
+                .addClass('display dataTable');
                 
             // Create Datatable header row (HIDDEN)
             var $tableHeader = $('<thead>')

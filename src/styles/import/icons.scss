@@ -32,6 +32,15 @@
     transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
 
+// Basic, no click action
+.icon-basic {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    padding: 2px;
+    display: inline-block;
+}
+
 /** 
  *    Body Link Styles 
  */
