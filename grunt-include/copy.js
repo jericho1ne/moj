@@ -22,7 +22,8 @@ module.exports = {
 				'styles/fonts/{,*/}*.*',
 				'styles/fa/{,*/}*.*',
 				'styles/images/**/*.{gif,jpeg,jpg,png}',
-				'styles/**/*.css'
+				'styles/**/*.css',
+				'styles/**/*.map'
 			]// End src
 		}]// End copy:dist - files
 	},// End copy:dist
@@ -38,7 +39,8 @@ module.exports = {
 				'styles/fonts/{,*/}*.*',
 				'styles/fa/{,*/}*.*',
 				'styles/images/**/*.{gif,jpeg,jpg,png}',
-				'styles/**/*.css'
+				'styles/**/*.css',
+				'styles/**/*.map'
 			]// End src
 		}]// End copy:dist - files
 	},// End copy:dist

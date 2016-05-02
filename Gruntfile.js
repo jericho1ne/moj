@@ -171,26 +171,31 @@ module.exports = function (grunt) {
 				username: '<%= scpConfig.username %>',
 				password: '<%= scpConfig.password %>'
 			},
+			test: {
+				files: [{
+					cwd: '<%= cfg.dst %>',
+					src: [
+						'styles/**/*.{css,map,jpg,png}',
+					],
+					filter: 'isFile',
+					// path on the server
+					dest: '<%= scpConfig.dev %>'
+				}]
+			},
 			dev: {
 				files: [{
 					cwd: '<%= cfg.dst %>',
 					src: [
 						'index.html',
-						'scripts/*.js',
-						'scripts/ui/**/*',
+						'scripts/**/*.js',
 						'scripts/api/**/*',
-						// Be specific, don't overwrite db stuff
-						'scripts/common/*.js',
-						'scripts/common/common.php',
-						'styles/*.css', 
-						'styles/**/*',	// remove later
+						'styles/**/*.{css,map,jpg,png}',
 						'templates/**/*',
 						'media/**/*',
 						// robots.txt, index.html, png icons
-						// '**/*',  
-		
-						//'images/_grey-bg.png',
 						//'images/*',
+						// Be specific, don't overwrite db stuff
+						'scripts/common/common.php',
 					],
 					filter: 'isFile',
 					// path on the server
@@ -208,7 +213,7 @@ module.exports = function (grunt) {
 						// Be specific, don't overwrite db stuff
 						'scripts/common/*.js',
 						'scripts/common/common.php',
-						'styles/*.css', 
+						'styles/*.css',
 						'styles/**/*',	// remove later
 						'templates/**/*',
 						'media/**/*',

@@ -188,7 +188,7 @@ function getPosition() {
    console.log(" >> getPosition() called >> ");
 
    // Try to find the user's position, passing in timeout in ms
-   UserState.geoLocateUser(10000)
+   UserState.geoLocateUser(7000)
    
     .then(function(position) {
         console.dir(" >> 1 then >> ");

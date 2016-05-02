@@ -185,6 +185,8 @@ $(document).ready(function() {
     });
     $('#action-getPosition').click(function() {
         // Get venues within 25 miles, max 10 results
+        alert(Modernizr.geolocation);
+        alert(navigator.geolocation);
         getPosition();
     });
 
