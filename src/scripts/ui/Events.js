@@ -215,7 +215,7 @@ var Events = {
             $('#' + dataTableUniqueID).DataTable({
                 "bPaginate": true,
                 "pagingType": "simple",      // Prev and Next buttons only 
-                "pageLength": 25, 
+                "pageLength": DATATABLES_PAGE_LENGTH, 
                 "lengthChange": false,
                 //  "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
                 "dom": '<"top"ifl<"clear">>rt<"bottom"p<"clear">>',

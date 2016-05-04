@@ -49,7 +49,8 @@
     margin: 1px;
     opacity: .8;
     background-color: #fff;
-    border: 1px solid $gray-xlight;
+    // border: 1px solid $gray-xlight;
+    box-shadow: 0.65px 0.15px .5px #A900CA,0 0px #eee;
 }
 .icon-link:hover{
     background-color: #B4CEE7 !important;
