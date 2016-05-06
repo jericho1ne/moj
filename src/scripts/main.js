@@ -137,22 +137,6 @@ $(document).ready(function() {
         //$("#ex6SliderVal").text(e.value);
     });
 
-    // 01.  Get user position
-    UserState.geoLocateUser(10000)   
-        .then(function(position) {
-            var coordinates = {
-                lat: position.coords.latitude,
-                lon: position.coords.longitude
-            };
-
-            console.log(coordinates); 
-            window.coords = coordinates; 
-
-            if (!isBlank(coordinates.lat)) {
-                $('#range-slider').slider('enable');
-            }
-        });
-
     // Asynchronously load modal template
     $.get('templates/artist-modal.html', function(template) {
         // Inject all those templates at the end of the document.
@@ -183,16 +167,42 @@ $(document).ready(function() {
             }// End else
         })// End ref.onAuth
     });
-    $('#action-getPosition').click(function() {
-        // Get venues within 25 miles, max 10 results
-        alert(Modernizr.geolocation);
-        alert(navigator.geolocation);
-        getPosition();
-    });
+
+    $('#action-getposition').click(function() {
+        // Append distance slider to toolbar
+        //$('#slider-parent').toggleClass('display-none', false);
+        
+        // Fade out slider, remove distance constraint
+        if ($('#slider-parent').is(":visible")) {
+             $('#slider-parent').fadeOut(500);
+             // TODO:  remove distance constraint from datatable
+        }
+        // Fade in slider, geolocate
+        else {
+            $('#slider-parent').fadeIn(500);
+            // Get current position and enable distance slider if successful
+            UserState.geoLocateUser(10000)   
+                .then(function(position) {
+                    var coordinates = {
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    };
+
+                    console.log(coordinates); 
+                    window.coords = coordinates; 
+
+                    if (!isBlank(coordinates.lat)) {
+                        $('#range-slider').slider('enable');
+                    }
+                });
+        }// End else case
+
+    });// End action-getposition
+
 
     $('#getNearbyVenues').click(function() {
-    // Get venues within 25 miles, max 10 results
-    getNearbyVenues(25, 4);
+        // Get venues within 25 miles, max 10 results
+        getNearbyVenues(25, 4);
     });
 
     // Should be calling set/loadPageState automatically!

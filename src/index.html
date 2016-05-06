@@ -61,8 +61,8 @@
 
         <!-- Action Bar -->
         <div class="col-sm-4 text-align-center pad10">
-            <img src="media/svg/heart.svg" class="icon-action" id="action-getPos" alt="Check Favorites">
-            <img src="media/svg/nearby.svg" class="icon-action" id="action-getPos" alt="Search Nearby">
+            <img src="media/svg/heart.svg" class="icon-action" id="action-showfaves" alt="Check Favorites">
+            <img src="media/svg/nearby.svg" class="icon-action" id="action-getposition" alt="Search Nearby">
             <!-- <img src="media/svg/trumpet.svg" class="icon-action" id="action-???" alt="Bring in the horns"> -->
             <img src="media/svg/cog.svg" class="icon-action" id="action-settings" alt="Settings">
             <img src="media/svg/envelope.svg" class="icon-action" id="action-eml" alt="Get in touch" title="Get in touch" />
@@ -88,12 +88,17 @@
         <button class="phatButton" id="getNearbyVenues">What's nearby?</button>
     </div>     -->
     
-    <div class="row h80 border">
-        <input id="range-slider" data-slider-id='range-slider-1' type="text" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="10" data-slider-enabled="false"/>
+    <!-- Distance search filter -->
+    <div id="slider-parent" class="row border display-none">
+        <div class="subtitle col-sm-6 pad20">Search for events this far away</div>
+        <div class="col-sm-6">
+            <input id="range-slider" data-slider-id="range-slider-1" type="text" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="10" data-slider-enabled="false"/>
+        </div>
     </div>
+
     
+    <!-- Show data goes here -->
     <div id="shows-content" class="row">
-        <!-- show data goes here -->
     </div>
 
 </div>
