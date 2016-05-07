@@ -21,7 +21,8 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 <hr>
 <input type="radio" name="action" value="getNewScenestarShows"> Get Scenestar Shows<br>
 <input type="radio" name="action" value="getNewExpLAevents"> Get Experience LA Events<br>
-<input type="radio" name="action" value="getNewTicketflyevents"> Hit Ticketfly API for the latest<br>
+<input type="radio" name="action" value="getNewTicketflyevents"> <b>Ticketfly</b> Shows<br>
+<input type="radio" name="action" value="getTicketFlyVenues"> <b>Ticketfly</b> Venues<br>
 <br>
 <input type="checkbox" name="saveToDB" value="1"> Save to DB!<br>
 <hr>
@@ -82,7 +83,7 @@ if ($dblink && $action !== "") {
 			// Get events from today onwards
 			$Events->parseExpLAxml('http://www.experiencela.com/rss/feeds/xlaevents.aspx?id=custom&region=&category=&type=&startdate=' . $today . '&enddate=&keyword=');
 		}
-		// Ticketfly! 
+		// Ticketfly events! 
 		else if ($action === 'getNewTicketflyevents') {
 			$url = "http://www.ticketfly.com/api/events/upcoming.json?orgId=1&fieldGroup=light&city=Los%20Angeles&maxResults=2000";
 
@@ -90,17 +91,38 @@ if ($dblink && $action !== "") {
 			$Events->parseTicketflyEvents($url);
 			// $eventsList = $Events->getEvents();
 		}
-		// Always do a dump to screen at the end - grab events and print
-		$eventsList = $Events->getEvents();
-		pr($eventsList);
+		// Ticketfly venues! 
+		else if ($action === 'getTicketFlyVenues') {
+			$url = "http://www.ticketfly.com/api/events/upcoming.json?" 
+				. "orgId=1&city=Los%20Angeles&maxResults=3";
+
+			// Get venues from today onwards
+			$Events->parseTicketflyVenues($url);
+		}
+
+
+		// Always do a dump to screen at the end - grab venues or events and print
+		if ($action !== 'getTicketFlyVenues') {
+			$eventsList = $Events->getEvents();
+			pr($eventsList);
+		}
+		else {
+			$venueList = $Events->getVenues();
+			pr($venueList);
+		}
+		
 	}// End else
 
 	// If Save to DB checkbox is checked
 	if ($saveToDB) {
-		//pr($eventsList);
-
-		// Save received events to DB, updating only if show link or title have changed
-		$Events->saveEventsToDb($dblink);
+		if ($action !== 'getTicketFlyVenues') {
+			// Save received events to DB, updating only if show link or title have changed
+			$Events->saveEventsToDb($dblink);
+		}
+		else {
+			// Insert/update Venues in database
+			$Events->saveVenuesToDb($dblink);
+		}
 	}
 }// End if dblink is set and there is a POST submit
 

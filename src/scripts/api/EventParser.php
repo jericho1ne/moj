@@ -88,6 +88,49 @@ class EventParser {
 		pr($venues);
 	}// End parseTicketflyEvents
 
+	/**********************************************************************************
+		parseTicketflyVenues( $url )
+		save venue info (mostly care about lat/lon) to database
+	*********************************************************************************/
+	public function parseTicketflyVenues($url) {
+		$rawJson = file_get_contents($url);
+
+		// Return array instead of StdClass object by passing 'true' as second arg
+		$jsonData = json_decode($rawJson, true);
+
+		//pr($jsonData);
+		//pr($jsonData['events']);
+
+		$venues = [];
+
+		foreach($jsonData['events'] as $venue) {
+			$venueInfo = array(
+				'tf_id' => $venue['venue']['id'],
+				'name' => $venue['venue']['name'],
+				'lat' => $venue['venue']['lat'],
+				'lon' => $venue['venue']['lng'],
+				'address1' => $venue['venue']['address1'],
+				'address2' => $venue['venue']['address2'],
+				'address2' => $venue['venue']['address2'],
+				'city' => $venue['venue']['city'],
+				'zip' => $venue['venue']['postalCode'],
+				'state' => $venue['venue']['stateProvince'],
+				'url' => $venue['venue']['url'],
+				'desc_brief' => $venue['venue']['blurb'],
+				'url_tw' => $venue['venue']['urlTwitter'],
+				'url_fb' => $venue['venue']['urlFacebook'],
+				'image' => $venue['venue']['image']['large']['path'],
+			);
+			
+			// Always save venue at tf_id index to avoid duplicates
+			$venues[$venueInfo['tf_id']] = $venueInfo;
+
+			//pr($venueInfo);
+
+		}
+		$this->venueArray = $venues;
+	}// End parseTicketflyEvents
+
 
 	/**********************************************************************************
 		parseScenestarEvents( $url )
@@ -422,6 +465,15 @@ class EventParser {
 	}
 
 	/**********************************************************************************
+		getVenues()
+		return venue array
+	*********************************************************************************/
+	public function getVenues() {
+		// echo "<pre>"; print_r($this->eventArray); echo "</pre>";
+		return $this->venueArray;
+	}
+
+	/**********************************************************************************
 		getEventsFromDb()
 		return events from database
 	*********************************************************************************/
@@ -480,15 +532,6 @@ class EventParser {
 	}// End function getEventsJson
 
 	/**********************************************************************************
-		getVenues()
-		return venues array and print to screen
-	*********************************************************************************/
-	public function getVenues() {
-		// echo "<pre>"; print_r($this->venueArray); echo "</pre>";
-		return $this->venueArray;
-	}
-
-	/**********************************************************************************
 		saveVenuesCsv()
 		duh, save to a CSV file
 	*********************************************************************************/
@@ -532,17 +575,29 @@ class EventParser {
 		}
 	}
 
-	/**********************************************************************************
-		saveToDatabase(event_array)
-		insert only new/unique records
-	*********************************************************************************/
+	/**
+	 * saveVenuesToDb()
+	 */
+	public function saveVenuesToDb($dbLink) {
+		foreach ($this->venueArray as $key => $eachVenue) {
+			$this->saveSingleVenueToDb($dbLink, $eachVenue);
+		}
+	}
+
+	/**
+	 * Insert only new/unique records, update if existing
+	 * @param  array $dbLink Link identifier
+	 * @param  array $event Everything related to this event
+	 * @return array $result Result of DB transaction and error code, if any
+	 */
 	public function saveSingleEventToDb($dbLink, $event) {
 		// TODO: insert into db if record isn't already present; could be very taxing
 		// return ( true if all good, false if db insert failed );
 		
 		// Prepare insert query
 		$statement = $dbLink->prepare(
-			"INSERT INTO events(ymd_date, source, type, artist, venue, title, description, url, media) ".
+			"INSERT INTO events(`ymd_date`, `source`, `type`, `artist`, `venue`, " . 
+				"`title`, `description`, `url, `media`) ".
    			"VALUES(:ymd_date, :source, :type, :artist, :venue, :title, :description, :url, :media) ".
    			"ON DUPLICATE KEY UPDATE title = :title2, url = :url2");
 
@@ -560,8 +615,7 @@ class EventParser {
 			"url2" 		=> $event['url']
 		);
 
-
-		pr($eventObject['media']);
+		// pr($eventObject['media']);
 
 		// Map statement column names to event that was passed in
 		$result = $statement->execute($eventObject);
@@ -572,7 +626,54 @@ class EventParser {
 			"result" => $result, 
 			"errorCode" => $statement->errorCode()
 		);
+	}// End saveSingleEventToDb
 
-	}
+	/**
+	 * Insert only new/unique records, update if existing
+	 * @param  array $dbLink Link identifier
+	 * @param  array $event Everything related to a venue
+	 * @return array $result Result of DB transaction and error code, if any
+	 */
+		// TODO: add other checks (eg: venue name & aliases) if tf_id isn't used
+	public function saveSingleVenueToDb($dbLink, $venue) {
+		// Prepare insert query
+		$statement = $dbLink->prepare(
+			"INSERT INTO venues(`tf_id`, `name`, `address1`, `address2`, `city`, `zip`, `state`, " .
+			"`lat`, `lon`, `url`, `desc_brief`, `image`, `url_fb`, `url_tw`) ".
+   			"VALUES(:tf_id, :name, :address1, :address2, :city, :zip, :state, " . 
+   			":lat, :lon, :url, :desc_brief, :image, :url_fb, :url_tw)");
+   			// "ON DUPLICATE KEY UPDATE ____ ?? eg: name = :name2, lat = :lat2");
+
+		$object = array(
+			"tf_id" => $venue['tf_id'],
+			"name" 	=> $venue['name'],
+			"address1" 	=> $venue['address1'],
+			"address2" 	=> $venue['address2'],
+			"city" 	=> $venue['city'],
+			"zip" 	=> $venue['zip'],
+			"state" => $venue['state'],
+			"lat" 	=> $venue['lat'],
+			"lon" 	=> $venue['lon'],
+			"url" 		=> $venue['url'],
+			"desc_brief" => $venue['desc_brief'],
+			"image" 	=> $venue['image'],
+			"url_fb" 	=> $venue['url_fb'],
+			"url_tw" 	=> $venue['url_tw']
+		);
+
+		// Map statement column names to event that was passed in
+		$result = $statement->execute($object);
+
+		echo "<pre>"; $statement->debugDumpParams(); echo "</pre>";
+
+		pr($statement->errorCode());
+		pr($statement->errorInfo());
+
+		return array(
+			"result" => $result, 
+			"errorCode" => $statement->errorCode()
+		);
+	}// End saveSingleVenueToDb
+
 }// End class Events
 ?>
