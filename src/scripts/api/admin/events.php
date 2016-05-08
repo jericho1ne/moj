@@ -76,9 +76,13 @@ if ($dblink && $action !== "") {
 		}
 		// Experience LA
 		else if ($action === 'getNewExpLAevents') {
-			$url = "http://www.experiencela.com/rss/feeds/xlaevents.aspx?id=custom&region=&category=&type=&startdate=2016-3-3&enddate=2016-3-4&keyword=";
+			// EXAMPles
+			// http://www.experiencela.com/rss/feeds/xlaevents.aspx
+
+			//	+	?id=custom&region=&category=&type=&startdate=2016-3-3&enddate=2016-3-4&keyword=
 			
-			$allFutureEventsUrl = "http://www.experiencela.com/rss/feeds/xlaevents.aspx?id=custom&region=&category=&type=&startdate=2016-3-3&enddate=&keyword=";
+			// Future Events (from startdate until whenever)
+			//	+	?id=custom&region=&category=&type=&startdate=2016-3-3&enddate=&keyword=
 
 			// Get events from today onwards
 			$Events->parseExpLAxml('http://www.experiencela.com/rss/feeds/xlaevents.aspx?id=custom&region=&category=&type=&startdate=' . $today . '&enddate=&keyword=');
@@ -93,11 +97,21 @@ if ($dblink && $action !== "") {
 		}
 		// Ticketfly venues! 
 		else if ($action === 'getTicketFlyVenues') {
-			$url = "http://www.ticketfly.com/api/events/upcoming.json?" 
-				. "orgId=1&city=Los%20Angeles&maxResults=3";
+			$maxResults = 2000;
+
+			$urlEventsCustom = "http://www.ticketfly.com/api/events/upcoming.json?orgId=1&city=Los%20Angeles"
+				. "&fields=venue.id,venue.name,venue.address1,venue.address2,venue.city,venue.stateProvince,"
+				. "venue.postalCode,venue.url,venue.blurb,venue.urlFacebook,venue.urlTwitter,"
+				. "venue.lat,venue.lng"
+				. "&maxResults=" . $maxResults;
+
+			// echo $urlEventsCustom; die;
+			
+			$urlVenues = "http://www.ticketfly.com/api/venues/list.json"
+				. "?city=Los%20Angeles&maxResults=500" . $maxResults;
 
 			// Get venues from today onwards
-			$Events->parseTicketflyVenues($url);
+			$Events->parseTicketflyVenues($urlEventsCustom);
 		}
 
 
@@ -108,7 +122,11 @@ if ($dblink && $action !== "") {
 		}
 		else {
 			$venueList = $Events->getVenues();
-			pr($venueList);
+			
+			pr("<b> TOTAL : " . count($venueList) . "</b><br>");
+			foreach ($venueList as $venue) {
+			 	pr($venue["name"]);
+			}
 		}
 		
 	}// End else

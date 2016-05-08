@@ -80,12 +80,9 @@ class EventParser {
 			);
 
 			$venues[] = array($event['venue']['id'] => $event['venue']['name']);
-
 			//pr($event);
 			//pr($pushIt);
-
-		}
-		pr($venues);
+		}// End foreach through events
 	}// End parseTicketflyEvents
 
 	/**********************************************************************************
@@ -98,12 +95,12 @@ class EventParser {
 		// Return array instead of StdClass object by passing 'true' as second arg
 		$jsonData = json_decode($rawJson, true);
 
-		//pr($jsonData);
-		//pr($jsonData['events']);
-
+		// We made an api/events call, need to index into 'events' subkey 
+		$venueData = $jsonData['events'];
+		
 		$venues = [];
 
-		foreach($jsonData['events'] as $venue) {
+		foreach($venueData as $venue) {
 			$venueInfo = array(
 				'tf_id' => $venue['venue']['id'],
 				'name' => $venue['venue']['name'],
@@ -119,18 +116,15 @@ class EventParser {
 				'desc_brief' => $venue['venue']['blurb'],
 				'url_tw' => $venue['venue']['urlTwitter'],
 				'url_fb' => $venue['venue']['urlFacebook'],
-				'image' => $venue['venue']['image']['large']['path'],
+				// 'image' => $venue['venue']['image']['large']['path'],
 			);
 			
 			// Always save venue at tf_id index to avoid duplicates
-			$venues[$venueInfo['tf_id']] = $venueInfo;
-
-			//pr($venueInfo);
-
+			// $venues[$venueInfo['tf_id']] = $venueInfo;
+			$venues[] = $venueInfo;
 		}
 		$this->venueArray = $venues;
 	}// End parseTicketflyEvents
-
 
 	/**********************************************************************************
 		parseScenestarEvents( $url )
@@ -639,26 +633,26 @@ class EventParser {
 		// Prepare insert query
 		$statement = $dbLink->prepare(
 			"INSERT INTO venues(`tf_id`, `name`, `address1`, `address2`, `city`, `zip`, `state`, " .
-			"`lat`, `lon`, `url`, `desc_brief`, `image`, `url_fb`, `url_tw`) ".
+			"`lat`, `lon`, `url`, `desc_brief`, `url_fb`, `url_tw`, `updated`) ".
    			"VALUES(:tf_id, :name, :address1, :address2, :city, :zip, :state, " . 
-   			":lat, :lon, :url, :desc_brief, :image, :url_fb, :url_tw)");
+   			":lat, :lon, :url, :desc_brief, :url_fb, :url_tw, :updated )");
    			// "ON DUPLICATE KEY UPDATE ____ ?? eg: name = :name2, lat = :lat2");
 
 		$object = array(
-			"tf_id" => $venue['tf_id'],
-			"name" 	=> $venue['name'],
-			"address1" 	=> $venue['address1'],
-			"address2" 	=> $venue['address2'],
-			"city" 	=> $venue['city'],
-			"zip" 	=> $venue['zip'],
-			"state" => $venue['state'],
-			"lat" 	=> $venue['lat'],
-			"lon" 	=> $venue['lon'],
-			"url" 		=> $venue['url'],
-			"desc_brief" => $venue['desc_brief'],
-			"image" 	=> $venue['image'],
-			"url_fb" 	=> $venue['url_fb'],
-			"url_tw" 	=> $venue['url_tw']
+			"tf_id" 		=> $venue['tf_id'],
+			"name" 			=> $venue['name'],
+			"address1" 		=> $venue['address1'],
+			"address2"		=> $venue['address2'],
+			"city" 			=> $venue['city'],
+			"zip" 			=> $venue['zip'],
+			"state" 		=> $venue['state'],
+			"lat" 			=> $venue['lat'],
+			"lon" 			=> $venue['lon'],
+			"url" 			=> $venue['url'],
+			"desc_brief"	=> $venue['desc_brief'],
+			"url_fb" 		=> $venue['url_fb'],
+			"url_tw" 		=> $venue['url_tw'],
+			"updated" 		=> date('Y-m-d H:i:s')
 		);
 
 		// Map statement column names to event that was passed in
