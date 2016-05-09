@@ -86,10 +86,10 @@ class EventParser {
 	}// End parseTicketflyEvents
 
 	/**********************************************************************************
-		parseTicketflyVenues( $url )
+		parseTicketflyVenuesFromEvents( $url )
 		save venue info (mostly care about lat/lon) to database
 	*********************************************************************************/
-	public function parseTicketflyVenues($url) {
+	public function parseTicketflyVenuesFromEvents($url) {
 		$rawJson = file_get_contents($url);
 
 		// Return array instead of StdClass object by passing 'true' as second arg
@@ -102,29 +102,71 @@ class EventParser {
 
 		foreach($venueData as $venue) {
 			$venueInfo = array(
-				'tf_id' => $venue['venue']['id'],
-				'name' => $venue['venue']['name'],
-				'lat' => $venue['venue']['lat'],
-				'lon' => $venue['venue']['lng'],
-				'address1' => $venue['venue']['address1'],
-				'address2' => $venue['venue']['address2'],
-				'address2' => $venue['venue']['address2'],
-				'city' => $venue['venue']['city'],
-				'zip' => $venue['venue']['postalCode'],
-				'state' => $venue['venue']['stateProvince'],
-				'url' => $venue['venue']['url'],
-				'desc_brief' => $venue['venue']['blurb'],
-				'url_tw' => $venue['venue']['urlTwitter'],
-				'url_fb' => $venue['venue']['urlFacebook'],
+				'external_id' 	=> $venue['venue']['id'],
+				'source' 		=> "tfly",	
+				'name' 			=> $venue['venue']['name'],
+				'lat' 			=> $venue['venue']['lat'],
+				'lon' 			=> $venue['venue']['lng'],
+				'address1' 		=> $venue['venue']['address1'],
+				'address2' 		=> $venue['venue']['address2'],
+				'city' 			=> $venue['venue']['city'],
+				'zip' 			=> $venue['venue']['postalCode'],
+				'state' 		=> $venue['venue']['stateProvince'],
+				'url' 			=> $venue['venue']['url'],
+				'desc_brief' 	=> $venue['venue']['blurb'],
+				'url_tw' 		=> $venue['venue']['urlTwitter'],
+				'url_fb' 		=> $venue['venue']['urlFacebook'],
 				// 'image' => $venue['venue']['image']['large']['path'],
 			);
 			
-			// Always save venue at tf_id index to avoid duplicates
-			// $venues[$venueInfo['tf_id']] = $venueInfo;
-			$venues[] = $venueInfo;
+			// Always save venue at external_id index to avoid duplicates
+			$venues[$venueInfo['external_id']] = $venueInfo;
+			// $venues[] = $venueInfo;
 		}
 		$this->venueArray = $venues;
-	}// End parseTicketflyEvents
+	}// End parseTicketflyVenuesFromEvents
+
+	/**********************************************************************************
+		parseTicketflyVenues( $url )
+		save venue info (mostly care about lat/lon) to database
+	*********************************************************************************/
+	public function parseTicketflyVenues($url) {
+		$rawJson = file_get_contents($url);
+
+		// Return array instead of StdClass object by passing 'true' as second arg
+		$jsonData = json_decode($rawJson, true);
+
+		// We made an api/events call, need to index into 'events' subkey 
+		$venueData = $jsonData['venues'];
+		
+		$venues = [];
+
+		foreach($venueData as $venue) {
+			$venueInfo = array(
+				'external_id' 	=> $venue['id'],
+				'source' 		=> "tfly",	
+				'name' 			=> $venue['name'],
+				'lat' 			=> $venue['lat'],
+				'lon' 			=> $venue['lng'],
+				'address1' 		=> $venue['address1'],
+				'address2' 		=> $venue['address2'],
+				'city' 			=> $venue['city'],
+				'zip' 			=> $venue['postalCode'],
+				'state' 		=> $venue['stateProvince'],
+				'url' 			=> $venue['url'],
+				'desc_brief' 	=> $venue['blurb'],
+				'url_tw' 		=> $venue['urlTwitter'],
+				'url_fb' 		=> $venue['urlFacebook'],
+				// 'image' => $venue['venue']['image']['large']['path'],
+			);
+			
+			// Always save venue at external_id index to avoid duplicates
+			$venues[$venueInfo['external_id']] = $venueInfo;
+			// $venues[] = $venueInfo;
+		}
+		$this->venueArray = $venues;
+	}// End parseTicketflyVenues
+
 
 	/**********************************************************************************
 		parseScenestarEvents( $url )
@@ -574,7 +616,17 @@ class EventParser {
 	 */
 	public function saveVenuesToDb($dbLink) {
 		foreach ($this->venueArray as $key => $eachVenue) {
-			$this->saveSingleVenueToDb($dbLink, $eachVenue);
+			$TBA_aliases = [
+				'TBA',
+				'To Be Announced',
+				'Will Be Announced',	
+				'TBA',
+			];
+
+			// Check for TBA and such
+			if (!inArrayWildcard($eachVenue["name"], $TBA_aliases)) {
+				$this->saveSingleVenueToDb($dbLink, $eachVenue);
+			}
 		}
 	}
 
@@ -628,18 +680,19 @@ class EventParser {
 	 * @param  array $event Everything related to a venue
 	 * @return array $result Result of DB transaction and error code, if any
 	 */
-		// TODO: add other checks (eg: venue name & aliases) if tf_id isn't used
+		// TODO: add other checks (eg: venue name & aliases) if external_id isn't used
 	public function saveSingleVenueToDb($dbLink, $venue) {
 		// Prepare insert query
 		$statement = $dbLink->prepare(
-			"INSERT INTO venues(`tf_id`, `name`, `address1`, `address2`, `city`, `zip`, `state`, " .
+			"INSERT INTO venues(`external_id`, `source`, `name`, `address1`, `address2`, `city`, `zip`, `state`, " .
 			"`lat`, `lon`, `url`, `desc_brief`, `url_fb`, `url_tw`, `updated`) ".
-   			"VALUES(:tf_id, :name, :address1, :address2, :city, :zip, :state, " . 
+   			"VALUES(:external_id, :source, :name, :address1, :address2, :city, :zip, :state, " . 
    			":lat, :lon, :url, :desc_brief, :url_fb, :url_tw, :updated )");
    			// "ON DUPLICATE KEY UPDATE ____ ?? eg: name = :name2, lat = :lat2");
 
 		$object = array(
-			"tf_id" 		=> $venue['tf_id'],
+			"external_id" 	=> $venue['external_id'],
+			"source"		=> $venue['source'],
 			"name" 			=> $venue['name'],
 			"address1" 		=> $venue['address1'],
 			"address2"		=> $venue['address2'],
@@ -652,7 +705,7 @@ class EventParser {
 			"desc_brief"	=> $venue['desc_brief'],
 			"url_fb" 		=> $venue['url_fb'],
 			"url_tw" 		=> $venue['url_tw'],
-			"updated" 		=> date('Y-m-d H:i:s')
+			"updated" 		=> date('Y-m-d H:i:s'),
 		);
 
 		// Map statement column names to event that was passed in

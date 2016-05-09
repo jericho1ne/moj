@@ -27,6 +27,20 @@ function pr($data) {
 	echo "<PRE>"; print_r($data); echo "</PRE>";
 }
 
+
+//------------------------------------------------------------------------------
+//  Name:     inArrayWildcard
+//  Purpose:  check for a needle in an array haystack (in_array w/ wildcard)
+//------------------------------------------------------------------------------
+function inArrayWildcard($description, $arrayTerms) {
+    foreach ($arrayTerms as $searchTerm) {
+        if (stripos($description, $searchTerm) > -1) {
+            return true;
+        }
+    }
+    return false;
+}// End inArrayWildcard
+
 //============================================================
 //  Name:    calculateDistance
 //  Purpose: return distance between two points in miles

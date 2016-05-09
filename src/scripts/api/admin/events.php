@@ -22,6 +22,7 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 <input type="radio" name="action" value="getNewScenestarShows"> Get Scenestar Shows<br>
 <input type="radio" name="action" value="getNewExpLAevents"> Get Experience LA Events<br>
 <input type="radio" name="action" value="getNewTicketflyevents"> <b>Ticketfly</b> Shows<br>
+<input type="radio" name="action" value="getTicketFlyVenuesFromEvents"> <b>Ticketfly</b> Venues (from upcoming Events)<br>
 <input type="radio" name="action" value="getTicketFlyVenues"> <b>Ticketfly</b> Venues<br>
 <br>
 <input type="checkbox" name="saveToDB" value="1"> Save to DB!<br>
@@ -32,7 +33,7 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 
 
 
-<?
+<?php
 //============================================================
 
 // Automatically get fresh data when time elapsed exceeds $hrsElapsed
@@ -95,8 +96,8 @@ if ($dblink && $action !== "") {
 			$Events->parseTicketflyEvents($url);
 			// $eventsList = $Events->getEvents();
 		}
-		// Ticketfly venues! 
-		else if ($action === 'getTicketFlyVenues') {
+		// Ticketfly venues (from upcoming events only) 
+		else if ($action === 'getTicketFlyVenuesFromEvents') {
 			$maxResults = 2000;
 
 			$urlEventsCustom = "http://www.ticketfly.com/api/events/upcoming.json?orgId=1&city=Los%20Angeles"
@@ -107,16 +108,24 @@ if ($dblink && $action !== "") {
 
 			// echo $urlEventsCustom; die;
 			
-			$urlVenues = "http://www.ticketfly.com/api/venues/list.json"
-				. "?city=Los%20Angeles&maxResults=500" . $maxResults;
-
 			// Get venues from today onwards
-			$Events->parseTicketflyVenues($urlEventsCustom);
+			$Events->parseTicketflyVenuesFromEvents($urlEventsCustom);
+		}
+		// Ticketfly venues direct 
+		else if ($action === 'getTicketFlyVenues') {
+			$maxResults = 2000;
+			$urlVenues = "http://www.ticketfly.com/api/venues/list.json"
+				. "?city=Los%20Angeles&maxResults=" . $maxResults;
+
+			// Get all venues in db.  ti-hee.
+			$Events->parseTicketflyVenues($urlVenues);
 		}
 
-
 		// Always do a dump to screen at the end - grab venues or events and print
-		if ($action !== 'getTicketFlyVenues') {
+		if (!in_array($action, array(
+			'getTicketFlyVenues',
+			'getTicketFlyVenuesFromEvents'))
+			) {
 			$eventsList = $Events->getEvents();
 			pr($eventsList);
 		}
