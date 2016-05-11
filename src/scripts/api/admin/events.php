@@ -56,14 +56,12 @@ if ($dblink && $action !== "") {
 
 	// Grab shows saved in DB
 	if ($action === 'getExistingShows') {
-		$cutoffDate = new DateTime();
-		$cutoffDate->modify("+30 days");
-		$date = $cutoffDate->format("Y-m-d");
-		// echo $date;
+		$boundaryDate = new DateTime();
+		// Format for start date
+		$startDate = $boundaryDate->format("Y-m-d");
 
 		// Get shows from today onwards
-		$existingEvents = $Events->getEventsFromDb('text', $date);
-
+		$existingEvents = $Events->getEventsFromDb('text', '', '10');
 		pr($existingEvents);
 	}
 	else {

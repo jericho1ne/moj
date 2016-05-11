@@ -4,31 +4,35 @@ require_once("db/__db_upd.php");
 require_once("db/__db_connex.php");
 include_once('EventParser.php');
 
+error_reporting(E_ALL);
+
 // Create new EventParser
 $Events = new EventParser($dblink);
 
 // Get today's date (and time)
-$cutoffDate = new DateTime();
+$boundaryDate = new DateTime();
 
-// Nudge date (forward or back) if need be
-// $cutoffDate->modify("+30 days");
-
-$date = $cutoffDate->format("Y-m-d");
+// Format for start date
+$startDate = $boundaryDate->format("Y-m-d");
 
 // Set result to false by default
 $success = false;
 
 // Get shows from today onwards
-$localEvents = $Events->getEventsFromDb('', $date);
+$localEvents = $Events->getEventsFromDb("text", "", "180");
+
 
 if (count($localEvents)) {
 	$success = true;
 }
 
 // Prepackage data into an array first
-echo json_encode(array(
-	'success' => $success,
-	'events' => $localEvents
+// // echo json_encode
+echo json_encode(utf8ize(
+	array(
+		'success' => $success,
+		'events' => $localEvents
+	)
 ));
 
 ?>

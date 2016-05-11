@@ -513,7 +513,18 @@ class EventParser {
 		getEventsFromDb()
 		return events from database
 	*********************************************************************************/
-	public function getEventsFromDb($format = '', $cutoffDate = '') {
+	public function getEventsFromDb($format = '', $startDate = '', $daysPlus = '') {
+		$defaultDate = new DateTime();
+		
+		if ($startDate == "") {
+			// Format for start date
+			$startDate = $defaultDate->format("Y-m-d");
+		}
+
+		// Set the end date
+		$daysPlus = $daysPlus == "" ? 180 : $daysPlus;
+		$endDate = $defaultDate->modify("+{$daysPlus} days")->format("Y-m-d");
+
 		if ($this->dbLink) {
 
 			$query = "SELECT *, DATE_FORMAT(ymd_date,'%W %M %D') AS nice_date, " . 
@@ -522,27 +533,25 @@ class EventParser {
 				"DATE_FORMAT(ymd_date,'%a %b %e') AS short_date " . 
 				"FROM events ";
 
-			if ($cutoffDate != '') {
-				$query .= ' WHERE ymd_date >= :ymd_date';
-			}
-
+			// Always place date boundaries, even if we use defaults
+			$query .= " WHERE ymd_date >= :date_start AND ymd_date <= :date_end";
+			
 			// For now, add a secondary order by on last modified date 
-			$query .= ' ORDER BY ymd_date ASC, updated DESC';
+			$query .= " ORDER BY ymd_date ASC, updated DESC";
 
 			// Prepare SELECT query
-			$statement = $this->dbLink->prepare($query);
+			$stmt = $this->dbLink->prepare($query);
 
-			if ($cutoffDate != '') {
-				$statement->execute(array(':ymd_date' => $cutoffDate));
-			}
-			else {
-				$statement->execute();
-			}
+			// Bind start / end dates
+			$stmt->bindParam(':date_start', $startDate, PDO::PARAM_STR);
+			$stmt->bindParam(':date_end', $endDate, PDO::PARAM_STR);
 
-			$dataRows = $statement->fetchAll(PDO::FETCH_ASSOC);
+			$stmt->execute();
+			// Get Results
+			$dataRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			//		DEBUG
-			// $statement->debugDumpParams();
+			// $stmt->debugDumpParams();
 
 			if ($format === 'json') {
 				return json_encode($dataRows);

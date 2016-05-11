@@ -28,6 +28,18 @@ function pr($data) {
 }
 
 
+function utf8ize($d) {
+	if (is_array($d)) {
+		foreach ($d as $k => $v) {
+			$d[$k] = utf8ize($v);
+		}
+	} 
+	else if (is_string ($d)) {
+		return utf8_encode($d);
+	}
+    return $d;
+}
+
 //------------------------------------------------------------------------------
 //  Name:     inArrayWildcard
 //  Purpose:  check for a needle in an array haystack (in_array w/ wildcard)
