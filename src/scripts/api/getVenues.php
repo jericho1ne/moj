@@ -30,7 +30,16 @@ pr($userLat . ' / ' . $userLon . ' / ' . $max);
 $nearbyPlaces = array();
 
 // Set db query
-$query = "SELECT * FROM `venues`";
+//$query = "SELECT * FROM `venues`";
+
+// Search for shows on the following date
+$show_date = date("Y-m-d");
+
+$query = 
+	"SELECT events.*, venues.name, venues.lat, venues.lon " . 
+	"FROM events " . 
+	"INNER JOIN venues ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
+	"WHERE ymd_date = '{$show_date}'";
 
 // $dblink is created in include/_db_connex.php
 $statement = $dblink->prepare($query);

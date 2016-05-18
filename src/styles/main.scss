@@ -517,7 +517,7 @@ select {
 @media screen and (max-width: 767px) {
 	.dataTables_wrapper {
 		max-width: 600px;
-		border: 1px solid yellow;
+		// border: 1px solid yellow;
 	}
 	table.dataTable th,
 	table.dataTable tbody td {
@@ -527,7 +527,7 @@ select {
 @media screen and (min-width: 768px) and (max-width: 1024px) {
 	.dataTables_wrapper {
 		max-width: 600px;
-		border: 1px solid yellow;
+		// border: 1px solid yellow;
 	}
 	table.dataTable th {
 		padding: 12px 6px 8px 0px !important;
@@ -539,23 +539,23 @@ select {
 @media screen and (min-width: 1025px) and (max-width: 1199px) {
 	.dataTables_wrapper {
 		max-width: 800px;
-		border: 1px solid orange;
+		// border: 1px solid orange;
 	}
 	table.dataTable th {
 		padding: 14px 8px 10px 0px !important;
 	}
 	table.dataTable tbody td {
-		padding: 10px 12px 10px 14px !important;
+		padding: 8px 10px 8px 12px !important;
 	}
 }
 @media screen and (min-width: 1200px) {
 	.dataTables_wrapper {
 		max-width: 1000px;
-		border: 1px solid red;
+		// border: 1px solid red;
 	}
 	table.dataTable th,
 	table.dataTable tbody td {
-		padding: 14px 16px 14px 18px !important;
+		padding: 8px 10px 8px 12px !important;
 	}
 }
 

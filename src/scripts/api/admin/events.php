@@ -19,11 +19,14 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 <input type="hidden" name="hiddenthing" value="1">
 <input type="radio" name="action" value="getExistingShows"> Display Existing Shows <br>
 <hr>
-<input type="radio" name="action" value="getNewScenestarShows"> Get Scenestar Shows<br>
-<input type="radio" name="action" value="getNewExpLAevents"> Get Experience LA Events<br>
-<input type="radio" name="action" value="getNewTicketflyevents"> <b>Ticketfly</b> Shows<br>
+<input type="radio" name="action" value="getNewScenestarShows"> Get <b>Scenestar</b> Shows<br>
+<input type="radio" name="action" value="getNewTicketflyEvents"> Get <b>Ticketfly</b> Shows<br>
+<input type="radio" name="action" value="getNewExpLAevents"> Get <b>Experience LA</b> Events<br>
+
 <input type="radio" name="action" value="getTicketFlyVenuesFromEvents"> <b>Ticketfly</b> Venues (from upcoming Events)<br>
 <input type="radio" name="action" value="getTicketFlyVenues"> <b>Ticketfly</b> Venues<br>
+
+<input type="radio" name="action" value="getSeatGeekVenues"> <b>SeatGeek</b> Venues<br>
 <br>
 <input type="checkbox" name="saveToDB" value="1"> Save to DB!<br>
 <hr>
@@ -47,8 +50,7 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 //  POST action
 //  
 $action = set($_POST['action']);
-$saveToDB = set($_POST['saveToDB']);
-
+$saveToDB = set($_POST['saveToDB']);	
 
 if ($dblink && $action !== "") {
 	// Create new EventParser	
@@ -87,12 +89,14 @@ if ($dblink && $action !== "") {
 			$Events->parseExpLAxml('http://www.experiencela.com/rss/feeds/xlaevents.aspx?id=custom&region=&category=&type=&startdate=' . $today . '&enddate=&keyword=');
 		}
 		// Ticketfly events! 
-		else if ($action === 'getNewTicketflyevents') {
-			$url = "http://www.ticketfly.com/api/events/upcoming.json?orgId=1&fieldGroup=light&city=Los%20Angeles&maxResults=2000";
+		else if ($action === 'getNewTicketflyEvents') {
+			$maxTicketFlyEventsToGrab = 2000;
+			$url = "http://www.ticketfly.com/api/events/upcoming.json?" .
+				"orgId=1&fieldGroup=light&city=Los%20Angeles&" .
+				"maxResults=". $maxTicketFlyEventsToGrab;
 
 			// Get events from today onwards
 			$Events->parseTicketflyEvents($url);
-			// $eventsList = $Events->getEvents();
 		}
 		// Ticketfly venues (from upcoming events only) 
 		else if ($action === 'getTicketFlyVenuesFromEvents') {
@@ -118,19 +122,28 @@ if ($dblink && $action !== "") {
 			// Get all venues in db.  ti-hee.
 			$Events->parseTicketflyVenues($urlVenues);
 		}
+		else if ($action ==="getSeatGeekVenues") {
+			$maxResults = 2000;
+			$urlVenues = "https://api.seatgeek.com/2/venues?city=los+angeles&state=ca&per_page="  
+				. $maxResults;
+
+			// Get all venues in db.  ti-hee.
+			$Events->parseSeatGeekVenues($urlVenues);
+		}
 
 		// Always do a dump to screen at the end - grab venues or events and print
 		if (!in_array($action, array(
 			'getTicketFlyVenues',
-			'getTicketFlyVenuesFromEvents'))
+			'getTicketFlyVenuesFromEvents',
+			'getSeatGeekVenues'))
 			) {
 			$eventsList = $Events->getEvents();
-			pr($eventsList);
+			// pr($eventsList);
 		}
 		else {
 			$venueList = $Events->getVenues();
 			
-			pr("<b> TOTAL : " . count($venueList) . "</b><br>");
+			pr("<b> Total # of Venues : " . count($venueList) . "</b><br>");
 			foreach ($venueList as $venue) {
 			 	pr($venue["name"]);
 			}
@@ -140,10 +153,17 @@ if ($dblink && $action !== "") {
 
 	// If Save to DB checkbox is checked
 	if ($saveToDB) {
-		if ($action !== 'getTicketFlyVenues') {
+
+		// Save Events
+		if (!in_array($action, array(
+			'getTicketFlyVenues',
+			'getTicketFlyVenuesFromEvents',
+			'getSeatGeekVenues'))) {
+			pr("<b> ... saving EVENTS to db... </b><hr>");
 			// Save received events to DB, updating only if show link or title have changed
 			$Events->saveEventsToDb($dblink);
 		}
+		// Save Venues
 		else {
 			// Insert/update Venues in database
 			$Events->saveVenuesToDb($dblink);

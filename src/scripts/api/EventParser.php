@@ -70,18 +70,24 @@ class EventParser {
 		$venues = [];
 
 		foreach($jsonData['events'] as $event) {
-			$pushIt = array(
-				'venue' => $event['venue']['name'],
-				'artist' => $event['headlinersName'],
-				'title' => $event['name'] . ' @ ' . $event['venue']['name'],
-				'ymd_date' => $event['startDate'],
-				'url' => $event['ticketPurchaseUrl'],
-				'price' => $event['ticketPrice'],
+			$ymd_date = date('Y-m-d', strtotime($event['startDate']));
+
+			$tflyEvent = array(
+				'ymd_date'	=> $ymd_date,	// 2020-12-01
+				'source'	=> 'ticketfly',
+				'type'		=> 'Live Show',
+				'artist'	=> $event['headlinersName'],
+				'venue'		=> $event['venue']['name'],
+				'title' 	=> $event['name'] . ' @ ' . $event['venue']['name'],
+				'url' 		=> $event['ticketPurchaseUrl'],
+				'price' 	=> $event['ticketPrice'],
+				'description' 	=> '',
+				'media'			=> '',
 			);
 
 			$venues[] = array($event['venue']['id'] => $event['venue']['name']);
-			//pr($event);
-			//pr($pushIt);
+
+			$this->eventArray[] = $tflyEvent;
 		}// End foreach through events
 	}// End parseTicketflyEvents
 
@@ -108,7 +114,6 @@ class EventParser {
 				'lat' 			=> $venue['venue']['lat'],
 				'lon' 			=> $venue['venue']['lng'],
 				'address1' 		=> $venue['venue']['address1'],
-				'address2' 		=> $venue['venue']['address2'],
 				'city' 			=> $venue['venue']['city'],
 				'zip' 			=> $venue['venue']['postalCode'],
 				'state' 		=> $venue['venue']['stateProvince'],
@@ -149,7 +154,6 @@ class EventParser {
 				'lat' 			=> $venue['lat'],
 				'lon' 			=> $venue['lng'],
 				'address1' 		=> $venue['address1'],
-				'address2' 		=> $venue['address2'],
 				'city' 			=> $venue['city'],
 				'zip' 			=> $venue['postalCode'],
 				'state' 		=> $venue['stateProvince'],
@@ -163,6 +167,49 @@ class EventParser {
 			// Always save venue at external_id index to avoid duplicates
 			$venues[$venueInfo['external_id']] = $venueInfo;
 			// $venues[] = $venueInfo;
+		}
+		$this->venueArray = $venues;
+	}// End parseTicketflyVenues
+
+	/**********************************************************************************
+		parseSeatGeekVenues( $url )
+		save venue info (mostly care about lat/lon) to database
+	*********************************************************************************/
+	public function parseSeatGeekVenues($url) {
+		$rawJson = file_get_contents($url);
+
+		// Return array instead of StdClass object by passing 'true' as second arg
+		$jsonData = json_decode($rawJson, true);
+
+		// Need to index into 'events' subkey 
+		$venueData = $jsonData['venues'];
+		
+		$venues = [];
+
+		foreach($venueData as $venue) {
+			$venueInfo = array(
+				'external_id' 	=> $venue['id'],
+				'source' 		=> "stgk",	
+				'name' 			=> $venue['name'],
+				'lat' 			=> $venue["location"]["lat"],
+				'lon' 			=> $venue["location"]["lon"],
+				'address1' 		=> $venue['address'],
+				'city' 			=> $venue['city'],
+				'zip' 			=> $venue['postal_code'],
+				'state' 		=> $venue['state'],
+				'url' 			=> '',
+				'desc_brief' 	=> '',
+				'url_tw' 		=> '',
+				'url_fb' 		=> '',
+				// 'image' => $venue['venue']['image']['large']['path'],
+			);
+			
+			if ($venue["location"]["lat"] !== "" &&
+				$venue["location"]["lon"] !== "") {
+				// Always save venue at external_id index to avoid duplicates
+				$venues[$venueInfo['external_id']] = $venueInfo;
+				// $venues[] = $venueInfo;
+			}
 		}
 		$this->venueArray = $venues;
 	}// End parseTicketflyVenues
@@ -652,9 +699,9 @@ class EventParser {
 		// Prepare insert query
 		$statement = $dbLink->prepare(
 			"INSERT INTO events(`ymd_date`, `source`, `type`, `artist`, `venue`, " . 
-				"`title`, `description`, `url, `media`) ".
+			"`title`, `description`, `url`, `media`) ".
    			"VALUES(:ymd_date, :source, :type, :artist, :venue, :title, :description, :url, :media) ".
-   			"ON DUPLICATE KEY UPDATE title = :title2, url = :url2");
+   			"ON DUPLICATE KEY UPDATE `title` = :title2, `url` = :url2");
 
 		$eventObject = array(
 			"ymd_date" => $event['ymd_date'],
@@ -674,8 +721,10 @@ class EventParser {
 
 		// Map statement column names to event that was passed in
 		$result = $statement->execute($eventObject);
-
-		echo "<pre>"; $statement->debugDumpParams(); echo "</pre>";
+		
+		// DEBUG
+		//echo "<pre>"; $statement->debugDumpParams(); echo "</pre>";
+		//pr("RESULT: ". $result . " // " . $statement->errorCode());
 
 		return array(
 			"result" => $result, 
@@ -693,9 +742,9 @@ class EventParser {
 	public function saveSingleVenueToDb($dbLink, $venue) {
 		// Prepare insert query
 		$statement = $dbLink->prepare(
-			"INSERT INTO venues(`external_id`, `source`, `name`, `address1`, `address2`, `city`, `zip`, `state`, " .
+			"INSERT INTO venues(`external_id`, `source`, `name`, `address1`, `city`, `zip`, `state`, " .
 			"`lat`, `lon`, `url`, `desc_brief`, `url_fb`, `url_tw`, `updated`) ".
-   			"VALUES(:external_id, :source, :name, :address1, :address2, :city, :zip, :state, " . 
+   			"VALUES(:external_id, :source, :name, :address1, :city, :zip, :state, " . 
    			":lat, :lon, :url, :desc_brief, :url_fb, :url_tw, :updated )");
    			// "ON DUPLICATE KEY UPDATE ____ ?? eg: name = :name2, lat = :lat2");
 
@@ -704,7 +753,6 @@ class EventParser {
 			"source"		=> $venue['source'],
 			"name" 			=> $venue['name'],
 			"address1" 		=> $venue['address1'],
-			"address2"		=> $venue['address2'],
 			"city" 			=> $venue['city'],
 			"zip" 			=> $venue['zip'],
 			"state" 		=> $venue['state'],
