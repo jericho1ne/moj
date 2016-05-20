@@ -114,9 +114,12 @@ var Events = {
             var $tableHeader = $('<thead>')
                     .addClass('row-bold')
                     .html('<tr>'
-                        + '<th class="left">date/artist</th>'
-                        + '<th class="left">venue</th>'
-                        + '<th class="left">tix</th>'
+                        // 1st header column
+                        + '<th class="left"></th>'
+                        // 2nd header column
+                        + '<th class="left"></th>'
+                        // 3rd header column
+                        //+ '<th class="left"></th>'
                         + '</tr>');
 
             // Append Datatable header row
@@ -141,6 +144,7 @@ var Events = {
                     var $dateHeaderRow = $('<tr>')
                         .addClass('date-header-row')
                         .html(
+                            // 1st header row
                             '<th mw200 class="date-header" data-sort="' + events[i].ymd_date + '">'
                             +   '<span class="date-block-xl white">' + dateArray[0] + '</span>'
                             +   '<span class="align-left date-block-md off-white opacity-60">' 
@@ -148,9 +152,11 @@ var Events = {
                             +   '<span class="align-left date-block-md off-white opacity-60">' 
                                 + dateArray[2] + '</span>'
                             + '</th>'
-
+                            // 2nd header row
                             + '<th class="date-header"></th>' 
-                            + '<th class="date-header"></th>');
+                            // 3rd header row
+                            //+ '<th class="date-header"></th>'
+                            );
 
                     // Append individual date header row
                     $dataTable.append($dateHeaderRow);
@@ -170,9 +176,9 @@ var Events = {
                     .addClass('line-item')
                     .html(
                         // For artist, use a highlighted bg color if a fave
-                        // style="background-color:' + expenseCategories[row.label].color + '"
+                        
+                        // 1st column :: Artist + Venue
                         '<td class="left" data-sort="' + events[i].ymd_date + '">' 
-                        // + '<a href="#" data-toggle="modal">'
                         +   '<span class="link artistInfo" ' 
                         +       'data-eventid="' +  i + '" '
                         +       'data-url="' +  events[i].url + '" '
@@ -182,13 +188,13 @@ var Events = {
                         +   '>' 
                         +       eventTitle + ''
                         +   '</span>'
-                        // + '</a>'
+                        +   '<span class="small-text block pad-left-6">' + events[i].venue + '</td>'
                         + '</td>'
                         
-                        // Column 2 :: Venue
-                        + '<td class="left small-text">' + events[i].venue + '</td>'
+                        // 2nd column :: Venue
+                        // + '<td class="left small-text">' + events[i].venue + '</td>'
                         
-                        // Column 3 :: Ticket link
+                        // 3rd column :: Ticket link
                         + '<td class="left"><a href="' + events[i].url + '">' 
                         +   '<img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" />' + '</a>'
                         + '</td>'
@@ -230,7 +236,7 @@ var Events = {
                 "autoWidth": false,
                 "language": {
                     //  "lengthMenu": "_MENU_ per pg",
-                    "sSearch": "search",
+                    "sSearch": "search events",        // Search input box label
                     "zeroRecords": "Nothing found.",
                     "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
                     "infoEmpty": "No shows available",
@@ -243,8 +249,28 @@ var Events = {
             setTimeout(function() {
                 // Save into class property
                 //this.eventData = $dataTable;
-                return("Event data loaded");
-            }, 0);
+                function leftArrowPressed() {
+                    $('.paginate_button.previous').click()
+                }
+
+                function rightArrowPressed() {
+                    $('.paginate_button.next').click()
+                }
+
+                document.onkeydown = function(evt) {
+                    evt = evt || window.event;
+                    switch (evt.keyCode) {
+                        case 37:
+                            leftArrowPressed();
+                            break;
+                        case 39:
+                            rightArrowPressed();
+                            break;
+                    }
+                };
+
+                // return("Event data loaded");
+            }, 250);
         }// End else data received
        
     },// End displayEvents

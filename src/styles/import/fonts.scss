@@ -11,25 +11,83 @@
     font-style: normal;
 }
 
-$font-regular: "Nexa", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-face {
+  font-family: 'Montserrat-Light';
+  src: url('fonts/montserrat/Montserrat-Light.eot');
+  src: url('fonts/montserrat/Montserrat-Light.woff2') format('woff2'),
+       url('fonts/montserrat/Montserrat-Light.woff') format('woff'),
+       url('fonts/montserrat/Montserrat-Light.ttf') format('truetype'),
+       url('fonts/montserrat/Montserrat-Light.svg#Montserrat-Light') format('svg'),
+       url('fonts/montserrat/Montserrat-Light.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 
+$font-regular: "Nexa", "Helvetica Neue", Helvetica, Arial, sans-serif;
+//$font-regular: 'Montserrat-Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+@mixin buildRegularFont($size) {   //, $weight: 400) {
+  font-family: $font-regular !important;
+  font-size: $size !important;
+}
+
+@mixin buildBoldFont($size) {
+  font-family: $font-regular !important;
+  font-weight: bold !important;
+  font-size: $size !important;
+}
+
+// Predefined sizes 
 $font-xsm:12px;
 $font-sm: 14px;
 $font-md: 16px;
 $font-lg: 24px;
 $font-xl: 36px;
 
+// Font Styles
+.large-text {
+  @include buildRegularFont($font-lg);
+}
+.xlarge-text {
+  @include buildRegularFont($font-xl);
+}
+.medium-text {
+  @include buildRegularFont($font-md);
+}
+.medium-text-bold {
+  @include buildBoldFont($font-md);
+}
+.small-text {
+  @include buildRegularFont($font-sm);
+  line-height: 1.1;
+}
+.subtitle {
+  @include buildRegularFont($font-md);
+}
 
+// Various
+.all-caps {
+    text-transform: uppercase;
+}
 .letter-spc-min-1 {
 	letter-spacing: -1px;
 }
-
+.letter-spc-plus-8 {
+  letter-spacing: 8px;
+}
+.line-height-180 {
+  line-height: 180%;
+}
+.line-height-200 {
+  line-height: 200%;
+}
+// Colors
 .white {
     color: #fff;
 }
-
 .off-white {
     color: $almost-white;
 }
+
 
 // END FONTS

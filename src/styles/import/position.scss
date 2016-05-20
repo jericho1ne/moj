@@ -1,3 +1,25 @@
+$btn-pad: 12px 8px;
+
+$div-width: "5%";
+$div-pad: 30px;
+
+$pad-xsm: 4px;
+$pad-sm: 10px;
+$pad-md: 16px;
+$pad-lg: 40px;
+$pad-xlg: 60px;
+
+$col-min-height: 90px;
+
+$phat-margin: 30px auto 40px auto;
+
+$container-max-width: 70%;
+$container-min-width: 320px;
+
+$light-box-shadow: 1px 2px 4px 2px rgba(10, 20, 30, 0.14);
+$pink-border: 1px solid $pink;
+$gray-light-border: 1px solid $gray-light;
+
 /*      General Stuff          */
 .absolute {
     position: absolute;
@@ -7,6 +29,9 @@
 }
 .hidden {
     display: none;
+}
+.block {
+    display: block;
 }
 
 .inline-block { 
@@ -80,7 +105,7 @@
 .pad4 {
     padding: 4px !important;
 }
-.pad 6 {
+.pad6 {
     padding: 6px !important;
 }
 .pad10 {
@@ -89,12 +114,40 @@
 .pad20 {
     padding: 20px !important;
 }
+.pad40 {
+    padding: 40px;
+}
+.pad60 {
+    padding: 60px;
+}
+.pad80 {
+    padding: 80px;
+}
+.pad100 {
+    padding: 100px;
+}
+
+.pad-left-6 {
+    padding-left: 6px;
+}
 .pad-left-10 {
     padding-left: 10px;
 }
 .pad-left-20 {
     padding-left: 20px;
 }
+
+.padtop10 {
+    padding-top: 10px;
+}
+
+.padbot20 {
+    padding-bottom: 20px;
+}
+
+
+
+// Tops
 .top20 {
     top: 20px;
 }
@@ -139,23 +192,8 @@
 }
 
 
-.padtop10 {
-    padding-top: 10px;
-}
-
-.padbot20 {
-    padding-bottom: 20px;
-}
-
-
-.pad4 {
-    padding: 4px;
-}
-.pad10 {
-    padding: 10px;
-}
-
 /*       Dimensions              */
+// Width - %
 .w100p {
     width: 100%;
 }
@@ -165,14 +203,12 @@
 .w80p {
     width: 80%;
 }
+// Widths - px
 .w10 {
     width: 10px;
 }
 .w10 {
     width: 10px;
-}
-.h30 {
-    width: 30px;
 }
 .w40 {
     width: 40px;
@@ -210,6 +246,8 @@
 .w320 {
     width: 320px !important;
 }
+
+// Heights - px
 .h20 {
     height: 20px !important;
 }
@@ -246,6 +284,25 @@
 .h400 {
     height: 400px !important;
 }
+.h480 {
+    height: 480px !important;
+}
+.h520 {
+    height: 520px !important;
+}
+.minh180 {
+    min-height: 180px
+}
 .minh200 {
     min-height: 200px
 }
+
+// Heights - %
+.h40p {
+    height: 40% !important;
+}
+.h100p {
+    height: 100% !important;
+}
+
+

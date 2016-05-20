@@ -14,6 +14,7 @@ $purple-i-like: #B70FD5;
 
 $pink: #D953E5;
 $gold: #DBD12C;
+$lt-blue: #69DDF5;
 
 $active-color: #CA2667;
 $inactive-color: 'transparent';
@@ -30,7 +31,12 @@ $inactive-color: 'transparent';
 .color-light-gray {
 	color: $gray-light;
 }
-
+.color-almost-white {
+	color: $almost-white !important;
+}
+.color-white {
+	color: #ffffff;
+}
 
 .bg-dk-gray {
 	background-color: $gray-dark;

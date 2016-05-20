@@ -3,28 +3,6 @@
 @import "import/position";
 @import "import/icons";
 
-$btn-pad: 12px 8px;
-
-$div-width: "5%";
-$div-pad: 30px;
-
-$pad-xsm: 4px;
-$pad-sm: 10px;
-$pad-md: 16px;
-$pad-lg: 40px;
-$pad-xlg: 60px;
-
-$col-min-height: 90px;
-
-$phat-margin: 30px auto 40px auto;
-
-$container-max-width: 70%;
-$container-min-width: 320px;
-
-$light-box-shadow: 1px 2px 4px 2px rgba(10, 20, 30, 0.14);
-$pink-border: 1px solid $pink;
-$gray-light-border: 1px solid $gray-light;
-
 @mixin buildRegularFont($size) {   //, $weight: 400) {
 	font-family: $font-regular !important;
 	font-size: $size !important;
@@ -43,10 +21,21 @@ $gray-light-border: 1px solid $gray-light;
 	border-radius: $px;
 }
 
+@mixin padLeft($px) {
+	padding-left: $px;
+}
+@mixin blur($px) {
+	-webkit-filter: blur($px);
+	-moz-filter: blur($px);
+	-o-filter: blur($px);
+	-ms-filter: blur($px);
+	filter: blur($px);
+}
 
 /*-------------------- HTML tags -------------------*/
 body {
-	background: $almost-white;
+	background: url("../media/images/grey-diag-bg.png") !important;
+	background-color: $gray-light !important;	// $almost-white;
 	@include buildRegularFont($font-md);
 	font-family: $font-regular;
 	color: $primary-font-color;
@@ -55,14 +44,39 @@ body {
 }
 
 /*----------------- One offs ----------------------*/
-#secondaryHeader {
+#titleHeader {
+	padding: 60px 10px;
+	color: $almost-white !important;
 	z-index: 101;
-	left: 0px;
-	top: 0px;
-	position: fixed;
-	width: 106%;
+	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
+}
+.fixed-top {
+ 	position: fixed;
+ 	top: 0;
+ 	width: 100%;
+    border-width: 0 0 1px;
+}
+.titleHeader-secondary {
+	color: $purple-i-like !important;
+	padding: 10px 0px 10px 0px !important;
+	background-color: $gray-xlight !important;
+	opacity: 0.92;
+	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
+}
+#mojBannerText {
+	color: $almost-white;
+	text-shadow: 1px 2px 2px rgba(30, 30, 30, 1.4);
+}
+.mojBannerText-secondary {
+	color: $purple-i-like !important;
+	text-shadow: none !important; 
 }
 
+#bg-plate {
+    background-size: cover !important;
+    background-color: #000 !important;
+	background: url('../media/backgrounds/moses.jpg') no-repeat center bottom scroll;
+}
 #content-parent {
 	max-width: 100%;
 	margin: 0px;
@@ -112,51 +126,30 @@ body {
 // }
 
 .link, .link a {
-	@include buildBoldFont($font-sm);
-	// Never add left padding or text breaking 
-	// across two rows will make top line seem intended
-	padding: 2px 2px 2px 0px;
+	@include buildBoldFont($font-md);
+	letter-spacing: 0.75px;
+	line-height: 1.25;
+	// Use the following three together or onlky first like will be indented
+	padding: 6px;
+	white-space: pre-wrap;
+	display: block; 
+
 	background: none;
-	border: none;
-	color: $lazy-blue !important;
+	text-transform: uppercase;
+	@include border-radius(3px);
+	color: $pink !important;
 }
 
 .link:hover {
-	background-color: #B4CEE7 !important;
-	padding: 2px 2px 2px 0px;
-	@include border-radius(3px);
+	background-color: $gray-light !important;
+	padding: 6px;
 	cursor: pointer;
-}
-
-.large-text {
-	@include buildRegularFont($font-lg);
-	line-height: 1.2;
-	margin: 10px auto 10px auto;
-}
-
-.medium-text {
-	@include buildRegularFont($font-md);
-	line-height: 1.2;
-	padding: $pad-sm;
-	margin: 10px auto 10px auto;
-}
-
-.small-text {
-	@include buildRegularFont($font-sm);
-	line-height: 1.1;
-	padding: $pad-sm;
-	margin: 4px auto 4px auto;
-}
-
-.subtitle {
-	@include buildRegularFont($font-md);
 }
 
 /*-------- Range Slider ----------*/
 #range-slider .slider-selection {
 	background: #BABABA;
 }
-
 
 /*-------------------- Row styles ---------------------------*/
 .row-sm {
@@ -434,9 +427,8 @@ img.artist-profile-pic:hover {
 }
 .block-notice {
 	@include border-radius(4px);
-	padding: 2px;
-	background-color: $gray-xlight;
-	border: 1px solid $purple-i-like;
+	padding: 12px;
+	background-color: $purple-i-like;
 }
 .text-input {
 	@include buildRegularFont($font-xsm);
@@ -463,14 +455,15 @@ img.artist-profile-pic:hover {
 	margin-bottom: 10px;
 }
 
-.dataTables_filter label {
+.dataTables_wrapper .dataTables_filter label {
 	width: 100%;
+	text-align: center !important;
 }
 
 .dataTables_filter input[type=search] {
 	height: 30px;
 	@include buildRegularFont($font-md);
-	width: 70% !important;
+	width: 60% !important;
 	padding: 4px 2px 4px 2px;
 	margin-bottom: 10px;
 	border: 1px solid #aaa;
@@ -500,16 +493,21 @@ select {
 	cursor:pointer;
 }
 
-// DataTables general overrides 
+// DataTables overrides 
 .dataTables_wrapper {
-	background: url("../media/images/grey-diag-bg.png");
 	margin: auto;
-	border: $gray-light-border;
-	@include border-radius(3px);
 }
 .dataTables_wrapper table thead {
 	display: none;
 }
+.dataTables_wrapper .pagination>li {
+    display: inline;
+    text-transform: uppercase;
+}
+.dataTable tbody {
+	border: 1px solid $gray-mid;
+}
+
 
 //
 // Datatables @media queries
@@ -521,7 +519,7 @@ select {
 	}
 	table.dataTable th,
 	table.dataTable tbody td {
-		padding: 3px 4px 3px 6px !important;
+		padding: 8px !important;
 	}
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
@@ -533,7 +531,7 @@ select {
 		padding: 12px 6px 8px 0px !important;
 	}
 	table.dataTable tbody td {
-		padding: 6px 8px 6px 10px !important;
+		padding: 12px !important;
 	}
 }
 @media screen and (min-width: 1025px) and (max-width: 1199px) {
@@ -545,7 +543,7 @@ select {
 		padding: 14px 8px 10px 0px !important;
 	}
 	table.dataTable tbody td {
-		padding: 8px 10px 8px 12px !important;
+		padding: 14px !important;
 	}
 }
 @media screen and (min-width: 1200px) {
@@ -555,7 +553,7 @@ select {
 	}
 	table.dataTable th,
 	table.dataTable tbody td {
-		padding: 8px 10px 8px 12px !important;
+		padding: 16px !important;
 	}
 }
 
@@ -616,6 +614,7 @@ table.dataTable .date-header {
 	width: 100% !important;
 	max-width: 768px !important;
 	border-radius: 3px !important;
+	padding: 12px; 
 }
 #artistModal {
 	padding: 0px !important;

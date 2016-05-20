@@ -18,6 +18,7 @@ module.exports = {
 				'data/**/*',
 				'*.{ico,png,txt}',
 				'media/images/**/*.{gif,jpeg,jpg,png}',
+				'media/backgrounds/**/*.{gif,jpeg,jpg,png}',
 				'media/svg/**/*',
 				'styles/fonts/{,*/}*.*',
 				'styles/fa/{,*/}*.*',

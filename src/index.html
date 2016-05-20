@@ -47,41 +47,36 @@
 
 <body>
 
+<!-- // Title header -->
+<div id="titleHeader" class="fixed-top">
+    <!-- // Background Plate -->
+    <div class="col-sm-8 center h100p">
+        <span id="mojBannerText" class="xlarge-text">Middle of June</span>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="col-sm-4 text-align-center center">
+        <!-- <img src="media/svg/heart.svg" class="icon-action" id="action-showfaves" alt="Check Favorites"> -->
+        <!-- <img src="media/svg/nearby.svg" class="icon-action" id="action-getposition" alt="Search Nearby"> -->
+        <!-- <img src="media/svg/trumpet.svg" class="icon-action" id="action-???" alt="Bring in the horns"> -->
+        <!-- <img src="media/svg/cog.svg" class="icon-action" id="action-settings" alt="Settings"> -->
+        <img src="media/svg/envelope.svg" class="icon-action" id="action-eml" alt="Get in touch" title="Get in touch" />
+            <span id="eml" data-u="enujfoelddimeht" data-dom="moc.liamg"></span>
+    </div>
+    <!-- <div id="map" class="column"></div> -->
+    <!-- <div class="" id="nearby-shows"></div> -->
+</div>
+
+<!-- // Background plate -->
+<div id="bg-plate" class="w100p h520 pad10 col-sm-12"></div>
+
+<!-- // Welcome to MoJ -->
+<div class="minh180 pad80 center col-sm-12">
+    <span class="large-text line-height-200">The most comprehensive source of live music and cultural events in Los Angeles and surrounding area.</span>
+</div>
+
+<!-- // Event Content and slider -->
 <div id="content-parent" class="w100p col-sm-12">
-    <!--  <div id="logo-banner"></div> -->
-    
-    <!-- PRIMARY -->
-    <div id="titleHeader" class="row margin-bottom-10 pad4 bg-lt-gray">
-  
-        <div class="col-sm-8 center pad10">
-            <span class="large-text color-dk-gray margin-top-10">Middle of June</span>
-            <br>
-            <span class="subtitle">'twas a friday afternoon in the middle of June</span>
-        </div>
-
-        <!-- Action Bar -->
-        <div class="col-sm-4 text-align-center pad10">
-            <img src="media/svg/heart.svg" class="icon-action" id="action-showfaves" alt="Check Favorites">
-            <img src="media/svg/nearby.svg" class="icon-action" id="action-getposition" alt="Search Nearby">
-            <!-- <img src="media/svg/trumpet.svg" class="icon-action" id="action-???" alt="Bring in the horns"> -->
-            <img src="media/svg/cog.svg" class="icon-action" id="action-settings" alt="Settings">
-            <img src="media/svg/envelope.svg" class="icon-action" id="action-eml" alt="Get in touch" title="Get in touch" />
-                <span id="eml" data-u="enujfoelddimeht" data-dom="moc.liamg"></span>
-        </div>
-        <!-- <div id="map" class="column"></div> -->
-        <!-- <div class="" id="nearby-shows"></div> -->
-    </div>
-
-    <!-- SECONDARY MINI HEADER -->
-    <div id="secondaryHeader" class="row pad10 bg-lt-gray hidden">
-        <!-- Tiny Action Bar -->
-        <div class="col-sm-4 text-align-center">
-            <img src="media/svg/heart.svg" class="icon-action" id="action-getPos" alt="Check Favorites" title="Check Favorites">
-            <img src="media/svg/nearby.svg" class="icon-action" id="action-getPos" alt="Search Nearby" title="Search Nearby">
-            <img src="media/svg/cog.svg" class="icon-action" id="action-settings" alt="Settings" title="Settings">
-        </div>
-    </div>
-
   <!--   <div class="button-bar center">
         <button class="phatButton" id="gPlusLogin">Login with G+</button>
         <button class="phatButton" id="setPageState">Save Layout</button>
@@ -89,18 +84,27 @@
     </div>     -->
     
     <!-- Distance search filter -->
-    <div id="slider-parent" class="row border display-none">
+    <div id="slider-parent" class="border display-none">
         <div class="subtitle col-sm-6 pad20">Search for events this far away</div>
         <div class="col-sm-6">
             <input id="range-slider" data-slider-id="range-slider-1" type="text" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="10" data-slider-enabled="false"/>
         </div>
     </div>
 
-    
     <!-- Show data goes here -->
     <div id="shows-content" class="row">
     </div>
+</div>
 
+
+<!-- // Spacer -->
+<div class="h100 pad40 center col-sm-12">
+    &nbsp;
+</div>
+
+<!-- // Bumper -->
+<div class="opacity-80 h200 pad60 center col-sm-12 bg-mid-gray">
+    <span class="medium-text-bold color-almost-white letter-spc-plus-8">` it was a friday afternoon in the middle of june `</span>
 </div>
 
 

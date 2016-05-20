@@ -39,13 +39,12 @@ function lookupArtist(event) {
             // default code 
     }// End switch based on event Source
 
-
-    // Append venue name + link
-    $('#event-tickets').html(
-        showTitle + ' ' 
-        + '<a href="' + event.url + '">' 
-        + '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/>'
-        + '</a>');
+    // Append venue name + link to modal
+    $('#tix-show-title').html(showTitle);
+    $('#tix-show-url').html(
+        '<a href="' + event.url + '">' 
+        +  '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/>'
+        +'</a>');
 
     // Append Event Tags
     var tags = event.type.split(',');
@@ -124,6 +123,11 @@ function startPromiseChain(event) {
 // Methods registered after document.ready
 //
 $(document).ready(function() {
+    // Set background plate
+    // $('#bg-plate').css('background-image', 
+    //     'url(' + 'media/backgrounds/aztec.jpg' + ') no-repeat center scroll');
+
+    
     // 00.  INITIALIZE DISTANCE SLIDER
     $('#range-slider').slider({
         tooltip: 'always',
@@ -262,23 +266,18 @@ $(document).ready(function() {
     // Replace regular action bar w/ mini action bar upon downward scroll
     // 
     $(window).scroll(function(e) { 
-        var divHeight = 35;
+        var divHeight = 75;
         var $secondaryHeader = $('#secondaryHeader'); 
 
-        // Append mini header
-        if ($(this).scrollTop() > divHeight) { 
-            // Gradual fade in then show
-            $secondaryHeader.fadeIn(150, function() {
-                $('nav > ul').removeClass('show');
-            });
-            $secondaryHeader.toggleClass('hidden', false); 
+        // Squeeze down header
+        if ($(this).scrollTop() > divHeight) {
+            $('#titleHeader').addClass('titleHeader-secondary');
+            $('#mojBannerText').addClass('mojBannerText-secondary');
         }
-        // Remove mini header
+        // Return to original look
         else if ($(this).scrollTop() < divHeight) {
-            // Gradual fade, then hide
-            $secondaryHeader.fadeOut(100, function() {
-                $secondaryHeader.toggleClass('hidden', true);
-            });
+            $('#titleHeader').removeClass('titleHeader-secondary');
+            $('#mojBannerText').removeClass('mojBannerText-secondary');
         } 
     });// End window.scroll trigger
 
