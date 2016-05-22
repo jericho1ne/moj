@@ -277,7 +277,8 @@ function parseUrlDomain(url, size) {
     domain = domain.split(':')[0];
 
     if (size === "short") {
-      return domain.split('.')[1]
+
+      return (domain.split('.')[0] === 'www' ? domain.split('.')[1] : domain.split('.')[0]);
     }
     return domain;
 }

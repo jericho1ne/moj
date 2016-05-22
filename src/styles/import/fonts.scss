@@ -42,7 +42,8 @@ $font-xsm:12px;
 $font-sm: 14px;
 $font-md: 16px;
 $font-lg: 24px;
-$font-xl: 36px;
+$font-xl: 32px;
+$font-xxl: 36px;
 
 // Font Styles
 .large-text {
@@ -50,6 +51,9 @@ $font-xl: 36px;
 }
 .xlarge-text {
   @include buildRegularFont($font-xl);
+}
+.xxlarge-text {
+  @include buildRegularFont($font-xxl);
 }
 .medium-text {
   @include buildRegularFont($font-md);

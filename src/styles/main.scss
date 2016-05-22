@@ -65,6 +65,7 @@ body {
 	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
 }
 #mojBannerText {
+	@include buildRegularFont($font-xl);
 	color: $almost-white;
 	text-shadow: 1px 2px 2px rgba(30, 30, 30, 1.4);
 }
@@ -76,7 +77,7 @@ body {
 #bg-plate {
     background-size: cover !important;
     background-color: #000 !important;
-	background: url('../media/backgrounds/will.jpg') no-repeat center bottom scroll;
+	// background: url('../media/backgrounds/will.jpg') no-repeat center bottom scroll;
 }
 #content-parent {
 	max-width: 100%;
@@ -525,6 +526,9 @@ select {
 // Datatables @media queries
 // 
 @media screen and (max-width: 767px) {
+	#bg-plate {
+		height: 300px;
+	}
 	.dataTables_wrapper {
 		max-width: 600px;
 		// border: 1px solid yellow;
@@ -535,6 +539,9 @@ select {
 	}
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
+	#bg-plate {
+		height: 410px;
+	}
 	.dataTables_wrapper {
 		max-width: 600px;
 		// border: 1px solid yellow;
@@ -547,6 +554,9 @@ select {
 	}
 }
 @media screen and (min-width: 1025px) and (max-width: 1199px) {
+	#bg-plate {
+		height: 480px;
+	}
 	.dataTables_wrapper {
 		max-width: 800px;
 		// border: 1px solid orange;
@@ -559,6 +569,9 @@ select {
 	}
 }
 @media screen and (min-width: 1200px) {
+	#bg-plate {
+		height: 520px;
+	}
 	.dataTables_wrapper {
 		max-width: 1000px;
 		// border: 1px solid red;

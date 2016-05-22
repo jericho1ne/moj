@@ -19,7 +19,7 @@ $startDate = $boundaryDate->format("Y-m-d");
 $success = false;
 
 // Get shows from today onwards
-$localEvents = $Events->getEventsFromDb("text", "", "180");
+$localEvents = $Events->getEventsFromDb("text", "", "60");
 
 
 if (count($localEvents)) {
