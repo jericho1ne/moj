@@ -138,22 +138,35 @@ $(document).ready(function() {
     var d = new Date();
     var n = d.getHours();
     var bgPlates = [ 
+        'adujahmal.jpg',   
         'aztec.jpg',
         'backstage.jpg',
         'busta.jpg',
         'chaka.jpg',
         'dalston.jpg',
+        'dalstonyard.jpg',
         'drums.jpg',
         'intherange.jpg',
+        'kingking.jpg',
+        'lfholiday.jpg',
         'moses.jpg',
+        'nemesis.jpg',
         'ngoniba.jpg',
+        'ozo.jpg',
         'rims.jpg',
+        'roycecrowd.jpg',
+        'roycepatio.jpg',
         'shiloh.jpg',
-        'themine.jpg',
+        'synth.jpg',
+        'themint.jpg',
         'theruler.jpg',
+        'weddingandfuneralband.jpg',
         'will.jpg',
     ];
     
+    window.bgPlates = bgPlates;
+    console.log(n);
+
     // Set background plate
     $('#bg-plate').css('background', 'url("media/backgrounds/' + bgPlates[n] + '") ' 
         + 'no-repeat center bottom scroll');
