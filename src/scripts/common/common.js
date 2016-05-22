@@ -264,6 +264,24 @@ function isBlank(thisVar) {
     return true;
 }
 
+function parseUrlDomain(url, size) {
+    var domain;
+    // Find & remove protocol (http, ftp, etc.) and get domain
+    if (url.indexOf("://") > -1) {
+        domain = url.split('/')[2];
+    }
+    else {
+        domain = url.split('/')[0];
+    }
+    // Remove port number, if any
+    domain = domain.split(':')[0];
+
+    if (size === "short") {
+      return domain.split('.')[1]
+    }
+    return domain;
+}
+
 function parseUrlAction() {
     var host = window.location.host;
     var path = window.location.pathname;
@@ -297,6 +315,4 @@ function parseUrlAction() {
             }// End switch
         }
     }// End if urlString is not blank
-
-}// End parseUrlHashtag
-
+}// End parseUrlAction

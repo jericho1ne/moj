@@ -29,22 +29,26 @@ function lookupArtist(event) {
     // Load artist/show data differently based on source
     switch(event.source) {
         case 'scenestar':
-            startPromiseChain(event);
+        case 'ticketfly':
+            startEventLookup(event);
             break;
         case 'experiencela':
             showTitle = event.title;
             Events.displayStaticShowInfo('artist-info', event);
             break;
-        default:
+        default:   // fallback case
+            startEventLookup(event);
+            break;
             // default code 
     }// End switch based on event Source
 
     // Append venue name + link to modal
     $('#tix-show-title').html(showTitle);
-    $('#tix-show-url').html(
+    $('#tix-url').html(
         '<a href="' + event.url + '">' 
         +  '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/>'
         +'</a>');
+    $('#tix-url-source').html(parseUrlDomain(parseUrlDomain(event.url, "short")));
 
     // Append Event Tags
     var tags = event.type.split(',');
@@ -58,7 +62,7 @@ function lookupArtist(event) {
         $('#event-tags').append($tag);
     }// End event tag loop
 
-    // Sharing link first
+    // Create event url share link
     var shareLink = buildSharingLink(event.eventid);
     $('#share-link').html(''
         //+'<a href="' + shareLink + '">' 
@@ -80,11 +84,11 @@ function lookupArtist(event) {
 
 
 /**
- * startPromiseChain(event)
+ * startEventLookup(event)
  * Events / Artist info promise chain
  * @param {array} event Object containing all of the related show info
  */
-function startPromiseChain(event) {
+function startEventLookup(event) {
 
     // returns $.ajax from Last.fm API
     Events.getArtistInfo(event.artist, 'getinfo')
@@ -117,7 +121,7 @@ function startPromiseChain(event) {
         .then(function(trackData) {
             Events.appendTopTracks('artist-tracks', trackData);
         });
-}// End startPromiseChain
+}// End startEventLookup
 
 //
 // Methods registered after document.ready
@@ -127,7 +131,7 @@ $(document).ready(function() {
     // $('#bg-plate').css('background-image', 
     //     'url(' + 'media/backgrounds/aztec.jpg' + ') no-repeat center scroll');
 
-    
+
     // 00.  INITIALIZE DISTANCE SLIDER
     $('#range-slider').slider({
         tooltip: 'always',

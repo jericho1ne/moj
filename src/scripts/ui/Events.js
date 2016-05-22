@@ -15,7 +15,7 @@ var Events = {
     eventsScript: 'getEventsJson.php',
 
     eventData: {},
-    maxVideosToShow: 4,
+    maxVideosToShow: 3,
 
     /**
      * getEventData
@@ -188,14 +188,14 @@ var Events = {
                         +   '>' 
                         +       eventTitle + ''
                         +   '</span>'
-                        +   '<span class="small-text block pad-left-6">' + events[i].venue + '</td>'
+                        +   '<span class="small-text block pad-top-4 pad-left-6">' + events[i].venue + '</td>'
                         + '</td>'
                         
                         // 2nd column :: Venue
                         // + '<td class="left small-text">' + events[i].venue + '</td>'
                         
                         // 3rd column :: Ticket link
-                        + '<td class="left"><a href="' + events[i].url + '">' 
+                        + '<td class="left w60"><a href="' + events[i].url + '">' 
                         +   '<img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" />' + '</a>'
                         + '</td>'
 
@@ -228,6 +228,7 @@ var Events = {
                 
                 // Alternating row color
                 "asStripeClasses": [ 'even-bgcolor', 'odd-bgcolor' ],
+                
                 "order": [[ 0, "asc" ]],
                 "aoColumnDefs": [
                     // 0 = date, 1 = artist, 2 = venue, 3 = ticket

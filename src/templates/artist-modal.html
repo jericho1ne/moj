@@ -10,22 +10,22 @@
 				</button>
 
 				<!-- Title - usually Artist @ Venue on so-and-so date -->
-				<div class="modal-title large-text pad10"></div>
+				<div class="modal-title large-text pad8"></div>
 			</div>
 
 			<!-- Body -->
 			<div class="modal-body container-fluid">
 
 				<!-- ARTIST INFO .................................. -->
-				<div id="artist-info" class="row">
+				<div id="artist-info" class="col-sm-12 row">
 					<!-- Photo -->
-					<div id="artist-photo" class="col-md-4 w200">
+					<div id="artist-photo" class="col-sm-4">
 						<span class="loading">
 							<div class="loading"></div>
 						</span>
 					</div>
 					<!-- Bio -->
-					<div id="artist-bio" class="col-md-8 margin-top-10">
+					<div id="artist-bio" class="col-sm-8">
 						<span class="loading">
 							<div class="loading"></div>
 						</span>
@@ -35,26 +35,28 @@
 				<!-- EVENT INFO .................................. -->
 				<div class="margin-top-10">
 					<!-- Event Tags -->
-					<div class="col-md-12 pad10" id="event-tags">
+					<div class="col-sm-12 pad10" id="event-tags">
 					</div>
 
 					<!-- Event link -->
-					<div class="col-md-12 block-notice margin-top-10">
+					<div class="col-xs-12 block-notice margin-top-10 minh84">
 						<!-- Event Link / tickets -->
-						<div id="event-tickets" class="">
-							<div id="tix-show-title" class="inline-block w80p all-caps medium-text color-white"></div>
-        					<div id="tix-show-url" class="inline-block w50"></div>
-						</div>
+						<div class="col-xs-10 inline-block all-caps medium-text color-white" id="tix-show-title"></div>
+    					<div class="col-xs-2 pad0 inline-block mw80">
+    						<span id="tix-url" class="block"></span>
+    						<span id="tix-url-source" class="block xsmall-text white"></span>
+    					</div>
+					
 					</div>
 				</div>
 			
 				<!-- SHARING LINK ................................. -->
-				<div class="margin-top-20">
+				<div class="col-xs-12 margin-top-20">
 					<div id="share-link"></div>	
 				</div>
 
 				<!-- TOP TRACKS ................................. -->
-				<div id="artist-tracks" class="row margin-top-10 pad-left-10 h100"></div>
+				<div id="artist-tracks" class="col-xs-12 margin-top-10 pad-left-10 h100"></div>
 
 			</div>
 

@@ -91,9 +91,28 @@ if ($dblink && $action !== "") {
 		// Ticketfly events! 
 		else if ($action === 'getNewTicketflyEvents') {
 			$maxTicketFlyEventsToGrab = 2000;
+			
+			$customParams = [
+				'startDate',
+				'venue.id',
+				'venue.name',
+				'venue.address1',
+				'ageLimit',
+				'headlinersName',
+				'supportsName',
+				'headliners.image.large',
+				'headliners.eventDescription',
+				'ticketPurchaseUrl',
+				'ticketPrice'
+			];
+
+			// ORIGINAL:  
+			// 	"orgId=1&fieldGroup=light&city=Los%20Angeles&maxResults=". $maxTicketFlyEventsToGrab;
+			
 			$url = "http://www.ticketfly.com/api/events/upcoming.json?" .
-				"orgId=1&fieldGroup=light&city=Los%20Angeles&" .
-				"maxResults=". $maxTicketFlyEventsToGrab;
+				"orgId=1&city=Los%20Angeles" .
+				"&fields=" . implode($customParams, ',') .
+				"&maxResults=". $maxTicketFlyEventsToGrab;
 
 			// Get events from today onwards
 			$Events->parseTicketflyEvents($url);
@@ -102,11 +121,25 @@ if ($dblink && $action !== "") {
 		else if ($action === 'getTicketFlyVenuesFromEvents') {
 			$maxResults = 2000;
 
-			$urlEventsCustom = "http://www.ticketfly.com/api/events/upcoming.json?orgId=1&city=Los%20Angeles"
-				. "&fields=venue.id,venue.name,venue.address1,venue.address2,venue.city,venue.stateProvince,"
-				. "venue.postalCode,venue.url,venue.blurb,venue.urlFacebook,venue.urlTwitter,"
-				. "venue.lat,venue.lng"
-				. "&maxResults=" . $maxResults;
+			$customParams = [
+				'venue.id',
+				'venue.name',
+				'venue.address1',
+				'venue.address2',
+				'venue.city',
+				'venue.stateProvince',
+				'venue.postalCode',
+				'venue.url',
+				'venue.blurb',
+				'enue.urlFacebook',
+				'venue.urlTwitter',
+				'venue.lat',
+				'venue.lng'
+			];
+	
+			$urlEventsCustom = 'http://www.ticketfly.com/api/events/upcoming.json?orgId=1&city=Los%20Angeles'
+				. '&fields=' . implode($customParams, ',')
+				. '&maxResults=' . $maxResults;
 
 			// echo $urlEventsCustom; die;
 			
@@ -138,7 +171,13 @@ if ($dblink && $action !== "") {
 			'getSeatGeekVenues'))
 			) {
 			$eventsList = $Events->getEvents();
-			// pr($eventsList);
+			
+			foreach ($eventsList as $evt) {
+				pr($evt['ymd_date'] . ' | ' . $evt['source'] . ' | ' . $evt['type'] . ' - ' . $evt['title'] 
+					. ' [' . $evt['price'] . ']'
+					. '<br>' 
+					. $evt['url'] . '<br>' . $evt['media'] . '<hr>');
+			}
 		}
 		else {
 			$venueList = $Events->getVenues();
@@ -153,7 +192,6 @@ if ($dblink && $action !== "") {
 
 	// If Save to DB checkbox is checked
 	if ($saveToDB) {
-
 		// Save Events
 		if (!in_array($action, array(
 			'getTicketFlyVenues',
@@ -168,7 +206,8 @@ if ($dblink && $action !== "") {
 			// Insert/update Venues in database
 			$Events->saveVenuesToDb($dblink);
 		}
-	}
+	}// End if Save to DB
+
 }// End if dblink is set and there is a POST submit
 
 ?>

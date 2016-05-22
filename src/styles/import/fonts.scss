@@ -59,7 +59,10 @@ $font-xl: 36px;
 }
 .small-text {
   @include buildRegularFont($font-sm);
-  line-height: 1.1;
+}
+.xsmall-text {
+  @include buildRegularFont($font-xsm);
+  letter-spacing: 0.5px;
 }
 .subtitle {
   @include buildRegularFont($font-md);

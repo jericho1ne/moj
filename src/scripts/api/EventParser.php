@@ -72,20 +72,27 @@ class EventParser {
 		foreach($jsonData['events'] as $event) {
 			$ymd_date = date('Y-m-d', strtotime($event['startDate']));
 
+			$media = isset($event['headliners'][0]['image']['large']['path']) 
+				? $event['headliners'][0]['image']['large']['path'] 
+				: '';
+
 			$tflyEvent = array(
 				'ymd_date'	=> $ymd_date,	// 2020-12-01
 				'source'	=> 'ticketfly',
 				'type'		=> 'Live Show',
 				'artist'	=> $event['headlinersName'],
 				'venue'		=> $event['venue']['name'],
-				'title' 	=> $event['name'] . ' @ ' . $event['venue']['name'],
+				'title' 	=> $event['headlinersName'] . ' @ ' . $event['venue']['name'],
 				'url' 		=> $event['ticketPurchaseUrl'],
-				'price' 	=> $event['ticketPrice'],
-				'description' 	=> '',
-				'media'			=> '',
+				'price' 	=> stripos($event['ticketPrice'], 'free') !== false 
+					? "free" 
+					: $event['ticketPrice'] ,
+				'description' => $event['headliners'][0]['eventDescription'],
+				'media'		=> $media,
 			);
 
-			$venues[] = array($event['venue']['id'] => $event['venue']['name']);
+			// OPTIONAL ingest venue just in case we don't have it
+			// $venues[] = array($event['venue']['id'] => $event['venue']['name']);
 
 			$this->eventArray[] = $tflyEvent;
 		}// End foreach through events
@@ -320,10 +327,11 @@ class EventParser {
 						"type"		=> "Live Show",  		// TODO: find out if needed for Event Calendar??
 						"artist"	=> $artist,
 						"venue"		=> $venue,
-						"title"		=> $artist . " @ " . $venue,	// needed for Event Calendar!
+						"title"		=> $artist . ' @ ' . $venue,	// needed for Event Calendar!
 						"description" => "",
 						"url"		=> $this->cleansePurchaseUrl($url),
-						"media"		=> "",
+						"media"		=> '',
+						"price"		=> ''
 					)
 				);
 				$count ++;
@@ -392,10 +400,12 @@ class EventParser {
 				'url' 			=> (string) $Item->link,
 				'title' 		=> (string) $Item->title,
 				'organization' 	=> (string) $Item->organization,
+				'location' 		=> (string) $Item->location,
 				'media'			=> (string) $Item->image,
 				'description' 	=> (string) $Item->description,
 				'venue' 		=> (string) $Item->location,
 				'address' 		=> (string) $Item->eventAddress,
+				'eventFree' 	=> (string) $Item->eventFree,
 				'category' 		=> $categories,
 			);
 
@@ -425,12 +435,19 @@ class EventParser {
 					"ymd_date"	=> $ymd_date,	// 2020-12-01
 					"type"		=> $event['category'],
 					"source"	=> "experiencela",
-					"artist"	=> $event['organization'],
+					// Choose "artist" based on whether org is the same as location;
+					// if not, use event title as the artist		
+					"artist"	=> ($event['location'] === $event['organization']
+						? $event['title']
+						: $event['organization']),
 					"venue"		=> $event['venue'],
 					"title"		=> $event['title'],
 					"description" => $event['description'],
 					"url"		=> $this->cleansePurchaseUrl($event['url']),
 					"media"		=> $image,
+					"price"		=> ($event['eventFree'] === "True" 
+						? "free" 
+						: ""),
 				)
 			);// End array_push
 
@@ -699,9 +716,11 @@ class EventParser {
 		// Prepare insert query
 		$statement = $dbLink->prepare(
 			"INSERT INTO events(`ymd_date`, `source`, `type`, `artist`, `venue`, " . 
-			"`title`, `description`, `url`, `media`) ".
-   			"VALUES(:ymd_date, :source, :type, :artist, :venue, :title, :description, :url, :media) ".
-   			"ON DUPLICATE KEY UPDATE `title` = :title2, `url` = :url2");
+				"`title`, `description`, `price`, `url`, `media`) ".
+   			"VALUES(:ymd_date, :source, :type, :artist, :venue, " .
+   				":title, :description, :price, :url, :media) ".
+   			"ON DUPLICATE KEY UPDATE `title` = :title2, `url` = :url2, " .
+   				"`media` = :media2, `description` = :description2");
 
 		$eventObject = array(
 			"ymd_date" => $event['ymd_date'],
@@ -710,7 +729,10 @@ class EventParser {
 			"artist" 	=> $event['artist'],
 			"venue" 	=> $event['venue'],
 			"description" => $event['description'],
+			"description2" => $event['description'],
+			"price" 	=> $event['price'],
 			"media" 	=> $event['media'],
+			"media2" 	=> $event['media'],
 			"title" 	=> $event['title'],
 			"title2" 	=> $event['title'],
 			"url" 		=> $event['url'],
@@ -721,10 +743,10 @@ class EventParser {
 
 		// Map statement column names to event that was passed in
 		$result = $statement->execute($eventObject);
-		
+
 		// DEBUG
-		//echo "<pre>"; $statement->debugDumpParams(); echo "</pre>";
-		//pr("RESULT: ". $result . " // " . $statement->errorCode());
+		echo "<pre>"; $statement->debugDumpParams(); echo "</pre>";
+		pr("RESULT: ". $result . " // " . $statement->errorCode());
 
 		return array(
 			"result" => $result, 
