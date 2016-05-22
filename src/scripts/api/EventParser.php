@@ -86,9 +86,9 @@ class EventParser {
 				'url' 		=> $event['ticketPurchaseUrl'],
 				'price' 	=> stripos($event['ticketPrice'], 'free') !== false 
 					? "free" 
-					: $event['ticketPrice'] ,
-				'description' => $event['headliners'][0]['eventDescription'],
-				'media'		=> $media,
+					: trim($event['ticketPrice']),
+				'description' => trim($event['headliners'][0]['eventDescription']),
+				'media'		=> trim($media),
 			);
 
 			// OPTIONAL ingest venue just in case we don't have it

@@ -29,12 +29,20 @@ function lookupArtist(event) {
     // Load artist/show data differently based on source
     switch(event.source) {
         case 'scenestar':
-        case 'ticketfly':
             startEventLookup(event);
             break;
         case 'experiencela':
             showTitle = event.title;
             Events.displayStaticShowInfo('artist-info', event);
+            break;
+        case 'ticketfly':
+            showTitle = event.title;
+            Events.displayStaticShowInfo('artist-info', event);
+            // Returns $.ajax from Youtube API
+            Events.getTopTracks(event.artist)
+                .then(function(trackData) {
+                   Events.appendTopTracks('artist-tracks', trackData);
+                });
             break;
         default:   // fallback case
             startEventLookup(event);
@@ -127,10 +135,28 @@ function startEventLookup(event) {
 // Methods registered after document.ready
 //
 $(document).ready(function() {
+    var d = new Date();
+    var n = d.getHours();
+    var bgPlates = [ 
+        'aztec.jpg',
+        'backstage.jpg',
+        'busta.jpg',
+        'chaka.jpg',
+        'dalston.jpg',
+        'drums.jpg',
+        'intherange.jpg',
+        'moses.jpg',
+        'ngoniba.jpg',
+        'rims.jpg',
+        'shiloh.jpg',
+        'themine.jpg',
+        'theruler.jpg',
+        'will.jpg',
+    ];
+    
     // Set background plate
-    // $('#bg-plate').css('background-image', 
-    //     'url(' + 'media/backgrounds/aztec.jpg' + ') no-repeat center scroll');
-
+    $('#bg-plate').css('background', 'url("media/backgrounds/' + bgPlates[n] + '") ' 
+        + 'no-repeat center bottom scroll');
 
     // 00.  INITIALIZE DISTANCE SLIDER
     $('#range-slider').slider({

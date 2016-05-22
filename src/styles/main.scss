@@ -45,10 +45,10 @@ body {
 
 /*----------------- One offs ----------------------*/
 #titleHeader {
-	padding: 60px 10px;
+	padding: 80px 20px;
 	color: $almost-white !important;
 	z-index: 101;
-	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
+	transition: background .35s ease-in-out, padding .5s ease-in-out, opacity .35s ease-in-out;
 }
 .fixed-top {
  	position: fixed;
@@ -57,10 +57,11 @@ body {
     border-width: 0 0 1px;
 }
 .titleHeader-secondary {
+	top: -4px;
 	color: $purple-i-like !important;
-	padding: 10px 0px 10px 0px !important;
+	padding: 14px 20px !important;
 	background-color: $gray-xlight !important;
-	opacity: 0.92;
+	opacity: 0.96;
 	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
 }
 #mojBannerText {
@@ -75,7 +76,7 @@ body {
 #bg-plate {
     background-size: cover !important;
     background-color: #000 !important;
-	background: url('../media/backgrounds/moses.jpg') no-repeat center bottom scroll;
+	background: url('../media/backgrounds/will.jpg') no-repeat center bottom scroll;
 }
 #content-parent {
 	max-width: 100%;
@@ -613,13 +614,17 @@ table.dataTable .date-header {
 	padding: 6px !important;
 }
 .modal-dialog {
-	width: 96% !important;
+	width: 100% !important;
 	margin: 0px !important;
 }
 .modal-content {
 	width: 100% !important;
+	min-height: 500px !important;
 	max-width: 768px !important;
 	border-radius: 3px !important;
+}
+.modal-body {
+	min-height: 400px !important;
 }
 #artistModal {
 	padding: 0px !important;

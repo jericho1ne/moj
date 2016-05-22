@@ -18,11 +18,11 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 <form method="post" action="">
 <input type="hidden" name="hiddenthing" value="1">
 <input type="radio" name="action" value="getExistingShows"> Display Existing Shows <br>
-<hr>
+<br>
 <input type="radio" name="action" value="getNewScenestarShows"> Get <b>Scenestar</b> Shows<br>
 <input type="radio" name="action" value="getNewTicketflyEvents"> Get <b>Ticketfly</b> Shows<br>
 <input type="radio" name="action" value="getNewExpLAevents"> Get <b>Experience LA</b> Events<br>
-
+<br>
 <input type="radio" name="action" value="getTicketFlyVenuesFromEvents"> <b>Ticketfly</b> Venues (from upcoming Events)<br>
 <input type="radio" name="action" value="getTicketFlyVenues"> <b>Ticketfly</b> Venues<br>
 

@@ -371,16 +371,15 @@ var Events = {
             $photoCaption = $('<span>')
                 .addClass('photo-caption absolute')
                 .html(event.artist);
-            $('#artist-photo').append($photoCaption);  
+            // $('#artist-photo').append($photoCaption);  
         }
 
-
-        $('#artist-bio').html();        // MOVE THIS TO MODAL RESET METHOD
+        $('#artist-bio').empty();        // MOVE THIS TO MODAL RESET METHOD
 
         // Event Description
         if (event.description !== "") {
             // Arbitrary limit on how much biography text to show
-            var maxCharsInBio = 2400;
+            var maxCharsInBio = 1000;
             // Remove any links
             var fullBio = event.description.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
             // Clip bio at preset character max
@@ -394,6 +393,9 @@ var Events = {
             
             // Append the artist bio text
             $('#artist-bio').html(shortBio);
+
+            console.log(event.price);
+
         }// End if bio is not blank
 
         // Clear out the loading spinner since we won't be pulling youtube track
@@ -402,6 +404,7 @@ var Events = {
             
         //
         // TODO: loop through event categories and print each tag in a button
+        //      HERE instead of main.js...
         //
     },// End function displayStaticShowInfo
 
@@ -501,7 +504,7 @@ var Events = {
                 $('#artist-photo').html('<a href="' + artist.url + '">'
                     + '<img src="' + artistPhoto + '" class="artist-profile-pic "></a>');
 
-                $('#artist-photo').append($photoCaption);  
+                // $('#artist-photo').append($photoCaption);  
             }// End artist photo exists
            
             // NECESSARY ??
