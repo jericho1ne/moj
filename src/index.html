@@ -50,16 +50,19 @@
 <!-- // Title header -->
 <div id="titleHeader" class="fixed-top">
     <!-- // Background Plate -->
-    <div class="col-sm-8 center h100p">
+    <div class="col-sm-6 center h100p">
         <span id="mojBannerText" class="">Middle of June</span>
     </div>
 
     <!-- Action Bar -->
-    <div class="col-sm-4 text-align-center center">
-        <span class="icon-action w80 color-dk-gray">Weekend</span>
-        <span class="icon-action w80 color-dk-gray">Venues</span>
-        <span class="icon-action w80 color-dk-gray">Cities</span>
-        <span class="icon-action w80 color-dk-gray">Map Search</span>
+    <div class="col-sm-6 text-align-center center" id="action-bar">
+        <!-- <button class="phatButton" id="gPlusLogin">Login with G+</button>
+        <button class="phatButton" id="setPageState">Save Layout</button>
+        <button class="phatButton" id="getNearbyVenues">What's nearby?</button> -->
+     
+        <button class="phatButton" id="buttonWeekend">Weekend</button>
+        <button class="phatButton" id="buttonRegion">City</button>
+        <button class="phatButton" id="buttonMap">Map</button>
         
         <!-- <img src="media/svg/heart.svg" class="icon-action" id="action-showfaves" alt="Check Favorites"> -->
         <!-- <img src="media/svg/nearby.svg" class="icon-action" id="action-getposition" alt="Search Nearby"> -->
@@ -82,12 +85,6 @@
 
 <!-- // Event Content and slider -->
 <div id="content-parent" class="w100p col-sm-12">
-  <!--   <div class="button-bar center">
-        <button class="phatButton" id="gPlusLogin">Login with G+</button>
-        <button class="phatButton" id="setPageState">Save Layout</button>
-        <button class="phatButton" id="getNearbyVenues">What's nearby?</button>
-    </div>     -->
-    
     <!-- Distance search filter -->
     <div id="slider-parent" class="border display-none">
         <div class="subtitle col-sm-6 pad20">Search for events this far away</div>
@@ -95,12 +92,10 @@
             <input id="range-slider" data-slider-id="range-slider-1" type="text" data-slider-min="0" data-slider-max="40" data-slider-step="1" data-slider-value="10" data-slider-enabled="false"/>
         </div>
     </div>
-
     <!-- Show data goes here -->
     <div id="shows-content" class="row">
     </div>
 </div>
-
 
 <!-- // Spacer -->
 <div class="h100 pad40 center col-sm-12">

@@ -52,11 +52,11 @@ body {
 	transition: background .35s ease-in-out, padding .5s ease-in-out, opacity .35s ease-in-out;
 }
 .titleHeader-secondary {
-	top: -4px;
+	top: -4px !important;
 	color: $purple-i-like !important;
 	padding: 10px 10px 6px 10px !important;
 	background-color: $gray-xlight !important;
-	opacity: 0.96;
+	opacity: 0.96 !important;
 	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
 }
 .fixed-top {
@@ -303,22 +303,22 @@ body {
 }
 
 .phatButton {
-	@include border-radius(3px);
-	font-family: $font-regular;
-	color: $gray-light;
-	font-size: $font-md;
-	background-color: $btn-bg-green;
+	@include border-radius(2px);
+	@include buildBoldFont($font-md);
+	letter-spacing: 0.75px;
+	text-transform: uppercase;
+	color: #fff;
+	background-color: $gray-dark;
 	padding: $btn-pad;
-	border: 0px;
-	margin: 4px;
+	margin: 1px;
 	cursor: pointer;
+	border: 0px;
 	text-decoration: none;
+	opacity: 0.96;
 }
-
 .phatButton:hover {
-	background-color:#5cbf2a
+	background-color: $lt-blue;
 }
-
 .phatButton:active{
 	position: relative;
 	top:1px
