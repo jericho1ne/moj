@@ -12,27 +12,6 @@
  *    FA replacements, ohh yeahhh  
  */
 
-// Action bar links
-.icon-action, .icon-link {
-    width: 44px;
-    height: 44px;
-    cursor: pointer;
-    padding: 6px;
-    display: inline-block;
-}
-.icon-action {
-    opacity: .94;
-    @include border-radius(4px);
-    margin: 2px;
-    background-color: #fafafa;
-    border: 3px solid $pink;
-}
-.icon-action:hover {
-    background-color: $lt-blue !important;
-    opacity: .9;
-    transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
-}
-
 // Basic, no click action
 .icon-basic {
     width: 30px;
@@ -41,7 +20,6 @@
     padding: 2px;
     display: inline-block;
 }
-
 .icon-lg {
     width: 80px;
     height: 80px;
@@ -52,7 +30,30 @@
 /** 
  *    Body Link Styles 
  */
+.icon-action, .icon-link {
+    cursor: pointer;
+    padding: 6px;
+    display: inline-block;
+}
+
+.icon-action {
+    width: 54px;
+    height: 44px;
+    opacity: 1;
+    @include border-radius(3px);
+    margin: 2px;
+    background-color: #fafafa;
+    //border: 3px solid $pink;
+}
+.icon-action:hover {
+    background-color: $lt-blue !important;
+    opacity: .9;
+    transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
+}
+
 .icon-link {
+    width: 44px;
+    height: 44px;
     @include border-radius(30px);
     margin: 1px;
     opacity: 1;
