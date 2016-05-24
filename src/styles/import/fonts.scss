@@ -12,6 +12,19 @@
 }
 
 @font-face {
+    font-family: 'NexaBold';
+    src: url('fonts/nexa/Nexa_Bold-webfont.eot');
+    src: url('fonts/nexa/Nexa_Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/nexa/Nexa_Bold-webfont.woff2') format('woff2'),
+         url('fonts/nexa/Nexa_Bold-webfont.woff') format('woff'),
+         url('fonts/nexa/Nexa_Bold-webfont.ttf') format('truetype'),
+         url('fonts/nexa/Nexa_Bold-webfont.svg#nexa_lightregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*
+@font-face {
   font-family: 'Montserrat-Light';
   src: url('fonts/montserrat/Montserrat-Light.eot');
   src: url('fonts/montserrat/Montserrat-Light.woff2') format('woff2'),
@@ -21,9 +34,11 @@
        url('fonts/montserrat/Montserrat-Light.eot?#iefix') format('embedded-opentype');
   font-weight: normal;
   font-style: normal;
-}
+}*/
 
 $font-regular: "Nexa", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-bold: "NexaBold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 //$font-regular: 'Montserrat-Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
 @mixin buildRegularFont($size) {   //, $weight: 400) {
@@ -32,8 +47,7 @@ $font-regular: "Nexa", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 @mixin buildBoldFont($size) {
-  font-family: $font-regular !important;
-  font-weight: bold !important;
+  font-family: $font-bold !important;
   font-size: $size !important;
 }
 
