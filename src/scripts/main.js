@@ -136,39 +136,11 @@ function startEventLookup(event) {
 //
 $(document).ready(function() {
     var d = new Date();
-    var n = d.getHours();
-    var bgPlates = [ 
-        'adujahmal.jpg',   
-        'aztec.jpg',
-        'backstage.jpg',
-        'busta.jpg',
-        'chaka.jpg',
-        'dalston.jpg',
-        'dalstonyard.jpg',
-        'drums.jpg',
-        'intherange.jpg',
-        'kingking.jpg',
-        'lfholiday.jpg',
-        'moses.jpg',
-        'nemesis.jpg',
-        'ngoniba.jpg',
-        'ozo.jpg',
-        'rims.jpg',
-        'roycecrowd.jpg',
-        'roycepatio.jpg',
-        'shiloh.jpg',
-        'synth.jpg',
-        'themint.jpg',
-        'theruler.jpg',
-        'weddingandfuneralband.jpg',
-        'will.jpg',
-    ];
-    
-    window.bgPlates = bgPlates;
-    console.log(n);
+    var hour = d.getHours();
+    var day =  d.getUTCDay(); // Sunday = 0, Sat = 6
 
     // Set background plate
-    $('#bg-plate').css('background', 'url("media/backgrounds/' + bgPlates[n] + '") ' 
+    $('#bg-plate').css('background', 'url("media/backgrounds/' + BG_PLATES[day] + '") ' 
         + 'no-repeat center bottom scroll');
 
     // 00.  INITIALIZE DISTANCE SLIDER

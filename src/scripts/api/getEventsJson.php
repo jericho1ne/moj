@@ -18,9 +18,9 @@ $startDate = $boundaryDate->format("Y-m-d");
 // Set result to false by default
 $success = false;
 
-// Get shows from today onwards
-$localEvents = $Events->getEventsFromDb("text", "", "60");
-
+// Get shows from today onwards.  
+// Pass in:  format, startDate (defaults to today), max days ahead
+$localEvents = $Events->getEventsFromDb("text", "", "30");
 
 if (count($localEvents)) {
 	$success = true;
