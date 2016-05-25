@@ -35,4 +35,29 @@ echo json_encode(utf8ize(
 	)
 ));
 
+// FORMAT
+/* 
+{
+    "success": true,
+    "events": [
+        {
+            "e_id": "13421",
+            "d_ymd": "2016-05-24",
+            "d_fmt": "Tue May 24",
+            "d_upd": "2016-05-22 15:47:13",
+            "type": "Music",
+            "a": "The Muffs Live Performance & Signing - Free & All Ages",
+            "v": "Amoeba Music",
+            "t": "The Muffs @ Ameoba",
+            "prc": "free",
+            "url": "http://www.experiencela.com/calendar/event/69947"
+        },
+        {
+            "e_id": "13422",
+           	...
+        }
+    }// End events
+}
+*/
+
 ?>

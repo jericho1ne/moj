@@ -56,6 +56,7 @@ body {
 	padding: 10px 10px 6px 10px !important;
 	background-color: $gray-xlight !important;
 	opacity: 0.96 !important;
+	border-bottom: 2px solid $gray-mid;
 	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
 }
 .fixed-top {
@@ -68,7 +69,7 @@ body {
 #mojBannerText {
 	@include buildBoldFont($font-xl);
 	color: $almost-white;
-	letter-spacing: 1.5px;
+	letter-spacing: 0.5px;
 	text-shadow: 1px 2px 2px rgba(30, 30, 30, 1);
 }
 .mojBannerText-secondary {
@@ -237,6 +238,7 @@ body {
 
 #action-bar {
 	top: 8px;
+	padding-bottom: 10px;
 }
 
 .border {

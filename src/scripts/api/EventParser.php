@@ -591,10 +591,8 @@ class EventParser {
 
 		if ($this->dbLink) {
 
-			$query = "SELECT *, DATE_FORMAT(ymd_date,'%W %M %D') AS nice_date, " . 
-				"DATE_FORMAT(ymd_date,'%a %M %D') AS semi_nice_date, " . 
-				"DATE_FORMAT(ymd_date,'%b %e') AS short_weekday, " . 
-				"DATE_FORMAT(ymd_date,'%a %b %e') AS short_date " . 
+			$query = "SELECT *, " . 
+				"DATE_FORMAT(ymd_date,'%a %M %e') AS nice_date " . 
 				"FROM events ";
 
 			// Always place date boundaries, even if we use defaults
@@ -616,12 +614,36 @@ class EventParser {
 
 			//		DEBUG
 			// $stmt->debugDumpParams();
+			
 
+			// Slim down the payload
+			$eventsSimplified = [];
+
+			foreach ($dataRows as $e) {
+				// Remap keys
+				$eventsSimplified[] = array(
+					'e_id' => $e['eventid'],
+					'src' => $e['source'],
+					'd_ymd' => $e['ymd_date'],
+					'd_fmt' => $e['nice_date'],
+					'd_upd' => $e['updated'],
+					'typ' => $e['type'],
+					'a' => $e['artist'],
+					'v' => $e['venue'],
+					't' => $e['title'],
+					'prc' => $e['price'],
+					'url' => $e['url'],
+					//'img' => $e['media'],
+					//'dsc' => $e['description'],
+				);
+			}// End foreach
+			//pr($eventsSimplified);
+			
 			if ($format === 'json') {
-				return json_encode($dataRows);
+				return json_encode($eventsSimplified);
 			}
 			else {
-				return $dataRows;
+				return $eventsSimplified;
 			}
 		}// End if db link is set
 	}
@@ -631,6 +653,8 @@ class EventParser {
 		return event array in JSON format
 	*********************************************************************************/
 	public function getEventsJson() {
+		
+		
 		// Return timestamp + data
 		return json_encode(
 		 	array(

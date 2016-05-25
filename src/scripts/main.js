@@ -245,16 +245,27 @@ $(document).ready(function() {
             // Parse the data into JSON object
             var eventData = JSON.parse(data);
 
-            // Save event data to local storage
-            UserState.events = eventData.events;
-            Events.eventData = eventData.events;
+            // Check for valid data before continuing
+            if (eventData.success) {
+                // Save event data to local storage
+                UserState.events = Events.eventData = 
+                    Events.remapEventArrayKeys(eventData.events);
 
-            // JSON data will go into shows-content div
-            Events.displayEvents(eventData, 'shows-content');
+                // JSON data will go into shows-content div
+                Events.displayEvents(Events.eventData, 'shows-content');
 
-            // Once data is loaded, parse URL for a direct link (after the #)
-            var request = parseUrlAction();
-            window.location.href.split('#');           
+                // Once data is loaded, parse URL for a direct link (after the #)
+                var request = parseUrlAction();
+                window.location.href.split('#');  
+            }
+            else {
+                if (!events.length || typeof events === 'undefined') {
+                    return Error("getEvents - did not receive any data ='(");
+                }
+                else {
+                    return Error("getEvents - event data received, but success flag is not set");
+                }
+            }// End else        
             
         })// End events.getEvents().then
 
@@ -262,16 +273,22 @@ $(document).ready(function() {
         .then(function(){  
             // https://davidwalsh.name/event-delegate
             document.getElementById('shows-content').addEventListener('click', function(e) {
+
                 var eventid = $(e.target).data('eventid');
                 var event = UserState.events[eventid];
-                
+
+                console.log(eventid);
+                console.log(event);
                 // Ensure that user has clicked on an actual link
                 if (event !== undefined && event.hasOwnProperty('source')) {
                     // Manually change URL in address bar
-                    window.history.pushState('', 'Live Show', '#event=' + Events.getEventByIndex(eventid).eventid);
+                    window.history.pushState('', 'Event', '#event=' + Events.getEventByIndex(eventid).eventid);
                     
                     // Pop up artist info modal
                     lookupArtist(event);
+                }
+                else {
+                    console.log("Click source is undefined");
                 }
             });// End addEventListener
         });// End add old school click listener
