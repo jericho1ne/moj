@@ -71,7 +71,7 @@ function lookupArtist(event) {
     }// End event tag loop
 
     // Create event url share link
-    var shareLink = buildSharingLink(event.eventid);
+    var shareLink = buildSharingLink(event.event_id);
     $('#share-link').html(''
         //+'<a href="' + shareLink + '">' 
         //+ '<img src="media/svg/share.svg" class="icon-action h30 w30" alt="Share Link" title="Share Link"/></a>'
@@ -273,22 +273,20 @@ $(document).ready(function() {
         .then(function(){  
             // https://davidwalsh.name/event-delegate
             document.getElementById('shows-content').addEventListener('click', function(e) {
-
+                // Get the array index of the clicked element
                 var eventid = $(e.target).data('eventid');
                 var event = UserState.events[eventid];
 
-                console.log(eventid);
-                console.log(event);
                 // Ensure that user has clicked on an actual link
                 if (event !== undefined && event.hasOwnProperty('source')) {
                     // Manually change URL in address bar
-                    window.history.pushState('', 'Event', '#event=' + Events.getEventByIndex(eventid).eventid);
+                    window.history.pushState('', 'Event', '#event=' + Events.getEventByIndex(eventid).event_id);
                     
                     // Pop up artist info modal
                     lookupArtist(event);
                 }
                 else {
-                    console.log("Click source is undefined");
+                    console.log("Click source is outside an event hit state");
                 }
             });// End addEventListener
         });// End add old school click listener

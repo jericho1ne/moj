@@ -6,6 +6,30 @@
  * Helper functions
  */
 
+function isEmpty(obj) {
+  return $.isEmptyObject(obj); 
+}
+
+function isBlank(thisVar) {
+    if (typeof thisVar !== 'undefined') {
+        if (typeof thisVar === 'object') { // figure out object.length substitute} && thisVar.length) {
+            return false;
+        }
+        else if ((typeof thisVar === 'string' || typeof thisVar === 'number') 
+          && thisVar != '') {
+            return false;
+        }
+    }
+    return true;
+}
+
+function flattenObject(obj) {
+  var newHTML = [];
+  var newHTML = $.map(obj, function(value) {
+      return(value);
+  });
+}
+
 function rvStr(s) {
   return s.split('').reverse().join('');
 }
@@ -249,19 +273,6 @@ function reattachListeners() {
 function buildSharingLink(eventId) {
     return window.location.origin + window.location.pathname 
         + '#event=' + eventId;
-}
-
-function isBlank(thisVar) {
-    if (typeof thisVar !== 'undefined') {
-        if (typeof thisVar === 'object') { // figure out object.length substitute} && thisVar.length) {
-            return false;
-        }
-        else if ((typeof thisVar === 'string' || typeof thisVar === 'number') 
-          && thisVar != '') {
-            return false;
-        }
-    }
-    return true;
 }
 
 function parseUrlDomain(url, size) {

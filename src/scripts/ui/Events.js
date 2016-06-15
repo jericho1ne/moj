@@ -58,7 +58,7 @@ var Events = {
     getEventById: function(eventId) {
             
         for(var i=0; i< this.eventData.length; i++) {
-            if (this.eventData[i].eventid == eventId) {
+            if (this.eventData[i].event_id == eventId) {
                 return this.eventData[i];
             }
         }// End for events loop
@@ -342,11 +342,12 @@ var Events = {
      * displayStaticShowInfo ::
      */
     displayStaticShowInfo: function (divId, event) {
+        window.staticInfo = event;
         // Create specific parent div name
         var artistInfo = '#' + divId;
 
         // Display artist/show photo
-        if (event.media !== '') {
+        if (!isEmpty(event.media)) {
             // Set the img tag    
             $('#artist-photo').addClass('relative');
             $('#artist-photo').html('<a href="' + event.url + '">' 
@@ -361,7 +362,7 @@ var Events = {
 
 
         // Artist photo + name caption
-        if (!isBlank(event.artist)) {
+        if (!isEmpty(event.artist)) {
             $photoCaption = $('<span>')
                 .addClass('photo-caption absolute')
                 .html(event.artist);
@@ -371,9 +372,10 @@ var Events = {
         $('#artist-bio').empty();        // MOVE THIS TO MODAL RESET METHOD
 
         // Event Description
-        if (event.description !== "") {
+        if (!isEmpty(event.description)) {
             // Arbitrary limit on how much biography text to show
             var maxCharsInBio = 1000;
+
             // Remove any links
             var fullBio = event.description.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
             // Clip bio at preset character max
@@ -538,7 +540,7 @@ var Events = {
                 // Handle error here
                 // TODO:  change to jquery UI modal that autofades and has (X) button
                 var msg = 'Unable to load Top tracks for <b>' + + '</b>';
-                alert(msg + '<br>' + errorMsg + '(' + errorCode + ')');
+                console.log(msg + '<br>' + errorMsg + '(' + errorCode + ')');
             }
         });// End topTracksXHR $.ajax 
     },// End function getTopTracks

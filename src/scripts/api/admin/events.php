@@ -90,7 +90,7 @@ if ($dblink && $action !== "") {
 		}
 		// Ticketfly events! 
 		else if ($action === 'getNewTicketflyEvents') {
-			$maxTicketFlyEventsToGrab = 2000;
+			$maxTicketFlyEventsToGrab = 20;
 			
 			$customParams = [
 				'startDate',
@@ -113,6 +113,8 @@ if ($dblink && $action !== "") {
 				"orgId=1&city=Los%20Angeles" .
 				"&fields=" . implode($customParams, ',') .
 				"&maxResults=". $maxTicketFlyEventsToGrab;
+		
+		echo $url . '<hr>';
 
 			// Get events from today onwards
 			$Events->parseTicketflyEvents($url);
@@ -176,7 +178,8 @@ if ($dblink && $action !== "") {
 				pr($evt['ymd_date'] . ' | ' . $evt['source'] . ' | ' . $evt['type'] . ' - ' . $evt['title'] 
 					. ' [' . $evt['price'] . ']'
 					. '<br>' 
-					. $evt['url'] . '<br>' . $evt['media'] . '<hr>');
+					. $evt['url'] . '<br>' . $evt['media'] . '<br>'
+					. $evt['description'] . '<hr>');
 			}
 		}
 		else {

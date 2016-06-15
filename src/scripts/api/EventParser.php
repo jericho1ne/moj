@@ -577,13 +577,40 @@ class EventParser {
 		getEventsFromDb()
 		return events from database
 	*********************************************************************************/
-	public function getEventsFromDb($format = '', $startDate = '', $daysPlus = '') {
+	public function getEventsFromDb($format = '', $startDate = '', $daysPlus = '', $fieldSet = 'light') {
 		$defaultDate = new DateTime();
 		
 		if ($startDate == "") {
-			// Format for start date
+			// Format for start daxte
 			$startDate = $defaultDate->format("Y-m-d");
 		}
+
+		// All db fields
+		$columns = array(
+			'eventid' => 'e_id',
+			'source' => 'src',
+			'ymd_date' => 'd_ymd',
+			'type' => 'typ',
+			'artist' => 'a',
+			'venue' => 'v',
+			'title' => 't',
+			'price' => 'prc',
+			'url' => 'url',
+			// Extra heavy stuff
+			'updated' => 'd_upd',
+			'media' => 'img',
+			'description' => 'dsc',
+		);
+
+		// Grab limited field set by default
+		if ($fieldSet == 'light') {
+			unset($columns['updated']);
+			unset($columns['media']);
+			unset($columns['description']);
+		}
+
+		// Create comma separated string of columsn to select on
+		$fields = implode(', ', array_keys($columns));
 
 		// Set the end date
 		$daysPlus = $daysPlus == "" ? 180 : $daysPlus;
@@ -591,7 +618,7 @@ class EventParser {
 
 		if ($this->dbLink) {
 
-			$query = "SELECT *, " . 
+			$query = "SELECT " . $fields . ", " . 
 				"DATE_FORMAT(ymd_date,'%a %M %e') AS nice_date " . 
 				"FROM events ";
 
@@ -600,7 +627,7 @@ class EventParser {
 			
 			// For now, add a secondary order by on last modified date 
 			$query .= " ORDER BY ymd_date ASC, updated DESC";
-
+			
 			// Prepare SELECT query
 			$stmt = $this->dbLink->prepare($query);
 
@@ -614,30 +641,23 @@ class EventParser {
 
 			//		DEBUG
 			// $stmt->debugDumpParams();
-			
-
+		
 			// Slim down the payload
 			$eventsSimplified = [];
 
-			foreach ($dataRows as $e) {
-				// Remap keys
-				$eventsSimplified[] = array(
-					'e_id' => $e['eventid'],
-					'src' => $e['source'],
-					'd_ymd' => $e['ymd_date'],
-					'd_fmt' => $e['nice_date'],
-					'd_upd' => $e['updated'],
-					'typ' => $e['type'],
-					'a' => $e['artist'],
-					'v' => $e['venue'],
-					't' => $e['title'],
-					'prc' => $e['price'],
-					'url' => $e['url'],
-					//'img' => $e['media'],
-					//'dsc' => $e['description'],
-				);
+			foreach ($dataRows as $event) {
+				$e = [];
+				foreach ($event as $k => $v) {
+					// Remap keys using the abbreviations
+					if ($k !== 'nice_date') {
+						$e[$columns[$k]] = $v;
+					}
+					else {
+						$e['d_fmt'] = $v;
+					}					
+				}
+				$eventsSimplified[] = $e;
 			}// End foreach
-			//pr($eventsSimplified);
 			
 			if ($format === 'json') {
 				return json_encode($eventsSimplified);
