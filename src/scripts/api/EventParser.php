@@ -65,7 +65,7 @@ class EventParser {
 		// Return array instead of StdClass object by passing 'true' as second arg
 		$jsonData = json_decode($rawJson, true);
 
-		pr($jsonData['totalResults']);
+		pr(' results returned by TicketFly API: ' . $jsonData['totalResults']);
 
 		$venues = [];
 
@@ -83,13 +83,17 @@ class EventParser {
 				'artist'	=> $event['headlinersName'],
 				'venue'		=> $event['venue']['name'],
 				'title' 	=> $event['headlinersName'] . ' @ ' . $event['venue']['name'],
-				'url' 		=> $event['ticketPurchaseUrl'],
+				'url' 		=> trim($event['ticketPurchaseUrl'])
+					? $event['ticketPurchaseUrl']	
+					: $event['urlEventDetailsUrl'], // fall back upon this bad bwoy
 				'price' 	=> stripos($event['ticketPrice'], 'free') !== false 
 					? "free" 
 					: trim($event['ticketPrice']),
 				'description' => trim($event['headliners'][0]['eventDescription']),
 				'media'		=> trim($media),
 			);
+
+			pr($tflyEvent);
 
 			// OPTIONAL ingest venue just in case we don't have it
 			// $venues[] = array($event['venue']['id'] => $event['venue']['name']);
@@ -226,7 +230,7 @@ class EventParser {
 		parseScenestarEvents( $url )
 		fill in the eventArray & venueArray
 	*********************************************************************************/
-	public function parseScenestarEvents($url) {
+	public function parseScenestarEvents($url, $maxResults = '') {
 		// Search for shows beginning with today's date
 		$searchDate = $this->today_formatted;
 
@@ -294,7 +298,7 @@ class EventParser {
 				$url_start_pos = strrpos($val, '<a href=');
 				$url_end_pos   = strrpos($val, '" target="_blank"');
 				$url_length = $url_end_pos - $url_start_pos;
-				$url   = trim(substr($val, $url_start_pos+9, $url_length-9));
+				$url   = trim(substr($val, $url_start_pos + 9, $url_length - 9));
 
 				// Extract artist name (hint: 'target="_blank"' >> '@')
 				$from = 'target="_blank" />';
@@ -302,7 +306,7 @@ class EventParser {
 				$artist_start_pos = strrpos($val, $from);
 				$artist_end_pos = strrpos($val, $to);
 				$artist_length = $artist_end_pos - $artist_start_pos;
-				$artist  = trim(substr($val, $artist_start_pos+strlen($from), $artist_length-18) );
+				$artist  = trim(substr($val, $artist_start_pos + strlen($from), $artist_length - 18) );
 				$artist = str_replace('"', '', $artist); 			// get rid of double quotes
 				$artist = str_replace(',', '', $artist); 			// and commas too
 
@@ -335,12 +339,19 @@ class EventParser {
 					)
 				);
 				$count ++;
+
+				if ($maxResults > 0 && $count >= $maxResults) {
+					break;
+				}
 			}// End if preg_match
 		}// End foreach lines
 
 		// OUTSIDE of the foor loop, do this:
 		$sortedVenues =  array_count_values($venues);
+
+		// Sort array in reverse order, maintaining index association
 		arsort( $sortedVenues );
+
 		$this->venueArray = $sortedVenues;
 		// return $json_data;			// TODO:  should return TRUE (if eventsArray was hydrated) or FALSE (if error)
 	}// End method parseScenestarEvents
@@ -527,6 +538,14 @@ class EventParser {
 		return $newUrl;
 	}// End cleansePurchaseUrl
 
+	public function cleanString($content, $strlength = 256) {
+		return str_replace(
+			'"', 
+			'', 
+			substr($content, 0, $strlength)
+		);
+	}
+
 	/**********************************************************************************
 		saveJsonToFile( filename )
 		dump JSON data to a file
@@ -596,8 +615,9 @@ class EventParser {
 			'title' => 't',
 			'price' => 'prc',
 			'url' => 'url',
+			// 'updated' => 'd_upd',
+
 			// Extra heavy stuff
-			'updated' => 'd_upd',
 			'media' => 'img',
 			'description' => 'dsc',
 		);
@@ -627,7 +647,7 @@ class EventParser {
 			
 			// For now, add a secondary order by on last modified date 
 			$query .= " ORDER BY ymd_date ASC, updated DESC";
-			
+
 			// Prepare SELECT query
 			$stmt = $this->dbLink->prepare($query);
 
@@ -754,31 +774,47 @@ class EventParser {
 	 * @return array $result Result of DB transaction and error code, if any
 	 */
 	public function saveSingleEventToDb($dbLink, $event) {
-		// TODO: insert into db if record isn't already present; could be very taxing
-		// return ( true if all good, false if db insert failed );
+		//
+		// TODO: insert into db if record isn't already present
+		// 
 		
+		// Remove double quotes and trim these strings
+		$artist = $this->cleanString($event['artist']);
+		$venue = $this->cleanString($event['venue']);
+		$title = $this->cleanString($event['title']);
+		$description = $this->cleanString($event['description'], 1200);
+
+		// Trimmed date (Eg: friday-jul-29)
+		$shortDate = date('l-M-j-Y', strtotime($event['ymd_date']));
+
+		// Same method of creating SEO-friendly slug url for all sources
+		$slug = substr(str_replace(' ', '-', $artist), 0, 48) 		// artist
+			. '-' . substr(str_replace(' ', '-', $venue), 0, 48) 	// venue
+			. '-' . $shortDate;										// date
+
+		$slug = slugifyString($slug);
+	
 		// Prepare insert query
 		$statement = $dbLink->prepare(
-			"INSERT INTO events(`ymd_date`, `source`, `type`, `artist`, `venue`, " . 
-				"`title`, `description`, `price`, `url`, `media`) ".
-   			"VALUES(:ymd_date, :source, :type, :artist, :venue, " .
-   				":title, :description, :price, :url, :media) ".
-   			"ON DUPLICATE KEY UPDATE `title` = :title2, `url` = :url2, " .
-   				"`media` = :media2, `description` = :description2");
+			"INSERT INTO events(`ymd_date`, `source`, `type`, `artist`, `venue`, `title`, `description`, `slug`, `price`, `url`, `media`) ".
+   			"VALUES(:ymd_date, :source, :type, :artist, :venue, :title, :description, :slug, :price, :url, :media) ".
+   			"ON DUPLICATE KEY UPDATE `title` = :title2, `url` = :url2, `media` = :media2, `slug` = :slug2, `description` = :description2");
 
 		$eventObject = array(
 			"ymd_date" => $event['ymd_date'],
 			"source" 	=> $event['source'],
 			"type" 		=> $event['type'],
-			"artist" 	=> $event['artist'],
-			"venue" 	=> $event['venue'],
-			"description" => substr($event['description'], 0, 1200),
-			"description2" => substr($event['description'], 0, 1200),
+			"artist" 	=> $artist,
+			"venue" 	=> $venue,
+			"description" => $description,
+			"description2" => $description,
+			"slug"		=> $slug,
+			"slug2"		=> $slug,
 			"price" 	=> $event['price'],
 			"media" 	=> $event['media'],
 			"media2" 	=> $event['media'],
-			"title" 	=> $event['title'],
-			"title2" 	=> $event['title'],
+			"title" 	=> $title,
+			"title2" 	=> $title,
 			"url" 		=> $event['url'],
 			"url2" 		=> $event['url']
 		);

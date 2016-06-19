@@ -2,6 +2,7 @@
 // SET DEFAULTS
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+setlocale(LC_ALL, 'en_US.UTF8');
 date_default_timezone_set('America/Los_Angeles');
 
 // Let's not forget the constants
@@ -53,6 +54,32 @@ function inArrayWildcard($description, $arrayTerms) {
     return false;
 }// End inArrayWildcard
 
+
+function slugifyString($text) {
+	// Replace ampersands
+	$text = str_replace("&", 'and', $text);
+
+	$text = preg_replace('~[^\pL\d]+~u', '-', $text);
+	// transliterate
+	$text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+	// remove unwanted characters
+	$text = preg_replace('~[^-\w]+~', '', $text);
+
+	// trim
+	$text = trim($text, '-');
+
+	// remove duplicate -
+	$text = preg_replace('~-+~', '-', $text);
+
+	// Remove any double dashes
+	// $text = str_replace('--', '-', $text);
+
+	// lowercase
+	$text = strtolower($text);
+
+	return $text;
+}
 //============================================================
 //  Name:    calculateDistance
 //  Purpose: return distance between two points in miles

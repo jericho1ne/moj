@@ -130,8 +130,9 @@ var Events = {
             var dateArray = nice_date.split(" ");
             var weekday = dateArray[0];
             var month = dateArray[1];
-            var dayofmonth = dateArray[3];
+            var dayofmonth = dateArray[2];
 
+            console.log(dateArray);
             // If the date has changed, it's time for the spacer row with large text
             if (String(prevDate.trim()) != String(ymd_date.trim())) {
                 

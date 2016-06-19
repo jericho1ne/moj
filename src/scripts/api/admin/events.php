@@ -67,13 +67,14 @@ if ($dblink && $action !== "") {
 		pr($existingEvents);
 	}
 	else {
-		// Figure out today's date for ExpLA and Ticketfly (format 2016-1-1)
+		// Figure out today's date 
 		$today = date('Y-n-j');
 
 		// Scrape Scenestar
 		if ($action === 'getNewScenestarShows') {
+			$maxResults = 2000;
 			// Get newest shows
-			$Events->parseScenestarEvents('http://thescenestar.typepad.com/shows/');		
+			$Events->parseScenestarEvents('http://thescenestar.typepad.com/shows/', $maxResults);		
 		}
 		// Experience LA
 		else if ($action === 'getNewExpLAevents') {
@@ -102,7 +103,10 @@ if ($dblink && $action !== "") {
 				'supportsName',
 				'headliners.image.large',
 				'headliners.eventDescription',
+				// If a paid event
 				'ticketPurchaseUrl',
+				// If a free event, fall back upon this, it'll always be there
+				'urlEventDetailsUrl',
 				'ticketPrice'
 			];
 
@@ -175,9 +179,11 @@ if ($dblink && $action !== "") {
 			$eventsList = $Events->getEvents();
 			
 			foreach ($eventsList as $evt) {
-				pr($evt['ymd_date'] . ' | ' . $evt['source'] . ' | ' . $evt['type'] . ' - ' . $evt['title'] 
-					. ' [' . $evt['price'] . ']'
-					. '<br>' 
+				pr($evt['ymd_date'] . ' | ' . $evt['source'] . ' | ' 
+					. $evt['type'] . ' | ' 
+					. $evt['artist'] . ' | ' . $evt['venue'] . ' -- ' 
+					. $evt['title'] . ' $[' . $evt['price'] . ']'
+					. '<br>'
 					. $evt['url'] . '<br>' . $evt['media'] . '<br>'
 					. $evt['description'] . '<hr>');
 			}
@@ -200,12 +206,13 @@ if ($dblink && $action !== "") {
 			'getTicketFlyVenues',
 			'getTicketFlyVenuesFromEvents',
 			'getSeatGeekVenues'))) {
-			pr("<b> ... saving EVENTS to db... </b><hr>");
+			pr("<b> ... saving VENUES to db... </b><hr>");
 			// Save received events to DB, updating only if show link or title have changed
 			$Events->saveEventsToDb($dblink);
 		}
 		// Save Venues
 		else {
+			pr("<b> ... saving EVENTS to db... </b><hr>");
 			// Insert/update Venues in database
 			$Events->saveVenuesToDb($dblink);
 		}
