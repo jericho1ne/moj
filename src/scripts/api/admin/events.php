@@ -5,9 +5,36 @@ require_once("../db/__db_connex.php");
 include_once('../EventParser.php');
 ?>
 
-<html>
-<body>
+<!doctype html><html class="no-js" lang="">
+<head><meta charset="utf-8">
+<title>Middle Of June - Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<!-- MoJ custom styles and overrides -->
+<style>
+body { 
+	background-color: rgba(121, 139, 96, 0.18);
+	font-family: Helvetica, Arial;
+    color: #434141;
+    font-weight: 100;
+    font-variant: normal;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+}
+input.button { 
+	/* transform: scale(1.2); */
+	padding: 12px; 
+	border: 1px solid black; 
+	font-size: 16px;
+}
+input[type='radio'], input[type='checkbox'] { 
+	transform: scale(1.75);
+    vertical-align: middle;
+    margin: 6px;
+}
+</style>
+</head>
 
+<body>
 <?php
 // Get total number of shows from today onwards
 $upcomingQuery  = "SELECT * FROM events WHERE ymd_date >= CURDATE()";
@@ -30,7 +57,7 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 <br>
 <input type="checkbox" name="saveToDB" value="1"> Save to DB!<br>
 <hr>
-<input type="submit" name="submit" value="Hit it.">
+<input type="submit" name="submit" class="button" value="Hit it.">
 <br>
 </form>
 
@@ -91,7 +118,7 @@ if ($dblink && $action !== "") {
 		}
 		// Ticketfly events! 
 		else if ($action === 'getNewTicketflyEvents') {
-			$maxTicketFlyEventsToGrab = 20;
+			$maxTicketFlyEventsToGrab = 2000;
 			
 			$customParams = [
 				'startDate',

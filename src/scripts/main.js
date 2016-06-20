@@ -56,7 +56,7 @@ function lookupArtist(event) {
         '<a href="' + event.url + '">' 
         +  '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/>'
         +'</a>');
-    $('#tix-url-source').html(parseUrlDomain(parseUrlDomain(event.url, "short")));
+    $('#tix-url-source').html(parseUrlDomain(event.url, "short"));
 
     // Append Event Tags
     var tags = event.type.split(',');
@@ -71,7 +71,7 @@ function lookupArtist(event) {
     }// End event tag loop
 
     // Create event url share link
-    var shareLink = buildSharingLink(event.event_id);
+    var shareLink = buildSharingLink(event.slug);
     $('#share-link').html(''
         //+'<a href="' + shareLink + '">' 
         //+ '<img src="media/svg/share.svg" class="icon-action h30 w30" alt="Share Link" title="Share Link"/></a>'
@@ -256,7 +256,7 @@ $(document).ready(function() {
 
                 // Once data is loaded, parse URL for a direct link (after the #)
                 var request = parseUrlAction();
-                window.location.href.split('#');  
+                //window.location.href.split('#');  
             }
             else {
                 if (typeof (events === 'undefined') || !events.length) {
@@ -280,13 +280,13 @@ $(document).ready(function() {
                 // Ensure that user has clicked on an actual link
                 if (event !== undefined && event.hasOwnProperty('source')) {
                     // Manually change URL in address bar
-                    window.history.pushState('', 'Event', '#event=' + Events.getEventByIndex(eventid).event_id);
+                    window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
                     
                     // Pop up artist info modal
                     lookupArtist(event);
                 }
                 else {
-                    console.log("Click source is outside an event hit state");
+                    // console.log("Click source is outside an event hit state");
                 }
             });// End addEventListener
         });// End add old school click listener

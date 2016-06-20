@@ -111,25 +111,6 @@ body {
 	overflow-y: auto;
 }
 
-.div-two-adjacent {
-	width: 100%;
-	display: inline-block;
-	position: relative;
-}
-
-.div-full-length {
-	width: 100%;
-	display: block;
-}
-
-// .loading {
-// 	@include buildRegularFont($font-md);
-// 	position: relative;
-// 	margin-left: 40px !important;
-// 	top: 40px !important;
-// 	color: $gray-mid;
-// }
-
 .link, .link a {
 	@include buildBoldFont($font-md);
 	letter-spacing: 0.75px;
@@ -481,9 +462,12 @@ img.artist-profile-pic:hover {
 }
 
 .dataTables_filter input[type=search] {
+	display: block !important;
+	margin: auto !important;
 	height: 30px;
 	@include buildRegularFont($font-md);
 	width: 60% !important;
+	max-width: 300px;
 	padding: 4px 2px 4px 2px;
 	margin-bottom: 10px;
 	border: 1px solid #aaa;

@@ -55,14 +55,13 @@ var Events = {
     },// End getEvents
 
 
-    getEventById: function(eventId) {
-            
+    getEventByKeyValue: function(key, value) {
         for(var i=0; i< this.eventData.length; i++) {
-            if (this.eventData[i].event_id == eventId) {
+            if (this.eventData[i].key == value) {
                 return this.eventData[i];
             }
         }// End for events loop
-    },// End getEventById
+    },// End getEventByKeyValue
 
     getEventByIndex: function(arrayIndex) {
         return this.eventData[arrayIndex];
@@ -234,7 +233,7 @@ var Events = {
             "autoWidth": false,
             "language": {
                 //  "lengthMenu": "_MENU_ per pg",
-                "sSearch": "search events",        // Search input box label
+                "sSearch": "search by Artist, Venue or Date",        // Search input box label
                 "zeroRecords": "Nothing found.",
                 "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
                 "infoEmpty": "No shows available",
@@ -374,7 +373,7 @@ var Events = {
         // Event Description
         if (!isEmpty(event.description)) {
             // Arbitrary limit on how much biography text to show
-            var maxCharsInBio = 1000;
+            var maxCharsInBio = 450;
 
             // Remove any links
             var fullBio = event.description.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
@@ -465,7 +464,7 @@ var Events = {
             // Bio exists, append content to modal
             if (!noBio) {
                 // Arbitrary limit on how much biography text to show
-                var maxCharsInBio = 1000;
+                var maxCharsInBio = 450;
                 // Remove any links
                 var fullBio = artistBio.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
                 // Clip bio at preset character max
@@ -625,7 +624,9 @@ var Events = {
     /**
      * appendYoutubeVideo :: add video clip thumbs to DOM
      */
-    appendYoutubeVideo: function(divID, vids) {   
+    appendYoutubeVideo: function(divID, vids) {
+        console.log(vids);
+        
         var videoId = vids[0].id.videoId;
 
         // vids[0].snippet.thumbnails.medium.url     // .width=320, height=180

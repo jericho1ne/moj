@@ -270,26 +270,31 @@ function reattachListeners() {
 
 }// End function reattachListeners
 
-function buildSharingLink(eventId) {
+function buildSharingLink(appendage) {
     return window.location.origin + window.location.pathname 
-        + '#event=' + eventId;
+        + '#' + appendage;
 }
 
 function parseUrlDomain(url, size) {
     var domain;
+
     // Find & remove protocol (http, ftp, etc.) and get domain
-    if (url.indexOf("://") > -1) {
-        domain = url.split('/')[2];
-    }
-    else {
-        domain = url.split('/')[0];
-    }
+    domain = (url.indexOf("://") > -1) 
+      ? url.split('/')[2]
+      : domain = url.split('/')[0];
+    
     // Remove port number, if any
     domain = domain.split(':')[0];
 
+    // Return the most descriptive portion of the url
     if (size === "short") {
-
-      return (domain.split('.')[0] === 'www' ? domain.split('.')[1] : domain.split('.')[0]);
+      return (
+        domain.split('.')[0] === 'www' || 
+        domain.split('.')[2] === 'net' ||
+        domain.split('.')[2] === 'com' 
+          ? domain.split('.')[1] 
+          : domain.split('.')[0]
+      );
     }
     return domain;
 }
@@ -304,18 +309,31 @@ function parseUrlAction() {
     if (!isBlank(urlString)) {
         var params = request[1].split('=');
 
-        // If there's stuff to do
-        if (!isBlank(params[0]) && !isBlank(params[1])) {
+        console.log(params);
+
+        // If only one parameter passed, it's a Slug
+        if (params.length === 1) {
+            var requestedEvent = Events.getEventByKeyValue('slug', params[1]);
+            // If event info exists
+            if (!isBlank(requestedEvent)) {
+                // Allow bootstrap modal to load
+                setTimeout(function() {
+                    lookupArtist(requestedEvent);
+                }, 250);
+            }// End if event info exists
+        }// End if slug
+        // If other actions to take
+        else if (!isBlank(params[0]) && !isBlank(params[1])) {
             // Load artist/show data differently based on source
             switch(params[0]) {
                 case 'event':
-                    var requestedEvent = Events.getEventById(params[1]);
+                    var requestedEvent = Events.getEventByKeyValue('event_id', params[1]);
                     // If event info exists
                     if (!isBlank(requestedEvent)) {
                         // Allow bootstrap modal to load
                         setTimeout(function() {
                             lookupArtist(requestedEvent);
-                        }, 500);
+                        }, 300);
                     }// End if event info exists
                     break;
                 case 'venue':
