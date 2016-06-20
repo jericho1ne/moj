@@ -318,7 +318,7 @@ function parseUrlAction() {
                 // Allow bootstrap modal to load
                 setTimeout(function() {
                     lookupArtist(requestedEvent);
-                }, 250);
+                }, 150);
             }// End if event info exists
         }// End if slug
         // If other actions to take
@@ -332,7 +332,7 @@ function parseUrlAction() {
                         // Allow bootstrap modal to load
                         setTimeout(function() {
                             lookupArtist(requestedEvent);
-                        }, 300);
+                        }, 150);
                     }// End if event info exists
                     break;
                 case 'venue':

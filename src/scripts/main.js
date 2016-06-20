@@ -257,8 +257,6 @@ $(document).ready(function() {
                 // JSON data will go into shows-content div
                 Events.displayEvents(Events.eventData, 'shows-content');
 
-                // Once data is loaded, parse URL for a direct link (after the #)
-                var request = parseUrlAction();
                 //window.location.href.split('#');  
             }
             else {
@@ -271,9 +269,12 @@ $(document).ready(function() {
             }// End else        
             
         })// End events.getEvents().then
-
+        // Once data is loaded, parse URL for a direct link (after the #)
+        .then(function() {
+            var request = parseUrlAction();
+        })
         // Add old school click listener on parent div (will bubble up from Datatable)
-        .then(function(){  
+        .then(function() {  
             // https://davidwalsh.name/event-delegate
             document.getElementById('shows-content').addEventListener('click', function(e) {
                 // Get the array index of the clicked element
