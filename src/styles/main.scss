@@ -456,24 +456,24 @@ img.artist-profile-pic:hover {
 }
 
 .dataTables_wrapper .dataTables_filter label {
-	width: 100%;
-	padding: 0px;
+	width: 99%;
+	display: block;
+	padding: 4px 0px 6px 0px;
+	font-size: 18px;
 	text-align: center !important;
 }
 
-.dataTables_filter input[type=search] {
-	display: block !important;
+div.dataTables_wrapper div.dataTables_filter input {
 	margin: auto !important;
+	display: block;
 	height: 30px;
 	@include buildRegularFont($font-md);
 	width: 60% !important;
 	max-width: 300px;
 	padding: 4px 2px 4px 2px;
-	margin-bottom: 10px;
 	border: 1px solid #aaa;
 	@include border-radius(2px);
 	background: #fff;
-	cursor: pointer;
 	outline: 0;
 	color: #333;
 	box-shadow: 0 2px 2px #ccc, 0 -1px #fff inset;

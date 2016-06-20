@@ -76,9 +76,12 @@ $(document).ready(function() {
 	$('#artistModal').appendTo("body");
 	$("#artistModal").on('hidden.bs.modal', function () {
 		$(this).data('bs.modal', null);
+		// Clear HTML content
 		clearDiv('artist-tracks', true);
 		clearDiv('artist-photo', true);
 		clearDiv('artist-bio', true);
+		// Clear URL
+ 		// TODO 
 	});
 });
 </script>

@@ -82,10 +82,13 @@ function lookupArtist(event) {
     $('.modal-title').html(
         (!isBlank(event.artist) ? event.artist + ' @ ' : '') 
         + event.venue 
-        + ' on ' + event.nice_date);
+        + ' / ' + event.nice_date);
 
     // Select all text in sharing link input on click or tap
     $('#share-link input:text').focus(function() { 
+        // Select all text when on mobile
+        $(this)[0].setSelectionRange(0, 9999);
+        // Select all on desktop/laptop
         $(this).select(); 
     });
 }// End lookupArtist

@@ -15,7 +15,7 @@ var Events = {
     eventsScript: 'getEventsJson.php',
 
     eventData: {},
-    maxVideosToShow: 3,
+    maxVideosToShow: 5,
 
     /**
      * getEventData
@@ -56,11 +56,15 @@ var Events = {
 
 
     getEventByKeyValue: function(key, value) {
-        for(var i=0; i< this.eventData.length; i++) {
-            if (this.eventData[i].key == value) {
-                return this.eventData[i];
-            }
-        }// End for events loop
+        // console.log(' >> getEventByKeyValue ' + key + '||' + value);
+        if (!isEmpty(key) && !isEmpty(value)) {
+            for (var i=0; i< this.eventData.length; i++) {
+                if (this.eventData[i][key] == value) {
+                    return this.eventData[i];
+                }
+            }// End for events loop
+        }
+        return false;
     },// End getEventByKeyValue
 
     getEventByIndex: function(arrayIndex) {
@@ -233,7 +237,7 @@ var Events = {
             "autoWidth": false,
             "language": {
                 //  "lengthMenu": "_MENU_ per pg",
-                "sSearch": "search by Artist, Venue or Date",        // Search input box label
+                "sSearch": "search by Artist or Venue",        // Search input box label
                 "zeroRecords": "Nothing found.",
                 "info": "",  // Default:  "Page _PAGE_ of _PAGES_",
                 "infoEmpty": "No shows available",
@@ -554,8 +558,13 @@ var Events = {
         // If actual track data was returned
         if (data.error !== 6) {
             // Keep an eye on this in case Last.fm changes their object structure
-            var artistTracks = data.toptracks.track;
-          
+            var artistTracks = $.map(data.toptracks.track, function( value, key ) {
+                return {
+                    'name': data.toptracks.track[key].name,
+                    'artist': data.toptracks.track[key].artist.name
+                };
+            });
+            
             // If tracks available
             if (typeof artistTracks !== undefined && artistTracks.length) {
                                 
@@ -568,8 +577,9 @@ var Events = {
 
                 // Create artist info element to be displayed
                 for (i = 0; i < artistTracks.length; i++) { 
+
                     // TODO:  create playlist of individual tracks via YouTube API hook
-                    var searchString = artistTracks[i].name + ' ' + artistTracks[i].artist.name;
+                    var searchString = artistTracks[i].name + ' ' + artistTracks[i].artist;
 
                     // Search for artist + track name one at a time
                     // Limit to 1 result max since we're doing individual calls
@@ -599,8 +609,8 @@ var Events = {
             url:  YOUTUBE_BASE_URL +
                   'search?part=snippet' +
                   '&q=' + searchTerm +
-                  '&key=' + YOUTUBE_API_KEY_NEW,
-                  // "&maxResults=" + parseInt(maxResults),
+                  '&key=' + YOUTUBE_API_KEY_NEW +
+                  '&maxResults=' + parseInt(maxResults),
             async: false
         };// End requestBody
 
@@ -625,8 +635,6 @@ var Events = {
      * appendYoutubeVideo :: add video clip thumbs to DOM
      */
     appendYoutubeVideo: function(divID, vids) {
-        console.log(vids);
-        
         var videoId = vids[0].id.videoId;
 
         // vids[0].snippet.thumbnails.medium.url     // .width=320, height=180

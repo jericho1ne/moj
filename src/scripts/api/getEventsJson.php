@@ -20,7 +20,7 @@ $success = false;
 
 // Get shows from today onwards.  
 // Pass in:  format, startDate (defaults to today), max days ahead
-$localEvents = $Events->getEventsFromDb('text', '', '1', 'light');
+$localEvents = $Events->getEventsFromDb('text', '', '90', 'light');
 
 if (count($localEvents)) {
 	$success = true;

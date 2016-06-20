@@ -140,7 +140,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
    // Distance in miles
    var d = R_mi * c;
-   console.log(d.toFixed(4));
+  
    // 4 decimals, in typecast just in case toFixed returns a string...
    return Number ( d.toFixed(4) );
 }
@@ -309,11 +309,10 @@ function parseUrlAction() {
     if (!isBlank(urlString)) {
         var params = request[1].split('=');
 
-        console.log(params);
-
         // If only one parameter passed, it's a Slug
         if (params.length === 1) {
-            var requestedEvent = Events.getEventByKeyValue('slug', params[1]);
+            // The first (and only) parameter is the slug
+            var requestedEvent = Events.getEventByKeyValue('slug', params[0]);
             // If event info exists
             if (!isBlank(requestedEvent)) {
                 // Allow bootstrap modal to load
