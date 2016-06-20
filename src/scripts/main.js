@@ -259,7 +259,7 @@ $(document).ready(function() {
                 window.location.href.split('#');  
             }
             else {
-                if (!events.length || typeof events === 'undefined') {
+                if (typeof (events === 'undefined') || !events.length) {
                     return Error("getEvents - did not receive any data ='(");
                 }
                 else {

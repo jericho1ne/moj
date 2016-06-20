@@ -132,7 +132,6 @@ var Events = {
             var month = dateArray[1];
             var dayofmonth = dateArray[2];
 
-            console.log(dateArray);
             // If the date has changed, it's time for the spacer row with large text
             if (String(prevDate.trim()) != String(ymd_date.trim())) {
                 
@@ -140,8 +139,8 @@ var Events = {
                 var $dateHeaderRow = $('<tr>')
                     .addClass('date-header-row')
                     .html(
-                        // 1st header row
-                        '<th mw200 class="date-header">'
+                        // 1st header row - keep data-sort attribute!
+                        '<th mw200 class="date-header" data-sort="' + ymd_date + '">'
                         +   '<span class="date-block-xl white">' + weekday + '</span>'
                         +   '<span class="align-left date-block-md off-white opacity-60">' 
                             + month + '</span><br>' 
@@ -692,6 +691,7 @@ var Events = {
                 'artist': data[i].a,
                 'venue': data[i].v,
                 'title': data[i].t,
+                'slug': data[i].s,
                 'type': data[i].typ,
                 'price': data[i].prc,
                 'url': data[i].url,

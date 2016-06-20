@@ -613,6 +613,7 @@ class EventParser {
 			'artist' => 'a',
 			'venue' => 'v',
 			'title' => 't',
+			'slug' => 's',
 			'price' => 'prc',
 			'url' => 'url',
 			// 'updated' => 'd_upd',
