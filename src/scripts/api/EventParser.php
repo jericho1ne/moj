@@ -600,7 +600,7 @@ class EventParser {
 		$defaultDate = new DateTime();
 		
 		if ($startDate == "") {
-			// Format for start daxte
+			// Format for start date
 			$startDate = $defaultDate->format("Y-m-d");
 		}
 
@@ -630,7 +630,7 @@ class EventParser {
 			unset($columns['description']);
 		}
 
-		// Create comma separated string of columsn to select on
+		// Create comma separated string of colums to select on
 		$fields = implode(', ', array_keys($columns));
 
 		// Set the end date
@@ -689,13 +689,48 @@ class EventParser {
 		}// End if db link is set
 	}
 
+	public function getSingleEventFromDb($event_id) {
+		// All db fields
+		$columns = array(
+			// 'eventid' => 'e_id',
+			// 'source' => 'src',
+			// 'ymd_date' => 'd_ymd',
+			// 'type' => 'typ',
+			// 'artist' => 'a',
+			// 'venue' => 'v',
+			// 'title' => 't',
+			// 'slug' => 's',
+			// 'price' => 'prc',
+			// 'url' => 'url',
+			// 'updated' => 'd_upd',
+			// Extra heavy stuff
+			'media' => 'img',
+			'description' => 'dsc'
+		);
+		// Create comma separated string of colums to select on
+		$fields = implode(', ', array_keys($columns));
+
+		$query = "SELECT " . $fields . " " 
+			. "FROM events " 
+			. "WHERE eventid = :event_id ";
+
+		// Prepare SELECT query
+		$stmt = $this->dbLink->prepare($query);
+
+		// Bind selection params
+		$stmt->bindParam(':event_id', $event_id, PDO::PARAM_STR);
+		$stmt->execute();
+		// Get Results
+		$dataRow = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $dataRow;
+	}
+
 	/**********************************************************************************
 		getEventsJson()
 		return event array in JSON format
 	*********************************************************************************/
-	public function getEventsJson() {
-		
-		
+	public function getEventsJson() {	
 		// Return timestamp + data
 		return json_encode(
 		 	array(

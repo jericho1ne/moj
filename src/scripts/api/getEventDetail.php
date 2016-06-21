@@ -19,10 +19,10 @@ $boundaryDate = new DateTime();
 $success = false;
 
 // TODO: Sanitize input!
-$event_id = $_POST['eid'];
+//$event_id = $_POST['eid'];
+$event_id = "768";
 
-// Get shows from today onwards.  
-// Pass in:  format, startDate (defaults to today), max days ahead
+// Get detailed show info for the given event id 
 $eventDetail = $Events->getSingleEventFromDb($event_id);
 
 if (count($eventDetail)) {
