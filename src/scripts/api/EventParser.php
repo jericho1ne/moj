@@ -646,8 +646,11 @@ class EventParser {
 			// Always place date boundaries, even if we use defaults
 			$query .= " WHERE ymd_date >= :date_start AND ymd_date <= :date_end";
 			
-			// For now, add a secondary order by on last modified date 
-			$query .= " ORDER BY ymd_date ASC, updated DESC";
+			// Order by (most important first):
+			// - date of show
+			// - existence of image to display
+			// - last modified date 
+			$query .= " ORDER BY ymd_date ASC, media DESC, updated DESC";
 
 			// Prepare SELECT query
 			$stmt = $this->dbLink->prepare($query);

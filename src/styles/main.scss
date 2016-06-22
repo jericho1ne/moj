@@ -434,8 +434,8 @@ img.artist-profile-pic:hover {
 	@include buildRegularFont($font-xsm);
 	padding: 2px;
 	margin-left: 5px;
-	max-width: 240px;
-	@include border-radius(5px);
+	max-width: 246px;
+	@include border-radius(3px);
 	background-color: $gray-light;
 	border: 0px;
 	text-align: center;
@@ -616,7 +616,10 @@ table.dataTable .date-header {
 
 /*  override bootstrap */
 .modal-header {
-	padding: 6px !important;
+	// padding: 6px !important;
+}
+.modal-footer {
+	text-align: center !important;
 }
 .modal-dialog {
 	width: 100% !important;
@@ -626,7 +629,7 @@ table.dataTable .date-header {
 	width: 100% !important;
 	min-height: 500px !important;
 	max-width: 768px !important;
-	border-radius: 3px !important;
+	border-radius: 0px !important;
 }
 .modal-body {
 	min-height: 400px !important;

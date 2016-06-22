@@ -12,20 +12,17 @@ $Events = new EventParser($dblink);
 // Get today's date (and time)
 $boundaryDate = new DateTime();
 
-// // Format for start date
-// $startDate = $boundaryDate->format("Y-m-d");
+// Format for start date
+$startDate = $boundaryDate->format("Y-m-d");
 
 // Set result to false by default
 $success = false;
 
-// TODO: Sanitize input!
-$event_id = intval($_POST['eid']);
-// $event_id = "768";
+// Get shows from today onwards.  
+// Pass in:  format, startDate (defaults to today), max days ahead
+$localEvents = $Events->getEventsFromDb('text', '', '90', 'light');
 
-// Get detailed show info for the given event id 
-$eventDetail = $Events->getSingleEventFromDb($event_id);
-
-if (count($eventDetail)) {
+if (count($localEvents)) {
 	$success = true;
 }
 
@@ -34,7 +31,7 @@ if (count($eventDetail)) {
 echo json_encode(utf8ize(
 	array(
 		'success' => $success,
-		'events' => $eventDetail
+		'events' => $localEvents
 	)
 ));
 

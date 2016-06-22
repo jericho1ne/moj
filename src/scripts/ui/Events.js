@@ -12,7 +12,8 @@ var Events = {
     eventsJSON: 'events.json',
 
     apiScriptsBase: 'scripts/api/',
-    eventsScript: 'getEventsJson.php',
+    eventsAll: 'getEvents.php',
+    eventDetail: 'getEventDetail.php',
 
     eventData: {},
     maxVideosToShow: 5,
@@ -37,7 +38,7 @@ var Events = {
         // when the request completes successfully
         return $.ajax({
                 type: 'GET',
-                url: _this.apiScriptsBase + _this.eventsScript,
+                url: _this.apiScriptsBase + _this.eventsAll,
                 async: false,
                 // Success callback will fire even when coupled with an external $.done
                 success : function(data) {  // data, status, jqXHR
@@ -363,7 +364,6 @@ var Events = {
                 + '</div>');
         }
 
-
         // Artist photo + name caption
         if (!isEmpty(event.artist)) {
             $photoCaption = $('<span>')
@@ -403,6 +403,66 @@ var Events = {
         //      HERE instead of main.js...
         //
     },// End function displayStaticShowInfo
+
+    getShowDetails: function (event_id) {
+        var _this = this;
+
+        return $.ajax({
+            type: 'POST',
+            url: _this.apiScriptsBase + _this.eventDetail,
+            data: 'eid=' + event_id,
+            dataType : 'json',
+            // Success callback will fire even when couple with an external $.done
+            success : function(data) {
+                console.log(data);
+                // Cache track data to avoid future calls
+                // CACHE[strToLowerNoSpaces(data.toptracks['@attr'].artist) + '_tracks'] = data;
+            },
+            error : function(errorCode, errorMsg) {
+                // Handle error here
+                // TODO:  change to jquery UI modal that autofades and has (X) button
+                var msg = 'Unable to load Show details for <b>event #' + event_id + '</b>';
+                console.log(msg + '<br>' + errorMsg + '(' + errorCode + ')');
+            }
+        });// End topTracksXHR $.ajax 
+
+    },
+
+    appendShowDetail: function(event) {
+        // Display artist/show photo
+        if (!isEmpty(event.media)) {
+            $('#artist-photo').empty();
+
+            // Set the img tag    
+            $('#artist-photo').addClass('relative');
+            $('#artist-photo').html('<a href="' + event.url + '">' 
+                + '<img src="' + event.media + '" class="artist-profile-pic "></a>');
+        }
+
+        // Bio exists, append content to modal
+        if (!isEmpty(event.description)) {
+            var artistBio = event.description;
+
+            $('#artist-bio').empty();        // MOVE THIS TO MODAL RESET METHOD
+
+            // Arbitrary limit on how much biography text to show
+            var maxCharsInBio = 450;
+            // Remove any links
+            var fullBio = artistBio.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
+            // Clip bio at preset character max
+            var shortBio = fullBio.substring(0, maxCharsInBio);
+
+            // If longer than max amount, add "show more" link
+            if (fullBio.length > maxCharsInBio) {
+                shortBio += ' ... ';
+                 // <span class="link">'
+                 //    + '<a href="' + artist.url + '" target="_blank">( read more )</a>'
+                 //    + '<span>';
+            }
+            // Append the artist bio text
+            $('#artist-bio').html(shortBio);
+        }// If case for bio content
+    },
 
     /**
      * appendArtistInfo :: display artist info in DOM

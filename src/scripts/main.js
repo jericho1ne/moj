@@ -38,6 +38,10 @@ function lookupArtist(event) {
         case 'ticketfly':
             showTitle = event.title;
             Events.displayStaticShowInfo('artist-info', event);
+            Events.getShowDetails(event.event_id)
+                .then(function(data) {
+                    Events.appendShowDetail(data.events[0]);
+                });
             // Returns $.ajax from Youtube API
             Events.getTopTracks(event.artist)
                 .then(function(trackData) {
