@@ -414,7 +414,6 @@ var Events = {
             dataType : 'json',
             // Success callback will fire even when couple with an external $.done
             success : function(data) {
-                console.log(data);
                 // Cache track data to avoid future calls
                 // CACHE[strToLowerNoSpaces(data.toptracks['@attr'].artist) + '_tracks'] = data;
             },

@@ -435,7 +435,7 @@ img.artist-profile-pic:hover {
 	padding: 2px;
 	margin-left: 5px;
 	max-width: 246px;
-	@include border-radius(3px);
+	@include border-radius(2px);
 	background-color: $gray-light;
 	border: 0px;
 	text-align: center;

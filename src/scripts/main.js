@@ -33,7 +33,16 @@ function lookupArtist(event) {
             break;
         case 'experiencela':
             showTitle = event.title;
+
+            // 
+            // TODO:  break up displayStaticShowInfo into smaller actions 
+            // (eg: getArtistPhoto), string them up as part of promise chain
+            // 
             Events.displayStaticShowInfo('artist-info', event);
+            Events.getShowDetails(event.event_id)
+                .then(function(data) {
+                    Events.appendShowDetail(data.events[0]);
+                });
             break;
         case 'ticketfly':
             showTitle = event.title;
