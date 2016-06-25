@@ -18,22 +18,35 @@ $startDate = $boundaryDate->format("Y-m-d");
 // Set result to false by default
 $success = false;
 
-// Get shows from today onwards.  
-// Pass in:  format, startDate (defaults to today), max days ahead
-$localEvents = $Events->getEventsFromDb('text', '', '90', 'light');
+// Set mode based on what was requested
+$mode = isset($_POST['mode']) $_POST['mode'] ? : '';
 
+// Default
+// Get shows from today onwards, light field set 
+// Pass in:  format, startDate (defaults to today), max days ahead
+if ($mode === '') {
+    $localEvents = $Events->getEventsFromDb('text', '', '90', 'light');
+}
+// If more specific request
+else if ($mode === 'tonight') {
+
+}
+else if ($mode === 'weekend') {
+
+}
+
+// At least one result return, consider that a success
 if (count($localEvents)) {
 	$success = true;
 }
 
-// Prepackage data into an array first
-// // echo json_encode
-echo json_encode(utf8ize(
+// Prepackage data into an array
+echo json_encode(
 	array(
 		'success' => $success,
 		'events' => $localEvents
 	)
-));
+);
 
 // FORMAT
 /* 

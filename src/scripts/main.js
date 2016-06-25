@@ -33,7 +33,6 @@ function lookupArtist(event) {
             break;
         case 'experiencela':
             showTitle = event.title;
-
             // 
             // TODO:  break up displayStaticShowInfo into smaller actions 
             // (eg: getArtistPhoto), string them up as part of promise chain
@@ -89,7 +88,7 @@ function lookupArtist(event) {
         //+'<a href="' + shareLink + '">' 
         //+ '<img src="media/svg/share.svg" class="icon-action h30 w30" alt="Share Link" title="Share Link"/></a>'
         + '<img src="media/svg/share.svg" class="icon-basic" alt="Share Link" title="Share Link"/>'
-        + '<input type="text" class="text-input w80p" value="' + shareLink + '">');
+        + '<input type="text" class="text-input w88p" value="' + shareLink + '">');
 
     // Modal title (Artist @ venue on date)
     $('.modal-title').html(

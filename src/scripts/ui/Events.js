@@ -16,7 +16,7 @@ var Events = {
     eventDetail: 'getEventDetail.php',
 
     eventData: {},
-    maxVideosToShow: 5,
+    maxVideosToShow: LASTFM_TOPTRACKS_LIMIT,
 
     /**
      * getEventData
@@ -345,8 +345,7 @@ var Events = {
     /**
      * displayStaticShowInfo ::
      */
-    displayStaticShowInfo: function (divId, event) {
-        window.staticInfo = event;
+    displayStaticShowInfo: function (divId, event) {    
         // Create specific parent div name
         var artistInfo = '#' + divId;
 
@@ -434,8 +433,7 @@ var Events = {
 
             // Set the img tag    
             $('#artist-photo').addClass('relative');
-            $('#artist-photo').html('<a href="' + event.url + '">' 
-                + '<img src="' + event.media + '" class="artist-profile-pic "></a>');
+            $('#artist-photo').html('<img src="' + event.media + '" class="artist-profile-pic">');
         }
 
         // Bio exists, append content to modal
@@ -485,7 +483,7 @@ var Events = {
         }
 
         // DEBUG
-        window.data = artist;        
+        // window.data = artist;        
 
         // Display some placeholder text and image
         if (noInfoOnArtist) {
@@ -557,7 +555,7 @@ var Events = {
                 // Set the img tag    
                 $('#artist-photo').addClass('relative');
                 $('#artist-photo').html('<a href="' + artist.url + '">'
-                    + '<img src="' + artistPhoto + '" class="artist-profile-pic "></a>');
+                    + '<img src="' + artistPhoto + '" class="artist-profile-pic link"></a>');
 
                 // $('#artist-photo').append($photoCaption);  
             }// End artist photo exists

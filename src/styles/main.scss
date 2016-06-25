@@ -250,16 +250,6 @@ body {
 	}
 }
 
-.left {
-	margin-left: 0px;
-	margin-right: auto;
-	text-align: left;
-}
-.center {
-	text-align: center;
-	margin-right: auto;
-	margin-left: auto;
-}
 
 .debug {
 	@include border-radius(0px);
@@ -379,7 +369,8 @@ img.artist-profile-pic {
 	min-height: 120px;
 	padding: 3px;
 }
-img.artist-profile-pic:hover {
+
+img.link:hover {
 	background-color: #B4CEE7 !important;
 	cursor: pointer;
 }
@@ -432,9 +423,7 @@ img.artist-profile-pic:hover {
 }
 .text-input {
 	@include buildRegularFont($font-xsm);
-	padding: 2px;
-	margin-left: 5px;
-	max-width: 246px;
+	padding: 1px 4px;
 	@include border-radius(2px);
 	background-color: $gray-light;
 	border: 0px;

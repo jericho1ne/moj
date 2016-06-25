@@ -40,6 +40,18 @@ $gray-light-border: 1px solid $gray-light;
     height: auto;
     text-align: left;
 }
+
+
+.center {
+    text-align: center;
+    margin-right: auto !important;
+    margin-left: auto !important;
+}
+.left {
+    margin-left: 0px;
+    margin-right: auto;
+    text-align: left;
+}
 .float-left {
     float: left;
 }
@@ -216,6 +228,9 @@ $gray-light-border: 1px solid $gray-light;
 }
 .w80p {
     width: 80%;
+}
+.w88p {
+    width: 88%;
 }
 // Widths - px
 .w10 {
