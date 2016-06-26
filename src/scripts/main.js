@@ -165,9 +165,13 @@ $(document).ready(function() {
             return value + ' miles';
         }
     });
-    // Set slide listener
+
+    // Set slide listener to search for nearby venues on each drag
     $("#range-slider").on("slide", function(e) {
-        console.log(e.value);
+        var chosenDistance = e.value;
+        console.log(chosenDistance);
+
+        Venues.getVenues(coordinates, 10, chosenDistance);
         //$("#ex6SliderVal").text(e.value);
     });
 
@@ -217,17 +221,24 @@ $(document).ready(function() {
             // Get current position and enable distance slider if successful
             UserState.geoLocateUser(10000)   
                 .then(function(position) {
+                    // Immediately store current user position, saving
+                    // lat, lon, and accuracy
+                    UserState.setUserPosition(position);
+
+                    // Grab coordinates separately for the first getVenues call
                     var coordinates = {
                         lat: position.coords.latitude,
                         lon: position.coords.longitude
                     };
 
-                    console.log(coordinates); 
-                    window.coords = coordinates; 
-
+                    // We have a position to work with, so activate distance slider
                     if (!isBlank(coordinates.lat)) {
                         $('#range-slider').slider('enable');
                     }
+
+                    // Get venues close to us, passing in {lat,lon}, 
+                    // max distance, and the current slider's search radius
+                    Venues.getVenues(coordinates, 10, $("#range-slider").val());
                 });
         }// End else case
 
@@ -267,7 +278,7 @@ $(document).ready(function() {
                     Events.remapEventArrayKeys(eventData.events);
 
                 // JSON data will go into shows-content div
-                Events.displayEvents(Events.eventData, 'shows-content');
+                Events.displayEvents(Events.eventData, CONTENT_DIV);
 
                 //window.location.href.split('#');  
             }
@@ -288,7 +299,7 @@ $(document).ready(function() {
         // Add old school click listener on parent div (will bubble up from Datatable)
         .then(function() {  
             // https://davidwalsh.name/event-delegate
-            document.getElementById('shows-content').addEventListener('click', function(e) {
+            document.getElementById(CONTENT_DIV).addEventListener('click', function(e) {
                 // Get the array index of the clicked element
                 var eventid = $(e.target).data('eventid');
                 var event = UserState.events[eventid];

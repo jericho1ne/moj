@@ -33,9 +33,12 @@ var Venues = {
 		$.ajax(requestBody).done(function(data, status) {
 			if (status === 'success') {
 				if (data) {
-					console.log(data);
                     _this.venuesList = JSON.parse(data);
                     _this.displayVenues(_this.venuesList);
+                    for (var i in _this.venuesList) {
+			            console.log(_this.venuesList[i]);
+			        }// End for loop 
+
 					return true;
 				}
 			}
@@ -56,7 +59,7 @@ var Venues = {
         });
 
         var venuesHtml = '';
-        $("#nearby-shows").empty();
+        $('#' + CONTENT_DIV).empty();
 
         $(venues).each(function() {
             console.log(this);
@@ -72,17 +75,17 @@ var Venues = {
                btnClass = 'btn-active';
             }
 
-
             venuesHtml =
-                '<div class="row-sm">' +
-                '<button class="faveButton ' + btnClass + '" data-id="' + this.id + '">' +
+                '<div class="row left">' +
+                '<button class="' + btnClass + '" data-id="' + this.id + '">' +
                 '<img src="media/svg/heart.svg" class="icon-link" alt="Save Favorite" />' +
                 '</button>' +
-                '<a href="#' + this.id + '">' + this.name + '</a> • ' +
-                this.city + ' - ' + parseFloat(this.distance.toFixed(1)) + ' mi. away' +
+                '<a href="#' + this.id + '">' + this.venue + '</a> • ' 
+                + this.artist + ' - '
+                + this.city + ' - ' + parseFloat(this.distance.toFixed(1)) + ' mi. away' +
                 '</div>';
              // Incrementally append to DOM
-            $("#nearby-shows").append(venuesHtml);
+            $('#' + CONTENT_DIV).append(venuesHtml);
         });
     },// End displayVenues
 

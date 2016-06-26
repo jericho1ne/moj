@@ -22,7 +22,7 @@ else {
 }
 
 // DEBUG
-pr($userLat . ' / ' . $userLon . ' / ' . $max);
+// pr($userLat . ' / ' . $userLon . ' / ' . $max);
 
 // TODO: sanitize lat / lon?
 
@@ -36,7 +36,7 @@ $nearbyPlaces = array();
 $show_date = date("Y-m-d");
 
 $query = 
-	"SELECT events.*, venues.name, venues.lat, venues.lon " . 
+	"SELECT events.*, venues.lat, venues.lon, venues.city " . 
 	"FROM events " . 
 	"INNER JOIN venues ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
 	"WHERE ymd_date = '{$show_date}'";
@@ -91,5 +91,4 @@ $nearbyPlaces = array_slice($nearbyPlaces, 0, $max);    //  truncate the nearby 
 // pr($nearbyPlaces);
 
 echo json_encode($nearbyPlaces);
-
 ?>

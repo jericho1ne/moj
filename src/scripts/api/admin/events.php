@@ -27,9 +27,9 @@ input.button {
 	font-size: 16px;
 }
 input[type='radio'], input[type='checkbox'] { 
-	transform: scale(1.75);
-    vertical-align: middle;
-    margin: 6px;
+	transform: scale(1.25);
+    margin: 7px 5px 5px 10px;
+    vertical-align: baseline;
 }
 </style>
 </head>
