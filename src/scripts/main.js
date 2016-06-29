@@ -268,6 +268,7 @@ $(document).ready(function() {
     Events.getEvents(10)
         // Return events $.ajax request
         .then(function(data) {
+            console.log(data);
             // Parse the data into JSON object
             var eventData = JSON.parse(data);
 

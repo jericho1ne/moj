@@ -118,7 +118,6 @@ body {
 	bottom: 0px;
 	margin-left: -3px;
 //	margin: 0 0 0 -1%;
-	
 }
 
 .event-tile-color-bar {
@@ -286,13 +285,14 @@ body {
 .toggle-button {
 	width: 28px;
 	height: 28px;
+	padding: 4px;
 	vertical-align: middle;
 	top: -2px;
 	outline: none;
 	@include border-radius(4px);
 	color: $gray-light;
-	padding: 3px;
 	opacity: 0.88;
+	margin-left: 2px;
 }
 .toggle-button:hover {
 	color: $gray-dark;

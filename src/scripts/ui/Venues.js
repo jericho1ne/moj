@@ -111,11 +111,11 @@ var Venues = {
             //   + '<a href="#' + this.url + '">' + this. + '</a> <br>'
           
             $showLocation = $('<div>')
-            	.addClass('medium-text bg-almost-white color-dk-gray pad-lr-10')
+            	.addClass('small-text bg-almost-white color-dk-gray pad-lr-10')
             	.html(this.city + ' • ' + parseFloat(this.distance.toFixed(1)) + ' mi. away');
 
         	$colorBar = $('<div>')
-            	.addClass('event-tile-color-bar medium-text white pad-lr-10')
+            	.addClass('event-tile-color-bar small-text white pad-lr-10')
             	.css('background-color', 'rgba(51, 102, 255, 0.9)')
             	.html(this.type + ' • ' + this.source);
             
