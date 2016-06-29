@@ -89,7 +89,6 @@ body {
 	margin-right: auto;
 	margin-left: auto;
 }
-
 #logo-banner {
 	background-image: url("../media/images/sax.png");
 	background-repeat: no-repeat;
@@ -101,7 +100,35 @@ body {
 	position: absolute;
 	z-index: -10;
 }
+.event-tile {
+	position: relative;
+	@include border-radius(3px);
+	overflow: hidden;
+	padding: 2px 2px;
+	margin: 0px;
+	background-color: $gray-light;
+	height: 320px !important;
+	background-repeat: no-repeat !important;
+	background-size: 100% auto !important;
+	border: 1px solid $gray-dark;
+}
+.event-tile-bottom {
+	position: absolute;
+	width: 101%;
+	bottom: 0px;
+	margin-left: -3px;
+//	margin: 0 0 0 -1%;
+	
+}
 
+.event-tile-color-bar {
+	position: relative;
+	min-height: 24px;
+	// bottom: -1px;
+	height: auto;
+    opacity: 0.9;
+    z-index: 1;
+}
 .display-none {
 	display: none;
 }
@@ -256,27 +283,30 @@ body {
 	border: $pink-border;
 }
 
-.faveButton {
+.toggle-button {
+	width: 28px;
+	height: 28px;
+	vertical-align: middle;
+	top: -2px;
 	outline: none;
-	@include border-radius(22px);
+	@include border-radius(4px);
 	color: $gray-light;
-	margin: 0 6px 0 0;
-	padding: 6px;
-	border: 0px;
-	width: 44px;
-	height: 44px;
+	padding: 3px;
 	opacity: 0.88;
 }
-.faveButton:hover {
+.toggle-button:hover {
 	color: $gray-dark;
 	outline: none;
 	opacity: 1;
+	transition: all .2s ease-in-out;
 }
-.faveButton:active {
+.toggle-button:active {
 	color: $gray-dark;
-	border: 1px solid red;
+	// Make the icon shrink slighlty
+	border: 1px solid transparent;
 	outline: none;
 	opacity: 1;
+	transition: all .2s ease-in-out;
 }
 
 .phatButton {
@@ -328,7 +358,6 @@ body {
 	width: 92%;
 	@include border-radius(2px);
 	padding: 2px;
-	border: 1px solid $gray-mid;
 	overflow: hidden;
 	margin: 2px 0px 2px 8px;
 }

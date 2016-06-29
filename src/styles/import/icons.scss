@@ -1,11 +1,11 @@
 /** 
- *    Duplicate mixins from main.scss  
+ *	Duplicate mixins from main.scss  
  */
 @mixin border-radius($px) {
-    -ms-border-radius: $px;
-    -moz-border-radius: $px;
-    -webkit-border-radius: $px;
-    border-radius: $px;
+	-ms-border-radius: $px;
+	-moz-border-radius: $px;
+	-webkit-border-radius: $px;
+	border-radius: $px;
 }
 
 /** 
@@ -14,119 +14,127 @@
 
 // Basic, no click action
 .icon-basic {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    padding: 4px;
-    display: inline-block;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	padding: 4px;
+	display: inline-block;
 }
+
+.icon-basic-link {
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	padding: 4px;
+	display: inline-block;
+}
+
 .icon-lg {
-    width: 80px;
-    height: 80px;
-    margin: 20px 0px;
-    display: block;
+	width: 80px;
+	height: 80px;
+	margin: 20px 0px;
+	display: block;
 }
 
 /** 
- *    Body Link Styles 
- */
+*    Body Link Styles 
+*/
 .icon-action, .icon-link {
-    cursor: pointer;
-    padding: 6px;
-    display: inline-block;
+	cursor: pointer;
+	padding: 6px;
+	display: inline-block;
 }
 
 .icon-action {
-    width: 54px;
-    height: 44px;
-    opacity: 1;
-    @include border-radius(3px);
-    margin: 2px;
-    background-color: #fafafa;
-    //border: 3px solid $pink;
+	width: 54px;
+	height: 44px;
+	opacity: 1;
+	@include border-radius(3px);
+	margin: 2px;
+	background-color: #fafafa;
+	//border: 3px solid $pink;
 }
 .icon-action:hover {
-    background-color: $lt-blue !important;
-    opacity: .9;
-    transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
+	background-color: $lt-blue !important;
+	opacity: .9;
+	transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
 
 .icon-link {
-    width: 44px;
-    height: 44px;
-    @include border-radius(30px);
-    margin: 1px;
-    opacity: 1;
-    background-color: #fff;
-    // border: 1px solid $gray-xlight;
-    box-shadow: 0px 0px 4.5px #A900CA,0 0 #eee;
+	width: 44px;
+	height: 44px;
+	opacity: 1;
+	background-color: #fff;	
 }
 .icon-link:hover{
-    background-color: $lt-blue !important;
-    opacity: 0.9;
-    transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
+	background-color: $lt-blue !important;
+	opacity: 0.9;
+	transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
-
+.icon-round {
+	@include border-radius(30px);
+	margin: 1px;
+}
 
 /** 
- *    Loading spinner  
- */
+*    Loading spinner  
+*/
 .loading {
-  font-size: 10px;
-  margin: 10px auto;
-  text-indent: -9999em;
-  width: 3em;
-  height: 3em;
-  border-radius: 58%;
-  background: #ffffff;
-  background: linear-gradient(to right, #DBD12C 10%, rgba(255, 252, 210, 0) 42%);
-  position: relative;
-  -webkit-animation: load3 1.4s infinite linear;
-  animation: load3 1.4s infinite linear;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
+	font-size: 10px;
+	margin: 10px auto;
+	text-indent: -9999em;
+	width: 3em;
+	height: 3em;
+	border-radius: 58%;
+	background: #ffffff;
+	background: linear-gradient(to right, #DBD12C 10%, rgba(255, 252, 210, 0) 42%);
+	position: relative;
+	-webkit-animation: load3 1.4s infinite linear;
+	animation: load3 1.4s infinite linear;
+	-webkit-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	transform: translateZ(0);
 }
 .loading:before {
-  width: 0%;
-  height: 0%;
-  background: #ffffff;
-  border-radius: 100% 0 0 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  content: '';
+	width: 0%;
+	height: 0%;
+	background: #ffffff;
+	border-radius: 100% 0 0 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	content: '';
 }
 .loading:after {
-  background: #fff;
-  width: 80%;
-  height: 90%;
-  border-radius: 50%;
-  content: '';
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+	background: #fff;
+	width: 80%;
+	height: 90%;
+	border-radius: 50%;
+	content: '';
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
 }
 @-webkit-keyframes load3 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }
 @keyframes load3 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+	  -webkit-transform: rotate(360deg);
+	  transform: rotate(360deg);
+	}
 }

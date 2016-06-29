@@ -198,7 +198,7 @@ var Events = {
                     
                     // 3rd column :: Ticket link
                     + '<td class="left w60"><a href="' + url + '">' 
-                    +   '<img src="media/svg/ticket.svg" class="icon-link" alt="Get tickets" />' + '</a>'
+                    +   '<img src="media/svg/ticket.svg" class="icon-link icon-round border-mid-gray" alt="Get tickets" />' + '</a>'
                     + '</td>'
 
                 + '</tr>' );
@@ -712,7 +712,7 @@ var Events = {
         // if Flash <object> stops working switch to .html('<iframe frameborder="0" 
 
         var $imgTag = $('<object>')
-            .attr('class','vid-clip')
+            .attr('class','vid-clip border-mid-gray')
             .attr('id', videoId)
             // Embed video at specific quality by appending "vq="
             // 144p: &vq=tiny 

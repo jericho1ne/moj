@@ -66,7 +66,7 @@ function lookupArtist(event) {
     $('#tix-show-title').html(showTitle);
     $('#tix-url').html(
         '<a href="' + event.url + '">' 
-        +  '<img src="media/svg/ticket.svg" class="icon-link margin-right-10" alt="Get tickets" title="Get tickets"/>'
+        +  '<img src="media/svg/ticket.svg" class="icon-link icon-round border-mid-gray margin-right-10" alt="Get tickets" title="Get tickets"/>'
         +'</a>');
     $('#tix-url-source').html(parseUrlDomain(event.url, "short"));
 
@@ -171,7 +171,7 @@ $(document).ready(function() {
         var chosenDistance = e.value;
         console.log(chosenDistance);
 
-        Venues.getVenues(coordinates, 10, chosenDistance);
+        Venues.getVenues(UserState.getSavedUserPosition(), 10, chosenDistance);
         //$("#ex6SliderVal").text(e.value);
     });
 

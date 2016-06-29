@@ -50,6 +50,8 @@
          'accuracy' : position.coords.accuracy
       };
 
+      this.saveUserState();
+
       //console.log(" >>>> UserState.setUserPosition ")
       //console.log(this.userPosition);
     },
@@ -151,12 +153,13 @@
     //
 
     // get
-    getUserState: function() {
+    getSavedUserState: function() {
       var currentStatus = JSON.parse(localStorage["UserState"]);
       return currentStatus;
     },
-    // set
-    setUserState: function() {
+
+    // save
+    saveUserState: function() {
       var UserState = {
          faveVenues: this.faveVenues,
          nearbyVenues: this.nearbyVenues,

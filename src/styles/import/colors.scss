@@ -20,6 +20,7 @@ $dk-blue: #2E6DA4;
 $active-color: #CA2667;
 $inactive-color: 'transparent';
 
+/* Foreground colors */
 .color-gold {
 	color: $gold;
 }
@@ -39,14 +40,21 @@ $inactive-color: 'transparent';
 	color: #ffffff;
 }
 
+/* Borders */
+.border-mid-gray {
+	border: 1px solid $gray-mid;
+}
+
+/* Backgrounds */
 .bg-dk-gray {
 	background-color: $gray-dark;
 }
-
 .bg-mid-gray {
 	background-color: $gray-mid;
 }
-
 .bg-lt-gray {
 	background-color: $gray-light;
+}
+.bg-almost-white {
+	background-color: $almost-white;
 }

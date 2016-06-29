@@ -36,7 +36,7 @@ var Venues = {
                     _this.venuesList = JSON.parse(data);
                     _this.displayVenues(_this.venuesList);
                     for (var i in _this.venuesList) {
-			            console.log(_this.venuesList[i]);
+			            // console.log(_this.venuesList[i]);
 			        }// End for loop 
 
 					return true;
@@ -62,30 +62,79 @@ var Venues = {
         $('#' + CONTENT_DIV).empty();
 
         $(venues).each(function() {
-            console.log(this);
-             // $("a").attr("href", "http://www.google.com/")
-
             venueID = this.id;
             btnClass = 'btn-inactive';
 
+            console.log(this);
+
+            // Check whether this Venue has been added to our favorites yet
             if (UserState.faveVenues.filter(function(venue) {
-               console.log(" >>" + venueID);
-               return venue.id == venueID;
-            }).length === 1) {
-               btnClass = 'btn-active';
+	               console.log(" >>" + venueID);
+	               return venue.id == venueID;
+	            }).length === 1) {
+            	btnClass = 'btn-active';
             }
 
-            venuesHtml =
-                '<div class="row left">' +
-                '<button class="' + btnClass + '" data-id="' + this.id + '">' +
-                '<img src="media/svg/heart.svg" class="icon-link" alt="Save Favorite" />' +
-                '</button>' +
-                '<a href="#' + this.id + '">' + this.venue + '</a> • ' 
-                + this.artist + ' - '
-                + this.city + ' - ' + parseFloat(this.distance.toFixed(1)) + ' mi. away' +
-                '</div>';
-             // Incrementally append to DOM
-            $('#' + CONTENT_DIV).append(venuesHtml);
+            $bootstrapParent = $('<div>')
+            	.addClass('pad-top-10 col-xs-12 col-sm-6 col-md-4 col-lg-3');
+
+            $eventTile  = $('<div>')
+            	.addClass('left event-tile');
+
+             // If we have a photo, show it!
+            if (typeof this.media !== undefined && this.media !== '') {
+            	console.log(this.media);
+            	$eventTile.css('background', 'url(\'' + this.media + '\')');
+            }
+
+	        $showContent = $('<div>')
+            	.addClass('event-tile-bottom bg-almost-white');
+
+            $showVenue = $('<div>')
+            	.addClass('block large-text dk-gray pad-lr-10')
+            	.html(this.venue);
+
+            $faveButton = $('<div>')
+            	.addClass('faveButton inline-block ' + btnClass)
+            	.attr('data-id', this.id)	
+            	.html('<img src="media/svg/heart.svg" class="toggle-button icon-link" alt="Save Favorite" />'); 
+	            
+        
+            $showDate = $('<div>')
+            	.addClass('block medium-text dk-gray pad-lr-10')
+	            .html(this.nice_date);  // ' ' 
+               
+            $showArtist = $('<div>')
+            	.addClass('block medium-text mid-gray pad-lr-10')
+            	.html(this.artist);
+
+            //   + '<a href="#' + this.url + '">' + this. + '</a> <br>'
+          
+            $showLocation = $('<div>')
+            	.addClass('medium-text bg-almost-white color-dk-gray pad-lr-10')
+            	.html(this.city + ' • ' + parseFloat(this.distance.toFixed(1)) + ' mi. away');
+
+        	$colorBar = $('<div>')
+            	.addClass('event-tile-color-bar medium-text white pad-lr-10')
+            	.css('background-color', 'rgba(51, 102, 255, 0.9)')
+            	.html(this.type + ' • ' + this.source);
+            
+            //$showContent.append($faveButton);
+            
+            $showVenue.append($faveButton);
+
+            $showContent.append($showVenue);
+            $showContent.append($showDate);
+            $showContent.append($showArtist);
+            $showContent.append($showLocation);
+			$showContent.append($colorBar);
+
+			$eventTile.append($showContent);
+
+			$bootstrapParent.append($eventTile);
+
+            // Incrementally append to DOM
+            $('#' + CONTENT_DIV).append($bootstrapParent);
         });
     },// End displayVenues
 
