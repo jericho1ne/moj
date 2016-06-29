@@ -116,16 +116,17 @@ body {
 	position: absolute;
 	width: 101%;
 	bottom: 0px;
+	min-height: 120px;
 	margin-left: -3px;
 //	margin: 0 0 0 -1%;
 }
 
 .event-tile-color-bar {
 	position: relative;
-	min-height: 24px;
+	min-height: 27px;
 	// bottom: -1px;
 	height: auto;
-    opacity: 0.9;
+    // opacity: 0.9;
     z-index: 1;
 }
 .display-none {

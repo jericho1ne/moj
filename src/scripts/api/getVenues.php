@@ -40,7 +40,8 @@ $query =
 	"DATE_FORMAT(events.ymd_date,'%a %M %e') AS nice_date " .
 	"FROM events " . 
 	"INNER JOIN venues ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
-	"WHERE ymd_date = '{$show_date}'";
+	"WHERE ymd_date = '{$show_date}' " .
+	"GROUP BY events.eventid";
 
 // $dblink is created in include/_db_connex.php
 $statement = $dblink->prepare($query);
