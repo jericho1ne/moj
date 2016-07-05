@@ -88,6 +88,9 @@ var Venues = {
             	// console.log(this.media);
             	$eventTile.css('background', 'url(\'' + this.media + '\')');
             }
+            else {
+            	$eventTile.css('background', 'url(\'media/images/no-artist-photo.jpg\')');
+            }
 
 	        $showContent = $('<div>')
             	.addClass('event-tile-bottom bg-almost-white');
