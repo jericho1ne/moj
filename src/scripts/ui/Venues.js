@@ -35,9 +35,10 @@ var Venues = {
 				if (data) {
                     _this.venuesList = JSON.parse(data);
                     _this.displayVenues(_this.venuesList);
-                    for (var i in _this.venuesList) {
-			            // console.log(_this.venuesList[i]);
-			        }// End for loop 
+                    
+           			// for (var i in _this.venuesList) {
+			        //     console.log(_this.venuesList[i]);
+			        // }
 
 					return true;
 				}
@@ -65,16 +66,17 @@ var Venues = {
             venueID = this.id;
             btnClass = 'btn-inactive';
 
-            console.log(this);
-
             // Check whether this Venue has been added to our favorites yet
+            // TODO:  Need to pass in the array of Favorite Venues, cannot access directly here!
+            /*
             if (UserState.faveVenues.filter(function(venue) {
 	               console.log(" >>" + venueID);
 	               return venue.id == venueID;
 	            }).length === 1) {
             	btnClass = 'btn-active';
             }
-
+			*/
+		
             $bootstrapParent = $('<div>')
             	.addClass('pad-top-10 col-xs-12 col-sm-6 col-md-4 col-lg-3');
 
@@ -83,7 +85,7 @@ var Venues = {
 
              // If we have a photo, show it!
             if (typeof this.media !== undefined && this.media !== '') {
-            	console.log(this.media);
+            	// console.log(this.media);
             	$eventTile.css('background', 'url(\'' + this.media + '\')');
             }
 
@@ -91,7 +93,7 @@ var Venues = {
             	.addClass('event-tile-bottom bg-almost-white');
 
             $showVenue = $('<div>')
-            	.addClass('block large-text dk-gray pad-lr-10')
+            	.addClass('block large-text line-height-100 dk-gray pad-lr-10')
             	.html(this.venue);
 
             $faveButton = $('<div>')

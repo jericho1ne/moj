@@ -36,7 +36,7 @@
   margin: 10px;
 }
 .slider.slider-horizontal .slider-track {
-  height: 22px;
+  height: 18px;
   width: 100%;
   margin-top: -5px;
   top: 50%;
@@ -60,7 +60,7 @@
 .slider.slider-horizontal .slider-tick,
 .slider.slider-horizontal .slider-handle {
   margin-left: -10px;
-  margin-top: -5px;
+  margin-top: -15px;
 }
 .slider.slider-horizontal .slider-tick.triangle,
 .slider.slider-horizontal .slider-handle.triangle {
@@ -192,8 +192,8 @@
 }
 .slider-handle {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 48px;
+  height: 48px;
   background-color: #ddd !important;
   background-image: -webkit-linear-gradient(top, #D953E5  0%, #97479E 100%);
   background-image: -o-linear-gradient(top, #D953E5  0%, #97479E 100%);

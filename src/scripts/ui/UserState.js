@@ -2,7 +2,6 @@
  * UserState.js
  *
  **/
-
 var UserState = (function() {
     // Instance stores a reference to the Singleton
     var instance;
@@ -57,8 +56,8 @@ var UserState = (function() {
              * getSavedUserPosition :: returns value stored in singleton object
              */
             getSavedUserPosition: function() {
-              if (this.userPosition.lat === 'undefined' ||
-                 this.userPosition.lon === 'undefined') {
+              if (this.properties.userPosition.lat === 'undefined' ||
+                 this.properties.userPosition.lon === 'undefined') {
                  // return the default coordintes set in constants.js
                  // return lat, lon, and accuracy (-1 so we know they're default values)
                  return {
@@ -68,7 +67,7 @@ var UserState = (function() {
                  };
               }
               else {
-                 return this.userPosition;
+                 return this.properties.userPosition;
               }
             },
 
@@ -163,20 +162,19 @@ var UserState = (function() {
             * attempts to grab the device coordinates
             */
             geoLocateUser: function(timeout) {
-              var def = $.Deferred();
+                var def = $.Deferred();
 
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(def.resolve, def.reject, {
-                  enableHighAccuracy: true,
-                  timeout: timeout
-                });
-              }
-              else {
-                //Reject the promise with a suitable error message
-                def.reject(new Error('Your browser does not support Geo Location.'));
-              }
-
-               return def.promise();
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(def.resolve, def.reject, {
+                        enableHighAccuracy: true,
+                        timeout: timeout
+                    });
+                }
+                else {
+                    //Reject the promise with a suitable error message
+                    def.reject(new Error('Your browser does not support Geo Location.'));
+                }
+                return def.promise();
             }, // End method geoLocateUser
 
 
@@ -199,11 +197,6 @@ var UserState = (function() {
              * @return {[type]} [description]
              */
             saveUserState: function() {
-                console.log(this);
-                window.this_thing = this;
-                console.log(UserState);
-                window.US = UserState;
-                
                 var UserState = {
                     faveVenues: this.faveVenues,
                     nearbyVenues: this.nearbyVenues,
@@ -235,7 +228,7 @@ var UserState = (function() {
              * @return {[type]} [description]
              */
             getFaveVenues: function() {
-              return this.faveVenues;
+              return this.properties.faveVenues;
             },
             /**
              * [addFaveVenue description]
@@ -250,7 +243,7 @@ var UserState = (function() {
             // NEARBY VENUES
             //
             getNearbyVenues: function() {
-              return this.nearbyVenues;
+              return this.properties.nearbyVenues;
             },
             setNearbyVenues: function(venues) {
                 // if it doesn't already exist
@@ -262,28 +255,28 @@ var UserState = (function() {
             // SEARCH TERMS
             //
             getSearchTerms: function() {
-              return this.searchTerms;
+              return this.properties.searchTerms;
             },
             setSearchTerm: function(search_term) {
-              this.faveVenues.push(search_term);
+              this.properties.faveVenues.push(search_term);
             },
 
             //
             // PAGE STATE
             //
             getLastPageState: function () {
-              return this.lastPageState;
+              return this.properties.lastPageState;
             },
             setLastPageState: function(currrent_state) {
-              this.lastPageState = currrent_state;
+              this.properties.lastPageState = currrent_state;
             },
 
             // Calendar layout
             getCalendarDisplay: function() {
-              return this.calendarDisplay;
+              return this.properties.calendarDisplay;
             },
             setCalendarDisplay: function(currrent_state) {
-              this.lastPageState = currrent_state;
+              this.properties.lastPageState = currrent_state;
             },
 
         };// End init()'s return

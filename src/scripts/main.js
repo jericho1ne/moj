@@ -154,6 +154,11 @@ $(document).ready(function() {
     var hour = d.getHours();
     var day =  d.getUTCDay(); // Sunday = 0, Sat = 6
 
+    // USER STATE
+    var mojUserState = UserState.getInstance();
+
+    window.mojUS = mojUserState;
+
     // Set background plate
     $('#bg-plate').css('background', 'url("media/backgrounds/' + BG_PLATES[day] + '") ' 
         + 'no-repeat center bottom scroll');
@@ -169,9 +174,9 @@ $(document).ready(function() {
     // Set slide listener to search for nearby venues on each drag
     $("#range-slider").on("slide", function(e) {
         var chosenDistance = e.value;
-        console.log(chosenDistance);
+        // console.log(chosenDistance);
 
-        Venues.getVenues(UserState.getSavedUserPosition(), 10, chosenDistance);
+        Venues.getVenues(mojUserState.getSavedUserPosition(), 10, chosenDistance);
         //$("#ex6SliderVal").text(e.value);
     });
 
@@ -219,11 +224,11 @@ $(document).ready(function() {
         else {
             $('#slider-parent').fadeIn(500);
             // Get current position and enable distance slider if successful
-            UserState.geoLocateUser(10000)   
+            mojUserState.geoLocateUser(10000)   
                 .then(function(position) {
                     // Immediately store current user position, saving
                     // lat, lon, and accuracy
-                    UserState.setUserPosition(position);
+                    mojUserState.setUserPosition(position);
 
                     // Grab coordinates separately for the first getVenues call
                     var coordinates = {
@@ -274,7 +279,7 @@ $(document).ready(function() {
             // Check for valid data before continuing
             if (eventData.success) {
                 // Save event data to local storage
-                UserState.events = Events.eventData = 
+                mojUserState.events = Events.eventData = 
                     Events.remapEventArrayKeys(eventData.events);
 
                 // JSON data will go into shows-content div
@@ -302,7 +307,7 @@ $(document).ready(function() {
             document.getElementById(CONTENT_DIV).addEventListener('click', function(e) {
                 // Get the array index of the clicked element
                 var eventid = $(e.target).data('eventid');
-                var event = UserState.events[eventid];
+                var event = mojUserState.events[eventid];
 
                 // Ensure that user has clicked on an actual link
                 if (event !== undefined && event.hasOwnProperty('source')) {
