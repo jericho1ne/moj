@@ -30,6 +30,7 @@ module.exports = {
 		files: [{
 			dot: true,
 			src: [
+				'<%= cfg.dst %>/admin/*.php',
 				'<%= cfg.dst %>/scripts/api/*.php',
 				'<%= cfg.dst %>/scripts/common/*.php'	
 			]

@@ -1,8 +1,9 @@
 <?php
-include_once('../../common/common.php');
-require_once("../db/__db_upd.php");
-require_once("../db/__db_connex.php");
-include_once('../EventParser.php');
+echo getcwd();
+require_once('../scripts/common/common.php');
+require_once("../scripts/api/db/__db_upd.php");
+require_once("../scripts/api/db/__db_connex.php");
+require_once('../scripts/api/EventParser.php');
 ?>
 
 <!doctype html><html class="no-js" lang="">

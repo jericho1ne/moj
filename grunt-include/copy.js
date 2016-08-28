@@ -6,6 +6,7 @@
 'use strict';
 module.exports = {
 	all: {
+		// BRO. IF ANYTHING IS MISSING IN app, ADD IT TO src BELOW.
 		files: [{
 			expand: true,
 			dot: true,
@@ -15,6 +16,7 @@ module.exports = {
 			src: [
 				'{,*/}*.html',
 				'scripts/**/*.{js,php}',
+				'admin/**/*.{js,php}',
 				'data/**/*',
 				'*.{ico,png,txt}',
 				'media/images/**/*.{gif,jpeg,jpg,png}',
@@ -69,7 +71,8 @@ module.exports = {
 			dest: '<%= cfg.dst %>',
 			src: [
 				'scripts/api/*.php',
-				'scripts/common/*.php'
+				'scripts/common/*.php',
+				'admin/*.php'
 			]
 		}]// End copy:phpfiles - files
 	},// End copy:phpfiles

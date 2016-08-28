@@ -187,6 +187,7 @@ module.exports = function (grunt) {
 					cwd: '<%= cfg.dst %>',
 					src: [
 						'index.html',
+						'admin/**/*',
 						'scripts/**/*.js',
 						'scripts/api/**/*',
 						'styles/**/*.{css,map,jpg,png}',
@@ -207,6 +208,7 @@ module.exports = function (grunt) {
 					cwd: '<%= cfg.dst %>',
 					src: [
 						'index.html',
+						'admin/**/*',
 						'scripts/*.js',
 						'scripts/ui/**/*',
 						'scripts/api/**/*',
@@ -219,7 +221,6 @@ module.exports = function (grunt) {
 						'media/**/*',
 						// robots.txt, index.html, png icons
 						// '**/*',  
-		
 						//'images/_grey-bg.png',
 						// 'images/*',
 					],
