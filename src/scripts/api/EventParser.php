@@ -599,8 +599,9 @@ class EventParser {
 	public function getEventsFromDb($format = '', $startDate = '', $daysPlus = '', $fieldSet = 'light') {
 		$defaultDate = new DateTime();
 		
+		// If no start date passed, use today's date
 		if ($startDate == "") {
-			// Format for start date
+			// Format start date properly (Y-m-d)
 			$startDate = $defaultDate->format("Y-m-d");
 		}
 

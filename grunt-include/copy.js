@@ -16,7 +16,7 @@ module.exports = {
 			src: [
 				'{,*/}*.html',
 				'scripts/**/*.{js,php}',
-				'admin/**/*.{js,php}',
+				'admin/**/*.php',
 				'data/**/*',
 				'*.{ico,png,txt}',
 				'media/images/**/*.{gif,jpeg,jpg,png}',
@@ -72,7 +72,7 @@ module.exports = {
 			src: [
 				'scripts/api/*.php',
 				'scripts/common/*.php',
-				'admin/*.php'
+				'admin/**/*.php'
 			]
 		}]// End copy:phpfiles - files
 	},// End copy:phpfiles

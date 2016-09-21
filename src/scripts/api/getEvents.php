@@ -6,6 +6,13 @@ include_once('EventParser.php');
 
 error_reporting(E_ALL);
 
+// Limit results
+$limit = 60;
+
+if (isset($_POST['limit'])) {
+    $limit = (int)$_POST['limit'];
+}
+
 // Create new EventParser
 $Events = new EventParser($dblink);
 
@@ -20,7 +27,7 @@ $success = false;
 
 // Get shows from today onwards.  
 // Pass in:  format, startDate (defaults to today), max days ahead
-$localEvents = $Events->getEventsFromDb('text', '', '90', 'light');
+$localEvents = $Events->getEventsFromDb('text', '', $limit, 'light');
 
 if (count($localEvents)) {
 	$success = true;

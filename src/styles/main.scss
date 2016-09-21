@@ -2,6 +2,7 @@
 @import "import/fonts";
 @import "import/position";
 @import "import/icons";
+@import "import/datatables";
 
 @mixin buildRegularFont($size) {   //, $weight: 400) {
 	font-family: $font-regular !important;
@@ -517,102 +518,6 @@ select {
 	appearance:none;
 	cursor:pointer;
 }
-
-// DataTables overrides 
-.dataTables_wrapper {
-	margin: auto;
-}
-.dataTables_wrapper table thead {
-	display: none;
-}
-.dataTables_wrapper .pagination>li {
-    display: inline;
-    text-transform: uppercase;
-}
-.dataTable tbody {
-	border: 1px solid $gray-mid;
-	background-color: $almost-white;
-}
-
-
-//
-// Datatables @media queries
-// 
-@media screen and (max-width: 767px) {
-	#bg-plate {
-		height: 300px;
-	}
-	.dataTables_wrapper {
-		max-width: 600px;
-		// border: 1px solid yellow;
-	}
-	table.dataTable th,
-	table.dataTable tbody td {
-		padding: 8px !important;
-	}
-}
-@media screen and (min-width: 768px) and (max-width: 1024px) {
-	#bg-plate {
-		height: 410px;
-	}
-	.dataTables_wrapper {
-		max-width: 600px;
-		// border: 1px solid yellow;
-	}
-	table.dataTable th {
-		padding: 12px 6px 8px 0px !important;
-	}
-	table.dataTable tbody td {
-		padding: 12px !important;
-	}
-}
-@media screen and (min-width: 1025px) and (max-width: 1199px) {
-	#bg-plate {
-		height: 480px;
-	}
-	.dataTables_wrapper {
-		max-width: 800px;
-		// border: 1px solid orange;
-	}
-	table.dataTable th {
-		padding: 14px 8px 10px 0px !important;
-	}
-	table.dataTable tbody td {
-		padding: 14px !important;
-	}
-}
-@media screen and (min-width: 1200px) {
-	#bg-plate {
-		height: 520px;
-	}
-	.dataTables_wrapper {
-		max-width: 1000px;
-		// border: 1px solid red;
-	}
-	table.dataTable th,
-	table.dataTable tbody td {
-		padding: 16px !important;
-	}
-}
-.even-bgcolor {
-	background-color: $almost-white;
-}
-.odd-bgcolor {
-	background-color: $gray-xlight;
-}
-.dataTables_paginate {
-	// margin-right: 20px;
-	// position: absolute !important;
-}
-table.dataTable .date-header-row {
-	background-color: $purple-i-like !important;
-}
-table.dataTable .date-header {
-	padding: 12px 6px 8px 0px;
-	left: -4px;
-	line-height: 1;
-}
-/*           end datatables.min.css override        */
 
 .date-block-xl {
 	@include buildBoldFont($font-xxl);

@@ -288,7 +288,7 @@ var UserState = (function() {
         // Get the Singleton instance if one exists
         // or create one if it doesn't
         getInstance: function () {
-            console.log('mojUserState created!');
+            // console.log('mojUserState created!');
 
             if (!instance) {
                 instance = init();

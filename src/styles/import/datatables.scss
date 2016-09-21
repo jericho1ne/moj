@@ -1,0 +1,134 @@
+/*
+	DataTables overrides 
+ */ 
+
+// Wrapper
+.dataTables_wrapper {
+	margin: auto;
+}
+.dataTables_wrapper table thead {
+	display: none;
+}
+
+
+// Table
+table#eventsDT {
+	border-bottom: 2px solid $gray-mid !important;
+	// margin-top: 4px !important;
+ 	// margin-bottom: 4px !important;
+}
+
+// Table Body
+table#eventsDT tbody {
+	background-color: $almost-white;
+}
+
+// Table Row Headers
+table#eventsDT tr.date-header-row,
+table#eventsDT th.date-header {
+	background-color: $purple-i-like !important;
+}
+table#eventsDT tr.line-item {
+	border-bottom: 1px solid $gray-light;
+}
+table#eventsDT .date-header {
+	padding: 12px 6px 8px 0px;
+	left: -4px;
+	line-height: 1;
+}
+
+// Prev / Next Pagination buttons
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	color: $almost-white;
+	cursor: pointer;
+	padding: 10px 20px;
+	margin: 1px;
+    display: inline;
+    text-transform: uppercase !important;
+    background-color: rgba(183, 15, 213, .68); 
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	background-color: rgba(183, 15, 213, 1); 
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled {
+    cursor: not-allowed;
+    color: #666 !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+}
+.dataTables_wrapper .dataTables_paginate {
+	text-align: center !important;
+	margin-top: 20px !important;
+	// position: absolute !important;
+}
+
+// Important is necessary to override datatables' default
+.even-bgcolor {
+	background-color: $almost-white !important;
+}
+.odd-bgcolor {
+	background-color: $gray-xlight !important;
+}
+
+
+//
+// Datatables @media queries
+// 
+@media screen and (max-width: 767px) {
+	#bg-plate {
+		height: 300px;
+	}
+	.dataTables_wrapper {
+		max-width: 600px;
+		// border: 1px solid yellow;
+	}
+	table#eventsDT th,
+	table#eventsDT tbody td {
+		padding: 8px !important;
+	}
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	#bg-plate {
+		height: 410px;
+	}
+	.dataTables_wrapper {
+		max-width: 600px;
+		// border: 1px solid yellow;
+	}
+	table#eventsDT th {
+		padding: 12px 6px 8px 0px !important;
+	}
+	table#eventsDT tbody td {
+		padding: 12px !important;
+	}
+}
+@media screen and (min-width: 1025px) and (max-width: 1199px) {
+	#bg-plate {
+		height: 480px;
+	}
+	.dataTables_wrapper {
+		max-width: 800px;
+		// border: 1px solid orange;
+	}
+	table#eventsDT th {
+		padding: 14px 8px 10px 0px !important;
+	}
+	table#eventsDT tbody td {
+		padding: 14px !important;
+	}
+}
+@media screen and (min-width: 1200px) {
+	#bg-plate {
+		height: 520px;
+	}
+	.dataTables_wrapper {
+		max-width: 1000px;
+		// border: 1px solid red;
+	}
+	table#eventsDT th,
+	table#eventsDT tbody td {
+		padding: 16px !important;
+	}
+}

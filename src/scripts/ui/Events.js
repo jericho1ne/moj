@@ -31,14 +31,17 @@ var Events = {
      * list of events, bounded by certain input parameters
      */
     getEvents: function(maxResults) {
-        // TODO:  limit on maxResults
+        // Need to be able to reference Events class inside $.ajax scope
         var _this = this;
 
         // $.ajax method will call resolve() on the deferred it returns
         // when the request completes successfully
         return $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: _this.apiScriptsBase + _this.eventsAll,
+                data: {
+                    'limit': maxResults,
+                },
                 async: false,
                 // Success callback will fire even when coupled with an external $.done
                 success : function(data) {  // data, status, jqXHR
@@ -85,7 +88,7 @@ var Events = {
         // TODO:  if ever more than one datatable is present
         //          create a unique id for each
         //          eg, append + year + '-' + month;
-        var dataTableUniqueID = 'data-table-01';
+        var dataTableUniqueID = 'eventsDT';
 
         // Create Datatable table tag, appending old school JS onClick
         // (for mobile browser compatibility)
@@ -118,7 +121,7 @@ var Events = {
         var prevDate = '';
         
         // Loop through incoming data
-        for (var i in events) {
+        for (var i in events) {            
             // simplify var names
             var event_id = events[i].event_id;
             var nice_date = events[i].nice_date;              
