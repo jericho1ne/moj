@@ -147,7 +147,7 @@ function startEventLookup(event) {
 }// End startEventLookup
 
 //
-// Methods registered after document.ready
+// document.ready
 //
 $(document).ready(function() {
     var d = new Date();

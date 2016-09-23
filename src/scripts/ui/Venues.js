@@ -6,7 +6,7 @@
 var Venues = {
 	// PROPERTIES
 	// apiKey: "AIzaSyCF4m5XE3VTOUzo8b10EstraU1depENiB4",
-	baseURL: 'scripts/api/getVenues.php',
+	baseURL: 'scripts/api/getShowsAndVenues.php',
 	venuesList: [],
 
 	/**
