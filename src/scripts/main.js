@@ -270,7 +270,7 @@ $(document).ready(function() {
     // 
     // Get list of shows, display them, set click listeners on each Artist
     //
-    Events.getEvents(45)
+    Events.getEvents(1)
         // Return events $.ajax request
         .then(function(data) {
             // Parse the data into JSON object

@@ -714,16 +714,23 @@ var Events = {
         // Enable dynamic play/stop functionality:  ?version=3&enablejsapi=1 
         // if Flash <object> stops working switch to .html('<iframe frameborder="0" 
 
+        var clipId = 'youtube-' + videoId;
+
         var $imgTag = $('<object>')
             .attr('class','vid-clip border-mid-gray')
-            .attr('id', videoId)
+            .attr('id', clipId)
             // Embed video at specific quality by appending "vq="
             // 144p: &vq=tiny 
             // 240p: &vq=small 
             // 360p: &vq=medium 
             // 480p: &vq=large 
             // 720p: &vq=hd720 
-            .attr('data', 'http://www.youtube.com/embed/' + videoId + '?vq=small');
+            .attr('data', 'http://www.youtube.com/embed/' 
+                + videoId 
+                + '?vq=small'
+                + '&playerapiid=' + clipId
+                + '&enablejsapi=1'
+            );
             //    + videoId + '"></object>'); )
            //.html('<object id="' + videoId + '" data="http://www.youtube.com/embed/' 
             //    + videoId + '"></object>'); 
