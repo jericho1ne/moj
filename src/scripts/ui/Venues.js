@@ -13,17 +13,18 @@ var Venues = {
 	/**
 	 * getShows
 	 * list of shows by venue, ordered by distance if lat/lon provided
+	 * options = { maxResults, coords (lat/lon), maxDistance }
 	 */
 	getShows: function(options) {
 
 		// Always set a default for maxResults limiter
 		if (typeof options.maxResults === 'undefined') {
-			maxResults = 10;
+			options.maxResults = 10;
 		}
 
 		// Default to using the most basic query
 		var scriptUrl = Venues.getShowsByVenue + 
-			"?maxResults=" + maxResults;
+			"?maxResults=" + options.maxResults;
 
 		if (typeof options.coords !== 'undefined' || typeof options.maxDistance !== 'undefined') {
 			var scriptUrl = Venues.getShowsByVenueAndDistance + 
@@ -46,14 +47,21 @@ var Venues = {
 			if (status === 'success') {
 				if (data) {
 					window.data = data;
-                    Venues.venuesList = JSON.parse(data);
-                    Venues.displayVenues(Venues.venuesList);
+					if (isValidJson(data)) {
+						Venues.venuesList = JSON.parse(data);
+                    	Venues.displayVenues(Venues.venuesList);
+						return true;
+					}
+					else {
+						alert("JSON not valid");
+					}
+                    
                     
            			// for (var i in _this.venuesList) {
 			        //     console.log(_this.venuesList[i]);
 			        // }
 
-					return true;
+					
 				}
 			}
 			else {

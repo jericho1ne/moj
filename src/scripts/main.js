@@ -233,7 +233,7 @@ $(document).ready(function() {
      * 
      */
     Venues.getShows({
-        maxResults: 10
+        'maxResults': 10
     });
 
 
@@ -254,7 +254,11 @@ $(document).ready(function() {
     //     var chosenDistance = e.value;
     //     // console.log(chosenDistance);
 
-    //     Venues.getShowsg(mojUserState.getSavedUserPosition(), 10, chosenDistance);
+    //     Venues.getShows({
+    //      'coords': mojUserState.getSavedUserPosition(), 
+    //      'maxResults': 10, 
+    //      'maxDistance': chosenDistance
+    //     });
     //     //$("#ex6SliderVal").text(e.value);
     // });
 
@@ -322,9 +326,9 @@ $(document).ready(function() {
                     // Get venues close to us, passing in {lat,lon}, 
                     // max distance, and the current slider's search radius
                     Venues.getShows({
+                        'maxResults': 10,
                         'coords': coordinates, 
-                        10, 
-                        $("#range-slider").val()
+                        'maxDistance': $("#range-slider").val()
                     });
                 });
         }// End else case

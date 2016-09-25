@@ -25,7 +25,6 @@ $query =
 	"ORDER BY ymd_date ASC " .
 	"LIMIT " . $maxResults;
 
-pr($query);
 // $dblink is created in include/_db_connex.php
 $statement = $dblink->prepare($query);
 
@@ -34,8 +33,8 @@ $statement->execute();
 $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 // Parse through results adding a blank 
-foreach ($results as $row) {
-	pr($row);
-}
+// foreach ($results as $row) {
+// 	//pr($row);
+// }
 echo json_encode($results);
 ?>

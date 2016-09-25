@@ -23,6 +23,15 @@ function isBlank(thisVar) {
     return true;
 }
 
+function isValidJson(input) {
+    try {
+        JSON.parse(input);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 function flattenObject(obj) {
   var newHTML = [];
   var newHTML = $.map(obj, function(value) {
