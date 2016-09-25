@@ -21,6 +21,7 @@ $query =
 	"FROM events " . 
 	"INNER JOIN venues ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
 	"WHERE ymd_date = '{$show_date}' " .
+	"AND media != '' " .
 	"GROUP BY events.eventid " .
 	"ORDER BY ymd_date ASC " .
 	"LIMIT " . $maxResults;
