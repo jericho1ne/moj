@@ -11,3 +11,4 @@ data/
 vendor/composer/*
 vendor/autoload*
 composer.json
+npm-debug.log
