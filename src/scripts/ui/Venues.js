@@ -143,8 +143,12 @@ var Venues = {
 
             //   + '<a href="#' + this.url + '">' + this. + '</a> <br>'
           	
-          	var locationText = this.city + 
-          		hasDistance 
+          
+          	var locationText = this.city;
+
+          	// Only display distance from Venue if set
+          	if (hasDistance)
+          		 locationText
           			? ' • ' + parseFloat(this.distance.toFixed(1)) + ' mi. away'
           			: ''; 
 
