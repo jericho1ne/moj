@@ -154,31 +154,109 @@ $(document).ready(function() {
     var hour = d.getHours();
     var day =  d.getUTCDay(); // Sunday = 0, Sat = 6
 
-    // USER STATE
+    // User State Global
     var mojUserState = UserState.getInstance();
 
     window.mojUS = mojUserState;
 
     // Set background plate
-    $('#bg-plate').css('background', 'url("media/backgrounds/' + BG_PLATES[day] + '") ' 
-        + 'no-repeat center bottom scroll');
+    $('#bg-plate').css(
+        'background', 
+        'url("media/backgrounds/' + BG_PLATES[day] + '") ' + 'no-repeat center bottom scroll'
+    );
 
-    // 00.  INITIALIZE DISTANCE SLIDER
-    $('#range-slider').slider({
-        tooltip: 'always',
-        formatter: function(value) {
-            return value + ' miles';
-        }
+    /**
+     *
+     * Get list of shows, display them, set click listeners on each Artist
+     * 
+     */
+    $('#something-something').on('click', function() {
+        Events.getEvents(1)
+            // Return events $.ajax request
+            .then(function(data) {
+                // Parse the data into JSON object
+                var eventData = JSON.parse(data);
+
+                // Check for valid data before continuing
+                if (eventData.success) {
+                    // Save event data to local storage
+                    mojUserState.events = Events.eventData = 
+                        Events.remapEventArrayKeys(eventData.events);
+
+                    // JSON data will go into shows-content div
+                    Events.displayEvents(Events.eventData, CONTENT_DIV);
+
+                    //window.location.href.split('#');  
+                }
+                else {
+                    if (typeof (events === 'undefined') || !events.length) {
+                        return Error("getEvents - did not receive any data ='(");
+                    }
+                    else {
+                        return Error("getEvents - event data received, but success flag is not set");
+                    }
+                }// End else        
+                
+            })// End events.getEvents().then
+            // Once data is loaded, parse URL for a direct link (after the #)
+            .then(function() {
+                var request = parseUrlAction();
+            })
+            // Add click listener on parent div of show link 
+            // (will bubble up from Datatable)
+            .then(function() {  
+                // https://davidwalsh.name/event-delegate
+                document.getElementById(CONTENT_DIV).addEventListener('click', function(e) {
+                    // Get the array index of the clicked element
+                    var eventid = $(e.target).data('eventid');
+                    var event = mojUserState.events[eventid];
+
+                    // Ensure that user has clicked on an actual link
+                    if (event !== undefined && event.hasOwnProperty('source')) {
+                        // Manually change URL in address bar
+                        window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
+                        
+                        // Pop up artist info modal
+                        lookupArtist(event);
+                    }
+                    else {
+                        // console.log("Click source is outside an event hit state");
+                    }
+                });// End addEventListener
+            });// End add datatable click listener
+    }); // End get list of shows, display them, set click listeners on each Artist
+
+
+    /** 
+     *
+     * Default call to grab shows list and display in square thumbnails
+     * 
+     */
+    Venues.getShows({
+        maxResults: 10
     });
 
-    // Set slide listener to search for nearby venues on each drag
-    $("#range-slider").on("slide", function(e) {
-        var chosenDistance = e.value;
-        // console.log(chosenDistance);
 
-        Venues.getVenues(mojUserState.getSavedUserPosition(), 10, chosenDistance);
-        //$("#ex6SliderVal").text(e.value);
-    });
+    /**
+     *
+     *  DISTANCE SLIDER
+     * 
+     */ 
+    // $('#range-slider').slider({
+    //     tooltip: 'always',
+    //     formatter: function(value) {
+    //         return value + ' miles';
+    //     }
+    // });
+
+    // // Set slide listener to search for nearby venues on each drag
+    // $("#range-slider").on("slide", function(e) {
+    //     var chosenDistance = e.value;
+    //     // console.log(chosenDistance);
+
+    //     Venues.getShowsg(mojUserState.getSavedUserPosition(), 10, chosenDistance);
+    //     //$("#ex6SliderVal").text(e.value);
+    // });
 
     // Asynchronously load modal template
     $.get('templates/artist-modal.html', function(template) {
@@ -230,7 +308,7 @@ $(document).ready(function() {
                     // lat, lon, and accuracy
                     mojUserState.setUserPosition(position);
 
-                    // Grab coordinates separately for the first getVenues call
+                    // Grab coordinates separately for the first getShows call
                     var coordinates = {
                         lat: position.coords.latitude,
                         lon: position.coords.longitude
@@ -243,7 +321,11 @@ $(document).ready(function() {
 
                     // Get venues close to us, passing in {lat,lon}, 
                     // max distance, and the current slider's search radius
-                    Venues.getVenues(coordinates, 10, $("#range-slider").val());
+                    Venues.getShows({
+                        'coords': coordinates, 
+                        10, 
+                        $("#range-slider").val()
+                    });
                 });
         }// End else case
 
@@ -265,63 +347,6 @@ $(document).ready(function() {
         // Save the last visited page
         setPageState(lastSection);
     });
-
-
-    // 
-    // Get list of shows, display them, set click listeners on each Artist
-    //
-    Events.getEvents(1)
-        // Return events $.ajax request
-        .then(function(data) {
-            // Parse the data into JSON object
-            var eventData = JSON.parse(data);
-
-            // Check for valid data before continuing
-            if (eventData.success) {
-                // Save event data to local storage
-                mojUserState.events = Events.eventData = 
-                    Events.remapEventArrayKeys(eventData.events);
-
-                // JSON data will go into shows-content div
-                Events.displayEvents(Events.eventData, CONTENT_DIV);
-
-                //window.location.href.split('#');  
-            }
-            else {
-                if (typeof (events === 'undefined') || !events.length) {
-                    return Error("getEvents - did not receive any data ='(");
-                }
-                else {
-                    return Error("getEvents - event data received, but success flag is not set");
-                }
-            }// End else        
-            
-        })// End events.getEvents().then
-        // Once data is loaded, parse URL for a direct link (after the #)
-        .then(function() {
-            var request = parseUrlAction();
-        })
-        // Add old school click listener on parent div (will bubble up from Datatable)
-        .then(function() {  
-            // https://davidwalsh.name/event-delegate
-            document.getElementById(CONTENT_DIV).addEventListener('click', function(e) {
-                // Get the array index of the clicked element
-                var eventid = $(e.target).data('eventid');
-                var event = mojUserState.events[eventid];
-
-                // Ensure that user has clicked on an actual link
-                if (event !== undefined && event.hasOwnProperty('source')) {
-                    // Manually change URL in address bar
-                    window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
-                    
-                    // Pop up artist info modal
-                    lookupArtist(event);
-                }
-                else {
-                    // console.log("Click source is outside an event hit state");
-                }
-            });// End addEventListener
-        });// End add old school click listener
 
 
     //

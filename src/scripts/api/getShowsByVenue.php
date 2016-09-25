@@ -3,12 +3,10 @@ require_once("../common/common.php");
 require_once("db/__db_sel.php");
 require_once("db/__db_connex.php");
 
-
 // Do whatever it takes to grab a lat / lon to use as anchor
 $maxResults = set($_POST['maxResults'])
 	? $_POST['maxResults']
 	: LIMIT_MAX_SHOWS_PER_PAGE;
-
 
 // Where we'll store any place within a X mile radius
 $nearbyPlaces = array();
@@ -18,6 +16,7 @@ $show_date = date("Y-m-d");
 
 $query = 
 	"SELECT events.*, venues.lat, venues.lon, venues.city, " . 
+	"'-1' AS distance, " .
 	"DATE_FORMAT(events.ymd_date,'%a %M %e') AS nice_date " .
 	"FROM events " . 
 	"INNER JOIN venues ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
@@ -26,6 +25,7 @@ $query =
 	"ORDER BY ymd_date ASC " .
 	"LIMIT " . $maxResults;
 
+pr($query);
 // $dblink is created in include/_db_connex.php
 $statement = $dblink->prepare($query);
 
@@ -33,31 +33,9 @@ $statement = $dblink->prepare($query);
 $statement->execute();
 $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-// Parse through results tagging each venue with proximity from user
+// Parse through results adding a blank 
 foreach ($results as $row) {
-	//pr($row);
-
-	/*
-
-	$current_venue_latlon  = array(
-		"lat"=> $row["lat"],
-		"lon" => $row["lon"]
-	);
-
-	// user position, venue position, geofence radius
-	$distance = calculateDistance(
-		array(
-			"lat" => $userLat,
-			"lon" => $userLon
-		),
-		$current_venue_latlon,
-		GEOFENCE_RADIUS
-	);// End distance = calcDist
-
-	*/ 
-
-}// End foreach parse through db results
-
-
+	pr($row);
+}
 echo json_encode($results);
 ?>

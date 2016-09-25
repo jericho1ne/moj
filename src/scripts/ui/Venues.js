@@ -6,35 +6,48 @@
 var Venues = {
 	// PROPERTIES
 	// apiKey: "AIzaSyCF4m5XE3VTOUzo8b10EstraU1depENiB4",
-	baseURL: 'scripts/api/getShowsAndVenues.php',
+	getShowsByVenue: 'scripts/api/getShowsByVenue.php',
+	getShowsByVenueAndDistance: 'scripts/api/getShowsByVenueAndDistance.php',
 	venuesList: [],
 
 	/**
-	 * getVenues
-	 * list of venues
+	 * getShows
+	 * list of shows by venue, ordered by distance if lat/lon provided
 	 */
-	getVenues: function(coords, maxDistance, maxResults) {
-		console.log(" >> getVenues >> ");
-		console.log(coords);
+	getShows: function(options) {
 
-		// we'll need this refernce later inside the $.ajax scope
-		var _this = this;
+		// Always set a default for maxResults limiter
+		if (typeof options.maxResults === 'undefined') {
+			maxResults = 10;
+		}
 
+		// Default to using the most basic query
+		var scriptUrl = Venues.getShowsByVenue + 
+			"?maxResults=" + maxResults;
+
+		if (typeof options.coords !== 'undefined' || typeof options.maxDistance !== 'undefined') {
+			var scriptUrl = Venues.getShowsByVenueAndDistance + 
+					"?lat=" + options.coords.lat +
+					"&lon=" + options.coords.lon +
+					"&maxDistance=" + options.maxDistance +
+					"&maxResults=" + options.maxResults;
+		}
+		
+
+		console.log(" >> getShows >> ");
+	
 		var requestBody = {
 			type: 	"GET",
-			url: 	this.baseURL +
-					"?lat=" + coords.lat +
-					"&lon=" + coords.lon +
-					"&maxResults=" + maxResults +
-					"&maxDistance=" + maxDistance,
+			url: 	scriptUrl,
 			async: false
 		};// End requestBody
 
 		$.ajax(requestBody).done(function(data, status) {
 			if (status === 'success') {
 				if (data) {
-                    _this.venuesList = JSON.parse(data);
-                    _this.displayVenues(_this.venuesList);
+					window.data = data;
+                    Venues.venuesList = JSON.parse(data);
+                    Venues.displayVenues(Venues.venuesList);
                     
            			// for (var i in _this.venuesList) {
 			        //     console.log(_this.venuesList[i]);
@@ -48,17 +61,24 @@ var Venues = {
 				return false;
 			}
 		});//End $.ajax
-	},// End getVenues
+	},// End getShows
 
     /**
      * displayVenues
      * show us what and where
      */
     displayVenues: function(venues) {
-        venues.sort(function(a, b) {            // sort by proximity (closest first)
-            return parseFloat(a.distance) - parseFloat(b.distance);
-        });
+    	window.vz = venues;
 
+        var hasDistance = venues[0].distance != '-1';
+
+        // Only bother  sorting by distance if part of the response
+        if (hasDistance) {
+	        venues.sort(function(a, b) {  
+	       		// sort by proximity (closest first)          
+	            return parseFloat(a.distance) - parseFloat(b.distance);
+	        });
+        }
         var venuesHtml = '';
         $('#' + CONTENT_DIV).empty();
 
@@ -114,10 +134,15 @@ var Venues = {
             	.html(this.artist);
 
             //   + '<a href="#' + this.url + '">' + this. + '</a> <br>'
-          
+          	
+          	var locationText = this.city + 
+          		hasDistance 
+          			? ' • ' + parseFloat(this.distance.toFixed(1)) + ' mi. away'
+          			: ''; 
+
             $showLocation = $('<div>')
             	.addClass('small-text bg-almost-white color-dk-gray pad-lr-10')
-            	.html(this.city + ' • ' + parseFloat(this.distance.toFixed(1)) + ' mi. away');
+            	.html(locationText);
 
         	$colorBar = $('<div>')
             	.addClass('event-tile-color-bar small-text white pad-lr-10')
