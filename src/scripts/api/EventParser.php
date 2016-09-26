@@ -630,6 +630,11 @@ class EventParser {
 			unset($columns['media']);
 			unset($columns['description']);
 		}
+		// Grab limited field set by default
+		else if ($fieldSet == 'medium') {
+			unset($columns['updated']);
+			unset($columns['description']);
+		}
 
 		// Create comma separated string of colums to select on
 		$fields = implode(', ', array_keys($columns));

@@ -38,7 +38,7 @@ function lookupArtist(event) {
             // (eg: getArtistPhoto), string them up as part of promise chain
             // 
             Events.displayStaticShowInfo('artist-info', event);
-            Events.getShowDetails(event.event_id)
+            Events.getShowDetails(event.eventid)
                 .then(function(data) {
                     Events.appendShowDetail(data.events[0]);
                 });
@@ -46,7 +46,7 @@ function lookupArtist(event) {
         case 'ticketfly':
             showTitle = event.title;
             Events.displayStaticShowInfo('artist-info', event);
-            Events.getShowDetails(event.event_id)
+            Events.getShowDetails(event.eventid)
                 .then(function(data) {
                     Events.appendShowDetail(data.events[0]);
                 });
@@ -233,8 +233,67 @@ $(document).ready(function() {
      * 
      */
     Venues.getShows({
-        'maxResults': 30
-    });
+        'maxResults': 1
+    })
+    // Append shows to DOM, save data to Singleton object(s)
+    .then(function(response) { 
+        // Check for valid data before continuing
+        if (isValidJson(response)) {
+
+            var jsonResponse = JSON.parse(response);
+
+            if (jsonResponse.success) {
+                // Save Data after rearranging event array keys
+                // (from abbreviated to readable)
+                mojUserState.events = 
+                Events.eventData = 
+                Venues.venuesList =
+                    Events.remapEventArrayKeys(jsonResponse.events);     
+
+                // Append shows to DOM
+                Venues.displayShowsByVenue(Venues.venuesList);               
+            }
+        }   
+
+    })
+    // Initialize swipe actions, set click listeners
+    .then(function() {
+         //  Initialize Swiper
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            paginationClickable: true
+        });
+
+        $('.event-tile').on('click', function(e) {
+            window.thing = $(this);
+            
+            // Get the array index of the clicked element
+            var eventid = $(this).data('eventid');
+
+            // Find the eventid in the array
+            var event = $.grep(
+                mojUserState.events, 
+                function(e){ 
+                    return e.eventid == eventid; 
+                }
+            );
+
+            console.log(eventid);
+            console.log(event);
+
+             // Ensure that user has clicked on an actual link
+            if (event[0] !== undefined && event[0].hasOwnProperty('source')) {
+                // Manually change URL in address bar
+                // window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
+                
+                // Pop up artist info modal
+                lookupArtist(event);
+            }
+            else {
+                console.log("Could not retrieve eventid " + eventid);
+            }
+        });
+    });// End addEventListener
 
 
     /**

@@ -11,9 +11,13 @@ var Events = {
     dataFolder: 'data/',
     eventsJSON: 'events.json',
 
+    // Where the PHP scripts are located
     apiScriptsBase: 'scripts/api/',
+
     eventsAll: 'getEvents.php',
     eventDetail: 'getEventDetail.php',
+    getShowsByVenue: 'getShowsByVenue.php',
+    getShowsByVenueAndDistance: 'getShowsByVenueAndDistance.php',
 
     eventData: {},
     maxVideosToShow: LASTFM_TOPTRACKS_LIMIT,
@@ -123,7 +127,7 @@ var Events = {
         // Loop through incoming data
         for (var i in events) {            
             // simplify var names
-            var event_id = events[i].event_id;
+            var eventid = events[i].eventid;
             var nice_date = events[i].nice_date;              
             var ymd_date = events[i].ymd_date;
             var artist = events[i].artist;
@@ -406,13 +410,13 @@ var Events = {
         //
     },// End function displayStaticShowInfo
 
-    getShowDetails: function (event_id) {
+    getShowDetails: function (eventid) {
         var _this = this;
 
         return $.ajax({
             type: 'POST',
             url: _this.apiScriptsBase + _this.eventDetail,
-            data: 'eid=' + event_id,
+            data: 'eid=' + eventid,
             dataType : 'json',
             // Success callback will fire even when couple with an external $.done
             success : function(data) {
@@ -422,7 +426,7 @@ var Events = {
             error : function(errorCode, errorMsg) {
                 // Handle error here
                 // TODO:  change to jquery UI modal that autofades and has (X) button
-                var msg = 'Unable to load Show details for <b>event #' + event_id + '</b>';
+                var msg = 'Unable to load Show details for <b>event #' + eventid + '</b>';
                 console.log(msg + '<br>' + errorMsg + '(' + errorCode + ')');
             }
         });// End topTracksXHR $.ajax 
@@ -760,7 +764,7 @@ var Events = {
         // Time to remap array keys!
         for (var i in data) {
             newData.push({
-                'event_id': data[i].e_id,
+                'eventid': data[i].e_id,
                 'source': data[i].src,
                 'nice_date': data[i].d_fmt,
                 'ymd_date': data[i].d_ymd,

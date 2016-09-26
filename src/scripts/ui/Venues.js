@@ -22,44 +22,44 @@ var Venues = {
         }
 
         // Default to using the most basic query
-        var scriptUrl = Venues.getShowsByVenue + 
-            "?maxResults=" + options.maxResults;
+        var postData = {
+            'maxResults': options.maxResults
+        };
 
-        if (typeof options.coords !== 'undefined' || typeof options.maxDistance !== 'undefined') {
-            var scriptUrl = Venues.getShowsByVenueAndDistance + 
-                    "?lat=" + options.coords.lat +
-                    "&lon=" + options.coords.lon +
-                    "&maxDistance=" + options.maxDistance +
-                    "&maxResults=" + options.maxResults;
-        }
-        
+        // If extra params passed in for geolocation query
+        if (typeof options.coords !== 'undefined' ||
+            typeof options.maxDistance !== 'undefined'
+        ) {
+            postData.lat = options.coords.lat;
+            postData.lon = options.coords.lon;
+            postData.maxDistance = options.maxDistance;
+        } // End append params for geolocation query
 
-        console.log(" >> getShows >> ");
-    
-        var requestBody = {
-            type: 'GET',
-            url: scriptUrl,
-            async: false
-        };// End requestBody
+        console.log(postData);
 
-        $.ajax(requestBody).done(function(data, status) {
-            if (status === 'success') {
-                if (data) {
-                    window.data = data;
-                    if (isValidJson(data)) {
-                        Venues.venuesList = JSON.parse(data);
-                        Venues.displayShowsByVenue(Venues.venuesList);
-                        return true;
-                    }
+        return $.ajax({
+            type: 'POST',
+            url: Venues.getShowsByVenue,
+            data: postData,
+            async: false,
+            // Success callback will fire even when coupled with an external $.done
+            success : function(response, status) {  // data, status, jqXHR
+                console.log(status);
+                if (status === 'success' && response) {
+                    // Save current artist data in global cache
+                    CACHE['eventData'] = response;
+                    return(response);
                 }
                 // else
                 alert("No data to display");
+            },
+            // if the request fails, deferred.reject() is called
+            error : function(code, message){
+                // Handle error here
+                // TODO:  change to jquery UI modal that autofades and has (X) button
+                return Error("Unable to load Event data =(");
             }
-            else {
-                alert("No data returned :(");
-                return false;
-            }
-        });//End $.ajax
+        }); // End getShows $.ajax
     },// End getShows
 
     /**
@@ -67,8 +67,6 @@ var Venues = {
      * show us what and where
      */
     displayShowsByVenue: function(venues) {
-        window.vz = venues;
-
         var hasDistance = venues[0].distance != '-1';
 
         // Only bother  sorting by distance if part of the response
@@ -85,8 +83,8 @@ var Venues = {
         $('#swiper-content').empty();
 
         $(venues).each(function() {
-            venueId = this.id;
-            eventId = this.eventid;
+            venueid = this.id;
+            eventid = this.eventid;
 
             btnClass = 'btn-inactive';
 
@@ -106,7 +104,7 @@ var Venues = {
                 // .addClass('pad-top-10 col-xs-12 col-sm-6 col-md-4 col-lg-3');
 
             $eventTile  = $('<div>')
-                .attr('id', eventId)
+                .attr('data-eventid', eventid)
                 .addClass('left event-tile');
 
              // If we have a photo, show it!
@@ -180,12 +178,6 @@ var Venues = {
             // Incrementally append to DOM
             //$('#' + CONTENT_DIV).append($bootstrapParent);
             $('#swiper-content').append($bootstrapParent);
-        });
-
-        //  Initialize Swiper
-        var swiper = new Swiper('.swiper-container', {
-            pagination: '.swiper-pagination',
-            paginationClickable: true
         });
     },// End displayVenues
 
