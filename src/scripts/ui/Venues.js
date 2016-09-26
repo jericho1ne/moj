@@ -80,7 +80,7 @@ var Venues = {
         }
         var venuesHtml = '';
         
-        $('#' + CONTENT_DIV).empty();
+        // $('#' + CONTENT_DIV).empty();
 
         $('#swiper-content').empty();
 
@@ -123,14 +123,14 @@ var Venues = {
                 .addClass('event-tile-bottom bg-almost-white');
                                
             // Artist
-            $showVenue = $('<div>')
+            $showArtist = $('<div>')
                 .addClass('block large-text mid-gray pad-lr-10')
-                .html(this.venue);
+                .html(this.artist);
 
             // Show Venue
-            $showArtist = $('<div>')
+            $showVenue = $('<div>')
                 .addClass('medium-text line-height-100 dk-gray pad-lr-10')
-                .html(this.artist);
+                .html(this.venue);
             
             // Favorite button
             $faveButton = $('<div>')

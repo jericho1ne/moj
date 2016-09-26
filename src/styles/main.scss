@@ -3,6 +3,7 @@
 @import "import/position";
 @import "import/icons";
 @import "import/datatables";
+@import "import/swiper";
 
 @mixin buildRegularFont($size) {   //, $weight: 400) {
 	font-family: $font-regular !important;

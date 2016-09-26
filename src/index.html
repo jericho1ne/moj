@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="styles/bootstrap-slider.css">
     
     <!-- Swiper -->
-    <link rel="stylesheet" href="styles/swiper/swiper.css">
+    <!-- <link rel="stylesheet" href="styles/swiper/swiper.css"> -->
 
     <!-- MoJ custom styles and overrides -->
     <link rel="stylesheet" href="styles/main.css">
@@ -90,26 +90,27 @@
     <span class="center icon-lg"><img src="media/svg/trumpet.svg" alt="Good vibes."></span>
 </div>
 
-<!-- Swiper -->
-<div class="swiper-container">
-    <div class="swiper-wrapper" id="swiper-content">
-        <div class="swiper-slide">Loading...</div>
-    </div>
-    <!-- Add Pagination -->
-    <div class="swiper-pagination"></div>
-</div>
-
 <!-- // Event Content and slider -->
 <div id="content-parent" class="w100p col-sm-12">
     <!-- Distance search filter -->
-    <div id="slider-parent" class="row border display-none">
+    <!-- <div id="slider-parent" class="row border display-none">
         <div class="subtitle col-sm-6 pad20">How far away shall we look?</div>
         <div class="col-sm-6">
             <input id="range-slider" data-slider-id="range-slider-1" type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10" data-slider-enabled="false"/>
         </div>
-    </div>
+    </div> -->
     <!-- Show data goes here -->
     <div id="shows-content" class="row-fluid clearfix">
+
+        <!-- Swiper -->
+        <div class="swiper-container">
+            <div class="swiper-wrapper" id="swiper-content">
+                <div class="swiper-slide">Loading...</div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+
     </div>
 </div>
 
@@ -132,13 +133,6 @@
 <!-- Swiper JS -->
 <script type="text/javascript" src="scripts/vendor/swiper.min.js"></script>
 
-<!-- Initialize Swiper -->
-<script>
-var swiper = new Swiper('.swiper-container', {
-    pagination: '.swiper-pagination',
-    paginationClickable: true
-});
-</script>
 
 <!-- GA Tracking -->
 <script>
