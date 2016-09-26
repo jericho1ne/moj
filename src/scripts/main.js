@@ -233,7 +233,7 @@ $(document).ready(function() {
      * 
      */
     Venues.getShows({
-        'maxResults': 10
+        'maxResults': 20
     });
 
 

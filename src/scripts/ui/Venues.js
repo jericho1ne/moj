@@ -49,7 +49,7 @@ var Venues = {
                     window.data = data;
                     if (isValidJson(data)) {
                         Venues.venuesList = JSON.parse(data);
-                        Venues.displayVenues(Venues.venuesList);
+                        Venues.displayShowsByVenue(Venues.venuesList);
                         return true;
                     }
                 }
@@ -67,7 +67,7 @@ var Venues = {
      * displayVenues
      * show us what and where
      */
-    displayVenues: function(venues) {
+    displayShowsByVenue: function(venues) {
         window.vz = venues;
 
         var hasDistance = venues[0].distance != '-1';
@@ -80,7 +80,10 @@ var Venues = {
             });
         }
         var venuesHtml = '';
+        
         $('#' + CONTENT_DIV).empty();
+
+        $('#swiper-content').empty();
 
         $(venues).each(function() {
             venueId = this.id;
@@ -100,7 +103,8 @@ var Venues = {
             */
         
             $bootstrapParent = $('<div>')
-                .addClass('pad-top-10 col-xs-12 col-sm-6 col-md-4 col-lg-3');
+                .addClass('swiper-slide');
+                // .addClass('pad-top-10 col-xs-12 col-sm-6 col-md-4 col-lg-3');
 
             $eventTile  = $('<div>')
                 .attr('id', eventId)
@@ -175,7 +179,14 @@ var Venues = {
             $bootstrapParent.append($eventTile);
 
             // Incrementally append to DOM
-            $('#' + CONTENT_DIV).append($bootstrapParent);
+            //$('#' + CONTENT_DIV).append($bootstrapParent);
+            $('#swiper-content').append($bootstrapParent);
+        });
+
+        //  Initialize Swiper
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            paginationClickable: true
         });
     },// End displayVenues
 

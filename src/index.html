@@ -44,6 +44,10 @@
     <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="styles/bootstrap/bootstrap-theme.css">
     <link rel="stylesheet" href="styles/bootstrap-slider.css">
+    
+    <!-- Swiper -->
+    <link rel="stylesheet" href="styles/swiper/swiper.css">
+
     <!-- MoJ custom styles and overrides -->
     <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -86,6 +90,15 @@
     <span class="center icon-lg"><img src="media/svg/trumpet.svg" alt="Good vibes."></span>
 </div>
 
+<!-- Swiper -->
+<div class="swiper-container">
+    <div class="swiper-wrapper" id="swiper-content">
+        <div class="swiper-slide">Loading...</div>
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+
 <!-- // Event Content and slider -->
 <div id="content-parent" class="w100p col-sm-12">
     <!-- Distance search filter -->
@@ -116,6 +129,16 @@
     <span class="medium-text-bold color-almost-white letter-spc-plus-4">` it was a friday afternoon in the middle of june `</span>
 </div>
 
+<!-- Swiper JS -->
+<script type="text/javascript" src="scripts/vendor/swiper.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+var swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    paginationClickable: true
+});
+</script>
 
 <!-- GA Tracking -->
 <script>
