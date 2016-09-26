@@ -4,8 +4,8 @@ require_once("db/__db_sel.php");
 require_once("db/__db_connex.php");
 
 // Do whatever it takes to grab a lat / lon to use as anchor
-$maxResults = set($_POST['maxResults'])
-	? $_POST['maxResults']
+$maxResults = set($_GET['maxResults'])
+	? $_GET['maxResults']
 	: LIMIT_MAX_SHOWS_PER_PAGE;
 
 // Where we'll store any place within a X mile radius
@@ -20,7 +20,7 @@ $query =
 	"DATE_FORMAT(events.ymd_date,'%a %M %e') AS nice_date " .
 	"FROM events " . 
 	"INNER JOIN venues ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
-	"WHERE ymd_date = '{$show_date}' " .
+	"WHERE ymd_date >= '{$show_date}' " .
 	"AND media != '' " .
 	"GROUP BY events.eventid " .
 	"ORDER BY ymd_date ASC " .
@@ -33,9 +33,5 @@ $statement = $dblink->prepare($query);
 $statement->execute();
 $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-// Parse through results adding a blank 
-// foreach ($results as $row) {
-// 	//pr($row);
-// }
 echo json_encode($results);
 ?>

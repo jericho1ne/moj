@@ -16,7 +16,6 @@ var Venues = {
      * options = { maxResults, coords (lat/lon), maxDistance }
      */
     getShows: function(options) {
-
         // Always set a default for maxResults limiter
         if (typeof options.maxResults === 'undefined') {
             options.maxResults = 10;
@@ -38,8 +37,8 @@ var Venues = {
         console.log(" >> getShows >> ");
     
         var requestBody = {
-            type:   "GET",
-            url:    scriptUrl,
+            type: 'GET',
+            url: scriptUrl,
             async: false
         };// End requestBody
 
