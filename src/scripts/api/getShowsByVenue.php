@@ -7,10 +7,7 @@ include_once('EventParser.php');
 // Do whatever it takes to grab a lat / lon to use as anchor
 $maxResults = set($_POST['maxResults'])
 	? $_POST['maxResults']
-	: 1;
-
-// Create new EventParser
-$Events = new EventParser($dblink);
+	: LIMIT_MAX_SHOWS_PER_PAGE;
 
 // Get today's date (and time)
 $boundaryDate = new DateTime();
@@ -23,14 +20,21 @@ $success = false;
 
 // Get shows from today onwards.  
 // Pass in:  format, startDate (defaults to today), max days ahead
-$localEvents = $Events->getEventsFromDb('text', '', $maxResults, 'medium	');
+$localEvents = EventParser::getEventsFromDb(
+	$dblink, 
+	[
+		'format' => 'text', 
+		'startDate' => '', 
+		'maxResults' => $maxResults, 
+		'fieldSet' => 'medium'
+	]
+);
 
 if (count($localEvents)) {
 	$success = true;
 }
 
 // Prepackage data into an array first
-// // echo json_encode
 echo json_encode(utf8ize(
 	array(
 		'success' => $success,

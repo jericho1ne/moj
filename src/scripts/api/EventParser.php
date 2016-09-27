@@ -596,13 +596,10 @@ class EventParser {
 		getEventsFromDb()
 		return events from database
 	*********************************************************************************/
-	public function getEventsFromDb($format = '', $startDate = '', $daysPlus = '', $fieldSet = 'light') {
-		$defaultDate = new DateTime();
-		
-		// If no start date passed, use today's date
-		if ($startDate == "") {
-			// Format start date properly (Y-m-d)
-			$startDate = $defaultDate->format("Y-m-d");
+	public static function getEventsFromDb($dblink, $options) {
+		// Create query params on the fly from `options`
+		foreach ($options as $key => $val) {
+			${$key} = $val;
 		}
 
 		// All db fields
@@ -639,34 +636,54 @@ class EventParser {
 		// Create comma separated string of colums to select on
 		$fields = implode(', ', array_keys($columns));
 
-		// Set the end date
-		$daysPlus = $daysPlus == "" ? 180 : $daysPlus;
-		$endDate = $defaultDate->modify("+{$daysPlus} days")->format("Y-m-d");
-
-		if ($this->dbLink) {
-
+		if ($dblink) {
+			/**
+			 * Set up the query
+			 */
 			$query = "SELECT " . $fields . ", " . 
 				"DATE_FORMAT(ymd_date,'%a %M %e') AS nice_date " . 
-				"FROM events ";
+				"FROM events " .
+				"WHERE ymd_date >= :date_start ";
 
-			// Always place date boundaries, even if we use defaults
-			$query .= " WHERE ymd_date >= :date_start AND ymd_date <= :date_end";
+			// Need a start date regardless of how we limit results
+			$queryStart = set($startDate)
+				? new DateTime($startDate)
+				: new DateTime();
+
+			// If we're limiting based on end date
+			$query .= set($daysPlus)
+				? "AND ymd_date <= :date_end "
+				: "";
 			
 			// Order by (most important first):
 			// - date of show
-			// - existence of image to display
 			// - last modified date 
-			$query .= " ORDER BY ymd_date ASC, media DESC, updated DESC";
+			$query .= "ORDER BY ymd_date ASC, updated DESC ";
 
-			// Prepare SELECT query
-			$stmt = $this->dbLink->prepare($query);
+			// If we're limiting on max results
+			$query .= set($maxResults)
+				? "LIMIT {$maxResults} "
+				: "";
 
-			// Bind start / end dates
-			$stmt->bindParam(':date_start', $startDate, PDO::PARAM_STR);
-			$stmt->bindParam(':date_end', $endDate, PDO::PARAM_STR);
+			/**
+			 * Bind parameters
+			 */
+			$stmt = $dblink->prepare($query);
+			$start = $queryStart->format("Y-m-d");
+			$stmt->bindParam(':date_start', $start, PDO::PARAM_STR);
 
+			if (set($daysPlus)) {
+				// Set the end date
+				$daysPlus = $daysPlus == "" ? 180 : $daysPlus;
+				$endDate = $queryStart->modify("+{$daysPlus} days");
+				// Bind end date
+				$stmt->bindParam(':date_end', $endDate->format("Y-m-d"), PDO::PARAM_STR);
+			}
+
+			/**
+			 * Execute and get results
+			 */
 			$stmt->execute();
-			// Get Results
 			$dataRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			//		DEBUG
@@ -724,7 +741,7 @@ class EventParser {
 			. "WHERE eventid = :event_id ";
 
 		// Prepare SELECT query
-		$stmt = $this->dbLink->prepare($query);
+		$stmt = $dblink->prepare($query);
 
 		// Bind selection params
 		$stmt->bindParam(':event_id', $event_id, PDO::PARAM_STR);

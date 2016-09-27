@@ -15,6 +15,9 @@
  * @param {array} event Object containing all of the related show info
  */
 function lookupArtist(event) {
+    console.log(">>> lookupArtist >>> ");
+    console.log(event);
+
     // Pop up hidden modal
     $('#artistModal').modal('show');
 
@@ -232,29 +235,26 @@ $(document).ready(function() {
      * Default call to grab shows list and display in square thumbnails
      * 
      */
-    Venues.getShows({
-        'maxResults': 1
+    Events.getShows({
+        'maxResults': 20
     })
     // Append shows to DOM, save data to Singleton object(s)
     .then(function(response) { 
         // Check for valid data before continuing
         if (isValidJson(response)) {
-
             var jsonResponse = JSON.parse(response);
 
             if (jsonResponse.success) {
                 // Save Data after rearranging event array keys
                 // (from abbreviated to readable)
                 mojUserState.events = 
-                Events.eventData = 
-                Venues.venuesList =
-                    Events.remapEventArrayKeys(jsonResponse.events);     
+                    Events.eventData = 
+                    Events.expandArrayKeys(jsonResponse.events);     
 
                 // Append shows to DOM
-                Venues.displayShowsByVenue(Venues.venuesList);               
+                Events.displayShows(Events.eventData);               
             }
-        }   
-
+        } // End if valid json
     })
     // Initialize swipe actions, set click listeners
     .then(function() {
@@ -278,23 +278,21 @@ $(document).ready(function() {
                 }
             );
 
-            console.log(eventid);
-            console.log(event);
+            console.log(">>> Clicked on >>>" + eventid);
 
-             // Ensure that user has clicked on an actual link
+            // Ensure that user has clicked on an actual link
             if (event[0] !== undefined && event[0].hasOwnProperty('source')) {
                 // Manually change URL in address bar
                 // window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
                 
                 // Pop up artist info modal
-                lookupArtist(event);
+                lookupArtist(event[0]);
             }
             else {
                 console.log("Could not retrieve eventid " + eventid);
             }
         });
     });// End addEventListener
-
 
     /**
      *
