@@ -236,7 +236,7 @@ $(document).ready(function() {
      * 
      */
     Events.getShows({
-        'maxResults': 20
+        'maxResults': 30
     })
     // Append shows to DOM, save data to Singleton object(s)
     .then(function(response) { 
@@ -261,10 +261,13 @@ $(document).ready(function() {
          //  Initialize Swiper
         var swiper = new Swiper('.swiper-container', {
             pagination: '.swiper-pagination',
-            paginationClickable: true
+            paginationClickable: true,
+            keyboardControl: true,
+            lazyLoading: true,
+            loop: true
         });
 
-        $('.event-tile').on('click', function(e) {
+        $('.event-tile-bottom').on('click', function(e) {
             window.thing = $(this);
             
             // Get the array index of the clicked element

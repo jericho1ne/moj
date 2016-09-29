@@ -144,14 +144,15 @@ var Events = {
         // If we have a photo, show it!
         if (typeof show.media !== undefined && show.media !== '') {
             // console.log(show.media);
-            $eventTile.css('background', 'url(\'' + show.media + '\')');
+            $eventTile.css('background', '#aaa url(\'' + show.media + '\')');
         }
         else {
-            $eventTile.css('background', 'url(\'media/images/no-artist-photo.jpg\')');
+            $eventTile.css('background', '#fefefe url(\'media/images/no-artist-photo.jpg\')');
         }
 
         // Parent div
         $showContent = $('<div>')
+            .attr('data-eventid', eventid)
             .addClass('event-tile-bottom bg-almost-white');
                            
         // Artist
@@ -190,14 +191,16 @@ var Events = {
 
         $colorBar = $('<div>')
             .addClass('event-tile-color-bar small-text white pad-lr-10')
-            .css('background-color', 'rgba(51, 102, 255, 0.9)')
+            .css('background-color', 'rgba(51, 102, 255, 0.8)')
             .html(show.type + ' • ' + show.source);
-        
-        //$showContent.append($faveButton);
-        
+                
         $showContent.append($showArtist);
 
-        $showVenue.append($faveButton);
+        // TODO:  Add functionality to fave Button
+        // that pushes favorite venues towards the 
+        // beginning of search results 
+        // 
+        // $showVenue.append($faveButton);
         $showContent.append($showVenue);
         
         $showContent.append($showDate);
