@@ -84,7 +84,7 @@
 <div id="bg-plate" class="w100p pad10 col-sm-12"></div>
 
 <!-- // Welcome to MoJ -->
-<div id="welcome-msg" class="minh180 pad80 center col-sm-12">
+<div id="welcome-msg" class="minh180 pad80 center col-sm-12 hidden">
     <span class="large-text line-height-200">The most comprehensive source for live music in Los Angeles and surrounding area.</span>
     <span class="center icon-lg"><img src="media/svg/trumpet.svg" alt="Good vibes."></span>
 </div>
@@ -101,6 +101,11 @@
     <!-- Show data goes here -->
     <div id="shows-content" class="row-fluid clearfix">
 
+        <!-- Date -->
+        <div id="event-date" class="large-text debug">
+            Today
+        </div>
+
         <!-- Swiper -->
         <div class="swiper-container">
             <div class="swiper-wrapper" id="swiper-content">
@@ -110,28 +115,34 @@
             <div class="swiper-pagination"></div>
         </div>
 
+        <div id="event-filter" class="debug">
+            [ ----- ]
+        </div>
+
     </div>
 </div>
 
-<!-- // Spacer -->
-<div class="h100 pad40 center col-sm-12">
+<!-- Spacer -->
+<div class="h80 pad20 center col-sm-12">
     &nbsp;
 </div>
 
-<!-- // Contact -->
-<div class="opacity-90 pad20 center col-sm-12 bg-mid-gray">
-    <img src="media/svg/envelope.svg" class="icon-action" id="action-eml" alt="Get in touch" title="Get in touch" />
-    <span id="eml" data-u="enujfoelddimeht" data-dom="moc.liamg"></span>
-</div>
-
-<!-- // Bumper -->
-<div class="opacity-80 pad60 center col-sm-12 bg-mid-gray">
-    <span class="medium-text-bold color-almost-white letter-spc-plus-4">` it was a friday afternoon in the middle of june `</span>
+<!-- Footer -->
+<div id="footer" class="opacity-90 pad20 center col-sm-12 bg-mid-gray">
+    
+    <!-- Contact -->
+    <div>
+        <img src="media/svg/envelope.svg" class="icon-action" id="action-eml" alt="Get in touch" title="Get in touch" />
+        <span id="eml" data-u="enujfoelddimeht" data-dom="moc.liamg"></span>
+    </div>
+    <!-- Bumper -->
+    <div class="medium-text-bold color-light-gray pad20 letter-spc-plus-4">
+        ` it was a friday afternoon in the middle of june `
+    </div>
 </div>
 
 <!-- Swiper JS -->
 <script type="text/javascript" src="scripts/vendor/swiper.min.js"></script>
-
 
 <!-- GA Tracking -->
 <script>
