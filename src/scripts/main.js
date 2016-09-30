@@ -264,8 +264,21 @@ $(document).ready(function() {
             paginationClickable: true,
             keyboardControl: true,
             lazyLoading: true,
-            loop: true
+            loop: true,
+            onSlideChangeEnd: function() {
+                console.log(' >> onSlideChangeEnd');
+
+                eventid = $('.swiper-slide-active .event-tile').data('eventid');
+                event = Events.getEventByKeyValue('eventid', eventid);
+                
+                $('#event-date').html(event.nice_date);
+                console.log(event);
+            },
+            onReachEnd: function() {console.log('onReachEnd');},
+            onReachBeginning: function() {console.log('onReachBeginning');}, 
+
         });
+        window.swiper = swiper;
 
         $('.event-tile-bottom').on('click', function(e) {
             window.thing = $(this);

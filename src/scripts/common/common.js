@@ -6,7 +6,7 @@
  * Helper functions
  */
 
-function isEmpty(obj) {
+function isEmptyObject(obj) {
   return $.isEmptyObject(obj); 
 }
 
@@ -36,6 +36,12 @@ function flattenObject(obj) {
   var newHTML = [];
   var newHTML = $.map(obj, function(value) {
       return(value);
+  });
+}
+
+function searchArrayKeyValue(list, key, value) {
+  return list.filter(function(eachObject) {
+     return eachObject[key] == value;
   });
 }
 

@@ -31,12 +31,10 @@ if (count($eventDetail)) {
 
 // Prepackage data into an array first
 // // echo json_encode
-echo json_encode(utf8ize(
-	array(
-		'success' => $success,
-		'events' => $eventDetail
-	)
-));
+echo json_encode([
+	'success' => $success,
+	'events' => $eventDetail
+]);
 
 // FORMAT
 /* 

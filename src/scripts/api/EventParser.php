@@ -655,6 +655,8 @@ class EventParser {
 				? "AND ymd_date <= :date_end "
 				: "";
 			
+			$query .= "AND type='Live Show' AND media != '' ";
+
 			// Order by (most important first):
 			// - date of show
 			// - last modified date 

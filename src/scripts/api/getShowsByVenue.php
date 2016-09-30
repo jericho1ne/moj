@@ -9,6 +9,8 @@ $maxResults = set($_POST['maxResults'])
 	? $_POST['maxResults']
 	: LIMIT_MAX_SHOWS_PER_PAGE;
 
+// $maxResults = 50;
+
 // Get today's date (and time)
 $boundaryDate = new DateTime();
 
@@ -35,12 +37,10 @@ if (count($localEvents)) {
 }
 
 // Prepackage data into an array first
-echo json_encode(utf8ize(
-	array(
-		'success' => $success,
-		'events' => $localEvents
-	)
-));
+echo json_encode([
+	'success' => $success,
+	'events' => $localEvents
+]);
 
 // // Search for shows on the following date
 // $show_date = date("Y-m-d");

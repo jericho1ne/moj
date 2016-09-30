@@ -244,10 +244,8 @@ var Events = {
         });// End getEvents $.ajax
     },// End getEvents
 
-
     getEventByKeyValue: function(key, value) {
-        // console.log(' >> getEventByKeyValue ' + key + '||' + value);
-        if (!isEmpty(key) && !isEmpty(value)) {
+        if (!isBlank(key) && !isBlank(value)) {
             for (var i=0; i< this.eventData.length; i++) {
                 if (this.eventData[i][key] == value) {
                     return this.eventData[i];
@@ -539,7 +537,7 @@ var Events = {
         var artistInfo = '#' + divId;
 
         // Display artist/show photo
-        if (!isEmpty(event.media)) {
+        if (!isBlank(event.media)) {
             // Set the img tag    
             $('#artist-photo').addClass('relative');
             $('#artist-photo').html('<a href="' + event.url + '">' 
@@ -553,7 +551,7 @@ var Events = {
         }
 
         // Artist photo + name caption
-        if (!isEmpty(event.artist)) {
+        if (!isBlank(event.artist)) {
             $photoCaption = $('<span>')
                 .addClass('photo-caption absolute')
                 .html(event.artist);
@@ -563,7 +561,7 @@ var Events = {
         $('#artist-bio').empty();        // MOVE THIS TO MODAL RESET METHOD
 
         // Event Description
-        if (!isEmpty(event.description)) {
+        if (!isBlank(event.description)) {
             // Arbitrary limit on how much biography text to show
             var maxCharsInBio = 450;
 
@@ -617,7 +615,7 @@ var Events = {
 
     appendShowDetail: function(event) {
         // Display artist/show photo
-        if (!isEmpty(event.media)) {
+        if (!isBlank(event.media)) {
             $('#artist-photo').empty();
 
             // Set the img tag    
@@ -626,7 +624,7 @@ var Events = {
         }
 
         // Bio exists, append content to modal
-        if (!isEmpty(event.description)) {
+        if (!isBlank(event.description)) {
             var artistBio = event.description;
 
             $('#artist-bio').empty();        // MOVE THIS TO MODAL RESET METHOD
