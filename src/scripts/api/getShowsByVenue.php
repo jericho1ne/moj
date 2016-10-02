@@ -4,30 +4,50 @@ require_once("db/__db_sel.php");
 require_once("db/__db_connex.php");
 include_once('EventParser.php');
 
-// Do whatever it takes to grab a lat / lon to use as anchor
+
+// Get today's date (and time)
+$defaultDate = new DateTime();
+
+
+/**
+ * SET DEFAULTS IF VALUES NOT PROVIDED
+ * - maxResults: limits the query
+ * - startDate: sets a specific start date 
+ * - daysChange: 
+	 */
 $maxResults = set($_POST['maxResults'])
 	? $_POST['maxResults']
 	: LIMIT_MAX_SHOWS_PER_PAGE;
 
+$startDate = set($_POST['startDate'])
+	? $_POST['startDate']
+	: $defaultDate->format("Y-m-d");
+
+$daysChange = set($_POST['daysChange'])
+	? $_POST['daysChange']
+	: 0;
+
 // $maxResults = 50;
 
-// Get today's date (and time)
-$boundaryDate = new DateTime();
-
-// Format for start date
-$startDate = $boundaryDate->format("Y-m-d");
+if ($daysChange != 0) {
+	$startDate = date(
+		'Y-m-d', 
+		strtotime($startDate. "+" . (int)$daysChange . " days")
+	);
+}
 
 // Set result to false by default
 $success = false;
 
 // Get shows from today onwards.  
-// Pass in:  format, startDate (defaults to today), max days ahead
+// Pass in:  format, startDate (defaults to today)
 $localEvents = EventParser::getEventsFromDb(
 	$dblink, 
 	[
 		'format' => 'text', 
-		'startDate' => '', 
-		'maxResults' => $maxResults, 
+		'startDate' => $startDate, 
+		'maxResults' => $maxResults,
+		'daysChange' => $daysChange,
 		'fieldSet' => 'medium'
 	]
 );

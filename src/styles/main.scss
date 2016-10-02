@@ -118,6 +118,7 @@ body {
 }
 .event-tile-bottom {
 	position: absolute;
+	cursor: pointer;
 	border-radius: 4px;
 	width: auto;
 	max-width: 94%;
@@ -129,6 +130,9 @@ body {
 	box-shadow: 0 0 0 #888,0 -3px 38px rgba(0, 0, 0, .4);
 	background-color: rgba(240,240,240,0.96);
 	overflow: hidden;
+}
+.event-tile-bottom:hover {
+	background-color: rgba(240,240,240,1);
 }
 .event-tile-color-bar {
 	position: relative;

@@ -11,6 +11,10 @@ var Events = {
     dataFolder: 'data/',
     eventsJSON: 'events.json',
 
+    // selectors
+    DIV_eventFilter: '#event-filter',
+    DIV_swiperContent: '#swiper-content',
+
     // Where the PHP scripts are located
     baseFolder: 'scripts/api/',
 
@@ -47,9 +51,12 @@ var Events = {
 
         // Default to using the most basic query
         var postData = {
+            'startDate': options.startDate,
+            'daysChange': options.daysChange,
             'maxResults': options.maxResults
         };
 
+        console.log(postData);
         // If extra params passed in for geolocation query
         if (typeof options.coords !== 'undefined' ||
             typeof options.maxDistance !== 'undefined'
@@ -102,7 +109,7 @@ var Events = {
         }
       
         // $('#' + CONTENT_DIV).empty();
-        $('#swiper-content').empty();
+        $(Events.DIV_swiperContent).empty();
 
         $(shows).each(function() {
             // Check whether this Venue has been added to our favorites yet
@@ -124,7 +131,7 @@ var Events = {
 
             // Incrementally append to DOM
             //$('#' + CONTENT_DIV).append($bootstrapParent);
-            $('#swiper-content').append($bootstrapParent);
+            $(Events.DIV_swiperContent).append($bootstrapParent);
         });
     }, // End displayShows
 
@@ -236,6 +243,70 @@ var Events = {
             }
         });
     }, // End function addShowDetailClickListener
+
+    addQuickFilters: function() {
+        // Clear existing filters
+        $(Events.DIV_eventFilter).empty();
+        // Add search filters 
+        if (Events.eventData.unique("price").contains("free")) {
+            // <button class="priceButton" id="action-weekend">Weekend</button>
+            $freePriceTag = $('<button>')
+                .addClass('filterTag toggle-button')
+                .attr('data-type', 'price')
+                .attr('data-filtervalue', 'free')
+                .attr('data-mode', 'off')
+                .html('free');
+
+            $(Events.DIV_eventFilter).append($freePriceTag);
+        }
+        // Add `neighborhood` search filter
+        // if () {
+            
+        // }
+        
+        // If at least one filter was added to DOM, set a click listener
+        if ($('.filterTag').length) {
+            $('.filterTag').on('click', function() {
+                console.log(" (+) filterTag clicked!");
+                var filterBy = $(this).data('type');
+                var filterValue = $(this).data('filtervalue');
+                var filterMode = $(this).data('mode');
+
+                if (!isBlank(filterBy) && !isBlank(filterValue)) {
+                    swiper.removeAllSlides();
+
+                    if (filterBy === 'price') {
+                        window.thing = $(this);
+
+                        if (filterMode === 'off') {
+                            console.log("filter mode OFF");
+
+                            trimmedData = Events.eventData.pluckIfKeyValueExists('price', filterValue);
+                            Events.displayShows(trimmedData);
+                            $(this).data('mode', 'on');
+                            $(this).toggleClass('toggle-button-active');
+                        }
+                        else {
+                            console.log("filter mode ON");
+
+                            Events.displayShows(Events.eventData);
+                            $(this).data('mode', 'off');
+                            $(this).toggleClass('toggle-button-active');
+                        }
+                    }
+                    else if (filterBy === 'neighborhood') {
+                        Events.eventData.pluckIfKeyValueExists('neighborhood', filterValue);
+                    }
+
+                    // Re-add all click listeners that were previously cleared
+                    //window.swiper.update();
+                    Events.addShowDetailClickListener();
+
+                } // End if filter values exist
+                
+            }); // End clicked on a filter tag  
+        } // End if at least one search filter exists
+    },
 
     /**
      * getEvents

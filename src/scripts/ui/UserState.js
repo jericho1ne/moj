@@ -47,9 +47,9 @@ var UserState = (function() {
             
             // Public methods and variables
             publicMethod: function () {
-                console.log( "The public can see me!" );
+                console.log( "Public Method." );
             },
-            publicProperty: "I am also public",
+            currentlyDisplayedDate: '',
             
 
             /**

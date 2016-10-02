@@ -652,7 +652,7 @@ class EventParser {
 				"FROM events " .
 					"INNER JOIN venues ".
 					"ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
-				"WHERE ymd_date >= :date_start ";
+				"WHERE ymd_date = :date_start ";
 
 			// Need a start date regardless of how we limit results
 			$queryStart = set($startDate)
@@ -675,7 +675,7 @@ class EventParser {
 			$query .= set($maxResults)
 				? "LIMIT {$maxResults} "
 				: "";
-
+		
 			/**
 			 * Bind parameters
 			 */

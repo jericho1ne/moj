@@ -108,7 +108,6 @@ function lookupArtist(event) {
     });
 }// End lookupArtist
 
-
 /**
  * startEventLookup(event)
  * Events / Artist info promise chain
@@ -149,6 +148,124 @@ function startEventLookup(event) {
         });
 }// End startEventLookup
 
+function updateSwiperDate() {
+    console.log(' >> swiper.onSlidePrev/NextEnd()');
+
+    eventid = $('.swiper-slide-active .event-tile').data('eventid');
+    show = Events.getEventByKeyValue('eventid', eventid);
+
+    // Set date display
+    $('#event-date').html(show.nice_date);
+
+    // Save date in UserState object
+    UserState.currentlyDisplayedDate = show.ymd_date;
+}
+
+/**
+ * Initialize the Swiper
+ * @param {string} Selector of DOM element that will contain the swiper
+ */
+function swiperInit(swiperSelector) {
+    //  Initialize Swiper
+    var swiper = new Swiper(swiperSelector, {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        keyboardControl: true,
+        lazyLoading: true,
+        onClick: function () {
+            swiper.slideNext();
+        },
+        loop: false,
+        onInit: function() {
+            console.log(' >> swiper.onInit()');
+            eventid = $('.swiper-slide-active .event-tile').data('eventid');
+            show = Events.getEventByKeyValue('eventid', eventid);
+            
+            // Set date display
+            $('#event-date').html(show.nice_date);
+
+            // Save date in UserState object
+            UserState.currentlyDisplayedDate = show.ymd_date;
+        },
+        onSlideNextEnd: updateSwiperDate(),
+        onSlideNextEnd: updateSwiperDate(),
+        onReachEnd: function() {
+            console.log('onReachEnd');
+
+            // Query the next day's worth of events
+            getItStartedRight({
+                'startDate': UserState.currentlyDisplayedDate,
+                'daysChange': 1, // Advance one day
+                'maxResults': 3
+            });
+        },
+        onReachBeginning: function() {
+            console.log('onReachBeginning');
+
+            // TODO: only query for the previous day only if we are sure
+            // that trigger came from a `go to slide` action
+            
+            // // Query the next day's worth of events
+            // getItStartedRight({
+            //     'startDate': UserState.currentlyDisplayedDate,
+            //     'daysChange': -1, // Advance one day
+            //     'maxResults': 3
+            // });
+        }, 
+    });
+    window.swiper = swiper;
+} // End swiperInit
+
+function getItStartedRight(opts) {
+    Events.getShows({
+            'startDate': opts.startDate,
+            'daysChange': opts.daysChange,    // eg: (+)1 or -1
+            'maxResults': opts.maxResults   // Daily limit just to be safe
+        })
+        // Append shows to DOM, save data to Singleton object(s)
+        .then(function(response) { 
+            // Check for valid data before continuing
+            if (isValidJson(response)) {
+                var jsonData = JSON.parse(response);
+               
+                window.jsonData = jsonData;
+                console.log(jsonData);
+
+                if (jsonData.success) {
+                    // Save Data after rearranging event array keys
+                    // (from abbreviated to readable)
+                    Events.eventData = Events.expandArrayKeys(jsonData.events);     
+
+                    // Append shows to DOM
+                    Events.displayShows(Events.eventData);               
+                }
+            } // End if valid json
+        })
+        // Initialize swipe actions, set click listeners
+        .then(function() {
+            
+            // Initialize Swiper if the first time on page
+            if (typeof window.swiper != 'object') {
+                swiperInit('.swiper-container');
+            }
+            // Otherwise, just update content
+            else {
+                window.swiper.update();
+                window.swiper.updateSlidesSize();
+                window.swiper.updateProgress()
+                window.swiper.updatePagination();
+                window.swiper.detachEvents()
+                window.swiper.attachEvents();
+                updateSwiperDate();                
+            }
+
+            // Popup show details on click 
+            Events.addShowDetailClickListener();
+
+            Events.addQuickFilters();
+        }); // Initialize swipe actions, set click listeners
+} // End function getItStartedRight
+
 //
 // document.ready
 //
@@ -160,8 +277,6 @@ $(document).ready(function() {
     // User State Global
     var mojUserState = UserState.getInstance();
 
-    window.mojUS = mojUserState;
-
     // Set background plate
     $('#bg-plate').css(
         'background', 
@@ -169,10 +284,10 @@ $(document).ready(function() {
     );
 
     /**
-     *
+     * FOR OLD DATATABLE
      * Get list of shows, display them, set click listeners on each Artist
-     * 
      */
+    /*
     $('#something-something').on('click', function() {
         Events.getEvents(1)
             // Return events $.ajax request
@@ -188,8 +303,6 @@ $(document).ready(function() {
 
                     // JSON data will go into shows-content div
                     Events.displayEvents(Events.eventData, CONTENT_DIV);
-
-                    //window.location.href.split('#');  
                 }
                 else {
                     if (typeof (events === 'undefined') || !events.length) {
@@ -228,123 +341,16 @@ $(document).ready(function() {
                 });// End addEventListener
             });// End add datatable click listener
     }); // End get list of shows, display them, set click listeners on each Artist
-
+    */
 
     /** 
-     *
-     * Default call to grab shows list and display in square thumbnails
-     * 
+     * Grab shows and display them in swipeable thumbnails
      */
-    Events.getShows({
-        'maxResults': 30
-    })
-    // Append shows to DOM, save data to Singleton object(s)
-    .then(function(response) { 
-        // Check for valid data before continuing
-        if (isValidJson(response)) {
-            var jsonResponse = JSON.parse(response);
-            window.jsonResponse = jsonResponse;
-
-            if (jsonResponse.success) {
-                // Save Data after rearranging event array keys
-                // (from abbreviated to readable)
-                mojUserState.events = 
-                    Events.eventData = 
-                    Events.expandArrayKeys(jsonResponse.events);     
-
-                // Append shows to DOM
-                Events.displayShows(Events.eventData);               
-            }
-        } // End if valid json
-    })
-    // Initialize swipe actions, set click listeners
-    .then(function() {
-         //  Initialize Swiper
-        var swiper = new Swiper('.swiper-container', {
-            pagination: '.swiper-pagination',
-            paginationClickable: true,
-            keyboardControl: true,
-            lazyLoading: true,
-            loop: true,
-            onSlideChangeEnd: function() {
-                console.log(' >> onSlideChangeEnd');
-
-                eventid = $('.swiper-slide-active .event-tile').data('eventid');
-                event = Events.getEventByKeyValue('eventid', eventid);
-                
-                $('#event-date').html(event.nice_date);
-                console.log(event);
-            },
-            onReachEnd: function() {console.log('onReachEnd');},
-            onReachBeginning: function() {console.log('onReachBeginning');}, 
-
-        });
-        window.swiper = swiper;
-
-        Events.addShowDetailClickListener();
-
-        // Add `price` search filter if useful 
-        if (Events.eventData.unique("price").contains("free")) {
-            $('#event-filter').html();
-
-            // <button class="priceButton" id="action-weekend">Weekend</button>
-            $freePriceTag = $('<button>')
-                .addClass('filterTag toggle-button')
-                .attr('data-type', 'price')
-                .attr('data-filtervalue', 'free')
-                .attr('data-mode', 'off')
-                .html('free');
-
-            $('#event-filter').append($freePriceTag);
-        }
-        // Add `neighborhood` search filter if useful
-        // if () {
-            
-        // }
-        
-        // If at least one filter was added to DOM, set a click listener
-        if ($('.filterTag').length) {
-            $('.filterTag').on('click', function() {
-                console.log("clicked!");
-                var filterBy = $(this).data('type');
-                var filterValue = $(this).data('filtervalue');
-                var filterMode = $(this).data('mode');
-
-                if (!isBlank(filterBy) && !isBlank(filterValue)) {
-                    swiper.removeAllSlides();
-
-                    if (filterBy === 'price') {
-                        window.thing = $(this);
-
-                        if (filterMode === 'off') {
-                            console.log("filter mode OFF");
-
-                            trimmedData = Events.eventData.pluckIfKeyValueExists('price', filterValue);
-                            Events.displayShows(trimmedData);
-                            $(this).data('mode', 'on');
-                            $(this).toggleClass('toggle-button-active');
-                        }
-                        else {
-                            console.log("filter mode ON");
-
-                            Events.displayShows(Events.eventData);
-                            $(this).data('mode', 'off');
-                            $(this).toggleClass('toggle-button-active');
-                        }
-                    }
-                    else if (filterBy === 'neighborhood') {
-                        Events.eventData.pluckIfKeyValueExists('neighborhood', filterValue);
-                    }
-                    // Re-add all click listeners that were previously cleared
-                    window.swiper.update();
-                    Events.addShowDetailClickListener();
-
-                } // End if filter values exist
-                
-            }); // End clicked on a filter tag  
-        } // End if at least one search filter exists
-        
-    }); // Initialize swipe actions, set click listeners
+    getItStartedRight({
+        'startDate': '',
+        'daysChange': '',
+        'maxResults': 3
+    });
 
     /**
      *
