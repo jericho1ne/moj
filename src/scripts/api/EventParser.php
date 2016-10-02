@@ -603,7 +603,7 @@ class EventParser {
 		}
 
 		// All db fields
-		$columns = array(
+		$eventColumns = [
 			'eventid' => 'e_id',
 			'source' => 'src',
 			'ymd_date' => 'd_ymd',
@@ -619,30 +619,39 @@ class EventParser {
 			// Extra heavy stuff
 			'media' => 'img',
 			'description' => 'dsc',
-		);
+		];
+
+		$venueColumns = [
+			'city' => 'ct',
+			'neighborhood' => 'nh',
+			// 'address' => 'ad',
+		];
 
 		// Grab limited field set by default
 		if ($fieldSet == 'light') {
-			unset($columns['updated']);
-			unset($columns['media']);
-			unset($columns['description']);
+			unset($eventColumns['updated']);
+			unset($eventColumns['media']);
+			unset($eventColumns['description']);
 		}
 		// Grab limited field set by default
 		else if ($fieldSet == 'medium') {
-			unset($columns['updated']);
-			unset($columns['description']);
+			unset($eventColumns['updated']);
+			unset($eventColumns['description']);
 		}
 
-		// Create comma separated string of colums to select on
-		$fields = implode(', ', array_keys($columns));
-
+		// Create comma separated string of columns to select on
+		$eventFields = 'events.' . implode(', events.', array_keys($eventColumns));
+		$venueFields = 'venues.' . implode(', venues.', array_keys($venueColumns));
+		
 		if ($dblink) {
 			/**
 			 * Set up the query
 			 */
-			$query = "SELECT " . $fields . ", " . 
+			$query = "SELECT " . $eventFields . ", " . $venueFields . ", " .
 				"DATE_FORMAT(ymd_date,'%a %M %e') AS nice_date " . 
 				"FROM events " .
+					"INNER JOIN venues ".
+					"ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
 				"WHERE ymd_date >= :date_start ";
 
 			// Need a start date regardless of how we limit results
@@ -652,15 +661,15 @@ class EventParser {
 
 			// If we're limiting based on end date
 			$query .= set($daysPlus)
-				? "AND ymd_date <= :date_end "
+				? "AND events.ymd_date <= :date_end "
 				: "";
 			
-			$query .= "AND type='Live Show' AND media != '' ";
+			$query .= "AND events.type='Live Show' AND events.media != '' ";
 
 			// Order by (most important first):
 			// - date of show
 			// - last modified date 
-			$query .= "ORDER BY ymd_date ASC, updated DESC ";
+			$query .= "ORDER BY events.ymd_date ASC, events.updated DESC ";
 
 			// If we're limiting on max results
 			$query .= set($maxResults)
@@ -693,13 +702,14 @@ class EventParser {
 		
 			// Slim down the payload
 			$eventsSimplified = [];
+			$columnMap = array_merge($eventColumns, $venueColumns);
 
 			foreach ($dataRows as $event) {
 				$e = [];
 				foreach ($event as $k => $v) {
 					// Remap keys using the abbreviations
 					if ($k !== 'nice_date') {
-						$e[$columns[$k]] = $v;
+						$e[$columnMap[$k]] = $v;
 					}
 					else {
 						$e['d_fmt'] = $v;
@@ -717,7 +727,7 @@ class EventParser {
 		}// End if db link is set
 	}
 
-	public function getSingleEventFromDb($event_id) {
+	public static function getSingleEventFromDb($dblink, $event_id) {
 		// All db fields
 		$columns = array(
 			// 'eventid' => 'e_id',

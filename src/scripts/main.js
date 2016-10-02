@@ -236,7 +236,7 @@ $(document).ready(function() {
      * 
      */
     Events.getShows({
-        'maxResults': 30
+        'maxResults': 10
     })
     // Append shows to DOM, save data to Singleton object(s)
     .then(function(response) { 

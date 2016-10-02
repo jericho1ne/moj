@@ -592,10 +592,9 @@ var Events = {
 
     getShowDetails: function (eventid) {
         var _this = this;
-
-        return $.ajax({
+        var request = {
             type: 'POST',
-            url: _this.baseFolder + _this.eventDetail,
+            url: Events.baseFolder + Events.eventDetail,
             data: 'eid=' + eventid,
             dataType : 'json',
             // Success callback will fire even when couple with an external $.done
@@ -609,9 +608,9 @@ var Events = {
                 var msg = 'Unable to load Show details for <b>event #' + eventid + '</b>';
                 console.log(msg + '<br>' + errorMsg + '(' + errorCode + ')');
             }
-        });// End topTracksXHR $.ajax 
-
-    },
+        };
+        return $.ajax(request);// End topTracksXHR $.ajax 
+    }, // End getShowDetails
 
     appendShowDetail: function(event) {
         // Display artist/show photo
@@ -955,7 +954,9 @@ var Events = {
                 'type': data[i].typ,
                 'price': data[i].prc,
                 'url': data[i].url,
-                'media': data[i].img
+                'media': data[i].img,
+                'city': data[i].ct,
+                'neighborhood': data[i].nh,
             });
         }// End for loop mapping array keys
         return newData;

@@ -6,9 +6,6 @@ include_once('EventParser.php');
 
 error_reporting(E_ALL);
 
-// Create new EventParser
-$Events = new EventParser($dblink);
-
 // Get today's date (and time)
 $boundaryDate = new DateTime();
 
@@ -23,7 +20,7 @@ $event_id = intval($_POST['eid']);
 // $event_id = "768";
 
 // Get detailed show info for the given event id 
-$eventDetail = $Events->getSingleEventFromDb($event_id);
+$eventDetail = EventParser::getSingleEventFromDb($event_id);
 
 if (count($eventDetail)) {
 	$success = true;

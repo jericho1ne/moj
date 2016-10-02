@@ -5,6 +5,22 @@
  *
  * Helper functions
  */
+Array.prototype.contains = function(value) {
+    for (var i = 0; i < this.length; i++) {
+        if(this[i] === value) return true;
+    }
+    return false;
+};
+
+Array.prototype.unique = function(key) {
+    var arr = [];
+    for (var i = 0; i < this.length; i++) {
+        if (!arr.contains(this[i][key])) {
+            arr.push(this[i][key]);
+        }
+    }
+    return arr; 
+}
 
 function isEmptyObject(obj) {
   return $.isEmptyObject(obj); 
