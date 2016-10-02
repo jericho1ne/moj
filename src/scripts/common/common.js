@@ -7,11 +7,12 @@
  */
 Array.prototype.contains = function(value) {
     for (var i = 0; i < this.length; i++) {
-        if(this[i] === value) return true;
+        if (this[i] === value) {
+          return true;
+        }
     }
     return false;
-};
-
+}
 Array.prototype.unique = function(key) {
     var arr = [];
     for (var i = 0; i < this.length; i++) {
@@ -20,6 +21,11 @@ Array.prototype.unique = function(key) {
         }
     }
     return arr; 
+}
+Array.prototype.pluckIfKeyValueExists = function(key, value) {
+  return this.filter(function(eachObject) {
+     return eachObject[key] == value;
+  });
 }
 
 function isEmptyObject(obj) {
@@ -52,12 +58,6 @@ function flattenObject(obj) {
   var newHTML = [];
   var newHTML = $.map(obj, function(value) {
       return(value);
-  });
-}
-
-function searchArrayKeyValue(list, key, value) {
-  return list.filter(function(eachObject) {
-     return eachObject[key] == value;
   });
 }
 

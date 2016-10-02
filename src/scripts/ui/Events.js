@@ -212,6 +212,31 @@ var Events = {
         return $eventTile;
     },
 
+    addShowDetailClickListener: function() {
+        // Initialize bootstrap detailed info popup
+        $('.event-tile-bottom').on('click', function(e) {  
+            // Get the array index of the clicked element
+            var eventid = $(this).data('eventid');
+
+            // Find the eventid in the array
+            var event = Events.eventData.pluckIfKeyValueExists('eventid', eventid);
+           
+            console.log(">>> Clicked on >>>" + eventid);
+
+            // Ensure that user has clicked on an actual link
+            if (event[0] !== undefined && event[0].hasOwnProperty('source')) {
+                // Manually change URL in address bar
+                // window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
+                
+                // Pop up artist info modal
+                lookupArtist(event[0]);
+            }
+            else {
+                console.log("Could not retrieve eventid " + eventid);
+            }
+        });
+    }, // End function addShowDetailClickListener
+
     /**
      * getEvents
      * list of events, bounded by certain input parameters
@@ -942,7 +967,6 @@ var Events = {
 
         // Time to remap array keys!
         for (var i = 0, max = data.length; i < max; i++) {
-            console.log(data[i]);
             newData.push({
                 'eventid': data[i].e_id,
                 'source': data[i].src,

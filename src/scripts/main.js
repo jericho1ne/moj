@@ -281,50 +281,70 @@ $(document).ready(function() {
         });
         window.swiper = swiper;
 
-        // Initialize bootstrap detailed info popup
-        $('.event-tile-bottom').on('click', function(e) {
-            window.thing = $(this);
-            
-            // Get the array index of the clicked element
-            var eventid = $(this).data('eventid');
+        Events.addShowDetailClickListener();
 
-            // Find the eventid in the array
-            var event = $.grep(
-                mojUserState.events, 
-                function(e){ 
-                    return e.eventid == eventid; 
-                }
-            );
-
-            console.log(">>> Clicked on >>>" + eventid);
-
-            // Ensure that user has clicked on an actual link
-            if (event[0] !== undefined && event[0].hasOwnProperty('source')) {
-                // Manually change URL in address bar
-                // window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
-                
-                // Pop up artist info modal
-                lookupArtist(event[0]);
-            }
-            else {
-                console.log("Could not retrieve eventid " + eventid);
-            }
-        });
-
-        // Add search filters 
+        // Add `price` search filter if useful 
         if (Events.eventData.unique("price").contains("free")) {
             $('#event-filter').html();
-            $freePriceTag = $('<div>')
-                .addClass('debug')
-                .html('(free button)');
+
+            // <button class="priceButton" id="action-weekend">Weekend</button>
+            $freePriceTag = $('<button>')
+                .addClass('filterTag toggle-button')
+                .attr('data-type', 'price')
+                .attr('data-filtervalue', 'free')
+                .attr('data-mode', 'off')
+                .html('free');
 
             $('#event-filter').append($freePriceTag);
-
-
         }
-
+        // Add `neighborhood` search filter if useful
+        // if () {
+            
+        // }
         
-    });// End addEventListener
+        // If at least one filter was added to DOM, set a click listener
+        if ($('.filterTag').length) {
+            $('.filterTag').on('click', function() {
+                console.log("clicked!");
+                var filterBy = $(this).data('type');
+                var filterValue = $(this).data('filtervalue');
+                var filterMode = $(this).data('mode');
+
+                if (!isBlank(filterBy) && !isBlank(filterValue)) {
+                    swiper.removeAllSlides();
+
+                    if (filterBy === 'price') {
+                        window.thing = $(this);
+
+                        if (filterMode === 'off') {
+                            console.log("filter mode OFF");
+
+                            trimmedData = Events.eventData.pluckIfKeyValueExists('price', filterValue);
+                            Events.displayShows(trimmedData);
+                            $(this).data('mode', 'on');
+                            $(this).toggleClass('toggle-button-active');
+                        }
+                        else {
+                            console.log("filter mode ON");
+
+                            Events.displayShows(Events.eventData);
+                            $(this).data('mode', 'off');
+                            $(this).toggleClass('toggle-button-active');
+                        }
+                    }
+                    else if (filterBy === 'neighborhood') {
+                        Events.eventData.pluckIfKeyValueExists('neighborhood', filterValue);
+                    }
+                    // Re-add all click listeners that were previously cleared
+                    window.swiper.update();
+                    Events.addShowDetailClickListener();
+
+                } // End if filter values exist
+                
+            }); // End clicked on a filter tag  
+        } // End if at least one search filter exists
+        
+    }); // Initialize swipe actions, set click listeners
 
     /**
      *
