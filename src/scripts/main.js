@@ -281,6 +281,7 @@ $(document).ready(function() {
         });
         window.swiper = swiper;
 
+        // Initialize bootstrap detailed info popup
         $('.event-tile-bottom').on('click', function(e) {
             window.thing = $(this);
             
@@ -309,6 +310,20 @@ $(document).ready(function() {
                 console.log("Could not retrieve eventid " + eventid);
             }
         });
+
+        // Add search filters 
+        if (Events.eventData.unique("price").contains("free")) {
+            $('#event-filter').html();
+            $freePriceTag = $('<div>')
+                .addClass('debug')
+                .html('(free button)');
+
+            $('#event-filter').append($freePriceTag);
+
+
+        }
+
+        
     });// End addEventListener
 
     /**
