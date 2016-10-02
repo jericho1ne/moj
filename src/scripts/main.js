@@ -236,13 +236,14 @@ $(document).ready(function() {
      * 
      */
     Events.getShows({
-        'maxResults': 10
+        'maxResults': 30
     })
     // Append shows to DOM, save data to Singleton object(s)
     .then(function(response) { 
         // Check for valid data before continuing
         if (isValidJson(response)) {
             var jsonResponse = JSON.parse(response);
+            window.jsonResponse = jsonResponse;
 
             if (jsonResponse.success) {
                 // Save Data after rearranging event array keys

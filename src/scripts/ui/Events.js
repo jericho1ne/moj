@@ -305,7 +305,7 @@ var Events = {
         var prevDate = '';
         
         // Loop through incoming data
-        for (var i in events) {            
+        for (var i = 0, max = events.length; i < max; i++) {            
             // simplify var names
             var eventid = events[i].eventid;
             var nice_date = events[i].nice_date;              
@@ -941,7 +941,8 @@ var Events = {
         var newData = [];
 
         // Time to remap array keys!
-        for (var i in data) {
+        for (var i = 0, max = data.length; i < max; i++) {
+            console.log(data[i]);
             newData.push({
                 'eventid': data[i].e_id,
                 'source': data[i].src,
