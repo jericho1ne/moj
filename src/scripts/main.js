@@ -15,8 +15,8 @@
  * @param {array} event Object containing all of the related show info
  */
 function lookupArtist(event) {
-    console.log(">>> lookupArtist >>> ");
-    console.log(event);
+    // console.log(">>> lookupArtist >>> ");
+    // console.log(event);
 
     // Pop up hidden modal
     $('#artistModal').modal('show');
@@ -148,19 +148,6 @@ function startEventLookup(event) {
         });
 }// End startEventLookup
 
-function updateSwiperDate() {
-    console.log(' >> swiper.onSlidePrev/NextEnd()');
-
-    eventid = $('.swiper-slide-active .event-tile').data('eventid');
-    show = Events.getEventByKeyValue('eventid', eventid);
-
-    // Set date display
-    $('#event-date').html(show.nice_date);
-
-    // Save date in UserState object
-    UserState.currentlyDisplayedDate = show.ymd_date;
-}
-
 /**
  * Initialize the Swiper
  * @param {string} Selector of DOM element that will contain the swiper
@@ -169,51 +156,89 @@ function swiperInit(swiperSelector) {
     //  Initialize Swiper
     var swiper = new Swiper(swiperSelector, {
         pagination: '.swiper-pagination',
-        paginationClickable: true,
+        paginationClickable: false,
         keyboardControl: true,
         lazyLoading: true,
         onClick: function () {
             swiper.slideNext();
         },
         loop: false,
+
+        // Stuff to do upon slider creation
         onInit: function() {
-            console.log(' >> swiper.onInit()');
             eventid = $('.swiper-slide-active .event-tile').data('eventid');
             show = Events.getEventByKeyValue('eventid', eventid);
-            
-            // Set date display
-            $('#event-date').html(show.nice_date);
-
+        
             // Save date in UserState object
             UserState.currentlyDisplayedDate = show.ymd_date;
-        },
-        onSlideNextEnd: updateSwiperDate(),
-        onSlideNextEnd: updateSwiperDate(),
-        onReachEnd: function() {
-            console.log('onReachEnd');
 
-            // Query the next day's worth of events
-            getItStartedRight({
-                'startDate': UserState.currentlyDisplayedDate,
-                'daysChange': 1, // Advance one day
-                'maxResults': 3
-            });
+            // Set date display
+            Events.updateEventDate();
         },
-        onReachBeginning: function() {
-            console.log('onReachBeginning');
 
-            // TODO: only query for the previous day only if we are sure
-            // that trigger came from a `go to slide` action
-            
-            // // Query the next day's worth of events
-            // getItStartedRight({
-            //     'startDate': UserState.currentlyDisplayedDate,
-            //     'daysChange': -1, // Advance one day
-            //     'maxResults': 3
-            // });
-        }, 
+        // If slide changed, might need to reset some stuff
+        // onSlideChangeStart: function() {
+        //     console.log('onSlideChangeStart');
+        // },
+
+        // When moving slider in either direction
+        // onSliderMove: function(swiper, event) {
+        //     // console.log('onSliderMove');
+        // },
+
+        // On Touch events
+        // onTouchStart: function(swiper, event) {
+        //     console.log('onTouchStart');
+        // },
+        
+        // // On start of < / > action
+        // onSlideNextStart: function() {
+        //     console.log('onSlideNextStart');
+        // },
+        // onSlidePrevStart: function() {
+        //     console.log('onSlidePrevStart');
+        // },
+        
+        // Check whether user is attempting to slide at either end
+        onTouchEnd: function(swiper, event) {
+            // console.log('onTouchEnd :: ' + swiper.touches.diff);
+            // console.log('Events.anyQuickFiltersAreOn ? ' + Events.anyQuickFiltersAreOn());
+            // At beginning, time to go back a day
+            if ((swiper.isBeginning || swiper.isEnd) && !Events.anyQuickFiltersAreOn()) {
+                var getShowsOptions = {
+                    'startDate': UserState.currentlyDisplayedDate,
+                    'maxResults': Events.MAX_perDay
+                };
+
+                // If user wants to go back one day
+                if (swiper.isBeginning && swiper.touches.diff > 0) {
+                    getShowsOptions['daysChange'] = -1;
+                    //console.log(' :: going << one day');
+                }
+                // Else if user wants to advance one day
+                else if (swiper.isEnd && swiper.touches.diff < 0) {
+                    getShowsOptions['daysChange'] = 1;
+                    //console.log(' :: going >> one day');
+                }
+
+                // Get new day's show data
+                getItStartedRight(getShowsOptions);
+            }
+        }, // onTouchEnd
+
+        // On end of < / > action
+        // onSlidePrevEnd: (),
+        // onSlideNextEnd: (),
+
+        // End of slide deck
+        // onReachEnd: function() {
+        //     console.log('(x) onReachEnd / reachedSlideEnd ');
+        // },
+        // onReachBeginning: function() {
+        //     console.log('(x) onReachBeginning / reachedSlideStart ');
+        // }, 
     });
-    window.swiper = swiper;
+    window.EventSlider = swiper;
 } // End swiperInit
 
 function getItStartedRight(opts) {
@@ -227,17 +252,13 @@ function getItStartedRight(opts) {
             // Check for valid data before continuing
             if (isValidJson(response)) {
                 var jsonData = JSON.parse(response);
-               
-                window.jsonData = jsonData;
-                console.log(jsonData);
-
                 if (jsonData.success) {
                     // Save Data after rearranging event array keys
                     // (from abbreviated to readable)
-                    Events.eventData = Events.expandArrayKeys(jsonData.events);     
+                    Events.setEventData(jsonData.events);     
 
                     // Append shows to DOM
-                    Events.displayShows(Events.eventData);               
+                    Events.displayShows(Events.getEventData());               
                 }
             } // End if valid json
         })
@@ -245,24 +266,27 @@ function getItStartedRight(opts) {
         .then(function() {
             
             // Initialize Swiper if the first time on page
-            if (typeof window.swiper != 'object') {
+            if (typeof window.EventSlider != 'object') {
                 swiperInit('.swiper-container');
             }
             // Otherwise, just update content
             else {
-                window.swiper.update();
-                window.swiper.updateSlidesSize();
-                window.swiper.updateProgress()
-                window.swiper.updatePagination();
-                window.swiper.detachEvents()
-                window.swiper.attachEvents();
-                updateSwiperDate();                
+                window.EventSlider.update();
+                window.EventSlider.updateSlidesSize();
+                window.EventSlider.updateProgress()
+                window.EventSlider.updatePagination();
+                window.EventSlider.detachEvents()
+                window.EventSlider.attachEvents();
+                window.EventSlider.slideTo(0);                
             }
 
             // Popup show details on click 
             Events.addShowDetailClickListener();
 
             Events.addQuickFilters();
+
+            // Update display date
+            Events.updateEventDate();
         }); // Initialize swipe actions, set click listeners
 } // End function getItStartedRight
 
@@ -275,7 +299,7 @@ $(document).ready(function() {
     var day =  d.getUTCDay(); // Sunday = 0, Sat = 6
 
     // User State Global
-    var mojUserState = UserState.getInstance();
+    mojUserState = UserState.getInstance();
 
     // Set background plate
     $('#bg-plate').css(
@@ -298,11 +322,11 @@ $(document).ready(function() {
                 // Check for valid data before continuing
                 if (eventData.success) {
                     // Save event data to local storage
-                    mojUserState.events = Events.eventData = 
-                        Events.remapEventArrayKeys(eventData.events);
+                    //mojUserState.events = 
+                    Events.setEventData(eventData.events);
 
                     // JSON data will go into shows-content div
-                    Events.displayEvents(Events.eventData, CONTENT_DIV);
+                    Events.displayEvents(Events.getEventData(), CONTENT_DIV);
                 }
                 else {
                     if (typeof (events === 'undefined') || !events.length) {
@@ -349,7 +373,7 @@ $(document).ready(function() {
     getItStartedRight({
         'startDate': '',
         'daysChange': '',
-        'maxResults': 3
+        'maxResults': Events.MAX_perDay
     });
 
     /**
@@ -461,7 +485,7 @@ $(document).ready(function() {
     $('#setPageState').click(function() {
         // Parse the hashtag section from URL
         var lastSection = window.location.href.split("/").pop();
-        console.log(lastSection);
+        // console.log(lastSection);
 
         // Save the last visited page
         setPageState(lastSection);

@@ -664,18 +664,26 @@ class EventParser {
 				? "AND events.ymd_date <= :date_end "
 				: "";
 			
-			$query .= "AND events.type='Live Show' AND events.media != '' ";
+			$query .= "AND events.media != '' ";
 
-			// Order by (most important first):
+			// GROUP BY eventid just in case duplicates were returned 
+			// by the JOIN on venue aliases
+			$query .= "GROUP BY events.eventid ";
+
+			// ORDER BY (most important first):
 			// - date of show
+			// - Live Shows take precendence
 			// - last modified date 
-			$query .= "ORDER BY events.ymd_date ASC, events.updated DESC ";
+			$query .= 
+				"ORDER BY events.ymd_date ASC, " . 
+				"events.type='Live Show' DESC, " .
+				"events.updated DESC ";
 
 			// If we're limiting on max results
 			$query .= set($maxResults)
 				? "LIMIT {$maxResults} "
 				: "";
-		
+
 			/**
 			 * Bind parameters
 			 */

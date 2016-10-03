@@ -548,6 +548,11 @@ select {
 	@include buildRegularFont($font-lg);
 }
 
+#event-date {
+	background-color: $purple-i-like !important;
+	min-height: 50px;
+}
+
 .short-date {
 	opacity: 0.4;
 	letter-spacing: -0.5px;

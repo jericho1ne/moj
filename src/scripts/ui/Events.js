@@ -10,6 +10,7 @@ var Events = {
     // PROPERTIES
     dataFolder: 'data/',
     eventsJSON: 'events.json',
+    MAX_perDay: 50,
 
     // selectors
     DIV_eventFilter: '#event-filter',
@@ -38,6 +39,11 @@ var Events = {
         return this.eventData;
     },// End getEventData
 
+    setEventData: function(rawData) {
+        Events.eventData = [];
+        Events.eventData = Events.expandArrayKeys(rawData);
+    },
+     
     /**
      * getShows
      * list of shows by venue, ordered by distance if lat/lon provided
@@ -56,7 +62,6 @@ var Events = {
             'maxResults': options.maxResults
         };
 
-        console.log(postData);
         // If extra params passed in for geolocation query
         if (typeof options.coords !== 'undefined' ||
             typeof options.maxDistance !== 'undefined'
@@ -91,6 +96,24 @@ var Events = {
         // console.log(">>> ajaxObject >>>"); console.log(ajaxObject);
         return $.ajax(ajaxObject);
     },// End getShows
+
+    updateEventDate: function() {
+        eventid = $('.swiper-slide-active .event-tile').data('eventid');
+        show = Events.getEventByKeyValue('eventid', eventid);
+
+        var dateArray = show.nice_date.split(" ");
+        var dateWeekday = dateArray[0];
+        var dateMonth = dateArray[1];
+        var dateDayOfMonth = dateArray[2];
+
+        // Set date display
+        $('#event-date #dateMonth').html(dateMonth);
+        $('#event-date #dateWeekday').html(dateWeekday);
+        $('#event-date #dateDayOfMonth').html(dateDayOfMonth);
+
+        // Save date in UserState object
+        UserState.currentlyDisplayedDate = show.ymd_date;
+    },
 
     /**
      * Makes use of swipable carousel
@@ -183,7 +206,7 @@ var Events = {
         // Date of show
         $showDate = $('<div>')
             .addClass('block medium-text dk-gray pad-lr-10')
-            .html(show.nice_date);  // ' ' 
+            .html(show.nice_date); 
 
         var locationText = show.city;
 
@@ -219,6 +242,7 @@ var Events = {
         return $eventTile;
     },
 
+
     addShowDetailClickListener: function() {
         // Initialize bootstrap detailed info popup
         $('.event-tile-bottom').on('click', function(e) {  
@@ -228,8 +252,6 @@ var Events = {
             // Find the eventid in the array
             var event = Events.eventData.pluckIfKeyValueExists('eventid', eventid);
            
-            console.log(">>> Clicked on >>>" + eventid);
-
             // Ensure that user has clicked on an actual link
             if (event[0] !== undefined && event[0].hasOwnProperty('source')) {
                 // Manually change URL in address bar
@@ -243,6 +265,21 @@ var Events = {
             }
         });
     }, // End function addShowDetailClickListener
+
+    /**
+     * Check if any of the quick filters are toggled ON
+     * @return {bool} T/F
+     */
+    anyQuickFiltersAreOn: function() {
+        var flag = false;
+        $('.filterTag').each(function() {
+          if ($(this).data('mode') == 'on') { 
+             flag=true;
+             return;
+          }
+        });
+        return flag;
+    },
 
     addQuickFilters: function() {
         // Clear existing filters
@@ -267,28 +304,23 @@ var Events = {
         // If at least one filter was added to DOM, set a click listener
         if ($('.filterTag').length) {
             $('.filterTag').on('click', function() {
-                console.log(" (+) filterTag clicked!");
                 var filterBy = $(this).data('type');
                 var filterValue = $(this).data('filtervalue');
                 var filterMode = $(this).data('mode');
 
                 if (!isBlank(filterBy) && !isBlank(filterValue)) {
-                    swiper.removeAllSlides();
+                    EventSlider.removeAllSlides();
 
                     if (filterBy === 'price') {
                         window.thing = $(this);
 
                         if (filterMode === 'off') {
-                            console.log("filter mode OFF");
-
                             trimmedData = Events.eventData.pluckIfKeyValueExists('price', filterValue);
                             Events.displayShows(trimmedData);
                             $(this).data('mode', 'on');
                             $(this).toggleClass('toggle-button-active');
                         }
                         else {
-                            console.log("filter mode ON");
-
                             Events.displayShows(Events.eventData);
                             $(this).data('mode', 'off');
                             $(this).toggleClass('toggle-button-active');
@@ -299,7 +331,7 @@ var Events = {
                     }
 
                     // Re-add all click listeners that were previously cleared
-                    //window.swiper.update();
+                    EventSlider.update();
                     Events.addShowDetailClickListener();
 
                 } // End if filter values exist
@@ -532,7 +564,6 @@ var Events = {
         // Give the datatable a chance to complete attaching
         setTimeout(function() {
             // Save into class property
-            //this.eventData = $dataTable;
             function leftArrowPressed() {
                 $('.paginate_button.previous').click()
             }
@@ -1035,7 +1066,7 @@ var Events = {
     expandArrayKeys: function(data) {
         // Re-map array keys 
         var newData = [];
-
+        window.data = data;
         // Time to remap array keys!
         for (var i = 0, max = data.length; i < max; i++) {
             newData.push({
@@ -1055,6 +1086,7 @@ var Events = {
                 'neighborhood': data[i].nh,
             });
         }// End for loop mapping array keys
+        window.newData = newData;
         return newData;
     },// End expandArrayKeys
 

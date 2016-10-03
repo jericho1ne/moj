@@ -50,7 +50,10 @@ var UserState = (function() {
                 console.log( "Public Method." );
             },
             currentlyDisplayedDate: '',
-            
+
+            // Keeps track of slider state
+            reachedSlideStart: false,
+            reachedSlideEnd: false,
 
             /**
              * getSavedUserPosition :: returns value stored in singleton object
