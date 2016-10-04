@@ -6,7 +6,7 @@ setlocale(LC_ALL, 'en_US.UTF8');
 date_default_timezone_set('America/Los_Angeles');
 
 // Let's not forget the constants
-require_once("__constants.php");
+require_once("constants.php");
 
 
 //------------------------------------------------------------------------------

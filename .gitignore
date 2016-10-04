@@ -1,10 +1,10 @@
 .DS_Store
 .tmp/
 .ftppass
+__*
 scp.json
 .grunt
 scripts/api/db/*
-__*
 node_modules/
 app/
 data/
