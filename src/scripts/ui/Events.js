@@ -171,6 +171,12 @@ var Events = {
             .attr('data-eventid', eventid)
             .addClass('left event-tile');
 
+        // Used for the swipe gesture event slider
+        $swipeHandler = $('<div>')
+            .addClass('event-swipe-handle h60p');
+        
+        $eventTile.append($swipeHandler);
+
         // If we have a photo, show it!
         if (typeof show.media !== undefined && show.media !== '') {
             // console.log(show.media);
@@ -246,16 +252,20 @@ var Events = {
     addShowDetailClickListener: function() {
         // Initialize bootstrap detailed info popup
         $('.event-tile-bottom').on('click', function(e) {  
+            // Do not allow the click to get misread as a swipe
+            e.stopPropagation();
+
             // Get the array index of the clicked element
             var eventid = $(this).data('eventid');
 
+            console.log(" Get detail for " + eventid);
             // Find the eventid in the array
             var event = Events.eventData.pluckIfKeyValueExists('eventid', eventid);
            
             // Ensure that user has clicked on an actual link
             if (event[0] !== undefined && event[0].hasOwnProperty('source')) {
                 // Manually change URL in address bar
-                // window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
+                window.history.pushState('', 'Event', '#' + event[0].slug);
                 
                 // Pop up artist info modal
                 lookupArtist(event[0]);
@@ -733,6 +743,7 @@ var Events = {
     },// End function displayStaticShowInfo
 
     getShowDetails: function (eventid) {
+        console.log(Events.baseFolder + Events.eventDetail);
         var _this = this;
         var request = {
             type: 'POST',
@@ -748,7 +759,7 @@ var Events = {
                 // Handle error here
                 // TODO:  change to jquery UI modal that autofades and has (X) button
                 var msg = 'Unable to load Show details for <b>event #' + eventid + '</b>';
-                console.log(msg + '<br>' + errorMsg + '(' + errorCode + ')');
+                console.log(msg + ' - ' + errorMsg + '(' + errorCode + ')');
             }
         };
         return $.ajax(request);// End topTracksXHR $.ajax 

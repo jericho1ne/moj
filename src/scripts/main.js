@@ -159,8 +159,9 @@ function swiperInit(swiperSelector) {
         paginationClickable: false,
         keyboardControl: true,
         lazyLoading: true,
+        swipeHandler: '.event-swipe-handle',
         onClick: function () {
-            swiper.slideNext();
+            // swiper.slideNext();
         },
         loop: false,
 
@@ -287,6 +288,16 @@ function getDailyEvents(opts) {
 
             // Update display date
             Events.updateEventDate();
+
+
+            // Parse url for hashtag slug (arrived via sharing link) 
+            var slug = window.location.href.split("#").pop();
+            var searchForEvent = Events.eventData.pluckIfKeyValueExists('slug', slug);
+            if (searchForEvent.length) {
+                lookupArtist(searchForEvent[0]);
+            }
+
+
         }); // Initialize swipe actions, set click listeners
 } // End function getDailyEvents
 
