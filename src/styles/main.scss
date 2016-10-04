@@ -298,19 +298,18 @@ body {
 
 .toggle-button {
 	width: auto;
-	padding: 2px 8px;
+	padding: 3px 8px;
 	vertical-align: middle;
-	top: -2px;
 	outline: none;
-	@include border-radius(4px);
+	@include border-radius(2px);
 	background-color: $gray-mid;
 	color: $almost-white;
-	opacity: 0.88;
+	// opacity: 0.88;
 	margin: 2px;
 	border: 1px solid transparent;
 }
 .toggle-button:hover {
-	color: $gray-xlight;
+	color: $gray-light;
 	outline: none;
 	opacity: 1;
 	transition: all .2s ease-in-out;

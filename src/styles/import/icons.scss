@@ -52,7 +52,7 @@
 	opacity: 1;
 	@include border-radius(2px);
 	margin: 2px;
-	background-color: none;
+	background-color: $gray-mid;
 }
 .icon-action:hover {
 	background-color: $gray-xlight !important;

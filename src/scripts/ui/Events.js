@@ -288,7 +288,7 @@ var Events = {
         if (Events.eventData.unique("price").contains("free")) {
             // <button class="priceButton" id="action-weekend">Weekend</button>
             $freePriceTag = $('<button>')
-                .addClass('filterTag toggle-button xsmall-text')
+                .addClass('filterTag toggle-button small-text')
                 .attr('data-type', 'price')
                 .attr('data-filtervalue', 'free')
                 .attr('data-mode', 'off')
@@ -301,7 +301,7 @@ var Events = {
         var showTypes = Events.eventData.unique("type");
         for (var i = 0, max = showTypes.length; i < max; i++) {
             $showTypeTag = $('<button>')
-                .addClass('filterTag toggle-button xsmall-text')
+                .addClass('filterTag toggle-button small-text')
                 .attr('data-type', 'type')
                 .attr('data-filtervalue', showTypes[i])
                 .attr('data-mode', 'off')
