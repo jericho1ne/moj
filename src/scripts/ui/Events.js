@@ -258,7 +258,6 @@ var Events = {
             // Get the array index of the clicked element
             var eventid = $(this).data('eventid');
 
-            console.log(" Get detail for " + eventid);
             // Find the eventid in the array
             var event = Events.eventData.pluckIfKeyValueExists('eventid', eventid);
            
@@ -328,9 +327,6 @@ var Events = {
                 var filterBy = $(this).data('type');
                 var filterValue = $(this).data('filtervalue');
                 var filterMode = $(this).data('mode');
-
-                console.log(filterBy);
-                console.log(filterValue);
 
                 if (!isBlank(filterBy) && !isBlank(filterValue)) {
                     EventSlider.removeAllSlides();
@@ -743,7 +739,6 @@ var Events = {
     },// End function displayStaticShowInfo
 
     getShowDetails: function (eventid) {
-        console.log(Events.baseFolder + Events.eventDetail);
         var _this = this;
         var request = {
             type: 'POST',
@@ -1092,7 +1087,7 @@ var Events = {
     expandArrayKeys: function(data) {
         // Re-map array keys 
         var newData = [];
-        window.data = data;
+
         // Time to remap array keys!
         for (var i = 0, max = data.length; i < max; i++) {
             newData.push({
@@ -1112,7 +1107,6 @@ var Events = {
                 'neighborhood': data[i].nh,
             });
         }// End for loop mapping array keys
-        window.newData = newData;
         return newData;
     },// End expandArrayKeys
 

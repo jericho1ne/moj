@@ -214,12 +214,10 @@ function swiperInit(swiperSelector) {
                 // If user wants to go back one day
                 if (swiper.isBeginning && swiper.touches.diff > 0) {
                     getShowsOptions['daysChange'] = -1;
-                    //console.log(' :: going << one day');
                 }
                 // Else if user wants to advance one day
                 else if (swiper.isEnd && swiper.touches.diff < 0) {
                     getShowsOptions['daysChange'] = 1;
-                    //console.log(' :: going >> one day');
                 }
 
                 // Get new day's show data
@@ -263,6 +261,10 @@ function getDailyEvents(opts) {
                 }
             } // End if valid json
         })
+        .then(function() {
+            // Parse url for hashtag slug (arrived via sharing link) 
+            var request = parseUrlAction();
+        })
         // Initialize swipe actions, set click listeners
         .then(function() {
             
@@ -288,15 +290,6 @@ function getDailyEvents(opts) {
 
             // Update display date
             Events.updateEventDate();
-
-
-            // Parse url for hashtag slug (arrived via sharing link) 
-            var slug = window.location.href.split("#").pop();
-            var searchForEvent = Events.eventData.pluckIfKeyValueExists('slug', slug);
-            if (searchForEvent.length) {
-                lookupArtist(searchForEvent[0]);
-            }
-
 
         }); // Initialize swipe actions, set click listeners
 } // End function getDailyEvents
