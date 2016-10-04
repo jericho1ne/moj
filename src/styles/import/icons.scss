@@ -47,18 +47,21 @@
 }
 
 .icon-action {
-	width: 54px;
-	height: 44px;
+	width: 44px;
+	height: 36px;
 	opacity: 1;
-	@include border-radius(3px);
+	@include border-radius(2px);
 	margin: 2px;
-	background-color: #fafafa;
-	//border: 3px solid $pink;
+	background-color: none;
 }
 .icon-action:hover {
-	background-color: $lt-blue !important;
-	opacity: .9;
-	transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
+	background-color: $gray-xlight !important;
+	transition: all 0.20s cubic-bezier(0.05, 0.71, 0.66, 0.85);
+}
+.icon-action:active {
+	background-color: $gray-light !important;
+	opacity: 1;
+	transition: all 0.15s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
 
 .icon-link {

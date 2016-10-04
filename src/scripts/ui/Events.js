@@ -288,46 +288,61 @@ var Events = {
         if (Events.eventData.unique("price").contains("free")) {
             // <button class="priceButton" id="action-weekend">Weekend</button>
             $freePriceTag = $('<button>')
-                .addClass('filterTag toggle-button')
+                .addClass('filterTag toggle-button xsmall-text')
                 .attr('data-type', 'price')
                 .attr('data-filtervalue', 'free')
                 .attr('data-mode', 'off')
-                .html('free');
+                .html('Free');
 
             $(Events.DIV_eventFilter).append($freePriceTag);
         }
-        // Add `neighborhood` search filter
-        // if () {
-            
-        // }
+
+        // Add show type filter
+        var showTypes = Events.eventData.unique("type");
+        for (var i = 0, max = showTypes.length; i < max; i++) {
+            $showTypeTag = $('<button>')
+                .addClass('filterTag toggle-button xsmall-text')
+                .attr('data-type', 'type')
+                .attr('data-filtervalue', showTypes[i])
+                .attr('data-mode', 'off')
+                .html(showTypes[i]);
+
+            $(Events.DIV_eventFilter).append($showTypeTag);
+        } // End loop through show type filters
         
-        // If at least one filter was added to DOM, set a click listener
+        /*
+         * At least one filter was added to DOM, set a click listener
+         */ 
         if ($('.filterTag').length) {
             $('.filterTag').on('click', function() {
                 var filterBy = $(this).data('type');
                 var filterValue = $(this).data('filtervalue');
                 var filterMode = $(this).data('mode');
 
+                console.log(filterBy);
+                console.log(filterValue);
+
                 if (!isBlank(filterBy) && !isBlank(filterValue)) {
                     EventSlider.removeAllSlides();
 
-                    if (filterBy === 'price') {
-                        window.thing = $(this);
+                    $('.filterTag').not(this).data('mode', 'off');
+                    $('.filterTag').not(this).removeClass('toggle-button-active', false);
 
-                        if (filterMode === 'off') {
-                            trimmedData = Events.eventData.pluckIfKeyValueExists('price', filterValue);
-                            Events.displayShows(trimmedData);
-                            $(this).data('mode', 'on');
-                            $(this).toggleClass('toggle-button-active');
-                        }
-                        else {
-                            Events.displayShows(Events.eventData);
-                            $(this).data('mode', 'off');
-                            $(this).toggleClass('toggle-button-active');
-                        }
+                    if (filterMode === 'off') {
+                        trimmedEvents = Events.eventData.pluckIfKeyValueExists(filterBy, filterValue);
+
+                        // Update quick filter button UI
+                        $(this).data('mode', 'on');
+                        $(this).toggleClass('toggle-button-active');
+
+                        Events.displayShows(trimmedEvents);
                     }
-                    else if (filterBy === 'neighborhood') {
-                        Events.eventData.pluckIfKeyValueExists('neighborhood', filterValue);
+                    else {
+                        // Update quick filter button UI
+                        $(this).data('mode', 'off');
+                        $(this).toggleClass('toggle-button-active', false);
+
+                        Events.displayShows(Events.eventData);
                     }
 
                     // Re-add all click listeners that were previously cleared

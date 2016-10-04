@@ -33,6 +33,9 @@ $gray-light-border: 1px solid $gray-light;
 .block {
     display: block;
 }
+.flex {
+    display: flex;
+}
 
 .inline-block { 
     position: relative !important; 
@@ -235,6 +238,15 @@ $gray-light-border: 1px solid $gray-light;
 .w80p {
     width: 80%;
 }
+.w60p {
+    width: 60%;
+}
+.w50p {
+    width: 50%;
+}
+.w40p {
+    width: 40%;
+}
 .w88p {
     width: 88%;
 }
@@ -294,6 +306,12 @@ $gray-light-border: 1px solid $gray-light;
 }
 .h40 {
     height: 40px !important;
+}
+.h50 {
+    height: 50px !important;
+}
+.h60 {
+    height: 60px !important;
 }
 .h80 {
     height: 80px !important;

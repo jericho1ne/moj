@@ -303,11 +303,11 @@ body {
 	top: -2px;
 	outline: none;
 	@include border-radius(4px);
+	background-color: $gray-mid;
 	color: $almost-white;
 	opacity: 0.88;
-	margin-left: 2px;
+	margin: 2px;
 	border: 1px solid transparent;
-	
 }
 .toggle-button:hover {
 	color: $gray-xlight;
@@ -549,8 +549,8 @@ select {
 }
 
 #event-date {
-	background-color: $purple-i-like !important;
-	min-height: 50px;
+	// background-color: $purple-i-like !important;
+	// min-height: 50px;
 }
 
 .short-date {

@@ -222,7 +222,7 @@ function swiperInit(swiperSelector) {
                 }
 
                 // Get new day's show data
-                getItStartedRight(getShowsOptions);
+                getDailyEvents(getShowsOptions);
             }
         }, // onTouchEnd
 
@@ -241,7 +241,7 @@ function swiperInit(swiperSelector) {
     window.EventSlider = swiper;
 } // End swiperInit
 
-function getItStartedRight(opts) {
+function getDailyEvents(opts) {
     Events.getShows({
             'startDate': opts.startDate,
             'daysChange': opts.daysChange,    // eg: (+)1 or -1
@@ -288,7 +288,7 @@ function getItStartedRight(opts) {
             // Update display date
             Events.updateEventDate();
         }); // Initialize swipe actions, set click listeners
-} // End function getItStartedRight
+} // End function getDailyEvents
 
 //
 // document.ready
@@ -307,6 +307,23 @@ $(document).ready(function() {
         'url("media/backgrounds/' + BG_PLATES[day] + '") ' + 'no-repeat center bottom scroll'
     );
 
+    $('#arrow-right').on('click', function() {
+        // Get new day's show data
+        getDailyEvents({
+            'startDate': UserState.currentlyDisplayedDate,
+            'maxResults': Events.MAX_perDay,
+            'daysChange': 1
+        });
+    });
+    $('#arrow-left').on('click', function() {
+        // Get new day's show data
+        getDailyEvents({
+            'startDate': UserState.currentlyDisplayedDate,
+            'maxResults': Events.MAX_perDay,
+            'daysChange': -1
+        });
+    });
+    
     /**
      * FOR OLD DATATABLE
      * Get list of shows, display them, set click listeners on each Artist
@@ -370,7 +387,7 @@ $(document).ready(function() {
     /** 
      * Grab shows and display them in swipeable thumbnails
      */
-    getItStartedRight({
+    getDailyEvents({
         'startDate': '',
         'daysChange': '',
         'maxResults': Events.MAX_perDay
