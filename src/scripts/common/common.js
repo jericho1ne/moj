@@ -223,6 +223,13 @@ function getNearbyVenues(position, radius, limit) {
     );
 }
 
+function truncateString(inputString, maxLength) {
+  if (inputString.length > maxLength) {
+    return inputString.substring(0, maxLength) + '...';
+  }
+  return inputString;
+}
+
 /**
  * setPageState
  * save the last web app section visited by user

@@ -312,16 +312,18 @@ var Events = {
         var filtersWidth = 0;
         for (var i = 0, max = showTypes.length; i < max; i++) {
 
-            if (!fuckTheseFilters.contains(showTypes[i]) && !isBlank(showTypes[i])) {
+            if (!isBlank(showTypes[i])
+                // && !fuckTheseFilters.contains(showTypes[i])
+            ) {
                 $showTypeTag = $('<button>')
                     .addClass('filterTag toggle-button small-text')
                     .attr('data-type', 'type')
                     .attr('data-filtervalue', showTypes[i])
                     .attr('data-mode', 'off')
-                    .html(showTypes[i]);
+                    .html(truncateString(showTypes[i], 20));
 
                 $(Events.DIV_eventFilter).append($showTypeTag);
-                filtersWidth += $showTypeTag.outerWidth() + 10;              
+                filtersWidth += $showTypeTag.outerWidth() + 30;              
             }
         } // End loop through show type filters
         
