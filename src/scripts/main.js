@@ -202,7 +202,10 @@ function swiperInit(swiperSelector) {
         
         // Check whether user is attempting to slide at either end
         onTouchEnd: function(swiper, event) {
-            // console.log('onTouchEnd :: ' + swiper.touches.diff);
+            var swipeDistance = swiper.touches.diff;
+
+            console.log('onTouchEnd :: ' + swipeDistance);
+            
             // console.log('Events.anyQuickFiltersAreOn ? ' + Events.anyQuickFiltersAreOn());
             // At beginning, time to go back a day
             if ((swiper.isBeginning || swiper.isEnd) && !Events.anyQuickFiltersAreOn()) {
@@ -211,12 +214,20 @@ function swiperInit(swiperSelector) {
                     'maxResults': Events.MAX_perDay
                 };
 
+                // Set a threshold for swipe "amount"
+                var minSwipeDistance = 100;
+                
                 // If user wants to go back one day
-                if (swiper.isBeginning && swiper.touches.diff > 0) {
+                if (swiper.isBeginning && 
+                    swipeDistance > minSwipeDistance
+                ) {
                     getShowsOptions['daysChange'] = -1;
                 }
                 // Else if user wants to advance one day
-                else if (swiper.isEnd && swiper.touches.diff < 0) {
+                else if (swiper.isEnd && 
+                    swipeDistance < 0 &&
+                    Math.abs(swipeDistance) > minSwipeDistance
+                ) {
                     getShowsOptions['daysChange'] = 1;
                 }
 
@@ -455,7 +466,7 @@ $(document).ready(function() {
 
     $('#action-getposition').click(function() {
         // Append distance slider to toolbar
-        //$('#slider-parent').toggleClass('display-none', false);
+        //$('#slider-parent').toggleClass('hidden', false);
         
         // Fade out slider, remove distance constraint
         if ($('#slider-parent').is(":visible")) {

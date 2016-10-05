@@ -52,16 +52,11 @@
 	opacity: 1;
 	@include border-radius(2px);
 	margin: 2px;
-	background-color: $gray-mid;
+	background-color: $gray-dark;
 }
 .icon-action:hover {
-	background-color: $gray-xlight !important;
+	background-color: $gray-mid !important;
 	transition: all 0.20s cubic-bezier(0.05, 0.71, 0.66, 0.85);
-}
-.icon-action:active {
-	background-color: $gray-light !important;
-	opacity: 1;
-	transition: all 0.15s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
 
 .icon-link {

@@ -93,7 +93,6 @@ var Events = {
                 return Error("Unable to load Event data =(");
             }
         }; // End ajaxObject 
-        // console.log(">>> ajaxObject >>>"); console.log(ajaxObject);
         return $.ajax(ajaxObject);
     },// End getShows
 
@@ -139,7 +138,6 @@ var Events = {
             // TODO:  Need to pass in the array of Favorite Venues, cannot access directly here!
             /*
             if (UserState.faveVenues.filter(function(venue) {
-                   console.log(" >>" + venueId);
                    return venue.id == venueId;
                 }).length === 1) {
                 btnClass = 'btn-active';
@@ -173,13 +171,12 @@ var Events = {
 
         // Used for the swipe gesture event slider
         $swipeHandler = $('<div>')
-            .addClass('event-swipe-handle h60p');
+            .addClass('event-swipe-handle h70p');
         
         $eventTile.append($swipeHandler);
 
         // If we have a photo, show it!
         if (typeof show.media !== undefined && show.media !== '') {
-            // console.log(show.media);
             $eventTile.css('background', '#aaa url(\'' + show.media + '\')');
         }
         else {
@@ -270,7 +267,7 @@ var Events = {
                 lookupArtist(event[0]);
             }
             else {
-                console.log("Could not retrieve eventid " + eventid);
+                console.warn("Could not retrieve eventid " + eventid);
             }
         });
     }, // End function addShowDetailClickListener
@@ -306,19 +303,30 @@ var Events = {
             $(Events.DIV_eventFilter).append($freePriceTag);
         }
 
-        // Add show type filter
+        // If not one of these annoying event types...
+         var fuckTheseFilters = [
+            'Visual Arts, Dance, Live Theater, Music, Educational, Museums/Zoos/Aquariums',
+        ];
+        // Add show type filters
         var showTypes = Events.eventData.unique("type");
+        var filtersWidth = 0;
         for (var i = 0, max = showTypes.length; i < max; i++) {
-            $showTypeTag = $('<button>')
-                .addClass('filterTag toggle-button small-text')
-                .attr('data-type', 'type')
-                .attr('data-filtervalue', showTypes[i])
-                .attr('data-mode', 'off')
-                .html(showTypes[i]);
 
-            $(Events.DIV_eventFilter).append($showTypeTag);
+            if (!fuckTheseFilters.contains(showTypes[i]) && !isBlank(showTypes[i])) {
+                $showTypeTag = $('<button>')
+                    .addClass('filterTag toggle-button small-text')
+                    .attr('data-type', 'type')
+                    .attr('data-filtervalue', showTypes[i])
+                    .attr('data-mode', 'off')
+                    .html(showTypes[i]);
+
+                $(Events.DIV_eventFilter).append($showTypeTag);
+                filtersWidth += $showTypeTag.outerWidth() + 10;              
+            }
         } // End loop through show type filters
         
+        // Expand the filters container div to fit content
+        $(Events.DIV_eventFilter).css('width', filtersWidth + 'px');
         /*
          * At least one filter was added to DOM, set a click listener
          */ 
@@ -649,7 +657,6 @@ var Events = {
                    'api_key=' + LASTFM_API_KEY + '&' +
                    'format=json';
 
-        // console.log(baseUrl + httpGetVars);
 
         //var promise = CACHE[strToLowerNoSpaces(artistName)];
         return $.ajax({
@@ -664,7 +671,7 @@ var Events = {
                     // CACHE[strToLowerNoSpaces(data.artist.name)] = data;
                 }
                 else {
-                    console.log(" (x) No data from Last.fm");
+                    console.warn(" (x) No data from Last.fm");
                     // TODO: fallback to another API
                 }
             },
@@ -754,7 +761,7 @@ var Events = {
                 // Handle error here
                 // TODO:  change to jquery UI modal that autofades and has (X) button
                 var msg = 'Unable to load Show details for <b>event #' + eventid + '</b>';
-                console.log(msg + ' - ' + errorMsg + '(' + errorCode + ')');
+                console.warn(msg + ' - ' + errorMsg + '(' + errorCode + ')');
             }
         };
         return $.ajax(request);// End topTracksXHR $.ajax 
@@ -821,7 +828,7 @@ var Events = {
 
         // Display some placeholder text and image
         if (noInfoOnArtist) {
-            console.log(" ERROR 6: No info on artist. ");
+            console.warn(" ERROR 6: No info on artist. ");
 
             $('#artist-photo').html('<div class="top60">'
                 + '<img src="media/images/no-artist-photo.jpg" class="artist-profile-pic" alt="No artist photo available"</i></div>');
@@ -934,7 +941,7 @@ var Events = {
                 // Handle error here
                 // TODO:  change to jquery UI modal that autofades and has (X) button
                 var msg = 'Unable to load Top tracks for <b>' + + '</b>';
-                console.log(msg + '<br>' + errorMsg + '(' + errorCode + ')');
+                console.warn(msg + '<br>' + errorMsg + '(' + errorCode + ')');
             }
         });// End topTracksXHR $.ajax 
     },// End function getTopTracks
@@ -987,7 +994,7 @@ var Events = {
             }// End if data
         }
         else {
-            console.log("appendTopTracks got no data :'(")
+            console.warn("appendTopTracks got no data :'(")
         }
     },// End function appendTopTracks
 

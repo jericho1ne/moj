@@ -6,11 +6,11 @@ $lazy-blue: #698ED0;
 
 $btn-bg-green: #2A713D;
 
-$gray-xlight: #f4f4f4;
-$gray-light: #ddd;
+$gray-xlight: #DEDEDE;
+$gray-light: #bbb;
 $gray-mid: #aaa;
-$gray-dark: #565656;
-$purple-i-like: #B70FD5;
+$gray-dark: #777;
+$purple-i-like: #E30EEE;
 
 $pink: #D953E5;
 $gold: #DBD12C;
@@ -51,6 +51,9 @@ $inactive-color: 'transparent';
 }
 .bg-dk-gray {
 	background-color: $gray-dark;
+}
+.bg-dk-blue {
+	background-color: $dk-blue;
 }
 .bg-mid-gray {
 	background-color: $gray-mid;

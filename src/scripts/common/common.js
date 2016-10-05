@@ -276,7 +276,6 @@ function reattachListeners() {
 
     // Bookmark favorite venues
     $('.faveButton').on('click', function() {
-    console.log(" venue id " + $(this).data("id"));
 
     // Save this to favorites
     if ($(this).hasClass('btn-inactive')) {
@@ -334,6 +333,7 @@ function parseUrlAction() {
     var host = window.location.host;
     var path = window.location.pathname;
     var request = window.location.href.split('#');
+
     var urlString = request[1];
 
     // See if there was even a hashtag passed in
@@ -349,7 +349,7 @@ function parseUrlAction() {
                 // Allow bootstrap modal to load
                 setTimeout(function() {
                     lookupArtist(requestedEvent);
-                }, 150);
+                }, 250);
             }// End if event info exists
         }// End if slug
         // If other actions to take
@@ -363,7 +363,7 @@ function parseUrlAction() {
                         // Allow bootstrap modal to load
                         setTimeout(function() {
                             lookupArtist(requestedEvent);
-                        }, 150);
+                        }, 250);
                     }// End if event info exists
                     break;
                 case 'venue':

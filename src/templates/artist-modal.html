@@ -83,8 +83,8 @@ $(document).ready(function() {
 		clearDiv('artist-bio', true);
 
 		// Clear URL
- 		var urlArray = document.location.href.split("#");
-		document.location.href = urlArray[0];
+ 		var urlArray = window.location.href.split("#");
+ 		window.history.pushState("", "Middle Of June", urlArray[0]);
 	});
 });
 </script>

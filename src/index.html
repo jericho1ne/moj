@@ -80,65 +80,66 @@
     <!-- <div class="" id="nearby-shows"></div> -->
 </div>
 
-<!-- // Background plate -->
+<!-- Background plate -->
 <div id="bg-plate" class="w100p pad10 col-sm-12"></div>
 
-<!-- // Welcome to MoJ -->
+<!-- Welcome to MoJ -->
 <div id="welcome-msg" class="minh180 pad80 center col-sm-12 hidden">
     <span class="large-text line-height-200">The most comprehensive source for live music in Los Angeles and surrounding area.</span>
     <span class="center icon-lg"><img src="media/svg/trumpet.svg" alt="Good vibes."></span>
 </div>
 
+ <!-- Date -->
+<div class="col-sm-12 flex h50 bg-dk-blue">
+    <div id="event-date" class="w60p">
+        <div id="dateWeekday" class="date-block-xl white">Today</div>
+        <div class="align-left pad8">
+            <span id="dateMonth" class="block align-left line-height-100 date-block-md off-white opacity-60"></span>
+            <span id="dateDayOfMonth" class="block align-left line-height-100 date-block-md off-white opacity-60"></span>
+        </div>
+    </div>
+    <div class="align-right w40p pad4">
+        <img src="media/svg/arrow-left-white.svg" class="icon-action" id="arrow-left" alt="Back one day" title="Back one day">
+        <img src="media/svg/arrow-right-white.svg" class="icon-action" id="arrow-right" alt="Advance one day" title="Advance one day">
+    </div>
+</div>
+
+<!-- Show data goes here -->
+<div id="shows-content" class="row-fluid w100p">
+
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper" id="swiper-content">
+            <div class="swiper-slide">Loading...</div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Scrollable Quick Filters -->
+    <div id="event-filter-outer">
+        <div id="event-filter" class="">
+            
+        </div>
+    </div>
+</div>
+
 <!-- // Event Content and slider -->
 <div id="content-parent" class="w100p col-sm-12">
     <!-- Distance search filter -->
-    <!-- <div id="slider-parent" class="row border display-none">
+    <!-- <div id="slider-parent" class="row border hidden">
         <div class="subtitle col-sm-6 pad20">How far away shall we look?</div>
         <div class="col-sm-6">
             <input id="range-slider" data-slider-id="range-slider-1" type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10" data-slider-enabled="false"/>
         </div>
     </div> -->
-    <!-- Show data goes here -->
-    <div id="shows-content" class="row-fluid clearfix">
-
-        <!-- Date -->
-        <div class="flex h50 margin-top-20 bg-purple-i-like">
-            <div id="event-date" class="w60p">
-                <div id="dateWeekday" class="date-block-xl white">Today</div>
-                <div class="align-left pad8">
-                    <span id="dateMonth" class="block align-left line-height-100 date-block-md off-white opacity-60"></span>
-                    <span id="dateDayOfMonth" class="block align-left line-height-100 date-block-md off-white opacity-60"></span>
-                </div>
-            </div>
-            <div class="align-right w40p pad4">
-                <img src="media/svg/arrow-left-white.svg" class="icon-action" id="arrow-left" alt="Back one day" title="Back one day">
-                <img src="media/svg/arrow-right-white.svg" class="icon-action" id="arrow-right" alt="Advance one day" title="Advance one day">
-            </div>
-        </div>
-
-        <!-- Swiper -->
-        <div class="swiper-container">
-            <div class="swiper-wrapper" id="swiper-content">
-                <div class="swiper-slide">Loading...</div>
-            </div>
-            <!-- Add Pagination -->
-            <div class="swiper-pagination"></div>
-        </div>
-
-        <div id="event-filter" class="">
-            
-        </div>
-
-    </div>
 </div>
 
 <!-- Spacer -->
-<div class="h80 pad20 center col-sm-12">
-    &nbsp;
-</div>
+<div class="h20 pad10 center col-sm-12">&nbsp;</div>
 
 <!-- Footer -->
-<div id="footer" class="opacity-90 pad20 center col-sm-12 bg-mid-gray">
+<div id="footer" class="opacity-90 pad20 center col-sm-12 bg-lt-gray">
     
     <!-- Contact -->
     <div>
@@ -146,7 +147,7 @@
         <span id="eml" data-u="enujfoelddimeht" data-dom="moc.liamg"></span>
     </div>
     <!-- Bumper -->
-    <div class="small-text color-light-gray pad20 letter-spc-plus-4">
+    <div class="small-text color-white pad20 letter-spc-plus-4">
         ` it was a friday afternoon in the middle of june `
     </div>
 </div>
