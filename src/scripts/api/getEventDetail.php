@@ -19,7 +19,7 @@ $event_id = set($_POST['eid'])
     ? intval($_POST['eid'])
     : '';
 
-$event_id = "815";
+// $event_id = "815";
 
 // Get detailed show info for the given event id 
 $eventDetail = EventParser::getSingleEventFromDb($dblink, $event_id);
