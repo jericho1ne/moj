@@ -371,22 +371,15 @@ var Events = {
                     var filterWidth = $(this).width();
                     var viewportMidpoint = $(window).width() / 2;
 
-                    console.log(" > filterWidth " + filterWidth);
-                    console.log(" > filterPos " + filterPos);
-                    console.log(" > viewportMidpoint " + viewportMidpoint);
-
                     // How far off is the filter off the center line
                     var diff = filterPos - viewportMidpoint;
 
                     // Add/Subtract the width of the filter itself
                     diff = (diff > 0)
                         // Off to the right
-                        ? diff + (0.25*filterWidth)
+                        ? diff + (0.3 * filterWidth)
                         // Off to the left
-                        : diff - (0.25*filterWidth);
-
-                    console.log(" > diff " + diff);
-                    console.log(" > ------------------- < ");
+                        : diff - (0.3 * filterWidth);
                 
                     $(Events.DIV_filterOuter).animate(
                         { scrollLeft: '+=' + diff }, 
@@ -823,7 +816,7 @@ var Events = {
             $('#artist-bio').empty();        // MOVE THIS TO MODAL RESET METHOD
 
             // Arbitrary limit on how much biography text to show
-            var maxCharsInBio = 450;
+            var maxCharsInBio = 1200;
             // Remove any links
             var fullBio = artistBio.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
             // Clip bio at preset character max
