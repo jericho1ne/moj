@@ -367,15 +367,29 @@ var Events = {
                     }
 
                     // Center this filter
-                    console.log(event.clientX);
-                    var scrollTo = $(this).left > event.clientX
-                        ? $(this).left - event.clientX
-                        : event.clientX;
-                        
+                    var filterPos = $(this).position().left;
+                    var filterWidth = $(this).width();
+                    var viewportMidpoint = $(window).width() / 2;
+
+                    console.log(" > filterWidth " + filterWidth);
+                    console.log(" > filterPos " + filterPos);
+                    console.log(" > viewportMidpoint " + viewportMidpoint);
+
+                    // How far off is the filter off the center line
+                    var diff = filterPos - viewportMidpoint;
+
+                    // Add/Subtract the width of the filter itself
+                    diff = (diff > 0)
+                        // Off to the right
+                        ? diff + (0.25*filterWidth)
+                        // Off to the left
+                        : diff - (0.25*filterWidth);
+
+                    console.log(" > diff " + diff);
+                    console.log(" > ------------------- < ");
+                
                     $(Events.DIV_filterOuter).animate(
-                        {
-                            scrollLeft: scrollTo
-                        }, 
+                        { scrollLeft: '+=' + diff }, 
                         250
                     );
                    
@@ -388,13 +402,10 @@ var Events = {
             }); // End clicked on a filter tag  
         } // End if at least one search filter exists
 
-        // Set mouseover listener to help with scroll assist 
-        $(Events.DIV_filterOuter).mouseenter(function(e){
-            // var filterTagPos = $('.filterTag').last().position().left;
-            // console.log(e.clientX + ' / ' + e.clientY);
-            // console.log(" >>> scrollTo: " + filterTagPos);
-            $(Events.DIV_filterOuter).animate({scrollLeft: .45 * e.clientX }, 550);
-        }); 
+        // Scroll assist when mouse enters in corner of scrollable div
+        // $(Events.DIV_filterOuter).mouseenter(function(e){
+        //     $(Events.DIV_filterOuter).animate({scrollLeft: .45 * e.clientX }, 550);
+        // }); 
     },
 
     /**
