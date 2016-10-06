@@ -13,7 +13,8 @@ var Events = {
     MAX_perDay: 50,
 
     // selectors
-    DIV_eventFilter: '#event-filter',
+    DIV_filter: '#event-filter',
+    DIV_filterOuter: '#outer-event-filter',
     DIV_swiperContent: '#swiper-content',
 
     // Where the PHP scripts are located
@@ -289,7 +290,7 @@ var Events = {
 
     addQuickFilters: function() {
         // Clear existing filters
-        $(Events.DIV_eventFilter).empty();
+        $(Events.DIV_filter).empty();
         // Add search filters 
         if (Events.eventData.unique("price").contains("free")) {
             // <button class="priceButton" id="action-weekend">Weekend</button>
@@ -300,7 +301,7 @@ var Events = {
                 .attr('data-mode', 'off')
                 .html('Free');
 
-            $(Events.DIV_eventFilter).append($freePriceTag);
+            $(Events.DIV_filter).append($freePriceTag);
         }
 
         // If not one of these annoying event types...
@@ -322,18 +323,22 @@ var Events = {
                     .attr('data-mode', 'off')
                     .html(truncateString(showTypes[i], 20));
 
-                $(Events.DIV_eventFilter).append($showTypeTag);
+                $(Events.DIV_filter).append($showTypeTag);
                 filtersWidth += $showTypeTag.outerWidth() + 30;              
             }
         } // End loop through show type filters
         
         // Expand the filters container div to fit content
-        $(Events.DIV_eventFilter).css('width', filtersWidth + 'px');
+        $(Events.DIV_filter).css('width', filtersWidth + 'px');
         /*
          * At least one filter was added to DOM, set a click listener
          */ 
         if ($('.filterTag').length) {
-            $('.filterTag').on('click', function() {
+
+            // If a search filter was clicked
+            $('.filterTag').on('click', function(event) {
+                window.FT = $(this);
+                window.evt = event;
                 var filterBy = $(this).data('type');
                 var filterValue = $(this).data('filtervalue');
                 var filterMode = $(this).data('mode');
@@ -361,6 +366,19 @@ var Events = {
                         Events.displayShows(Events.eventData);
                     }
 
+                    // Center this filter
+                    console.log(event.clientX);
+                    var scrollTo = $(this).left > event.clientX
+                        ? $(this).left - event.clientX
+                        : event.clientX;
+                        
+                    $(Events.DIV_filterOuter).animate(
+                        {
+                            scrollLeft: scrollTo
+                        }, 
+                        250
+                    );
+                   
                     // Re-add all click listeners that were previously cleared
                     EventSlider.update();
                     Events.addShowDetailClickListener();
@@ -369,6 +387,14 @@ var Events = {
                 
             }); // End clicked on a filter tag  
         } // End if at least one search filter exists
+
+        // Set mouseover listener to help with scroll assist 
+        $(Events.DIV_filterOuter).mouseenter(function(e){
+            // var filterTagPos = $('.filterTag').last().position().left;
+            // console.log(e.clientX + ' / ' + e.clientY);
+            // console.log(" >>> scrollTo: " + filterTagPos);
+            $(Events.DIV_filterOuter).animate({scrollLeft: .45 * e.clientX }, 550);
+        }); 
     },
 
     /**
