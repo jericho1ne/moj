@@ -59,6 +59,12 @@ $font-lg: 22px;
 $font-xl: 32px;
 $font-xxl: 36px;
 
+.overflow-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 // Font Styles
 .large-text {
   @include buildRegularFont($font-lg);

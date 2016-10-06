@@ -203,8 +203,6 @@ function swiperInit(swiperSelector) {
         // Check whether user is attempting to slide at either end
         onTouchEnd: function(swiper, event) {
             var swipeDistance = swiper.touches.diff;
-
-            console.log('onTouchEnd :: ' + swipeDistance);
             
             // console.log('Events.anyQuickFiltersAreOn ? ' + Events.anyQuickFiltersAreOn());
             // At beginning, time to go back a day

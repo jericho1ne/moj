@@ -307,6 +307,9 @@ $gray-light-border: 1px solid $gray-light;
 .h40 {
     height: 40px !important;
 }
+.h40p {
+    height: 40% !important;
+}
 .h50 {
     height: 50px !important;
 }
@@ -324,6 +327,12 @@ $gray-light-border: 1px solid $gray-light;
 }
 .h80 {
     height: 80px !important;
+}
+.h80p {
+    height: 80% !important;
+}
+.h100p {
+    height: 100% !important;
 }
 .h120 {
     height: 120px !important;
@@ -364,14 +373,3 @@ $gray-light-border: 1px solid $gray-light;
 .minh200 {
     min-height: 200px !important;
 }
-
-
-// Heights - %
-.h40p {
-    height: 40% !important;
-}
-.h100p {
-    height: 100% !important;
-}
-
-

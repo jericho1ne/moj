@@ -172,7 +172,7 @@ var Events = {
 
         // Used for the swipe gesture event slider
         $swipeHandler = $('<div>')
-            .addClass('event-swipe-handle h70p');
+            .addClass('event-swipe-handle h100p');
         
         $eventTile.append($swipeHandler);
 
@@ -188,10 +188,10 @@ var Events = {
         $showContent = $('<div>')
             .attr('data-eventid', eventid)
             .addClass('event-tile-bottom bg-almost-white');
-                           
-        // Artist
+                            
+        // Artist (will get cropped by overflow-ellipsis if too long)
         $showArtist = $('<div>')
-            .addClass('block large-text mid-gray pad-lr-10')
+            .addClass('block large-text overflow-ellipsis mid-gray pad-lr-10')
             .html(show.artist);
 
         // Show Venue
