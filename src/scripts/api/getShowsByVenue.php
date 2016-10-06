@@ -14,7 +14,7 @@ $defaultDate = new DateTime();
  * - maxResults: limits the query
  * - startDate: sets a specific start date 
  * - daysChange: 
-	 */
+ */
 $maxResults = set($_POST['maxResults'])
 	? $_POST['maxResults']
 	: LIMIT_MAX_SHOWS_PER_PAGE;
@@ -26,6 +26,10 @@ $startDate = set($_POST['startDate'])
 $daysChange = set($_POST['daysChange'])
 	? $_POST['daysChange']
 	: 0;
+
+$fieldSet = set($_POST['fieldSet'])
+	? $_POST['fieldSet']
+	: 'light';
 
 // $maxResults = 50;
 

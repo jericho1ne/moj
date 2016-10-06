@@ -341,8 +341,7 @@ $(document).ready(function() {
      * FOR OLD DATATABLE
      * Get list of shows, display them, set click listeners on each Artist
      */
-    /*
-    $('#something-something').on('click', function() {
+    $('#action-calendarView').on('click', function() {
         Events.getEvents(1)
             // Return events $.ajax request
             .then(function(data) {
@@ -356,7 +355,7 @@ $(document).ready(function() {
                     Events.setEventData(eventData.events);
 
                     // JSON data will go into shows-content div
-                    Events.displayEvents(Events.getEventData(), CONTENT_DIV);
+                    Events.displayEventsTable(Events.getEventData(), CONTENT_DIV);
                 }
                 else {
                     if (typeof (events === 'undefined') || !events.length) {
@@ -395,7 +394,6 @@ $(document).ready(function() {
                 });// End addEventListener
             });// End add datatable click listener
     }); // End get list of shows, display them, set click listeners on each Artist
-    */
 
     /** 
      * Grab shows and display them in swipeable thumbnails
@@ -532,12 +530,12 @@ $(document).ready(function() {
         // Squeeze down header
         if ($(this).scrollTop() > divHeight) {
             $('#titleHeader').addClass('titleHeader-secondary');
-            $('#mojBannerText').addClass('mojBannerText-secondary');
+            $('#mojBannerText').addClass('mojBannerText-secondary blur');
         }
         // Return to original look
         else if ($(this).scrollTop() < divHeight) {
             $('#titleHeader').removeClass('titleHeader-secondary');
-            $('#mojBannerText').removeClass('mojBannerText-secondary');
+            $('#mojBannerText').removeClass('mojBannerText-secondary blur');
         } 
     });// End window.scroll trigger
 

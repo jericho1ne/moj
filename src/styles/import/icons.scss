@@ -42,7 +42,7 @@
 .icon-action, .icon-link {
 	cursor: pointer;
 	padding: 6px;
-	background-color: rgba(235, 235, 235, 0.88);
+	background-color: $purple-i-like;
 	display: inline-block;
 }
 
@@ -52,7 +52,6 @@
 	opacity: 1;
 	@include border-radius(2px);
 	margin: 2px;
-	background-color: $gray-dark;
 }
 .icon-action:hover {
 	background-color: $gray-mid !important;

@@ -44,6 +44,10 @@ $gray-light-border: 1px solid $gray-light;
     text-align: left;
 }
 
+.auto-expand {
+    display: block;
+    overflow-y: auto;
+}
 
 .center {
     text-align: center;

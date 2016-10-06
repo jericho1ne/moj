@@ -20,7 +20,6 @@ var Events = {
     // Where the PHP scripts are located
     baseFolder: 'scripts/api/',
 
-    eventsAll: 'getEvents.php',
     eventDetail: 'getEventDetail.php',
     getShowsByVenue: 'getShowsByVenue.php',
     getShowsByVenueAndDistance: 'getShowsByVenueAndDistance.php',
@@ -60,7 +59,8 @@ var Events = {
         var postData = {
             'startDate': options.startDate,
             'daysChange': options.daysChange,
-            'maxResults': options.maxResults
+            'maxResults': options.maxResults,
+            'fieldSet': 'medium',
         };
 
         // If extra params passed in for geolocation query
@@ -412,24 +412,25 @@ var Events = {
         // $.ajax method will call resolve() on the deferred it returns
         // when the request completes successfully
         return $.ajax({
-                type: 'POST',
-                url: _this.baseFolder + _this.eventsAll,
-                data: {
-                    'limit': maxResults,
-                },
-                async: false,
-                // Success callback will fire even when coupled with an external $.done
-                success : function(data) {  // data, status, jqXHR
-                    // Save current artist data in global cache
-                    CACHE['eventData'] = data;
-                    return(data);
-                },
-                // if the request fails, deferred.reject() is called
-                error : function(code, message){
-                    // Handle error here
-                    // TODO:  change to jquery UI modal that autofades and has (X) button
-                    return Error("Unable to load Event data =(");
-                }
+            type: 'POST',
+            url: Events.baseFolder + Events.getShowsByVenue,
+            data: {
+                'limit': maxResults,
+                'fieldSet': 'light',
+            },
+            async: false,
+            // Success callback will fire even when coupled with an external $.done
+            success : function(data) {  // data, status, jqXHR
+                // Save current artist data in global cache
+                CACHE['eventData'] = data;
+                return(data);
+            },
+            // if the request fails, deferred.reject() is called
+            error : function(code, message){
+                // Handle error here
+                // TODO:  change to jquery UI modal that autofades and has (X) button
+                return Error("Unable to load Event data =(");
+            }
         });// End getEvents $.ajax
     },// End getEvents
 
@@ -449,10 +450,10 @@ var Events = {
     },// End getEventById
 
     /**
-     * displayEvents
+     * displayEventsTable
      * display events inside the div id we've passed in
      */
-    displayEvents: function(events, divId) {
+    displayEventsTable: function(events, divId) {
        // clear div contents
         $('#' + divId).empty('');
 
@@ -647,7 +648,7 @@ var Events = {
             // return("Event data loaded");
         }, 250);// End setTimeout for key listeners
        
-    },// End displayEvents
+    },// End displayEventsTable
 
     //
     // Artist Bio, Info, Images, and Top tracks
@@ -750,7 +751,7 @@ var Events = {
         // Event Description
         if (!isBlank(event.description)) {
             // Arbitrary limit on how much biography text to show
-            var maxCharsInBio = 450;
+            var maxCharsInBio = 1200;
 
             // Remove any links
             var fullBio = event.description.replace(/<a\b[^>]*>(.*?)<\/a>/i,"");
