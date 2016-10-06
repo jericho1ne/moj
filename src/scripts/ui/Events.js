@@ -377,9 +377,9 @@ var Events = {
                     // Add/Subtract the width of the filter itself
                     diff = (diff > 0)
                         // Off to the right
-                        ? diff + (0.3 * filterWidth)
+                        ? diff + (0.5 * filterWidth)
                         // Off to the left
-                        : diff - (0.3 * filterWidth);
+                        : diff;
                 
                     $(Events.DIV_filterOuter).animate(
                         { scrollLeft: '+=' + diff }, 
