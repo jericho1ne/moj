@@ -99,9 +99,17 @@ var Events = {
 
     updateEventDate: function() {
         eventid = $('.swiper-slide-active .event-tile').data('eventid');
-        show = Events.getEventByKeyValue('eventid', eventid);
 
-        var dateArray = show.nice_date.split(" ");
+        var nice_date = UserState.props.currentDate.nice;
+        var ymd_date = UserState.props.currentDate.ymd;
+
+        if (typeof eventid !== 'undefined' && eventid !== '') {
+            todaysDate = Events.getEventByKeyValue('eventid', eventid).nice_date;
+        }
+    
+        console.log(todaysDate);
+
+        var dateArray = todaysDate.split(" ");
         var dateWeekday = dateArray[0];
         var dateMonth = dateArray[1];
         var dateDayOfMonth = dateArray[2];
@@ -112,14 +120,14 @@ var Events = {
         $('#event-date #dateDayOfMonth').html(dateDayOfMonth);
 
         // Save date in UserState object
-        UserState.currentlyDisplayedDate = show.ymd_date;
+        UserState.props.currentDate.nice = show.ymd_date;
     },
 
     /**
      * Makes use of swipable carousel
      * show us what and where 
      */
-    displayShows: function(shows) {
+    displayShowsInSlider: function(shows) {
         var hasDistance = 
             (typeof shows[0].distance !== 'undefined' && shows[0].distance != '-1');
 
@@ -131,6 +139,10 @@ var Events = {
             });
         }
       
+        // Set the UI button toggle state
+        $('#action-calendarView').data('mode', 'slider');
+        $(this).toggleClass('toggle-button-active', false);
+
         // $('#' + CONTENT_DIV).empty();
         $(Events.DIV_swiperContent).empty();
 
@@ -155,7 +167,7 @@ var Events = {
             //$('#' + CONTENT_DIV).append($bootstrapParent);
             $(Events.DIV_swiperContent).append($bootstrapParent);
         });
-    }, // End displayShows
+    }, // End displayShowsInSlider
 
     buildEventTile: function(show) {
         var hasDistance = 
@@ -356,14 +368,14 @@ var Events = {
                         $(this).data('mode', 'on');
                         $(this).toggleClass('toggle-button-active');
 
-                        Events.displayShows(trimmedEvents);
+                        Events.displayShowsInSlider(trimmedEvents);
                     }
                     else {
                         // Update quick filter button UI
                         $(this).data('mode', 'off');
                         $(this).toggleClass('toggle-button-active', false);
 
-                        Events.displayShows(Events.eventData);
+                        Events.displayShowsInSlider(Events.eventData);
                     }
 
                     // Center this filter
@@ -450,12 +462,16 @@ var Events = {
     },// End getEventById
 
     /**
-     * displayEventsTable
+     * displayEventsInCalendar
      * display events inside the div id we've passed in
      */
-    displayEventsTable: function(events, divId) {
-       // clear div contents
+    displayEventsInCalendar: function(events, divId) {
+        // clear div contents
         $('#' + divId).empty('');
+
+        // Set the UI button toggle state
+        $('#action-calendarView').data('mode', 'calendar')
+        $(this).toggleClass('toggle-button-active', true);
 
         // Start building the datatable container
 
@@ -648,7 +664,7 @@ var Events = {
             // return("Event data loaded");
         }, 250);// End setTimeout for key listeners
        
-    },// End displayEventsTable
+    },// End displayEventsInCalendar
 
     //
     // Artist Bio, Info, Images, and Top tracks

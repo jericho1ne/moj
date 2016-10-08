@@ -2,68 +2,55 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Middle Of June</title>
-    <meta name="description" content="Live shows, Cultural events, Family fun and various free events in and around Los Angeles">
+    <meta name="description" content="Live show and entertainment in Los Angeles">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <!-- external dependencies -->
     <script type="text/javascript" src="scripts/vendor/jquery.min.js"></script>
-    <!-- <script type="text/javascript" src="scripts/vendor/datatables.min.js"></script> -->
-
-<!-- <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css"> -->
-<!-- <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
- -->
- <script type="text/javascript" charset="utf8" src="scripts/vendor/jquery.dataTables.min.js"></script>
-
+    <script type="text/javascript" src="scripts/vendor/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="scripts/vendor/modernizr-custom.min.js"></script>
-    <!-- <script type="text/javascript" src="scripts/vendor/jquery-ui.min.js"></script> -->
     <script type="text/javascript" src="scripts/vendor/bootstrap.min.js"></script>
 
     <!-- firebase for oauth -->
     <!-- <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script> -->
 
-    <!-- stuff i wrote - filerev (cachebuster) will uniquely rename the files below -->
+    <!-- MoJ libraries and modules -->
     <script type="text/javascript" src="scripts/common/constants.js"></script>
     <script type="text/javascript" src="scripts/common/common.js"></script>
-    <script type="text/javascript" src="scripts/main.js"></script>
    <!--  <script type="text/javascript" src="scripts/ui/MapGeo.js"></script> -->
     <script type="text/javascript" src="scripts/ui/UserState.js"></script>
     <script type="text/javascript" src="scripts/ui/Events.js"></script>
+    <script type="text/javascript" src="scripts/moj.events.js"></script>
+    <script type="text/javascript" src="scripts/main.js"></script>
 
     <!-- <script type="text/javascript" src="scripts/ui/YouTube.js"></script> -->
     <!-- <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script> -->
 
-    <!-- jQuery and related -->
-    <!-- <link rel="stylesheet" href="styles/jquery-ui.css">
-    <link rel="stylesheet" href="styles/jquery-ui.structure.css">
-    <link rel="stylesheet" href="styles/jquery-ui.theme.css"> -->
-    <!-- <link rel="stylesheet" href="styles/datatables.bootstrap.css"> -->
     <!-- Bootstrap -->
     <link rel="stylesheet" href="styles/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="styles/bootstrap/bootstrap-theme.css">
     
-    <!-- Swiper -->
-    <!-- <link rel="stylesheet" href="styles/swiper/swiper.css"> -->
-
     <!-- MoJ custom styles and overrides -->
     <link rel="stylesheet" href="styles/main.css">
 </head>
 
 <body>
 
-<!-- // Title header -->
+<!-- Title header -->
 <div id="titleHeader" class="fixed-top container-fluid">
-    <!-- // Background Plate -->
+    <!-- Background Plate -->
     <div class="row center h100p">
-        <div class="col-xs-6" id="mojBannerText">Middle of June</div> 
-        <div class="col-xs-6" id="action-bar">
-            <img src="media/svg/camera.svg" 
-                class="icon-action" 
+        <div class="col-xs-8" id="mojBannerText">Middle of June</div> 
+        <div class="col-xs-4" id="action-bar">
+            <!-- <img src="media/svg/camera.svg" 
+                class="icon-action icon-action" 
                 id="action-imageSlider" 
-                alt="Image Slider" title="Image Slider">
+                alt="Image Slider" title="Image Slider"> -->
             <img src="media/svg/calendar.svg" 
-                class="icon-action" 
-                id="action-calendarView" 
+                class="toggle-button icon-action" 
+                id="action-calendarView"
+                data-mode=""
                 alt="Calendar View" title="Calendar View">
         </div>
     </div>

@@ -1,9 +1,7 @@
 /**
- * @file common.js
- * @author Mihai Peteu <mihai.peteu@gmail.com>
+ * @file common.js Helper functions
+ * @author Mihai Peteu
  * @copyright 2016 Middle of June.  All rights reserved.
- *
- * Helper functions
  */
 Array.prototype.contains = function(value) {
     for (var i = 0; i < this.length; i++) {
@@ -119,35 +117,62 @@ function clearDiv(divId, loading) {
   }
 }
 
+/**
+ * Return date as Y-m-d
+ * @return {string} 
+ */
+function getTodaysDate() {
+  var d = new Date(),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear(),
+    hour = d.getHours();
+
+  var fmtDate = {
+    'day': day.toString(),
+    'hour': hour.toString(),
+  };
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  // Append Y-m-d component
+  fmtDate.ymd = [year, month, day].join('-');
+
+  console.log(fmtDate);
+  return fmtDate;
+}
+
+
 function cleanArtistName(artistName) {
-    var formattedName = String(artistName);
+  var formattedName = String(artistName);
 
-    // Strip unnecessary stuff
-    formattedName.replace('& more', '');
-    formattedName.replace('&more', '');
+  // Strip unnecessary stuff
+  formattedName.replace('& more', '');
+  formattedName.replace('&more', '');
 
-    // Replace spaces w/ pluses
-    formattedName.replace(/ /g, "+");
+  // Replace spaces w/ pluses
+  formattedName.replace(/ /g, "+");
 
-    // Search for "w/" and return both halves,
-    // hoping that one of the two will yield a result
-    if (formattedName.search('w/') !== -1) {
-        //console.log(formattedName);
-        tempArray = formattedName.split('w/');
-        formattedName = [
-            tempArray[0].trim(), 
-            tempArray[1].trim()
-        ];
-        //console.log(formattedName);
-    }
+  // Search for "w/" and return both halves,
+  // hoping that one of the two will yield a result
+  if (formattedName.search('w/') !== -1) {
+      //console.log(formattedName);
+      tempArray = formattedName.split('w/');
+      formattedName = [
+          tempArray[0].trim(), 
+          tempArray[1].trim()
+      ];
+      //console.log(formattedName);
+  }
 
-    // First check whether this artist has an alias
-    if (typeof ARTIST_ALIASES[artistName] !== 'undefined') {
-        formattedName = ARTIST_ALIASES[artistName];
-    }
-    
-    // Replace spaces with +
-    return formattedName;
+  // First check whether this artist has an alias
+  if (typeof ARTIST_ALIASES[artistName] !== 'undefined') {
+      formattedName = ARTIST_ALIASES[artistName];
+  }
+  
+  // Replace spaces with +
+  return formattedName;
 }
 
 /**

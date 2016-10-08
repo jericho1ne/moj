@@ -1,12 +1,8 @@
 /**
- * @file main.js
- * @author Mihai Peteu <mihai.peteu@gmail.com>
+ * @file main.js General methods to load and display show data
+ * @author Mihai Peteu 
  * @copyright 2016 Middle of June.  All rights reserved.
  */
-
-//
-// Methods outside of document.ready
-//
 
 /**
  * lookupArtist(event)
@@ -167,12 +163,15 @@ function swiperInit(swiperSelector) {
 
         // Stuff to do upon slider creation
         onInit: function() {
-            eventid = $('.swiper-slide-active .event-tile').data('eventid');
-            show = Events.getEventByKeyValue('eventid', eventid);
-        
-            // Save date in UserState object
-            UserState.currentlyDisplayedDate = show.ymd_date;
+            // if (UserState.props.currentDate.nice == '')  {
+            //     eventid = $('.swiper-slide-active .event-tile').data('eventid');
+            //     show = Events.getEventByKeyValue('eventid', eventid);
+                
+            //     // Save date in UserState object
+            //     UserState.props.currentDate.nice = show.ymd_date;
+            // }
 
+            console.log(" >> main.js L176");
             // Set date display
             Events.updateEventDate();
         },
@@ -208,7 +207,7 @@ function swiperInit(swiperSelector) {
             // At beginning, time to go back a day
             if ((swiper.isBeginning || swiper.isEnd) && !Events.anyQuickFiltersAreOn()) {
                 var getShowsOptions = {
-                    'startDate': UserState.currentlyDisplayedDate,
+                    'startDate': UserState.props.currentDate.nice,
                     'maxResults': Events.MAX_perDay
                 };
 
@@ -230,7 +229,7 @@ function swiperInit(swiperSelector) {
                 }
 
                 // Get new day's show data
-                getDailyEvents(getShowsOptions);
+                showEventSlider(getShowsOptions);
             }
         }, // onTouchEnd
 
@@ -249,7 +248,7 @@ function swiperInit(swiperSelector) {
     window.EventSlider = swiper;
 } // End swiperInit
 
-function getDailyEvents(opts) {
+function showEventSlider(opts) {
     Events.getShows({
             'startDate': opts.startDate,
             'daysChange': opts.daysChange,    // eg: (+)1 or -1
@@ -266,7 +265,7 @@ function getDailyEvents(opts) {
                     Events.setEventData(jsonData.events);     
 
                     // Append shows to DOM
-                    Events.displayShows(Events.getEventData());               
+                    Events.displayShowsInSlider(Events.getEventData());               
                 }
             } // End if valid json
         })
@@ -276,7 +275,6 @@ function getDailyEvents(opts) {
         })
         // Initialize swipe actions, set click listeners
         .then(function() {
-            
             // Initialize Swiper if the first time on page
             if (typeof window.EventSlider != 'object') {
                 swiperInit('.swiper-container');
@@ -301,242 +299,59 @@ function getDailyEvents(opts) {
             Events.updateEventDate();
 
         }); // Initialize swipe actions, set click listeners
-} // End function getDailyEvents
+} // End function showEventSlider
 
-//
-// document.ready
-//
-$(document).ready(function() {
-    var d = new Date();
-    var hour = d.getHours();
-    var day =  d.getUTCDay(); // Sunday = 0, Sat = 6
+function showEventCalendar() {
+    Events.getEvents(1)
+        // Return events $.ajax request
+        .then(function(data) {
+            // Parse the data into JSON object
+            var eventData = JSON.parse(data);
 
-    // User State Global
-    mojUserState = UserState.getInstance();
+            // Check for valid data before continuing
+            if (eventData.success) {
+                // Save event data to local storage
+                //mojUserState.events = 
+                Events.setEventData(eventData.events);
 
-    // Set background plate
-    $('#bg-plate').css(
-        'background', 
-        'url("media/backgrounds/' + BG_PLATES[day] + '") ' + 'no-repeat center bottom scroll'
-    );
-
-    $('#arrow-right').on('click', function() {
-        // Get new day's show data
-        getDailyEvents({
-            'startDate': UserState.currentlyDisplayedDate,
-            'maxResults': Events.MAX_perDay,
-            'daysChange': 1
-        });
-    });
-    $('#arrow-left').on('click', function() {
-        // Get new day's show data
-        getDailyEvents({
-            'startDate': UserState.currentlyDisplayedDate,
-            'maxResults': Events.MAX_perDay,
-            'daysChange': -1
-        });
-    });
-    
-    /**
-     * FOR OLD DATATABLE
-     * Get list of shows, display them, set click listeners on each Artist
-     */
-    $('#action-calendarView').on('click', function() {
-        Events.getEvents(1)
-            // Return events $.ajax request
-            .then(function(data) {
-                // Parse the data into JSON object
-                var eventData = JSON.parse(data);
-
-                // Check for valid data before continuing
-                if (eventData.success) {
-                    // Save event data to local storage
-                    //mojUserState.events = 
-                    Events.setEventData(eventData.events);
-
-                    // JSON data will go into shows-content div
-                    Events.displayEventsTable(Events.getEventData(), CONTENT_DIV);
+                // JSON data will go into shows-content div
+                Events.displayEventsInCalendar(Events.getEventData(), CONTENT_DIV);
+            }
+            else {
+                if (typeof (events === 'undefined') || !events.length) {
+                    return Error("getEvents - did not receive any data ='(");
                 }
                 else {
-                    if (typeof (events === 'undefined') || !events.length) {
-                        return Error("getEvents - did not receive any data ='(");
-                    }
-                    else {
-                        return Error("getEvents - event data received, but success flag is not set");
-                    }
-                }// End else        
-                
-            })// End events.getEvents().then
-            // Once data is loaded, parse URL for a direct link (after the #)
-            .then(function() {
-                var request = parseUrlAction();
-            })
-            // Add click listener on parent div of show link 
-            // (will bubble up from Datatable)
-            .then(function() {  
-                // https://davidwalsh.name/event-delegate
-                document.getElementById(CONTENT_DIV).addEventListener('click', function(e) {
-                    // Get the array index of the clicked element
-                    var eventid = $(e.target).data('eventid');
-                    var event = mojUserState.events[eventid];
+                    return Error("getEvents - event data received, but success flag is not set");
+                }
+            }// End else        
+            
+        })// End events.getEvents().then
+        // Once data is loaded, parse URL for a direct link (after the #)
+        .then(function() {
+            var request = parseUrlAction();
+        })
+        // Add click listener on parent div of show link 
+        // (will bubble up from Datatable)
+        .then(function() {  
+            // https://davidwalsh.name/event-delegate
+            document.getElementById(CONTENT_DIV).addEventListener('click', function(e) {
+                // Get the array index of the clicked element
+                var eventid = $(e.target).data('eventid');
+                var event = mojUserState.events[eventid];
 
-                    // Ensure that user has clicked on an actual link
-                    if (event !== undefined && event.hasOwnProperty('source')) {
-                        // Manually change URL in address bar
-                        window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
-                        
-                        // Pop up artist info modal
-                        lookupArtist(event);
-                    }
-                    else {
-                        // console.log("Click source is outside an event hit state");
-                    }
-                });// End addEventListener
-            });// End add datatable click listener
-    }); // End get list of shows, display them, set click listeners on each Artist
+                // Ensure that user has clicked on an actual link
+                if (event !== undefined && event.hasOwnProperty('source')) {
+                    // Manually change URL in address bar
+                    window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
+                    
+                    // Pop up artist info modal
+                    lookupArtist(event);
+                }
+                else {
+                    // console.log("Click source is outside an event hit state");
+                }
+            });// End addEventListener
+        });// End add datatable click listener
+}
 
-    /** 
-     * Grab shows and display them in swipeable thumbnails
-     */
-    getDailyEvents({
-        'startDate': '',
-        'daysChange': '',
-        'maxResults': Events.MAX_perDay
-    });
-
-    /**
-     *
-     *  DISTANCE SLIDER
-     * 
-     */ 
-    // $('#range-slider').slider({
-    //     tooltip: 'always',
-    //     formatter: function(value) {
-    //         return value + ' miles';
-    //     }
-    // });
-
-    // // Set slide listener to search for nearby venues on each drag
-    // $("#range-slider").on("slide", function(e) {
-    //     var chosenDistance = e.value;
-    //     // console.log(chosenDistance);
-
-    //     Venues.getShows({
-    //      'coords': mojUserState.getSavedUserPosition(), 
-    //      'maxResults': 10, 
-    //      'maxDistance': chosenDistance
-    //     });
-    //     //$("#ex6SliderVal").text(e.value);
-    // });
-
-    // Asynchronously load modal template
-    $.get('templates/artist-modal.html', function(template) {
-        // Inject all those templates at the end of the document.
-        $('body').append(template);
-    });
-
-    //
-    // XX.  SET LISTENERS
-    //
-    $('#action-eml').click(function() {
-        var emlad = rvStr($("#eml").data("u")) + '@' + rvStr($("#eml").data("dom"));
-        document.location.href = 'ma' + 'il' + 'to' + ':' + emlad;
-    });
-
-    $('#gPlusLogin').click(function() {
-        var ref = new Firebase("https://blinding-torch-6251.firebaseio.com");
-        ref.onAuth(function(authData) {
-            if (authData !== null) {
-                console.log("Login Success!", authData);
-                window.authData = authData;
-            } 
-            else {
-                ref.authWithOAuthRedirect('google', function(error, authData) {
-                    if (error) {
-                        console.log("Problems Houston...", error);
-                    }
-                });// End authWithOAuthRedirect
-            }// End else
-        })// End ref.onAuth
-    });
-
-    $('#action-getposition').click(function() {
-        // Append distance slider to toolbar
-        //$('#slider-parent').toggleClass('hidden', false);
-        
-        // Fade out slider, remove distance constraint
-        if ($('#slider-parent').is(":visible")) {
-             $('#slider-parent').fadeOut(500);
-             // TODO:  remove distance constraint from datatable
-        }
-        // Fade in slider, geolocate
-        else {
-            $('#slider-parent').fadeIn(500);
-            // Get current position and enable distance slider if successful
-            mojUserState.geoLocateUser(10000)   
-                .then(function(position) {
-                    // Immediately store current user position, saving
-                    // lat, lon, and accuracy
-                    mojUserState.setUserPosition(position);
-
-                    // Grab coordinates separately for the first getShows call
-                    var coordinates = {
-                        lat: position.coords.latitude,
-                        lon: position.coords.longitude
-                    };
-
-                    // We have a position to work with, so activate distance slider
-                    if (!isBlank(coordinates.lat)) {
-                        $('#range-slider').slider('enable');
-                    }
-
-                    // Get venues close to us, passing in {lat,lon}, 
-                    // max distance, and the current slider's search radius
-                    Venues.getShows({
-                        'maxResults': 10,
-                        'coords': coordinates, 
-                        'maxDistance': $("#range-slider").val()
-                    });
-                });
-        }// End else case
-
-    });// End action-getposition
-
-
-    $('#getNearbyVenues').click(function() {
-        // Get venues within 25 miles, max 10 results
-        getNearbyVenues(25, 4);
-    });
-
-    // Should be calling set/loadPageState automatically!
-    // 
-    $('#setPageState').click(function() {
-        // Parse the hashtag section from URL
-        var lastSection = window.location.href.split("/").pop();
-        // console.log(lastSection);
-
-        // Save the last visited page
-        setPageState(lastSection);
-    });
-
-
-    //
-    // Replace regular action bar w/ mini action bar upon downward scroll
-    // 
-    $(window).scroll(function(e) { 
-        var divHeight = 75;
-        var $secondaryHeader = $('#secondaryHeader'); 
-
-        // Squeeze down header
-        if ($(this).scrollTop() > divHeight) {
-            $('#titleHeader').addClass('titleHeader-secondary');
-            $('#mojBannerText').addClass('mojBannerText-secondary blur');
-        }
-        // Return to original look
-        else if ($(this).scrollTop() < divHeight) {
-            $('#titleHeader').removeClass('titleHeader-secondary');
-            $('#mojBannerText').removeClass('mojBannerText-secondary blur');
-        } 
-    });// End window.scroll trigger
-
-});// End on Document Load
