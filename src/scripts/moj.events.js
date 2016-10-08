@@ -6,26 +6,24 @@
 $(document).ready(function() {
     var fmtDate = getTodaysDate();
     
-     console.log(fmtDate);
-
-     window.fmtDate = fmtDate;
-
-    // Initialize UserState 
-    mojUserState = UserState.getInstance();
-
     // Set background plate
     $('#bg-plate').css(
         'background', 
         'url("media/backgrounds/' + BG_PLATES[fmtDate.day] + '") ' + 'no-repeat center bottom scroll'
     );
 
+    // Initialize UserState singleton with today's date
+    UserState.init(fmtDate.ymd);
+
     /*
      *      Left / Right Slider arrows
      */
     $('#arrow-right').on('click', function() {
+        var date = UserState.getDisplayedDate();
+
         // Get new day's show data
         showEventSlider({
-            'startDate': UserState.props.currentDate.nice,
+            'startDate': date,
             'maxResults': Events.MAX_perDay,
             'daysChange': 1
         });
@@ -33,7 +31,7 @@ $(document).ready(function() {
     $('#arrow-left').on('click', function() {
         // Get new day's show data
         showEventSlider({
-            'startDate': UserState.props.currentDate.nice,
+            'startDate': date,
             'maxResults': Events.MAX_perDay,
             'daysChange': -1
         });
@@ -126,7 +124,7 @@ $(document).ready(function() {
     //     // console.log(chosenDistance);
 
     //     Venues.getShows({
-    //      'coords': mojUserState.getSavedUserPosition(), 
+    //      'coords': UserState.getSavedUserPosition(), 
     //      'maxResults': 10, 
     //      'maxDistance': chosenDistance
     //     });
@@ -168,11 +166,11 @@ $(document).ready(function() {
     //     else {
     //         $('#slider-parent').fadeIn(500);
     //         // Get current position and enable distance slider if successful
-    //         mojUserState.geoLocateUser(10000)   
+    //         UserState.geoLocateUser(10000)   
     //             .then(function(position) {
     //                 // Immediately store current user position, saving
     //                 // lat, lon, and accuracy
-    //                 mojUserState.setUserPosition(position);
+    //                 UserState.setUserPosition(position);
 
     //                 // Grab coordinates separately for the first getShows call
     //                 var coordinates = {

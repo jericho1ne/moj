@@ -139,10 +139,20 @@ function getTodaysDate() {
   // Append Y-m-d component
   fmtDate.ymd = [year, month, day].join('-');
 
-  console.log(fmtDate);
   return fmtDate;
 }
 
+function formatYmdAsShortDate(ymd_date) {
+  var mDate = moment(ymd_date);
+  // See `tokens` section of http://momentjs.com/docs/#/displaying/format/
+  return {
+    'month': mDate.format('MMM'),
+    'weekday': mDate.format('ddd'),
+    'day': mDate.format('D'),
+    'year': mDate.format('YYYY'),
+    'nice_date': mDate.format('dddd MMM Do'),
+  };
+}
 
 function cleanArtistName(artistName) {
   var formattedName = String(artistName);

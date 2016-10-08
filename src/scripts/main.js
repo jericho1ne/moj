@@ -93,7 +93,7 @@ function lookupArtist(event) {
     $('.modal-title').html(
         (!isBlank(event.artist) ? event.artist + ' @ ' : '') 
         + event.venue 
-        + ' / ' + event.nice_date);
+        + ' / ' + formatYmdAsShortDate(event.ymd_date).nice_date);
 
     // Select all text in sharing link input on click or tap
     $('#share-link input:text').focus(function() { 
@@ -163,15 +163,6 @@ function swiperInit(swiperSelector) {
 
         // Stuff to do upon slider creation
         onInit: function() {
-            // if (UserState.props.currentDate.nice == '')  {
-            //     eventid = $('.swiper-slide-active .event-tile').data('eventid');
-            //     show = Events.getEventByKeyValue('eventid', eventid);
-                
-            //     // Save date in UserState object
-            //     UserState.props.currentDate.nice = show.ymd_date;
-            // }
-
-            console.log(" >> main.js L176");
             // Set date display
             Events.updateEventDate();
         },
@@ -207,7 +198,7 @@ function swiperInit(swiperSelector) {
             // At beginning, time to go back a day
             if ((swiper.isBeginning || swiper.isEnd) && !Events.anyQuickFiltersAreOn()) {
                 var getShowsOptions = {
-                    'startDate': UserState.props.currentDate.nice,
+                    'startDate': UserState.getDisplayedDate(),
                     'maxResults': Events.MAX_perDay
                 };
 

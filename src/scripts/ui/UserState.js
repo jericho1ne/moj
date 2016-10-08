@@ -15,10 +15,8 @@ var UserState = (function() {
   var events = [];
 
   var props = {
-    currentDate: {
-      'ymd': '',
-      'nice': ''
-    },
+    todaysDate: '',
+    displayedDate: '',
     faveVenues: [
         {id: 25, name: 'Echoplex'}, 
         {id: 16, name: 'The Troubadour'}
@@ -43,9 +41,29 @@ var UserState = (function() {
   // Public properties and methods
   //
   return {
-    // Public methods and variables
-    publicMethod: function () {
-        console.log( "Public Method." );
+    /**
+     * Constructor
+     * @param {string} Today's date in Y-m-d format
+     */
+    init: function(todaysDate) {
+      // Assume that we're starting out w/ displaying current day as well
+      this.setTodaysDate(todaysDate);
+      this.setDisplayedDate(todaysDate);
+    },
+
+    // Date getter/setter Functions
+    getTodaysDate: function () {
+      return props.todaysDate;
+    },
+    setTodaysDate: function(date) {
+      window.thisThing = this;
+      props.todaysDate = date;
+    },
+    getDisplayedDate: function () {
+      return props.displayedDate;
+    },
+    setDisplayedDate: function(date) {
+      props.displayedDate = date;
     },
 
     // Keeps track of slider state

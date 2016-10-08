@@ -647,8 +647,7 @@ class EventParser {
 			/**
 			 * Set up the query
 			 */
-			$query = "SELECT " . $eventFields . ", " . $venueFields . ", " .
-				"DATE_FORMAT(ymd_date,'%a %M %e') AS nice_date " . 
+			$query = "SELECT " . $eventFields . ", " . $venueFields . " " .
 				"FROM events " .
 					"INNER JOIN venues ".
 					"ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
@@ -716,12 +715,7 @@ class EventParser {
 				$e = [];
 				foreach ($event as $k => $v) {
 					// Remap keys using the abbreviations
-					if ($k !== 'nice_date') {
-						$e[$columnMap[$k]] = $v;
-					}
-					else {
-						$e['d_fmt'] = $v;
-					}					
+					$e[$columnMap[$k]] = $v;
 				}
 				$eventsSimplified[] = $e;
 			}// End foreach
@@ -811,7 +805,6 @@ class EventParser {
 
 		foreach($this->eventArray as $show) {
 			$text .= '"'.
-			$show["nice_date"].'","'.
 			$show['artist'].'","'.
 			$show['venue'].'","'.
 			$show['url'].'"'.
@@ -900,8 +893,6 @@ class EventParser {
 			"url" 		=> $event['url'],
 			"url2" 		=> $event['url']
 		);
-
-		// pr($eventObject['media']);
 
 		// Map statement column names to event that was passed in
 		$result = $statement->execute($eventObject);

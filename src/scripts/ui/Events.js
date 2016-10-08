@@ -98,29 +98,21 @@ var Events = {
     },// End getShows
 
     updateEventDate: function() {
-        eventid = $('.swiper-slide-active .event-tile').data('eventid');
+        var eventid = $('.swiper-slide-active .event-tile').data('eventid');
 
-        var nice_date = UserState.props.currentDate.nice;
-        var ymd_date = UserState.props.currentDate.ymd;
-
-        if (typeof eventid !== 'undefined' && eventid !== '') {
-            todaysDate = Events.getEventByKeyValue('eventid', eventid).nice_date;
-        }
-    
-        console.log(todaysDate);
-
-        var dateArray = todaysDate.split(" ");
-        var dateWeekday = dateArray[0];
-        var dateMonth = dateArray[1];
-        var dateDayOfMonth = dateArray[2];
-
+        var ymd_date = 
+            (typeof eventid !== 'undefined' && eventid !== '') 
+                ? Events.getEventByKeyValue('eventid', eventid).ymd_date
+                : UserState.getDisplayedDate();
+        
         // Set date display
-        $('#event-date #dateMonth').html(dateMonth);
-        $('#event-date #dateWeekday').html(dateWeekday);
-        $('#event-date #dateDayOfMonth').html(dateDayOfMonth);
+        var dateFormatted = formatYmdAsShortDate(ymd_date);
+        $('#event-date #dateMonth').html(dateFormatted.month);
+        $('#event-date #dateWeekday').html(dateFormatted.weekday);
+        $('#event-date #dateDayOfMonth').html(dateFormatted.day);
 
-        // Save date in UserState object
-        UserState.props.currentDate.nice = show.ymd_date;
+        // Also save date in UserState object
+        UserState.setDisplayedDate(ymd_date);
     },
 
     /**
@@ -173,8 +165,8 @@ var Events = {
         var hasDistance = 
             (typeof show.distance !== 'undefined' && show.distance != '-1');
 
-        venueid = show.id;
-        eventid = show.eventid;
+        var venueid = show.id;
+        var eventid = show.eventid;
 
         btnClass = 'btn-inactive';
 
@@ -222,7 +214,7 @@ var Events = {
         // Date of show
         $showDate = $('<div>')
             .addClass('block medium-text dk-gray pad-lr-10')
-            .html(show.nice_date); 
+            .html(formatYmdAsShortDate(show.ymd_date).nice_date); 
 
         var locationText = show.city;
 
@@ -514,8 +506,8 @@ var Events = {
         for (var i = 0, max = events.length; i < max; i++) {            
             // simplify var names
             var eventid = events[i].eventid;
-            var nice_date = events[i].nice_date;              
             var ymd_date = events[i].ymd_date;
+            var nice_date = formatYmdAsShortDate(ymd_date);              
             var artist = events[i].artist;
             var venue = events[i].venue;
             var title = events[i].title;
@@ -523,11 +515,9 @@ var Events = {
             var price = events[i].price;
             var url = events[i].url;
 
-            // Do date stuff
-            var dateArray = nice_date.split(" ");
-            var weekday = dateArray[0];
-            var month = dateArray[1];
-            var dayofmonth = dateArray[2];
+            var weekday = nice_date.weekday;
+            var month = nice_date.month;
+            var dayofmonth = nice_date.day;
 
             // If the date has changed, it's time for the spacer row with large text
             if (String(prevDate.trim()) != String(ymd_date.trim())) {
@@ -1149,7 +1139,6 @@ var Events = {
             newData.push({
                 'eventid': data[i].e_id,
                 'source': data[i].src,
-                'nice_date': data[i].d_fmt,
                 'ymd_date': data[i].d_ymd,
                 'artist': data[i].a,
                 'venue': data[i].v,

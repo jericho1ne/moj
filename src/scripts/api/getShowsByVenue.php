@@ -72,7 +72,6 @@ echo json_encode([
 // $query = 
 // 	"SELECT events.*, venues.lat, venues.lon, venues.city, " . 
 // 	"'-1' AS distance, " .
-// 	"DATE_FORMAT(events.ymd_date,'%a %M %e') AS nice_date " .
 // 	"FROM events " . 
 // 	"INNER JOIN venues ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
 // 	"WHERE ymd_date >= '{$show_date}' " .
