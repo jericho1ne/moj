@@ -52,32 +52,41 @@ $(document).ready(function() {
     $('#action-calendarView').on('click', function() {
         var viewMode = $(this).data('mode');
         console.log(" >> previous viewMode : " + viewMode);
-        debugger;
-        
+
         // We're in slider view mode, need to change to Calendar
         if (viewMode === 'slider') {
+
             $(this).toggleClass('toggle-button-active', true);
 
             // Drop the slider
             $('#swiper-parent').addClass('hidden');
 
-            // If the first time calendar is being loaded
-            if ($('#' + CALENDAR_DIV).is(':empty')) {
-               showEventCalendar(); 
-            }
-            // For all subsequent times, just unhide it
-            else {
+            // Data previously loaded, unhide Calendar
+            if ($('#' + CALENDAR_DIV).data('loaded')) {
                 $('#' + CALENDAR_DIV).removeClass('hidden');
+            }
+            //  Else, first time loading Calendar
+            else {
+                showEventCalendar(); 
             }
         }
         // We're in Calendar view mode, need to change to Slider
-        else {
+        else if (viewMode === 'calendar') {
             $(this).toggleClass('toggle-button-active', false);
 
-            // Empty existing calendar content, show Slider
             $('#' + CALENDAR_DIV).addClass('hidden');
-            $('#swiper-parent').removeClass('hidden');
-        }
+
+            if ($('#swiper-parent').data('loaded')) {
+                $('#swiper-parent').removeClass('hidden');
+            }
+            else {
+                showEventSlider({
+                    'startDate': '',
+                    'daysChange': '',
+                    'maxResults': Events.MAX_perDay
+                });            
+            } 
+        }// End else in Calendar mode, switch to Slider
     }); // End UI toggle between Calendar and Slider
 
     $('#action-eml').click(function() {

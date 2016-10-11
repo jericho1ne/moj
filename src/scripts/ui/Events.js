@@ -347,7 +347,6 @@ var Events = {
                 if (!isBlank(filterBy) && !isBlank(filterValue)) {
                     EventSlider.removeAllSlides();
 
-                    $('.filterTag').not(this).data('mode', 'off');
                     $('.filterTag').not(this).removeClass('toggle-button-active', false);
 
                     if (filterMode === 'off') {

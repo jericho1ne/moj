@@ -259,7 +259,10 @@ function showEventSlider(opts) {
                     Events.setEventData(jsonData.events);     
 
                     // Append shows to DOM
-                    Events.displayShowsInSlider(Events.getEventData());               
+                    Events.displayShowsInSlider(Events.getEventData()); 
+
+                    // Set loaded flag
+                    $('#swiper-parent').data('loaded', 'true');         
                 }
             } // End if valid json
         })
@@ -296,6 +299,8 @@ function showEventSlider(opts) {
 } // End function showEventSlider
 
 function showEventCalendar() {
+    $('#action-calendarView').data('mode', 'calendar');
+
     Events.getEvents(1)
         // Return events $.ajax request
         .then(function(data) {
