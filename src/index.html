@@ -13,7 +13,6 @@
     <script type="text/javascript" src="scripts/vendor/bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/vendor/moment.min.js"></script>
 
-
     <!-- firebase for oauth -->
     <!-- <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.0.4/firebase.js"></script> -->
 
@@ -101,10 +100,11 @@
     </div>
 </div>
 
-<!-- Show data goes here -->
-<div id="shows-content" class="row-fluid w100p">
+<!-- Calendar datatable -->
+<div id="calendar-content" data-loaded="false" class="row-fluid w100p"></div>
 
-    <!-- Swiper -->
+<!-- Swiper -->
+<div id="swiper-parent" data-loaded="false">
     <div class="swiper-container">
         <div class="swiper-wrapper" id="swiper-content">
             <div class="swiper-slide">Loading...</div>
@@ -112,16 +112,13 @@
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
     </div>
-
     <!-- Scrollable Quick Filters -->
     <div id="outer-event-filter">
-        <div id="event-filter" class="">
-            
-        </div>
+        <div id="event-filter" class=""></div>
     </div>
 </div>
 
-<!-- // Event Content and slider -->
+<!-- Distance slider -->
 <div id="content-parent" class="w100p col-sm-12">
     <!-- Distance search filter -->
     <div id="slider-parent" class="row border hidden">

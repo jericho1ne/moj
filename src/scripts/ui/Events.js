@@ -135,7 +135,6 @@ var Events = {
         $('#action-calendarView').data('mode', 'slider');
         $(this).toggleClass('toggle-button-active', false);
 
-        // $('#' + CONTENT_DIV).empty();
         $(Events.DIV_swiperContent).empty();
 
         $(shows).each(function() {
@@ -150,13 +149,11 @@ var Events = {
             */
             $bootstrapParent = $('<div>')
                 .addClass('swiper-slide');
-                // .addClass('pad-top-10 col-xs-12 col-sm-6 col-md-4 col-lg-3');
-
+    
             $eventTile = Events.buildEventTile(this);
             $bootstrapParent.append($eventTile);
 
             // Incrementally append to DOM
-            //$('#' + CONTENT_DIV).append($bootstrapParent);
             $(Events.DIV_swiperContent).append($bootstrapParent);
         });
     }, // End displayShowsInSlider

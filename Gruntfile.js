@@ -103,7 +103,7 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
 					cwd: '<%= cfg.src %>/scripts/',
-					src: [ 'main.js', 'ui/*.js', 'common/*.js' ],
+					src: [ '*.js', 'ui/*.js', 'common/*.js' ],
 					dest: '<%= cfg.dst %>/scripts/',
 					ext:  '.js'
 				}]
@@ -297,21 +297,9 @@ module.exports = function (grunt) {
 		// all: ['Gruntfile.js', '<%=cfg.src%>/js/**/*.js']
 		//},
 
-		// Watches files for changes and runs tasks based on what's changed
-		//watch: require('./grunt-include/watch'),
-		//browserSync: require('./grunt-include/browserSync'),
-
-
-
 	});// End grunt initcfg
 
-	grunt.registerTask('default', [
-		//'newer:eslint',
-		'build',
-		'test'
-	]);// End register task :: default
-
-	// This is the default Grunt task if you simply run "grunt" in project dir
+	// `grunt build` - full distribution build
 	grunt.registerTask('build', [
 		'clean:all',
 		'sass', // to be replaced by 'concurrent:dist',
@@ -326,6 +314,20 @@ module.exports = function (grunt) {
 		'htmlmin'
 	]);// End register task :: build
 
+	// `grunt build:dev` - no uglify
+	grunt.registerTask('build:dev', [
+		'clean:all',
+		'sass', // to be replaced by 'concurrent:dist',
+		'postcss',
+		'cssmin',
+		
+		// stuff after this task happens in the destination folder
+		'copy:all',	
+		//'uglify',	
+		'filerev:all',
+		'usemin',
+		'htmlmin'
+	]);
 
 	grunt.registerTask('scp', ['scp']);
 

@@ -5,7 +5,7 @@
  */
 $(document).ready(function() {
     var fmtDate = getTodaysDate();
-    
+
     // Set background plate
     $('#bg-plate').css(
         'background', 
@@ -16,14 +16,12 @@ $(document).ready(function() {
     UserState.init(fmtDate.ymd);
 
     /*
-     *      Left / Right Slider arrows
+     *      Set Left / Right Slider arrow actions
      */
     $('#arrow-right').on('click', function() {
-        var date = UserState.getDisplayedDate();
-
         // Get new day's show data
         showEventSlider({
-            'startDate': date,
+            'startDate': UserState.getDisplayedDate(),
             'maxResults': Events.MAX_perDay,
             'daysChange': 1
         });
@@ -31,12 +29,11 @@ $(document).ready(function() {
     $('#arrow-left').on('click', function() {
         // Get new day's show data
         showEventSlider({
-            'startDate': date,
+            'startDate': UserState.getDisplayedDate(),
             'maxResults': Events.MAX_perDay,
             'daysChange': -1
         });
     });
-
 
     /** 
      *      Event Slider
@@ -48,30 +45,38 @@ $(document).ready(function() {
         'maxResults': Events.MAX_perDay
     });
 
-
-
-    
     /**
      *      Calendar View
      *          Get list of shows, display them, set click listeners on each Artist
      */
     $('#action-calendarView').on('click', function() {
         var viewMode = $(this).data('mode');
-        console.log(" >> viewMode : " + viewMode);
+        console.log(" >> previous viewMode : " + viewMode);
+        debugger;
         
-        // We're in slider mode, need to change to Calendar
+        // We're in slider view mode, need to change to Calendar
         if (viewMode === 'slider') {
             $(this).toggleClass('toggle-button-active', true);
-            showEventCalendar();
+
+            // Drop the slider
+            $('#swiper-parent').addClass('hidden');
+
+            // If the first time calendar is being loaded
+            if ($('#' + CALENDAR_DIV).is(':empty')) {
+               showEventCalendar(); 
+            }
+            // For all subsequent times, just unhide it
+            else {
+                $('#' + CALENDAR_DIV).removeClass('hidden');
+            }
         }
-        // We're in Calendar mode, need to change to Slider
+        // We're in Calendar view mode, need to change to Slider
         else {
             $(this).toggleClass('toggle-button-active', false);
-            showEventSlider({
-                'startDate': '',
-                'daysChange': '',
-                'maxResults': Events.MAX_perDay
-            });
+
+            // Empty existing calendar content, show Slider
+            $('#' + CALENDAR_DIV).addClass('hidden');
+            $('#swiper-parent').removeClass('hidden');
         }
     }); // End UI toggle between Calendar and Slider
 
@@ -90,12 +95,12 @@ $(document).ready(function() {
         // Squeeze down header
         if ($(this).scrollTop() > divHeight) {
             $('#titleHeader').addClass('titleHeader-secondary');
-            $('#mojBannerText').addClass('mojBannerText-secondary blur');
+            $('#mojBannerText').addClass('mojBannerText-secondary');
         }
         // Return to original look
         else if ($(this).scrollTop() < divHeight) {
             $('#titleHeader').removeClass('titleHeader-secondary');
-            $('#mojBannerText').removeClass('mojBannerText-secondary blur');
+            $('#mojBannerText').removeClass('mojBannerText-secondary');
         } 
     });
 

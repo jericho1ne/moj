@@ -31,7 +31,7 @@ var YOUTUBE_BASE_URL = 'https://www.googleapis.com/youtube/v3/';
 //
 // Data
 // 
-var CONTENT_DIV = 'shows-content';
+var CALENDAR_DIV = 'calendar-content';
 var ARTIST_ALIASES = {
   'House Of Vibe All-Stars': 'House of Vibe Allstars',
   'Bringin\' Down the House': 'Bringing Down The House',

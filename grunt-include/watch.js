@@ -8,14 +8,14 @@ module.exports = {
 	dist: {
 		files: ['<%= cfg.src %>/**/{,*/}*.*'],
 		tasks: [
-			'build', 
+			'build:dev', 
 			//'pushtodev'
 		]
 	},
 	gruntfile: {
 		// options: {livereload: true},
 		files: ['Gruntfile.js'],
-		tasks: ['build']
+		tasks: ['build:dev']
 	},
 	// cssfiles: {
 	// 	// options: {livereload: true},

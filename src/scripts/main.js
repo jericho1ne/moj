@@ -240,6 +240,9 @@ function swiperInit(swiperSelector) {
 } // End swiperInit
 
 function showEventSlider(opts) {
+    console.log('showEventSlider');
+    console.log(opts);
+
     Events.getShows({
             'startDate': opts.startDate,
             'daysChange': opts.daysChange,    // eg: (+)1 or -1
@@ -301,12 +304,15 @@ function showEventCalendar() {
 
             // Check for valid data before continuing
             if (eventData.success) {
-                // Save event data to local storage
+                // TODO: Save event data to local storage
                 //mojUserState.events = 
                 Events.setEventData(eventData.events);
 
-                // JSON data will go into shows-content div
-                Events.displayEventsInCalendar(Events.getEventData(), CONTENT_DIV);
+                // Toggle data attribute of calendar parent
+                $("#" . CALENDAR_DIV).data('loaded', 'true');
+
+                // JSON data will go into present calendar div
+                Events.displayEventsInCalendar(Events.getEventData(), CALENDAR_DIV);
             }
             else {
                 if (typeof (events === 'undefined') || !events.length) {
@@ -326,7 +332,7 @@ function showEventCalendar() {
         // (will bubble up from Datatable)
         .then(function() {  
             // https://davidwalsh.name/event-delegate
-            document.getElementById(CONTENT_DIV).addEventListener('click', function(e) {
+            document.getElementById(CALENDAR_DIV).addEventListener('click', function(e) {
                 // Get the array index of the clicked element
                 var eventid = $(e.target).data('eventid');
                 var event = mojUserState.events[eventid];
