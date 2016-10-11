@@ -240,9 +240,6 @@ function swiperInit(swiperSelector) {
 } // End swiperInit
 
 function showEventSlider(opts) {
-    console.log('showEventSlider');
-    console.log(opts);
-
     Events.getShows({
             'startDate': opts.startDate,
             'daysChange': opts.daysChange,    // eg: (+)1 or -1
@@ -301,7 +298,8 @@ function showEventSlider(opts) {
 function showEventCalendar() {
     $('#action-calendarView').data('mode', 'calendar');
 
-    Events.getEvents(1)
+    // How many days ahead to grab
+    Events.getEvents(60)
         // Return events $.ajax request
         .then(function(data) {
             // Parse the data into JSON object
@@ -314,7 +312,7 @@ function showEventCalendar() {
                 Events.setEventData(eventData.events);
 
                 // Toggle data attribute of calendar parent
-                $("#" . CALENDAR_DIV).data('loaded', 'true');
+                $("#" + CALENDAR_DIV).data('loaded', 'true');
 
                 // JSON data will go into present calendar div
                 Events.displayEventsInCalendar(Events.getEventData(), CALENDAR_DIV);
@@ -333,27 +331,5 @@ function showEventCalendar() {
         .then(function() {
             var request = parseUrlAction();
         })
-        // Add click listener on parent div of show link 
-        // (will bubble up from Datatable)
-        .then(function() {  
-            // https://davidwalsh.name/event-delegate
-            document.getElementById(CALENDAR_DIV).addEventListener('click', function(e) {
-                // Get the array index of the clicked element
-                var eventid = $(e.target).data('eventid');
-                var event = mojUserState.events[eventid];
-
-                // Ensure that user has clicked on an actual link
-                if (event !== undefined && event.hasOwnProperty('source')) {
-                    // Manually change URL in address bar
-                    window.history.pushState('', 'Event', '#' + Events.getEventByIndex(eventid).slug);
-                    
-                    // Pop up artist info modal
-                    lookupArtist(event);
-                }
-                else {
-                    // console.log("Click source is outside an event hit state");
-                }
-            });// End addEventListener
-        });// End add datatable click listener
 }
 

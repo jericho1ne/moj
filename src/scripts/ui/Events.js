@@ -503,7 +503,7 @@ var Events = {
             // simplify var names
             var eventid = events[i].eventid;
             var ymd_date = events[i].ymd_date;
-            var nice_date = formatYmdAsShortDate(ymd_date);              
+            var fmtDate = formatYmdAsShortDate(ymd_date);              
             var artist = events[i].artist;
             var venue = events[i].venue;
             var title = events[i].title;
@@ -511,9 +511,9 @@ var Events = {
             var price = events[i].price;
             var url = events[i].url;
 
-            var weekday = nice_date.weekday;
-            var month = nice_date.month;
-            var dayofmonth = nice_date.day;
+            var weekday = fmtDate.weekday;
+            var month = fmtDate.month;
+            var dayofmonth = fmtDate.day;
 
             // If the date has changed, it's time for the spacer row with large text
             if (String(prevDate.trim()) != String(ymd_date.trim())) {
@@ -550,7 +550,6 @@ var Events = {
                 artist === '') {
                 eventTitle = title;
             }
-            
 
             // Date | Artist | Venue
             var $dataRow = $('<tr>')
@@ -561,11 +560,11 @@ var Events = {
                     // 1st column :: Artist + Venue
                     '<td class="left" data-sort="' + ymd_date + '">' 
                     +   '<span class="link artistInfo" ' 
-                    +       'data-eventid="' + i + '" '
+                    +       'data-eventid="' + eventid + '" '
                     +       'data-url="' + url + '" '
                     +       'data-artist="' + eventTitle + '" '
                     +       'data-venue="' + venue + '" '
-                    +       'data-nicedate="' + nice_date + '" '
+                    +       'data-nicedate="' + fmtDate.nice_date + '" '
                     +   '>' 
                     +       eventTitle + ''
                     +   '</span>'
@@ -601,7 +600,26 @@ var Events = {
         $('#' + dataTableUniqueID).DataTable({
             "bPaginate": true,
             "pagingType": "simple",      // Prev and Next buttons only 
-            "pageLength": DATATABLES_PAGE_LENGTH, 
+            "pageLength": DATATABLES_PAGE_LENGTH,
+            "initComplete": function () {
+                var api = this.api();
+                api.$('td').click(function () {
+                    // Get the array index of the clicked element
+                    var eventid = $(this).children('span').data('eventid');
+                    var event = Events.getEventByKeyValue('eventid', eventid);
+                    // var event = mojUserState.events[eventid];
+
+                    // Ensure that user has clicked on an actual link
+                    if (event !== undefined && event.hasOwnProperty('source')) {
+                        // Manually change URL in address bar
+                        window.history.pushState('', 'Event', '#' + event.slug);
+                        
+                        // Pop up artist info modal
+                        lookupArtist(event);
+                    }
+                    
+                } );
+            },
             "lengthChange": false,
             //  "lengthMenu": [[10, 20, 40, -1], [10, 20, 40, "All"]],
             "dom": '<"top"ifl<"clear">>rt<"bottom"p<"clear">>',

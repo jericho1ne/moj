@@ -51,19 +51,19 @@ $(document).ready(function() {
      */
     $('#action-calendarView').on('click', function() {
         var viewMode = $(this).data('mode');
-        console.log(" >> previous viewMode : " + viewMode);
-
+        
         // We're in slider view mode, need to change to Calendar
         if (viewMode === 'slider') {
-
+             // Update toggle button state, set the mode
             $(this).toggleClass('toggle-button-active', true);
+            $('#action-calendarView').data('mode', 'calendar')
 
             // Drop the slider
-            $('#swiper-parent').addClass('hidden');
+            $('#swiper-parent').hide();
 
             // Data previously loaded, unhide Calendar
             if ($('#' + CALENDAR_DIV).data('loaded')) {
-                $('#' + CALENDAR_DIV).removeClass('hidden');
+                $('#' + CALENDAR_DIV).show();
             }
             //  Else, first time loading Calendar
             else {
@@ -72,12 +72,15 @@ $(document).ready(function() {
         }
         // We're in Calendar view mode, need to change to Slider
         else if (viewMode === 'calendar') {
+            // Update toggle button state, set the mode
             $(this).toggleClass('toggle-button-active', false);
+            $('#action-calendarView').data('mode', 'slider');
 
-            $('#' + CALENDAR_DIV).addClass('hidden');
+            // Hide Calendar
+            $('#' + CALENDAR_DIV).hide();
 
             if ($('#swiper-parent').data('loaded')) {
-                $('#swiper-parent').removeClass('hidden');
+                $('#swiper-parent').show();
             }
             else {
                 showEventSlider({
