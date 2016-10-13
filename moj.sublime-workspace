@@ -1,0 +1,524 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"max-",
+				"max-width"
+			],
+			[
+				"fun",
+				"function〔keyword〕"
+			],
+			[
+				"ke",
+				"keyup〔function〕"
+			],
+			[
+				"cv",
+				"csvList"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/index.html",
+			"settings":
+			{
+				"buffer_size": 7090,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 247.0,
+		"last_filter": "sch",
+		"selected_items":
+		[
+			[
+				"sch",
+				"Schemr: List all schemes"
+			],
+			[
+				"sche",
+				"Schemr: List all schemes"
+			],
+			[
+				"schemr",
+				"Schemr: List all schemes"
+			],
+			[
+				"install",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"instal",
+				"SublimeCodeIntel: Disable Live Autocompletion"
+			],
+			[
+				"install them",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"preference",
+				"Preferences: Settings - User"
+			],
+			[
+				"theme",
+				"Colorsublime: Browse Themes"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/mpeteu/Sites/moj/src"
+	],
+	"file_history":
+	[
+		"/Users/mpeteu/Sites/moj/src/index.html",
+		"/Users/mpeteu/Sites/moj/src/scripts/moj.events.js",
+		"/Users/mpeteu/Sites/moj/src/scripts/main.js",
+		"/Users/mpeteu/Sites/moj/src/scripts/ui/Events.js",
+		"/Users/mpeteu/Sites/moj/copyDev.sh",
+		"/Users/mpeteu/Sites/React-For-Beginners-Starter-Files/catch-of-the-day/public/index.html",
+		"/Users/mpeteu/Sites/moj/src/styles/main.scss",
+		"/Users/mpeteu/Sites/moj/src/styles/import/fonts.scss",
+		"/Users/mpeteu/Dropbox/Home-and-Life/pwd/pwd.txt",
+		"/Users/mpeteu/Dropbox/Home-and-Life/pwd/travel.txt",
+		"/Users/mpeteu/Dropbox/Home-and-Life/pwd/travel (mpeteu’s MacBook Pro's conflicted copy 2016-09-08).txt",
+		"/Users/mpeteu/Downloads/Software/Adobe-PremierePro-CC-2015-V9.0/Crack/install.txt",
+		"/Users/mpeteu/Sites/trailsportal/src/styles/import/position.scss",
+		"/Users/mpeteu/Sites/trailsportal/src/styles/import/colors.scss",
+		"/Users/mpeteu/Sites/trailsportal/src/index.html",
+		"/Users/mpeteu/Sites/trailsportal/src/scripts/main.js",
+		"/Users/mpeteu/Sites/trailsportal/src/styles/import/fonts.scss",
+		"/Users/mpeteu/Sites/trailsportal/src/styles/main.scss",
+		"/Users/mpeteu/Dropbox/Development/Sublime/Packages/User/Preferences.sublime-settings",
+		"/Users/mpeteu/Dropbox/Personal/pwd/pwd.txt",
+		"/Users/mpeteu/Sites/trailsportal/src/robots.txt",
+		"/Users/mpeteu/Sites/moj-simple/src/styles/import/position.scss",
+		"/Users/mpeteu/Sites/moj-simple/src/scripts/common/__constants.js",
+		"/Users/mpeteu/Sites/moj-simple/src/scripts/common/__constants.php",
+		"/Users/mpeteu/Sites/moj-simple/src/.editorconfig",
+		"/Users/mpeteu/Sites/moj-simple/styles/main.css",
+		"/Volumes/AdobePremiereProCC2015/Crack/install.txt",
+		"/Users/admin/Dropbox/Development/grunt-setup/grunt-workflow.txt",
+		"/Users/mpeteu/Sites/exp-tracker/index.html",
+		"/Users/mpeteu/Sites/exp-tracker/common.php",
+		"/Users/mpeteu/Sites/exp-tracker/categorize-exp.php",
+		"/Users/mpeteu/Sites/exp-tracker/assets/css/style.css",
+		"/Users/mpeteu/Sites/exp-tracker/assets/css/jquery-ui.min.css",
+		"/Users/mpeteu/Sites/exp-tracker/assets/js/datatables.min.js",
+		"/Users/mpeteu/Sites/exp-tracker/main.js",
+		"/Users/mpeteu/Sites/exp-tracker/assets/js/chartjs-legend.js",
+		"/Users/mpeteu/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/mpeteu/Dropbox/_restore_/Software/Sublime/Bare-metal-sublime-restore.txt",
+		"/Users/mpeteu/Library/Application Support/Sublime Text 3/Packages/User/SFTP.sublime-settings",
+		"/Users/mpeteu/Dropbox/_restore_/apache-mysql-phpmyadmin-guide.txt",
+		"/Users/mpeteu/Desktop/asdf.conf",
+		"/Users/admin/Sites/exp-tracker/index.html",
+		"/Users/admin/Sites/exp-tracker/categorize-exp.php",
+		"/Users/admin/Sites/exp-tracker/assets/css/style.css",
+		"/Users/admin/Sites/exp-tracker/main.js",
+		"/Users/admin/Dropbox/_restore_/apache-mysql-phpmyadmin-guide.txt",
+		"/Users/admin/Sites/exp-tracker/.editorconfig",
+		"/Users/admin/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/admin/Library/Application Support/Sublime Text 3/Packages/User/Colorsublime.sublime-settings",
+		"/Users/admin/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Users/admin/Dropbox/_restore_/Software/Sublime/Bare-metal-sublime-restore.txt",
+		"/Users/admin/Library/Application Support/Sublime Text 3/Packages/User/SFTP.sublime-settings"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"data('mode",
+			"debugger",
+			"data('mode'",
+			".data('mode'",
+			"showeven",
+			"slider",
+			"data('loaded",
+			"iewMode === 'cale",
+			"25",
+			"20",
+			"swi",
+			"faveButton",
+			"url",
+			"fedex",
+			"citi",
+			"max-w",
+			"pad-top-bot-20",
+			"story-te",
+			"tripDesc",
+			"story-text",
+			"spacer",
+			"spacer-",
+			"story-text",
+			"tripDescription",
+			"trip-header",
+			"tripDesc",
+			"xlarge",
+			"xlarge-text",
+			"medium-text",
+			"story-text",
+			".story-photo, .story-video",
+			"amaz",
+			"css",
+			"debugg",
+			"deb",
+			"loading",
+			"debugger",
+			"debug",
+			"this",
+			"applyArtistListeners",
+			"$col-min-height",
+			"$debug",
+			"$container-min-width",
+			"container-max-width",
+			"$phat-margin",
+			"border-radius",
+			"$",
+			"$6px",
+			"btn-pad",
+			"gold",
+			"$btn-bg-gold",
+			"$gray-dark",
+			"$gray-mid",
+			"$gray-light",
+			"$btn-bg-green",
+			"$primary-font-color",
+			";;",
+			";",
+			";;",
+			"phat-margin",
+			"$font-bold",
+			"$font-regular",
+			"ui/vendor/",
+			"contrib-co",
+			"attach",
+			"datatable",
+			"drawChart",
+			"shake",
+			"showTooltip",
+			"getParsedData",
+			"parsedData",
+			"data parse",
+			"parsedData",
+			"get",
+			"parsedData",
+			"years",
+			"categorizePurchases",
+			"pr(",
+			"console",
+			"consoe",
+			"displayYearlyChargeData",
+			"date_compare",
+			"mode",
+			"parsedData",
+			"pr",
+			"ui",
+			"input",
+			"$year",
+			"[108-Base:~/Library/Application Support/Sublime Text 3] admin%"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"xlg",
+			"90px",
+			"1px solid #ccc",
+			"30%",
+			"80%",
+			"30px auto 40px auto",
+			"6px",
+			"#DBD12C",
+			"#565656",
+			"#ababab",
+			"#EAEAEA",
+			"#2A713D",
+			"#333",
+			";",
+			"\"Ruda-Black\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;",
+			"\"Ruda-Regular\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;",
+			"ui/",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7090,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"editorconfig": true,
+							"ensure_newline_at_eof_on_save": true,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 25.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "moj.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"even",
+				"src/scripts/ui/Events.js"
+			],
+			[
+				"events.js",
+				"src/scripts/ui/Events.js"
+			],
+			[
+				"index",
+				"src/index.html"
+			],
+			[
+				"events",
+				"scripts/ui/Events.js"
+			],
+			[
+				"font",
+				"styles/import/fonts.scss"
+			],
+			[
+				"main",
+				"scripts/main.js"
+			],
+			[
+				"fonts",
+				"styles/import/fonts.scss"
+			],
+			[
+				"event.",
+				"scripts/ui/Events.js"
+			],
+			[
+				"swiper",
+				"styles/import/swiper.scss"
+			],
+			[
+				"pos",
+				"styles/import/position.scss"
+			],
+			[
+				"color",
+				"styles/import/colors.scss"
+			],
+			[
+				"mainj.",
+				"scripts/main.js"
+			],
+			[
+				"ind",
+				"index.html"
+			],
+			[
+				"getene",
+				"scripts/api/getEvents.php"
+			],
+			[
+				"temp",
+				"templates/artist-popup.html"
+			],
+			[
+				"main.cs",
+				"styles/main.scss"
+			],
+			[
+				".edi",
+				".editorconfig"
+			],
+			[
+				"data",
+				"assets/js/datatables.min.js"
+			],
+			[
+				"chart",
+				"assets/js/chartjs-legend.js"
+			],
+			[
+				"jqui",
+				"assets/css/jquery-ui.min.css"
+			],
+			[
+				"styl",
+				"assets/css/style.css"
+			],
+			[
+				"main.",
+				"main.js"
+			],
+			[
+				"common",
+				"common.php"
+			],
+			[
+				"style",
+				"assets/css/style.css"
+			],
+			[
+				"inex",
+				"index.html"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 177.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
