@@ -861,9 +861,9 @@ class EventParser {
 
 		// Trimmed date (Eg: friday-jul-29)
 		$shortDate = date('l-M-j-Y', strtotime($event['ymd_date']));
-
+		$slugMaxLength = 28;
 		// Same method of creating SEO-friendly slug url for all sources
-		$slug = substr(str_replace(' ', '-', $artist), 0, 48) 		// artist
+		$slug = substr(str_replace(' ', '-', $artist), 0, $slugMaxLength) 		// artist
 			. '-' . substr(str_replace(' ', '-', $venue), 0, 48) 	// venue
 			. '-' . $shortDate;										// date
 

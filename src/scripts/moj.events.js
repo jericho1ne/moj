@@ -6,10 +6,10 @@
 $(document).ready(function() {
     var fmtDate = getTodaysDate();
 
-    // Set background plate
+    // Set background plate based on current time (new photo every hour)
     $('#bg-plate').css(
         'background', 
-        'url("media/backgrounds/' + BG_PLATES[fmtDate.day] + '") ' + 'no-repeat center bottom scroll'
+        'url("media/backgrounds/' + BG_PLATES[fmtDate.hour] + '") ' + 'no-repeat center bottom scroll'
     );
 
     // Initialize UserState singleton with today's date
