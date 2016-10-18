@@ -281,7 +281,6 @@ class EventParser {
 				// For whatever reason, the full date wasn't captured, assume bad input and skip
 				if (sizeof($dateArray) != 3) {
 					// echo (" >> Skipping - Bad Input ");
-					// pr($matches);
 					continue;
 				}
 
@@ -651,16 +650,16 @@ class EventParser {
 				"FROM events " .
 					"INNER JOIN venues ".
 					"ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
-				"WHERE ymd_date = :date_start ";
+				"WHERE ymd_date >= :date_start ";
 
-			// Need a start date regardless of how we limit results
+			// Require a start date
 			$queryStart = set($startDate)
 				? new DateTime($startDate)
 				: new DateTime();
 
 			// If we're limiting based on end date
-			$query .= set($daysPlus)
-				? "AND events.ymd_date <= :date_end "
+			$query .= set($endDate)
+				? "AND events.ymd_date < :date_end "
 				: "";
 			
 			$query .= "AND events.media != '' ";
@@ -678,26 +677,29 @@ class EventParser {
 				"events.type='Live Show' DESC, " .
 				"events.updated DESC ";
 
-			// If we're limiting on max results
-			$query .= set($maxResults)
-				? "LIMIT {$maxResults} "
-				: "";
+			// If no end date specified, set a LIMIT default
+			//if (!set($endDate)) {
+				$max = set($maxResults)
+					? : LIMIT_MAX_SHOWS_DEFAULT; 
+				$query .= "LIMIT " . $max;
+			//}
+
+			// pr($options);
+			// pr($query);
 
 			/**
 			 * Bind parameters
 			 */
 			$stmt = $dblink->prepare($query);
-			$start = $queryStart->format("Y-m-d");
-			$stmt->bindParam(':date_start', $start, PDO::PARAM_STR);
+		 	// $start = $queryStart->format("Y-m-d");
+			$stmt->bindParam(':date_start', $startDate, PDO::PARAM_STR);
 
-			if (set($daysPlus)) {
-				// Set the end date
-				$daysPlus = $daysPlus == "" ? 180 : $daysPlus;
-				$endDate = $queryStart->modify("+{$daysPlus} days");
+			// Set the end date parameter, if passed in
+			if (set($endDate)) {
+				// $end = new DateTime($endDate);
 				// Bind end date
-				$stmt->bindParam(':date_end', $endDate->format("Y-m-d"), PDO::PARAM_STR);
+				$stmt->bindParam(':date_end', $endDate, PDO::PARAM_STR);
 			}
-
 			/**
 			 * Execute and get results
 			 */

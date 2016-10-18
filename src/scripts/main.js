@@ -194,33 +194,24 @@ function swiperInit(swiperSelector) {
         onTouchEnd: function(swiper, event) {
             var swipeDistance = swiper.touches.diff;
             
-            // console.log('Events.anyQuickFiltersAreOn ? ' + Events.anyQuickFiltersAreOn());
-            // At beginning, time to go back a day
+            // Arrive at the tail ends of the slider, go either back or forward a day
             if ((swiper.isBeginning || swiper.isEnd) && !Events.anyQuickFiltersAreOn()) {
                 var getShowsOptions = {
                     'startDate': UserState.getDisplayedDate(),
-                    'maxResults': Events.MAX_perDay
                 };
 
                 // Set a threshold for swipe "amount"
                 var minSwipeDistance = 100;
                 
                 // If user wants to go back one day
-                if (swiper.isBeginning && 
-                    swipeDistance > minSwipeDistance
-                ) {
-                    getShowsOptions['daysChange'] = -1;
+                if (swiper.isBeginning && swipeDistance > minSwipeDistance) {
+                    sliderPrevDay();
                 }
                 // Else if user wants to advance one day
                 else if (swiper.isEnd && 
-                    swipeDistance < 0 &&
-                    Math.abs(swipeDistance) > minSwipeDistance
-                ) {
-                    getShowsOptions['daysChange'] = 1;
+                    swipeDistance < 0 && Math.abs(swipeDistance) > minSwipeDistance) {
+                    sliderNextDay();
                 }
-
-                // Get new day's show data
-                showEventSlider(getShowsOptions);
             }
         }, // onTouchEnd
 
@@ -240,20 +231,29 @@ function swiperInit(swiperSelector) {
 } // End swiperInit
 
 function showEventSlider(opts) {
+   console.log(opts);
+
     Events.getShows({
             'startDate': opts.startDate,
-            'daysChange': opts.daysChange,    // eg: (+)1 or -1
+            'endDate': opts.endDate,    // eg: (+)1 or -1
             'maxResults': opts.maxResults   // Daily limit just to be safe
         })
         // Append shows to DOM, save data to Singleton object(s)
         .then(function(response) { 
             // Check for valid data before continuing
             if (isValidJson(response)) {
+
                 var jsonData = JSON.parse(response);
                 if (jsonData.success) {
-                    // Save Data after rearranging event array keys
-                    // (from abbreviated to readable)
-                    Events.setEventData(jsonData.events);     
+
+                    var events = [];
+                    // Rearrange event array keys from abbreviated to readable
+                    if (jsonData.timestamp !== 'cached') {
+                        events = Events.expandArrayKeys(jsonData.events);
+                    }
+
+                    // Save Data to Events singleton
+                    Events.setEventData(events);
 
                     // Append shows to DOM
                     Events.displayShowsInSlider(Events.getEventData()); 
@@ -302,6 +302,7 @@ function showEventCalendar() {
     Events.getEvents(60)
         // Return events $.ajax request
         .then(function(data) {
+
             // Parse the data into JSON object
             var eventData = JSON.parse(data);
 
@@ -333,3 +334,27 @@ function showEventCalendar() {
         })
 }
 
+
+/**
+ * Slider advancement functions
+ */
+function sliderToday() {
+    showEventSlider({
+        'startDate': UserState.getDisplayedDate(),
+        'endDate': getDayByOffset(UserState.getDisplayedDate(), 1),
+    });
+}
+function sliderNextDay() {
+    // Get next day's shows
+    showEventSlider({
+        'startDate': getDayByOffset(UserState.getDisplayedDate(), 1),
+        'endDate': getDayByOffset(UserState.getDisplayedDate(), 2),
+    });
+}
+function sliderPrevDay() {
+    // Get previous day's show data
+    showEventSlider({
+        'startDate': getDayByOffset(UserState.getDisplayedDate(), -1),
+        'endDate': UserState.getDisplayedDate(),
+    });
+}

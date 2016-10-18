@@ -11,6 +11,15 @@ Array.prototype.contains = function(value) {
     }
     return false;
 }
+Array.prototype.containsSubkeyValue = function(key, value) {
+    debugger;
+    for (var i = 0; i < this.length; i++) {
+        if (this[i][key] === value) {
+          return true;
+        }
+    }
+    return false;
+}
 Array.prototype.unique = function(key) {
     var arr = [];
     for (var i = 0; i < this.length; i++) {
@@ -153,6 +162,17 @@ function formatYmdAsShortDate(ymd_date) {
     'nice_date': mDate.format('dddd MMM Do'),
   };
 }
+
+/**
+ * Useful for skipping ahead or going back +1/-1 or more days
+ * @param  {string} curDate Y-m-d format
+ * @param  {int} offset Positve or negative number 
+ * @return {string} Resulting date in Y-m-d format
+ */
+function getDayByOffset(curDate, offset) {
+  return moment(curDate, 'YYYY-MM-DD').add(offset, 'days').format('YYYY-MM-DD')
+}
+
 
 function cleanArtistName(artistName) {
   var formattedName = String(artistName);

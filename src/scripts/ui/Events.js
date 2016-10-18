@@ -40,8 +40,7 @@ var Events = {
     },// End getEventData
 
     setEventData: function(rawData) {
-        Events.eventData = [];
-        Events.eventData = Events.expandArrayKeys(rawData);
+        Events.eventData = rawData;
     },
      
     /**
@@ -50,51 +49,73 @@ var Events = {
      * options = { maxResults, coords (lat/lon), maxDistance }
      */
     getShows: function(options) {
-        // Always set a default for maxResults limiter
-        if (typeof options.maxResults === 'undefined') {
-            options.maxResults = 10;
-        }
+        var dataExists = false;
+        
+        // var cachedEvents = Events.getEventData();
 
-        // Default to using the most basic query
-        var postData = {
-            'startDate': options.startDate,
-            'daysChange': options.daysChange,
-            'maxResults': options.maxResults,
-            'fieldSet': 'medium',
-        };
+        // TODO
+        // Check If cached events exist for the requested day
+        // if (options.startDate && cachedEvents.length) {
+        //     dataExists = cachedEvents.containsSubkeyValue('ymd_date', options.startDate);
+        // }
 
-        // If extra params passed in for geolocation query
-        if (typeof options.coords !== 'undefined' ||
-            typeof options.maxDistance !== 'undefined'
-        ) {
-            postData.lat = options.coords.lat;
-            postData.lon = options.coords.lon;
-            postData.maxDistance = options.maxDistance;
-        } // End append params for geolocation query
+        if (dataExists) {
+            // TODO
+            // var def = $.Deferred();
 
-        var ajaxObject = { 
-            type: 'POST',
-            url: this.buildAjaxUrl(this.getShowsByVenue),
-            data: postData,
-            async: false,
-            // Success callback will fire even when coupled with an external $.done
-            success : function(response, status) {  // data, status, jqXHR
-                if (status === 'success' && response) {
-                    // Save current artist data in global cache
-                    CACHE['eventData'] = response;
-                    return(response);
+            // // Manually create the response wrapper
+            // var response = {
+            //     'success': true,
+            //     'events': cachedEvents
+            // };
+            // // Package up the existing single day data as JSON
+            // def.resolve(JSON.stringify(response)); 
+    
+            // return def.promise();  
+        } // End if
+        // Else, need to make an ajax call to get JSON
+        else {
+            // Default to using the most basic query
+            var postData = {
+                'startDate': options.startDate,
+                'endDate': options.endDate,
+                'maxResults': options.maxResults,
+                'fieldSet': 'medium',
+            };
+
+            // If extra params passed in for geolocation query
+            if (typeof options.coords !== 'undefined' ||
+                typeof options.maxDistance !== 'undefined'
+            ) {
+                postData.lat = options.coords.lat;
+                postData.lon = options.coords.lon;
+                postData.maxDistance = options.maxDistance;
+            } // End append params for geolocation query
+
+            var ajaxObject = { 
+                type: 'POST',
+                url: this.buildAjaxUrl(this.getShowsByVenue),
+                data: postData,
+                async: false,
+                // Success callback will fire even when coupled with an external $.done
+                success : function(response, status) {  // data, status, jqXHR
+                    if (status === 'success' && response) {
+                        // Save current artist data in global cache
+                        CACHE['eventData'] = response;
+                        return(response);
+                    }
+                    // else
+                    alert("No data to display");
+                },
+                // if the request fails, deferred.reject() is called
+                error : function(code, message){
+                    // Handle error here
+                    // TODO:  change to jquery UI modal that autofades and has (X) button
+                    return Error("Unable to load Event data =(");
                 }
-                // else
-                alert("No data to display");
-            },
-            // if the request fails, deferred.reject() is called
-            error : function(code, message){
-                // Handle error here
-                // TODO:  change to jquery UI modal that autofades and has (X) button
-                return Error("Unable to load Event data =(");
-            }
-        }; // End ajaxObject 
-        return $.ajax(ajaxObject);
+            }; // End ajaxObject 
+            return $.ajax(ajaxObject);
+        } // End else
     },// End getShows
 
     updateEventDate: function() {

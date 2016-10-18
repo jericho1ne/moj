@@ -19,31 +19,17 @@ $(document).ready(function() {
      *      Set Left / Right Slider arrow actions
      */
     $('#arrow-right').on('click', function() {
-        // Get new day's show data
-        showEventSlider({
-            'startDate': UserState.getDisplayedDate(),
-            'maxResults': Events.MAX_perDay,
-            'daysChange': 1
-        });
+        sliderNextDay();
     });
     $('#arrow-left').on('click', function() {
-        // Get new day's show data
-        showEventSlider({
-            'startDate': UserState.getDisplayedDate(),
-            'maxResults': Events.MAX_perDay,
-            'daysChange': -1
-        });
+        sliderPrevDay();
     });
 
     /** 
-     *      Event Slider
+     *      Event Slider (called automatically)
      *         Grab shows and display them in swipeable thumbnails
      */
-    showEventSlider({
-        'startDate': '',
-        'daysChange': '',
-        'maxResults': Events.MAX_perDay
-    });
+    sliderToday();
 
     /**
      *      Calendar View
@@ -83,11 +69,8 @@ $(document).ready(function() {
                 $('#swiper-parent').show();
             }
             else {
-                showEventSlider({
-                    'startDate': '',
-                    'daysChange': '',
-                    'maxResults': Events.MAX_perDay
-                });            
+                // Show today's shows
+                sliderToday();           
             } 
         }// End else in Calendar mode, switch to Slider
     }); // End UI toggle between Calendar and Slider

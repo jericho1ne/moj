@@ -17,6 +17,7 @@ define("SEARCH_RADIUS_MIN", 1);
 define("SEARCH_RADIUS_MAX", 20);
 
 // DB query limit fallbacks
+define("LIMIT_MAX_SHOWS_DEFAULT", 100);
 define("LIMIT_MAX_VENUES", 10);
 define("LIMIT_MAX_SHOWS_PER_PAGE", 20);
 
