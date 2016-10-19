@@ -170,7 +170,7 @@ function formatYmdAsShortDate(ymd_date) {
  * @return {string} Resulting date in Y-m-d format
  */
 function getDayByOffset(curDate, offset) {
-  return moment(curDate, 'YYYY-MM-DD').add(offset, 'days').format('YYYY-MM-DD')
+  return moment(curDate, 'YYYY-MM-DD').add(offset, 'days').format('YYYY-MM-DD');
 }
 
 

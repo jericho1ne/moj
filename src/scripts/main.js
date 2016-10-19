@@ -245,7 +245,7 @@ function showEventSlider(opts) {
 
                 var jsonData = JSON.parse(response);
                 if (jsonData.success) {
-
+                    debugger;
                     var events = [];
                     // Rearrange event array keys from abbreviated to readable
                     if (jsonData.timestamp !== 'cached') {
@@ -306,11 +306,21 @@ function showEventCalendar() {
             // Parse the data into JSON object
             var eventData = JSON.parse(data);
 
+            debugger;
+
             // Check for valid data before continuing
             if (eventData.success) {
+                var events = eventData.events;
+
+                // Rearrange event array keys from abbreviated to readable
+                if (eventData.timestamp !== 'cached') {
+                    events = Events.expandArrayKeys(eventData.events);
+                }
+
                 // TODO: Save event data to local storage
                 //mojUserState.events = 
-                Events.setEventData(eventData.events);
+                Events.setEventData(events);
+
 
                 // Toggle data attribute of calendar parent
                 $("#" + CALENDAR_DIV).data('loaded', 'true');

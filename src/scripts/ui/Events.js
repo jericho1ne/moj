@@ -426,7 +426,10 @@ var Events = {
      * getEvents
      * list of events, bounded by certain input parameters
      */
-    getEvents: function(maxResults) {
+    getEvents: function(daysInAdvance) {
+        var startDate = moment().format('YYYY-MM-DD')
+        var endDate = moment(startDate, 'YYYY-MM-DD').add(daysInAdvance, 'days').format('YYYY-MM-DD');
+       
         // Need to be able to reference Events class inside $.ajax scope
         var _this = this;
 
@@ -436,7 +439,8 @@ var Events = {
             type: 'POST',
             url: Events.baseFolder + Events.getShowsByVenue,
             data: {
-                'limit': maxResults,
+                'startDate': startDate,
+                'endDate': endDate,
                 'fieldSet': 'light',
             },
             async: false,

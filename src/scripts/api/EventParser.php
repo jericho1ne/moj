@@ -678,14 +678,11 @@ class EventParser {
 				"events.updated DESC ";
 
 			// If no end date specified, set a LIMIT default
-			//if (!set($endDate)) {
+			if (!set($endDate)) {
 				$max = set($maxResults)
 					? : LIMIT_MAX_SHOWS_DEFAULT; 
 				$query .= "LIMIT " . $max;
-			//}
-
-			// pr($options);
-			// pr($query);
+			}
 
 			/**
 			 * Bind parameters
@@ -693,7 +690,6 @@ class EventParser {
 			$stmt = $dblink->prepare($query);
 		 	// $start = $queryStart->format("Y-m-d");
 			$stmt->bindParam(':date_start', $startDate, PDO::PARAM_STR);
-
 			// Set the end date parameter, if passed in
 			if (set($endDate)) {
 				// $end = new DateTime($endDate);
