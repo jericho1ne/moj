@@ -40,6 +40,7 @@ var ARTIST_ALIASES = {
 // Need at least 12 for each hour of the day
 var BG_PLATES = [ 
   'adujahmal.jpg',
+  'avalon.jpg',
   'aztec.jpg',
   'backstage.jpg',
   'busta.jpg',
@@ -47,6 +48,7 @@ var BG_PLATES = [
   'dalston.jpg',
   'dalston2.jpg',
   'drums.jpg',
+  'drummer.jpg',
   'intherange.jpg',
   'kingking.jpg',
   'moses.jpg',

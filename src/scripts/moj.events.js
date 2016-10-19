@@ -6,6 +6,9 @@
 $(document).ready(function() {
     var fmtDate = getTodaysDate();
 
+    console.log(fmtDate);
+    debugger;
+    
     // Set background plate based on current time (new photo every hour)
     $('#bg-plate').css(
         'background', 
