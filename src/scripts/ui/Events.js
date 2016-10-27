@@ -118,20 +118,25 @@ var Events = {
         } // End else
     },// End getShows
 
-    updateEventDate: function() {
-        var eventid = $('.swiper-slide-active .event-tile').data('eventid');
+    /**
+     * Update the date header on day/month change
+     * @param  {string} mode Either `slider` or `calendar`
+     */
+    updateEventDate: function(mode) {
+        var ymd_date = '';
 
-        var ymd_date = 
-            (typeof eventid !== 'undefined' && eventid !== '') 
-                ? Events.getEventByKeyValue('eventid', eventid).ymd_date
-                : UserState.getDisplayedDate();
-        
-        // Set date display
-        var dateFormatted = formatYmdAsShortDate(ymd_date);
-        $('#event-date #dateMonth').html(dateFormatted.month);
-        $('#event-date #dateWeekday').html(dateFormatted.weekday);
-        $('#event-date #dateDayOfMonth').html(dateFormatted.day);
-
+        if (mode === 'slider') {
+            var eventid = $('.swiper-slide-active .event-tile').data('eventid');
+            ymd_date = (typeof eventid !== 'undefined' && eventid !== '') 
+                    ? Events.getEventByKeyValue('eventid', eventid).ymd_date
+                    : UserState.getDisplayedDate();
+            
+            // Set date display
+            var dateFormatted = formatYmdAsShortDate(ymd_date);
+            $('#event-date #dateMonth').html(dateFormatted.month);
+            $('#event-date #dateWeekday').html(dateFormatted.weekday);
+            $('#event-date #dateDayOfMonth').html(dateFormatted.day);
+        }
         // Also save date in UserState object
         UserState.setDisplayedDate(ymd_date);
     },
@@ -659,6 +664,10 @@ var Events = {
             ],
             "autoWidth": false,
             "language": {
+                paginate: {
+                    next: '<img src="media/svg/arrow-right-white.svg" class="icon-simple">',
+                    previous: '<img src="media/svg/arrow-left-white.svg" class="icon-simple">'
+                },
                 //  "lengthMenu": "_MENU_ per pg",
                 "sSearch": "search by Artist or Venue",        // Search input box label
                 "zeroRecords": "Nothing found.",

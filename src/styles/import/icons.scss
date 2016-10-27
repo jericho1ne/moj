@@ -39,17 +39,17 @@
 /** 
 *    Body Link Styles 
 */
-.icon-action, .icon-link {
+.icon-simple, .icon-action {
+	width: 42px;
+	height: 36px;
 	cursor: pointer;
-	padding: 6px;
-	background-color: $purple-i-like;
 	display: inline-block;
+	padding: 6px;
+	opacity: 1;
 }
 
 .icon-action {
-	width: 42px;
-	height: 36px;
-	opacity: 1;
+	// background-color: $purple-i-like;
 	@include border-radius(2px);
 	margin: 2px;
 }
@@ -58,14 +58,18 @@
 	transition: all 0.20s cubic-bezier(0.05, 0.71, 0.66, 0.85);
 }
 .icon-link {
+	padding: 6px;
+	cursor: pointer;
 	width: 44px;
 	height: 44px;
 	opacity: 1;
+	border: 1px $gray-mid solid;
 }
 .icon-link:hover{
 	background-color: $lt-blue !important;
 	opacity: 0.9;
 	transition: all 0.25s cubic-bezier(0.05, 0.71, 0.66, 0.85);
+	border: 1px solid $purple-i-like;
 }
 .icon-round {
 	@include border-radius(30px);

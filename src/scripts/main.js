@@ -65,7 +65,7 @@ function lookupArtist(event) {
     $('#tix-show-title').html(showTitle);
     $('#tix-url').html(
         '<a href="' + event.url + '">' 
-        +  '<img src="media/svg/ticket.svg" class="icon-link icon-round border-mid-gray margin-right-10" alt="Get tickets" title="Get tickets"/>'
+        +  '<img src="media/svg/ticket.svg" class="icon-link icon-round margin-right-10" alt="Get tickets" title="Get tickets"/>'
         +'</a>');
     $('#tix-url-source').html(parseUrlDomain(event.url, "short"));
 
@@ -169,7 +169,7 @@ function swiperInit(swiperSelector) {
         // Stuff to do upon slider creation
         onInit: function() {
             // Set date display
-            Events.updateEventDate();
+            Events.updateEventDate('slider');
         },
 
         // If slide changed, might need to reset some stuff
@@ -294,7 +294,7 @@ function showEventSlider(opts) {
             Events.addQuickFilters();
 
             // Update display date
-            Events.updateEventDate();
+            Events.updateEventDate('slider');
 
         }); // Initialize swipe actions, set click listeners
 } // End function showEventSlider

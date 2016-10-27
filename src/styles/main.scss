@@ -118,7 +118,7 @@ body {
 	background-color: rgba(240, 240, 240, 1);
 	background-repeat: no-repeat !important;
 	background-size: cover !important;
-	border-bottom: 1px solid $gray-mid;
+	// border-bottom: 1px solid $gray-mid;
 }
 .event-tile-bottom {
 	position: absolute;
@@ -529,8 +529,8 @@ img.link:hover {
 .dataTables_wrapper .dataTables_filter label {
 	width: 99%;
 	display: block;
-	padding: 4px 0px 6px 0px;
-	font-size: 18px;
+	padding: 4px 0px;
+	font-size: 16px;
 	text-align: center !important;
 }
 

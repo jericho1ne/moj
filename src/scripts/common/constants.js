@@ -71,7 +71,7 @@ var BG_PLATES = [
 // Misc
 //
 
-var DATATABLES_PAGE_LENGTH = 10;
+var DATATABLES_PAGE_LENGTH = 1000;
 
 // Get the base url of the webapp (used in getEvents.php)
 // define('URL_ROOT', (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/');
