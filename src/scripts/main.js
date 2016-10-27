@@ -152,7 +152,12 @@ function swiperInit(swiperSelector) {
     //  Initialize Swiper
     var swiper = new Swiper(swiperSelector, {
         pagination: '.swiper-pagination',
+        // Do not allow clicking of pagination buttons
         paginationClickable: false,
+        // < / > clickable arrow buttons
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        // L / R arrow keys
         keyboardControl: true,
         lazyLoading: true,
         swipeHandler: '.event-swipe-handle',
@@ -245,7 +250,6 @@ function showEventSlider(opts) {
 
                 var jsonData = JSON.parse(response);
                 if (jsonData.success) {
-                    debugger;
                     var events = [];
                     // Rearrange event array keys from abbreviated to readable
                     if (jsonData.timestamp !== 'cached') {
@@ -305,8 +309,6 @@ function showEventCalendar() {
 
             // Parse the data into JSON object
             var eventData = JSON.parse(data);
-
-            debugger;
 
             // Check for valid data before continuing
             if (eventData.success) {
