@@ -237,22 +237,32 @@ class EventParser {
 		// Ingest webpage source
 		$scenestarHTML = file_get_contents($url);							
 
-		// If time is nearing midnight, we may get no results
-		// Therefore, grab next day's shows (d+1)
-		if (strpos($scenestarHTML, $this->today_formatted) === -1) {
+		// If time is nearing midnight, we may get no results		
+		$dateFound = strpos($scenestarHTML, $this->today_formatted);
+		// In this case, grab next day's shows (d+1)
+		if (!$dateFound) {
 			$searchDate = $this->trrow_formatted;
 		}
 		
-		// Look for our start date, mark as entry point
+		// 
+		// Use the decided-upon start date as our scraping entry point
+		//
+		
+		// TODO:  Need fall back value for $start
 		$start = strpos($scenestarHTML, $searchDate);	
-		// find the end marker (this *may* change every so often)	
+		// find the end marker *** this may change ***	
 		$end = strpos($scenestarHTML, '<div id="gamma">');	
 		// find character length up to the end marker
-		$data_size = $end - $start;		
+		$rough_show_data = $end - $start;		
 		// grab only the repeated, relevant show data							
-		$rough_chunk = substr($scenestarHTML, $start-1, $data_size);	
+		$rough_chunk = substr($scenestarHTML, $start - 1, $rough_show_data);	
 
-		// get rid of funky characters like <®> or <â€™>
+		/**
+		 * DEBUG
+		 */
+		// pr(" DATE / START / END: " . $searchDate . ' / ' . $start . ' / ' . $end);
+		
+		// Get rid of funky characters like <®> or <â€™>
 		$rough_chunk = html_entity_decode($rough_chunk, ENT_QUOTES, "UTF-8");
 		$rough_chunk = str_replace('’',"'", $rough_chunk);
 		$rough_chunk = str_replace('®',"", $rough_chunk);
@@ -268,8 +278,7 @@ class EventParser {
 		$count = 0;
 		$venues = array();	// will temporarily store all venues
 
-		foreach ($lines as $val) {
-			
+		foreach ($lines as $val) {			
 			// Extract date of show using regular expressions
 			// [0-9]{2}.[0-9]{2}.[0-9]{2}  << pattern to look for (eg 01.31.2013)
 
@@ -309,17 +318,28 @@ class EventParser {
 				$artist = str_replace('"', '', $artist); 			// get rid of double quotes
 				$artist = str_replace(',', '', $artist); 			// and commas too
 
+				// 
 				// Extract venue
-				$venue = preg_match('/@ [A-z0-9&\',. ]*/', $val, $matches);			// allow for &, single quotes and commas in the venue name
-				$venue = str_replace("@ ", "", $matches[0]);
-				$venue = str_replace('"', '', $venue); 				// get rid of double quotes!
-				$venue = str_replace(', ', '-', $venue);
-				$venue = trim($venue);
-				$venues[$count] = $venue;
+				// 
+				
+				// allow for &, single quotes and commas in the venue name
+				$venue = preg_match('/@ [A-z0-9&\',. ]*/', $val, $matches);	
 
-				// ********** DEBUG ******
-				// Uncomment line below to see what the f is wrong
-				// echo $ymd_date . " " . $artist . " @ " . $venue ."<br>";
+				if (!isset($matches[0])) {
+					continue;
+				} else {
+					$venue = str_replace("@ ", "", $matches[0]);
+					$venue = str_replace('"', '', $venue); 				// get rid of double quotes!
+					$venue = str_replace(', ', '-', $venue);
+					$venue = trim($venue);
+					$venues[$count] = $venue;
+				}
+
+				/**
+				 * DEBUG
+				 * Uncomment line below to see what may be wrong
+				 */
+				//  pr($ymd_date . " " . $artist . " @ " . $venue ."<br>");
 
 				// Save all of our event info to the private class property (eventArray)
 				array_push(
@@ -361,36 +381,36 @@ class EventParser {
 		
 		// print_r($simpleXML);
 		/*
-		[title] => Father, Son & Holy Coach
-		    [link] => http://www.experiencela.com/calendar/event/68113
-		    [description] => Southern storytelling at its best! [...]
-		    [guid] => http://www.experiencela.com/calendar/event/68113
-		    [datetime] => March 4, 2016; 8:00 PM - 9:15 PM
-		    [startDate] => Fri, 04 Mar 2016 20:00:00 GMT -08:00
-		    [endDate] => Fri, 04 Mar 2016 21:15:00 GMT -08:00
-		    [image] => http://ww1.experiencela.com/Uploads/20070904124551-63848.jpg
-		    [organizationEntryId] => 3480
-		    [organization] => Lucy Pollak Public Relations
-		    [region] => Beverly Hills / Westside
-		    [eventWebsite] => http://www.holycoach.net/.
-		    [location] => Odyssey Theatre
-		    [eventAddress] => 2055 S. Sepulveda Blvd., Los Angeles, 90025
-		    [eventLocationStreetIntersection1] => S. Sepulveda Blvd.
-		    [eventLocationStreetIntersection2] => Mississippi Ave.
-		    [toolsMetroTripPlanner] => http://www.experiencela.com/MetroTripPlanner?value1=2055 S. Sepulveda Blvd., Los Angeles, 90025
-		    [category] => Array
-		        (
-		            [0] => Visual Arts
-		            [1] => Live Theater
-		            [2] => Educational
-		            [3] => Museums/Zoos/Aquariums
-		        )
+			[title] => Father, Son & Holy Coach
+			[link] => http://www.experiencela.com/calendar/event/68113
+			[description] => Southern storytelling at its best! [...]
+			[guid] => http://www.experiencela.com/calendar/event/68113
+			[datetime] => March 4, 2016; 8:00 PM - 9:15 PM
+			[startDate] => Fri, 04 Mar 2016 20:00:00 GMT -08:00
+			[endDate] => Fri, 04 Mar 2016 21:15:00 GMT -08:00
+			[image] => http://ww1.experiencela.com/Uploads/20070904124551-63848.jpg
+			[organizationEntryId] => 3480
+			[organization] => Lucy Pollak Public Relations
+			[region] => Beverly Hills / Westside
+			[eventWebsite] => http://www.holycoach.net/.
+			[location] => Odyssey Theatre
+			[eventAddress] => 2055 S. Sepulveda Blvd., Los Angeles, 90025
+			[eventLocationStreetIntersection1] => S. Sepulveda Blvd.
+			[eventLocationStreetIntersection2] => Mississippi Ave.
+			[toolsMetroTripPlanner] => http://www.experiencela.com/MetroTripPlanner?value1=2055 S. Sepulveda Blvd., Los Angeles, 90025
+			[category] => Array
+				(
+					[0] => Visual Arts
+					[1] => Live Theater
+					[2] => Educational
+					[3] => Museums/Zoos/Aquariums
+				)
 
-		    [eventLocationHearing] => False
-		    [eventLocationWheelChair] => True
-		    [eventKidFamily] => False
-		    [eventFree] => False
-		    [eventCostExplain] => $15 - $25
+			[eventLocationHearing] => False
+			[eventLocationWheelChair] => True
+			[eventKidFamily] => False
+			[eventFree] => False
+			[eventCostExplain] => $15 - $25
 		*/
 		$count = 0;
 
@@ -430,7 +450,7 @@ class EventParser {
 			// Check that image doesn't throw a 404
 			$image = trim($event['media']);
 			
-
+			// Check that remote image file exists before inserting it into db
 			if ($image != "") {
 				$image = remoteFileExists($image) ? $image : "";
 			}
@@ -499,7 +519,7 @@ class EventParser {
 		// Actions to perform based on URL/Referrer type
 		switch ($urlType) {
 			// A-Win
-		    case "awin1":
+			case "awin1":
 				// Parse the URL string to access individual params
 				parse_str($url, $params);
 
@@ -520,7 +540,7 @@ class EventParser {
 
 				break;
 			// Share-a-sale
-		    case "shareasale":
+			case "shareasale":
 				if (isset($params['urllink']) 
 					&& strpos($params['urllink'], 'www') !== false ) {
 					$newUrl = (strpos($params['urllink'], "http") ? "" : "http://") . $params['urllink'];
@@ -555,20 +575,20 @@ class EventParser {
 			file_put_contents($file, 
 				json_encode(
 					array(
-		 				'timestamp' => time(),
-		 				'events' => $this->eventArray
-		 			)
-		 		)
+						'timestamp' => time(),
+						'events' => $this->eventArray
+					)
+				)
 			);
 		}
 		else if ($which=="venues") {
 			file_put_contents($file, 
 				json_encode(
 					array(
-			 			'timestamp' => time(),
-			 			'events' => $this->venueArray
-			 		)
-			 	)
+						'timestamp' => time(),
+						'events' => $this->venueArray
+					)
+				)
 			);
 		}
 	}
@@ -652,17 +672,21 @@ class EventParser {
 					"ON events.venue IN (venues.name, venues.alias_1, venues.alias_2) " .
 				"WHERE ymd_date >= :date_start ";
 
-			// Require a start date
-			$queryStart = set($startDate)
+			// A start date is required, so either use the one passed in, or
+			// create one using the current timestamp
+			$queryStartDateObj = set($startDate)
 				? new DateTime($startDate)
 				: new DateTime();
+			$queryStart = $queryStartDateObj->format("Y-m-d");
 
 			// If we're limiting based on end date
 			$query .= set($endDate)
 				? "AND events.ymd_date < :date_end "
 				: "";
 			
-			$query .= "AND events.media != '' ";
+			if (set($mediaOnly) && $mediaOnly) {
+				$query .= "AND events.media != '' ";
+			}
 
 			// GROUP BY eventid just in case duplicates were returned 
 			// by the JOIN on venue aliases
@@ -683,16 +707,14 @@ class EventParser {
 					? : LIMIT_MAX_SHOWS_DEFAULT; 
 				$query .= "LIMIT " . $max;
 			}
-
+			
 			/**
 			 * Bind parameters
 			 */
 			$stmt = $dblink->prepare($query);
-		 	// $start = $queryStart->format("Y-m-d");
-			$stmt->bindParam(':date_start', $startDate, PDO::PARAM_STR);
+			$stmt->bindParam(':date_start', $queryStart, PDO::PARAM_STR);
 			// Set the end date parameter, if passed in
 			if (set($endDate)) {
-				// $end = new DateTime($endDate);
 				// Bind end date
 				$stmt->bindParam(':date_end', $endDate, PDO::PARAM_STR);
 			}
@@ -771,10 +793,10 @@ class EventParser {
 	public function getEventsJson() {	
 		// Return timestamp + data
 		return json_encode(
-		 	array(
-		 		'timestamp' => time(),
-		 		'events' => $this->eventArray
-		 	)
+			array(
+				'timestamp' => time(),
+				'events' => $this->eventArray
+			)
 		);
 	}// End function getEventsJson
 
@@ -870,8 +892,8 @@ class EventParser {
 		// Prepare insert query
 		$statement = $dbLink->prepare(
 			"INSERT INTO events(`ymd_date`, `source`, `type`, `artist`, `venue`, `title`, `description`, `slug`, `price`, `url`, `media`) ".
-   			"VALUES(:ymd_date, :source, :type, :artist, :venue, :title, :description, :slug, :price, :url, :media) ".
-   			"ON DUPLICATE KEY UPDATE `title` = :title2, `url` = :url2, `media` = :media2, `slug` = :slug2, `description` = :description2");
+			"VALUES(:ymd_date, :source, :type, :artist, :venue, :title, :description, :slug, :price, :url, :media) ".
+			"ON DUPLICATE KEY UPDATE `title` = :title2, `url` = :url2, `media` = :media2, `slug` = :slug2, `description` = :description2");
 
 		$eventObject = array(
 			"ymd_date" => $event['ymd_date'],
@@ -917,9 +939,9 @@ class EventParser {
 		$statement = $dbLink->prepare(
 			"INSERT INTO venues(`external_id`, `source`, `name`, `address1`, `city`, `zip`, `state`, " .
 			"`lat`, `lon`, `url`, `desc_brief`, `url_fb`, `url_tw`, `updated`) ".
-   			"VALUES(:external_id, :source, :name, :address1, :city, :zip, :state, " . 
-   			":lat, :lon, :url, :desc_brief, :url_fb, :url_tw, :updated )");
-   			// "ON DUPLICATE KEY UPDATE ____ ?? eg: name = :name2, lat = :lat2");
+			"VALUES(:external_id, :source, :name, :address1, :city, :zip, :state, " . 
+			":lat, :lon, :url, :desc_brief, :url_fb, :url_tw, :updated )");
+			// "ON DUPLICATE KEY UPDATE ____ ?? eg: name = :name2, lat = :lat2");
 
 		$object = array(
 			"external_id" 	=> $venue['external_id'],

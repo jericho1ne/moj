@@ -9,9 +9,9 @@
 	$xml = simplexml_load_string($xmlData) or die("Error: Cannot create object");
 	
 	foreach ($xml as $object) {
-	    // ATTRIBUTE NAMES ARE CASE-SENSITIVE
-	  //  $loc = $object->attributes()->lokasyon;
-	   // $dep = $object->attributes()->Depth;
+		// ATTRIBUTE NAMES ARE CASE-SENSITIVE
+	 	//  $loc = $object->attributes()->lokasyon;
+	  	// $dep = $object->attributes()->Depth;
 		//print_r($object);
 		print_r($object->item->title->__toString());
 		print_r($object->item->link->__toString());
@@ -20,4 +20,4 @@
 		
 	}
 	
-	?>
+?>

@@ -24,6 +24,7 @@ $options = [
 	'format' => 'text', 
 	'fieldSet' => 'medium',
 	'maxResults' => set($_POST['maxResults']),
+	//'mediaOnly' => true,
 ];
 
 // Get shows from start date to end date  

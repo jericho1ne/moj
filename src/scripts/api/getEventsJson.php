@@ -25,7 +25,8 @@ $mode = isset($_POST['mode']) $_POST['mode'] ? : '';
 // Get shows from today onwards, light field set 
 // Pass in:  format, startDate (defaults to today), max days ahead
 if ($mode === '') {
-    $localEvents = $Events->getEventsFromDb('text', '', '90', 'light');
+    // TODO allow explicit request of # shows, and light/full fieldsets
+    // $localEvents = $Events->getEventsFromDb($dblink, '90', 'light');
 }
 // If more specific request
 else if ($mode === 'tonight') {
@@ -35,7 +36,7 @@ else if ($mode === 'weekend') {
 
 }
 
-// At least one result return, consider that a success
+// If at least one result was returned
 if (count($localEvents)) {
 	$success = true;
 }

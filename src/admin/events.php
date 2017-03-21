@@ -49,7 +49,7 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 <br>
 <input type="radio" name="action" value="getNewScenestarShows"> Get <b>Scenestar</b> Shows<br>
 <input type="radio" name="action" value="getNewTicketflyEvents"> Get <b>Ticketfly</b> Shows<br>
-<input type="radio" name="action" value="getNewExpLAevents"> Get <b>Experience LA</b> Events<br>
+<!-- <input type="radio" name="action" value="getNewExpLAevents"> Get <b>Experience LA</b> Events<br> -->
 <br>
 <input type="radio" name="action" value="getTicketFlyVenuesFromEvents"> <b>Ticketfly</b> Venues (from upcoming Events)<br>
 <input type="radio" name="action" value="getTicketFlyVenues"> <b>Ticketfly</b> Venues<br>
@@ -80,6 +80,7 @@ echo " Upcoming events in DB: <b>" . $results->rowCount() . "</b><br><br>";
 $action = set($_POST['action']);
 $saveToDB = set($_POST['saveToDB']);	
 
+// If submit button was clicked
 if ($dblink && $action !== "") {
 	// Create new EventParser	
 	$Events = new EventParser($dblink);
@@ -90,11 +91,19 @@ if ($dblink && $action !== "") {
 		// Format for start date
 		$startDate = $boundaryDate->format("Y-m-d");
 
+		// Pass in:  format, startDate (defaults to today)
+		$options = [
+			'startDate' => $startDate, 
+			 //'endDate' => '',
+			'format' => 'text', 
+			'fieldSet' => 'medium',
+			'maxResults' => 9999,
+		];
+
 		// Get shows from today onwards
-		$existingEvents = $Events->getEventsFromDb('text', '', '10');
+		$existingEvents = EventParser::getEventsFromDb($dblink, $options);
 		pr($existingEvents);
-	}
-	else {
+	} else {
 		// Figure out today's date 
 		$today = date('Y-n-j');
 
