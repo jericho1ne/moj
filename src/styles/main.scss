@@ -56,10 +56,10 @@ body {
 	// top: -4px !important;
 	color: $purple-i-like !important;
 	padding: 0px 0px !important;
-	background-color: $gray-xlight !important;
+	// background-color: $gray-xlight !important;
+	background-color: none !important; 
 	opacity: 0.98 !important;
-	border-bottom: 0px solid $gray-mid;
-	transition: background .5s ease-in-out, padding .5s ease-in-out, opacity .5s ease-in-out;
+	transition: background .4s ease-in-out, padding .4s ease-in-out, opacity .4s ease-in-out;
 }
 .fixed-top {
  	position: fixed;
@@ -77,9 +77,10 @@ body {
 }
 .mojBannerText-secondary {
 	// color: $dk-blue !important;
-	color: rgba(46, 109, 164, 0.6) !important;
+	color: rgba(46, 109, 164, 0) !important;
 	font-size: 12px !important;
 	text-shadow: 1px 2px 2px rgba(255, 255, 255, 0) !important; 
+	transition: all .2s ease-in-out;
 }
 
 #bg-plate {
@@ -334,7 +335,7 @@ body {
 
 .toggle-button {
 	width: auto;
-	padding: 6px 12px;
+	padding: 6px 10px;
 	vertical-align: middle;
 	outline: none;
 	@include border-radius(2px);

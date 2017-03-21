@@ -78,7 +78,7 @@ table#eventsDT .date-header {
 // 
 @media screen and (max-width: 767px) {
 	#bg-plate {
-		height: 300px;
+		height: 200px;
 	}
 	.dataTables_wrapper {
 		max-width: 600px;
@@ -91,7 +91,7 @@ table#eventsDT .date-header {
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
 	#bg-plate {
-		height: 410px;
+		height: 230px;
 	}
 	.dataTables_wrapper {
 		max-width: 600px;
@@ -106,7 +106,7 @@ table#eventsDT .date-header {
 }
 @media screen and (min-width: 1025px) and (max-width: 1199px) {
 	#bg-plate {
-		height: 480px;
+		height: 260px;
 	}
 	.dataTables_wrapper {
 		max-width: 800px;
@@ -121,7 +121,7 @@ table#eventsDT .date-header {
 }
 @media screen and (min-width: 1200px) {
 	#bg-plate {
-		height: 520px;
+		height: 300px;
 	}
 	.dataTables_wrapper {
 		max-width: 1000px;
