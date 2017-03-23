@@ -52,20 +52,20 @@
   z-index: 10;
 }
 .swiper-pagination-bullet {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   display: inline-block;
   border-radius: 100%;
-  background: $gray-mid;
+  background: $gray-light;
   opacity: 0.8;
 }
 .swiper-pagination-bullet-active {
   opacity: 1;
   // background: $purple-i-like;
-  background: $dk-blue;
+  background: $blue-mid;
 }
 .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet {
-  margin: 0 2px 0 3px;
+  margin: 0 2px 0 2px;
 }
 
 .swiper-slide {

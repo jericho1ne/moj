@@ -16,6 +16,7 @@ $purple-i-like: #E30EEE;
 $pink: #D953E5;
 $gold: #DBD12C;
 $lt-blue: #69DDF5;
+$blue-mid: #4d95d4;
 $dk-blue: #2E6DA4;
 
 $active-color: #CA2667;
@@ -52,6 +53,9 @@ $inactive-color: 'transparent';
 }
 .bg-dk-gray {
 	background-color: $gray-dark;
+}
+.bg-blue-mid {
+	background-color: $blue-mid;
 }
 .bg-dk-blue {
 	background-color: $dk-blue;
