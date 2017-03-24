@@ -121,7 +121,7 @@ function clearDiv(divId, loading) {
   $('#' + divId).html('');
   if (loading) {
     $('#' + divId).html('<div class="col-md-12 opacity-80">'+
-      '<div class="loading"></div>' +
+      '<div class="loading-spinner"></div>' +
       '</div>');
   }
 }

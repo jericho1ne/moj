@@ -66,6 +66,13 @@ $gray-light-border: 1px solid $gray-light;
     float: right;
 }
 
+.overlay-center {
+    position: absolute !important;
+    top: 50%;
+    left: 40%;
+    z-index: 999 !important;
+}
+
 .opacity-30 {
     opacity: 0.3;
 }

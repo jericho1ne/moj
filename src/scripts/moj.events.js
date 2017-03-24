@@ -35,9 +35,13 @@ $(document).ready(function() {
      *      Calendar View
      *          Get list of shows, display them, set click listeners on each Artist
      */
-    $('#action-calendarView').on('click', function() {
+    $('#action-calendarView').on('click', function() {        
         var viewMode = $(this).data('mode');
         
+        $('#action-bar')
+            .append('<div id="largeLoadingSpinner" class=""><div class="loading-spinner opacity-80 overlay-center"></div></div>');
+
+
         // We're in slider view mode, need to change to Calendar
         if (viewMode === 'slider') {
              // Update toggle button state, set the mode
